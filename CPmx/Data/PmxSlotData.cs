@@ -37,5 +37,24 @@ namespace CPmx.Data
                 exporter.WritePmxId(size, id);
             }
         }
+
+        public void Parse(PmxParser parser)
+        {
+            this.slotName = parser.ReadPmxText();
+            this.slotNameE = parser.ReadPmxText();
+
+            this.normalSlot = parser.ReadByte() == 0;
+
+            int elementCount = parser.ReadInt32();
+            this.indices = new int[elementCount];
+
+            for (int i = 0; i < elementCount; i++)
+            {
+                byte type = parser.ReadByte();
+                byte size = type == SLOT_TYPE_BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
+
+               this.indices[i] = parser.ReadPmxId(size);
+            }
+        }
     }
 }

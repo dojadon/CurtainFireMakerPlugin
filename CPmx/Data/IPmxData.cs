@@ -8,5 +8,6 @@ namespace CPmx.Data
     interface IPmxData
     {
         void Export(PmxExporter exporter);
+        void Parse(PmxParser parser);
     }
 }
