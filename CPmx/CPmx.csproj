@@ -61,6 +61,7 @@
     <Compile Include="Data\PmxSlotData.cs" />
     <Compile Include="Data\PmxVertexData.cs" />
     <Compile Include="PmxExporter.cs" />
+    <Compile Include="PmxParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
