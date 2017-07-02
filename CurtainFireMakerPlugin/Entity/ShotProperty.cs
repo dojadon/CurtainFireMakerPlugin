@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CurtainFireMakerPlugin.Entity
 {
-    class ShotProperty
+    public class ShotProperty
     {
         public int Color;
     }

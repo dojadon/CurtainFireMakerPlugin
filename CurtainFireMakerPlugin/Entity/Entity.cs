@@ -7,7 +7,7 @@ using CurtainFireMakerPlugin.Task;
 
 namespace CurtainFireMakerPlugin.Entity
 {
-    class Entity
+    public class Entity
     {
         public Matrix WorldMat { get; set; } = new Matrix();
         public Vector3 WorldPos { get { return new Vector3(WorldMat.M14, WorldMat.M24, WorldMat.M34); } }
