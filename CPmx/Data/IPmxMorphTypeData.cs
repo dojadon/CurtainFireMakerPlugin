@@ -7,7 +7,6 @@ namespace CPmx.Data
 {
    public interface IPmxMorphTypeData : IPmxData
     {
-        void SetIndices(int[] indices);
         byte GetMorphType();
     }
 }

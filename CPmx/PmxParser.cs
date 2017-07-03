@@ -10,42 +10,16 @@ namespace CPmx
 {
     public class PmxParser : BinaryReader
     {
-        private byte sizeVertex;
-        public byte SizeVertex => sizeVertex;
+        public byte SizeVertex => this.Size[2];
+        public byte SizeTexture => this.Size[3];
+        public byte SizeMaterial => this.Size[4];
+        public byte SizeBone => this.Size[5];
+        public byte SizeMorph => this.Size[6];
+        public byte SizeRigid => this.Size[7];
 
-        private byte sizeTexture;
-        public byte SizeTexture => sizeTexture;
+        protected Encoding Encording => this.Size[0] == 0 ? Encoding.Unicode : Encoding.UTF8;
 
-        private byte sizeMaterial;
-        public byte SizeMaterial => sizeMaterial;
-
-        private byte sizeBone;
-        public byte SizeBone => sizeBone;
-
-        private byte sizeMorph;
-        public byte SizeMorph => sizeMorph;
-
-        private byte sizeRigid;
-        public byte SizeRigid => sizeRigid;
-
-        protected Encoding Encording { get; set; }
-
-        private PmxHeaderData headerData;
-        public PmxHeaderData HeaderData
-        {
-            get { return this.headerData; }
-            set
-            {
-                this.headerData = value;
-                this.Encording = this.HeaderData.size[0] == 0 ? Encoding.Unicode : Encoding.UTF8;
-                this.sizeVertex = this.HeaderData.size[2];
-                this.sizeTexture = this.HeaderData.size[3];
-                this.sizeMaterial = this.HeaderData.size[4];
-                this.sizeBone = this.HeaderData.size[5];
-                this.sizeMorph = this.HeaderData.size[6];
-                this.sizeRigid = this.HeaderData.size[7];
-            }
-        }
+        public byte[] Size { get; set; }
 
         public PmxParser(Stream outStream) : base(outStream)
         {
@@ -101,6 +75,14 @@ namespace CPmx
         }
 
         public void ReadVector(Vector4 vec)
+        {
+            vec.X = this.ReadSingle();
+            vec.Y = this.ReadSingle();
+            vec.Z = this.ReadSingle();
+            vec.W = this.ReadSingle();
+        }
+
+        public void ReadVector(Quaternion vec)
         {
             vec.X = this.ReadSingle();
             vec.Y = this.ReadSingle();

@@ -8,32 +8,29 @@ namespace CPmx.Data
 {
     public class PmxMorphBoneData : IPmxMorphTypeData
     {
-        public int[] indices;
-        public Vector3[] positions;
-        public Quaternion[] rotations;
+        public int index;
+        public Vector3 position = new Vector3();
+        public Quaternion rotation = new Quaternion();
 
         public void Export(PmxExporter exporter)
         {
-            exporter.Write(this.indices.Length);
-            for (int i = 0; i < this.indices.Length; i++)
-            {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.indices[i]);
+            exporter.WritePmxId(PmxExporter.SIZE_BONE, this.index);
 
-                exporter.Write(this.positions[i]);
-                exporter.Write(this.rotations[i]);
-            }
+            exporter.Write(this.position);
+            exporter.Write(this.rotation);
+        }
+
+        public void Parse(PmxParser parser)
+        {
+            this.index = parser.ReadPmxId(parser.SizeBone);
+
+            parser.ReadVector(this.position);
+            parser.ReadVector(this.rotation);
         }
 
         public byte GetMorphType()
         {
             return PmxMorphData.MORPHTYPE_BONE;
-        }
-
-        public void SetIndices(int[] indices)
-        {
-            this.indices = indices;
-            this.positions = ArrayUtil.Set(new Vector3[indices.Length], i => new Vector3());
-            this.rotations = ArrayUtil.Set(new Quaternion[indices.Length], i => new Quaternion());
         }
     }
 }

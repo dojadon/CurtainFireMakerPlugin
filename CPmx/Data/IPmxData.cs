@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CPmx.Data
 {
-    interface IPmxData
+ public   interface IPmxData
     {
         void Export(PmxExporter exporter);
         void Parse(PmxParser parser);

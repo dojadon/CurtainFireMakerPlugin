@@ -6,26 +6,28 @@ using DxMath;
 
 namespace CPmx.Data
 {
-    public class PmxMorphVertexData : IPmxMorphTypeData
+    public class PmxMorphUVData : IPmxMorphTypeData
     {
+        public byte uvType;
+
         public int index;
-        public Vector3 positions = new Vector3();
+        public Vector4 uv = new Vector4();
 
         public void Export(PmxExporter exporter)
         {
             exporter.WritePmxId(PmxExporter.SIZE_VERTEX, this.index);
-            exporter.Write(this.positions);
+            exporter.Write(this.uv);
         }
 
         public void Parse(PmxParser parser)
         {
             this.index = parser.ReadPmxId(parser.SizeVertex);
-            parser.ReadVector(this.positions);
+            parser.ReadVector(this.uv);
         }
 
         public byte GetMorphType()
         {
-            return PmxMorphData.MORPHTYPE_VERTEX;
+            return this.uvType;
         }
     }
 }

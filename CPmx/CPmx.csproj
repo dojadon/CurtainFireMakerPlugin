@@ -49,7 +49,7 @@
     <Compile Include="Data\IPmxData.cs" />
     <Compile Include="Data\IPmxMorphTypeData.cs" />
     <Compile Include="Data\PmxBoneData.cs" />
-    <Compile Include="Data\PmxMoprhUVData.cs" />
+    <Compile Include="Data\PmxMorphUVData.cs" />
     <Compile Include="Data\PmxMorphBoneData.cs" />
     <Compile Include="Data\PmxMorphGroupData.cs" />
     <Compile Include="Data\PmxHeaderData.cs" />

@@ -8,58 +8,54 @@ namespace CPmx.Data
 {
     public class PmxMorphMaterialData : IPmxMorphTypeData
     {
-        public int[] indices;
+        public int index;
 
-        public byte[] calcType;
-        public Vector4[] diffuse;
-        public Vector3[] specular;
-        public float[] shininess;
-        public Vector3[] ambient;
-        public Vector4[] edge;
-        public float[] edgeThick;
-        public Vector4[] texture;
-        public Vector4[] sphereTexture;
-        public Vector4[] toonTexture;
+        public byte calcType;
+        public Vector4 diffuse = new Vector4();
+        public Vector3 specular = new Vector3();
+        public float shininess;
+        public Vector3 ambient = new Vector3();
+        public Vector4 edge = new Vector4();
+        public float edgeThick;
+        public Vector4 texture = new Vector4();
+        public Vector4 sphereTexture = new Vector4();
+        public Vector4 toonTexture = new Vector4();
 
         public void Export(PmxExporter exporter)
         {
-            exporter.Write(this.indices.Length);
-            for (int i = 0; i < this.indices.Length; i++)
-            {
-                exporter.WritePmxId(PmxExporter.SIZE_MATERIAL, this.indices[i]);
+            exporter.WritePmxId(PmxExporter.SIZE_MATERIAL, this.index);
 
-                exporter.Write(this.calcType[i]);
-                exporter.Write(this.diffuse[i]);
-                exporter.Write(this.specular[i]);
-                exporter.Write(this.shininess[i]);
-                exporter.Write(this.ambient[i]);
-                exporter.Write(this.edge[i]);
-                exporter.Write(this.edgeThick[i]);
-                exporter.Write(this.texture[i]);
-                exporter.Write(this.sphereTexture[i]);
-                exporter.Write(this.toonTexture[i]);
-            }
+            exporter.Write(this.calcType);
+            exporter.Write(this.diffuse);
+            exporter.Write(this.specular);
+            exporter.Write(this.shininess);
+            exporter.Write(this.ambient);
+            exporter.Write(this.edge);
+            exporter.Write(this.edgeThick);
+            exporter.Write(this.texture);
+            exporter.Write(this.sphereTexture);
+            exporter.Write(this.toonTexture);
+        }
+
+        public void Parse(PmxParser parser)
+        {
+            this.index = parser.ReadPmxId(parser.SizeMaterial);
+
+            this.calcType = parser.ReadByte();
+            parser.ReadVector(this.diffuse);
+            parser.ReadVector(this.specular);
+            this.shininess = parser.ReadSingle();
+            parser.ReadVector(this.ambient);
+            parser.ReadVector(this.edge);
+            this.edgeThick = parser.ReadSingle();
+            parser.ReadVector(this.texture);
+            parser.ReadVector(this.sphereTexture);
+            parser.ReadVector(this.toonTexture);
         }
 
         public byte GetMorphType()
         {
             return PmxMorphData.MORPHTYPE_MATERIAL;
-        }
-
-        public void SetIndices(int[] indices)
-        {
-            this.indices = indices;
-
-            this.calcType = new byte[indices.Length];
-            this.diffuse = ArrayUtil.Set(new Vector4[indices.Length], i => new Vector4());
-            this.specular = ArrayUtil.Set(new Vector3[indices.Length], i => new Vector3());
-            this.shininess = new float[indices.Length];
-            this.ambient = ArrayUtil.Set(new Vector3[indices.Length], i => new Vector3());
-            this.edge = ArrayUtil.Set(new Vector4[indices.Length], i => new Vector4());
-            this.edgeThick = new float[indices.Length];
-            this.texture = ArrayUtil.Set(new Vector4[indices.Length], i=> new Vector4());
-            this.sphereTexture = ArrayUtil.Set(new Vector4[indices.Length], i=> new Vector4());
-            this.toonTexture = ArrayUtil.Set(new Vector4[indices.Length], i=> new Vector4());
         }
     }
 }

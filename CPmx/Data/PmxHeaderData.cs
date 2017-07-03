@@ -53,6 +53,8 @@ namespace CPmx.Data
 
             this.description = parser.ReadPmxText();
             this.descriptionE = parser.ReadPmxText();
+
+            parser.Size = this.size;
         }
     }
 }

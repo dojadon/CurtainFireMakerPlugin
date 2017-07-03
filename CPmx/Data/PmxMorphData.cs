@@ -28,7 +28,7 @@ namespace CPmx.Data
          */
         public byte type;
 
-        public IPmxMorphTypeData morphType;
+        public IPmxMorphTypeData[] morphArray;
 
         public void Export(PmxExporter exporter)
         {
@@ -37,10 +37,60 @@ namespace CPmx.Data
 
             exporter.Write(this.type);
 
-            byte morphType = this.morphType.GetMorphType();
+            byte morphType = this.morphArray[0].GetMorphType();
             exporter.Write(morphType);
 
-            this.morphType.Export(exporter);
+            int elementCount = this.morphArray.Length;
+            exporter.Write(elementCount);
+
+            for (int i = 0; i < this.morphArray.Length; i++)
+            {
+                this.morphArray[i].Export(exporter);
+            }
+        }
+
+        public void Parse(PmxParser parser)
+        {
+            this.morphName = parser.ReadPmxText();
+            this.morphName = parser.ReadPmxText();
+
+            this.type = parser.ReadByte();
+
+            byte morphType = parser.ReadByte();
+
+            int elementCount = parser.ReadInt32();
+
+            switch (morphType)
+            {
+                case MORPHTYPE_GROUP:
+                    this.morphArray = ArrayUtil.Set(new PmxMorphGroupData[elementCount], i => new PmxMorphGroupData());
+                    break;
+
+                case MORPHTYPE_VERTEX:
+                    this.morphArray = ArrayUtil.Set(new PmxMorphVertexData[elementCount], i => new PmxMorphVertexData());
+                    break;
+
+                case MORPHTYPE_BONE:
+                    this.morphArray = ArrayUtil.Set(new PmxMorphBoneData[elementCount], i => new PmxMorphBoneData());
+                    break;
+
+                case MORPHTYPE_UV:
+                case MORPHTYPE_EXUV_1:
+                case MORPHTYPE_EXUV_2:
+                case MORPHTYPE_EXUV_3:
+                case MORPHTYPE_EXUV_4:
+                    this.morphArray = ArrayUtil.Set(new PmxMorphUVData[elementCount], i => new PmxMorphUVData());
+                    break;
+
+                case MORPHTYPE_MATERIAL:
+                    this.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[elementCount], i => new PmxMorphMaterialData());
+                    break;
+            }
+
+            for (int i = 0; i < this.morphArray.Length; i++)
+            {
+                this.morphArray[i].Parse(parser);
+            }
         }
     }
 }

@@ -7,29 +7,24 @@ namespace CPmx.Data
 {
     public class PmxMorphGroupData : IPmxMorphTypeData
     {
-        public int[] indices;
-        public float[] rateValues;
+        public int index;
+        public float rate;
 
         public void Export(PmxExporter exporter)
         {
-            exporter.Write(this.indices.Length);
-            for (int i = 0; i < this.indices.Length; i++)
-            {
-                exporter.WritePmxId(PmxExporter.SIZE_MORPH, this.indices[i]);
+                exporter.WritePmxId(PmxExporter.SIZE_MORPH, this.index);
+                exporter.Write(this.rate);
+        }
 
-                exporter.Write(this.rateValues[i]);
-            }
+        public void Parse(PmxParser parser)
+        {
+            this.index = parser.ReadPmxId(parser.SizeMorph);
+            this.rate = parser.ReadSingle();
         }
 
         public byte GetMorphType()
         {
             return PmxMorphData.MORPHTYPE_GROUP;
-        }
-
-        public void SetIndices(int[] indices)
-        {
-            this.indices = indices;
-            this.rateValues = new float[indices.Length];
         }
     }
 }
