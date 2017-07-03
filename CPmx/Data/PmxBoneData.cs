@@ -118,6 +118,75 @@ namespace CPmx.Data
                 }
             }
         }
+
+        public void Parse(PmxParser parser)
+        {
+            this.boneName = parser.ReadPmxText();
+            this.boneNameE = parser.ReadPmxText();
+
+            parser.ReadVector(this.pos);
+            this.parentId = parser.ReadPmxId(parser.SizeBone);
+
+            this.depth = parser.ReadInt32();
+            this.flag = parser.ReadInt16();
+
+            if (!BoneFlags.OFFSET.check(this.flag))
+            {
+                parser.ReadVector(this.posOffset);
+            }
+            else
+            {
+                this.arrowId = parser.ReadPmxId(parser.SizeBone);
+            }
+
+            if (BoneFlags.ROTATE_LINK.check(this.flag) || BoneFlags.MOVE_LINK.check(this.flag))
+            {
+                this.linkParent = parser.ReadPmxId(parser.SizeBone);
+                this.rate = parser.ReadSingle();
+            }
+
+            if (BoneFlags.AXIS_ROTATE.check(this.flag))
+            {
+                parser.ReadVector(this.axisVec);
+            }
+
+            if (BoneFlags.LOCAL_AXIS.check(this.flag))
+            {
+                parser.ReadVector(this.localAxisVecX);
+                parser.ReadVector(this.localAxisVecZ);
+            }
+
+            if (BoneFlags.EXTRA.check(this.flag))
+            {
+                this.extraParentId = parser.ReadInt32();
+            }
+
+            if (BoneFlags.IK.check(this.flag))
+            {
+                this.ikTargetId = parser.ReadPmxId(parser.SizeBone);
+
+                this.ikDepth = parser.ReadInt32();
+                this.angleLimit = parser.ReadSingle();
+
+                int boneNum = parser.ReadInt32();
+                this.ikChilds = new int[boneNum];
+                this.ikAngleMin = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
+                this.ikAngleMax = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
+
+                for (int i = 0; i < boneNum; i++)
+                {
+                    this.ikChilds[i] = parser.ReadPmxId(parser.SizeBone);
+
+                    int limit = parser.ReadByte();
+
+                    if (limit > 0)
+                    {
+                        parser.ReadVector(ikAngleMin[i]);
+                        parser.ReadVector(ikAngleMax[i]);
+                    }
+                }
+            }
+        }
     }
 
     class BoneFlags

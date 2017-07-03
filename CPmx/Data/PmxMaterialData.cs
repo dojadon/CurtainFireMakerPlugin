@@ -84,5 +84,26 @@ namespace CPmx.Data
 
             exporter.Write(this.faceCount);
         }
+
+        public void Parse(PmxParser parser)
+        {
+            this.materialName = parser.ReadPmxText();
+            this.materialNameE = parser.ReadPmxText();
+
+            parser.ReadVector(this.diffuse);
+            parser.ReadVector(this.specular);
+            this.shininess = parser.ReadSingle();
+            parser.ReadVector(this.ambient);
+
+            this.flag = parser.ReadByte();
+
+            parser.ReadVector(this.edge);
+            this.edgeThick = parser.ReadSingle();
+
+            this.textureId = parser.ReadPmxId(parser.SizeTexture);
+            this.sphereId = parser.ReadPmxId(parser.SizeTexture);
+            this.mode = parser.ReadByte();
+            this.sharedToon = parser.ReadByte();
+        }
     }
 }

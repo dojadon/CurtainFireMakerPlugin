@@ -2,7 +2,7 @@
 
 namespace CPmx.Data
 {
-    public class PmxMorphData
+    public class PmxMorphData : IPmxData
     {
         public const byte MORPHTYPE_GROUP = 0;
         public const byte MORPHTYPE_VERTEX = 1;

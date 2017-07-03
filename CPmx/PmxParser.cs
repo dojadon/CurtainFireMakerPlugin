@@ -52,6 +52,11 @@ namespace CPmx
 
         }
 
+        public void Parse(PmxModelData data)
+        {
+            data.Parse(this);
+        }
+
         public int ReadPmxId(byte size)
         {
             int id = 0;
