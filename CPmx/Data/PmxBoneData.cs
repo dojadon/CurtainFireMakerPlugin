@@ -6,6 +6,7 @@ using DxMath;
 
 namespace CPmx.Data
 {
+    [Serializable]
     public class PmxBoneData : IPmxData
     {
         public String boneName = "";

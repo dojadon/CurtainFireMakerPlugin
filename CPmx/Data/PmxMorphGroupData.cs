@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CPmx.Data
 {
+    [Serializable]
     public class PmxMorphGroupData : IPmxMorphTypeData
     {
         public int index;

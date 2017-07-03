@@ -2,6 +2,7 @@
 
 namespace CPmx.Data
 {
+    [Serializable]
     public class PmxMorphData : IPmxData
     {
         public const byte MORPHTYPE_GROUP = 0;

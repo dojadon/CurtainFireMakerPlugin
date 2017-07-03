@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CPmx.Data
 {
+    [Serializable]
     public class PmxSlotData : IPmxData
     {
         public const byte SLOT_TYPE_BONE = 0;

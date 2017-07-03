@@ -2,6 +2,7 @@
 
 namespace CPmx.Data
 {
+    [Serializable]
     public class PmxHeaderData : IPmxData
     {
         private static readonly byte[] MAGIC_BYTES = { 0x50, 0x4d, 0x58, 0x20 };// PMX

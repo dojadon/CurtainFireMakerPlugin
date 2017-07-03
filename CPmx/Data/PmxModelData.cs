@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CPmx.Data
 {
+    [Serializable]
     public class PmxModelData : IPmxData
     {
         public PmxHeaderData Header { get; set; } = new PmxHeaderData();

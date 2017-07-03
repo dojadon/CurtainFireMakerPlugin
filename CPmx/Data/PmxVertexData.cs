@@ -6,6 +6,7 @@ using DxMath;
 
 namespace CPmx.Data
 {
+    [Serializable]
     public class PmxVertexData : IPmxData
     {
         public const byte WEIGHT_TYPE_BDEF1 = 0;
