@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BezierCurve\EquationUtil.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\EntityShot.cs" />

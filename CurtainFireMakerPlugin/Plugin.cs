@@ -11,6 +11,13 @@ namespace CurtainFireMakerPlugin
 {
     public class Plugin : IHaveUserControl, ICommandPlugin
     {
+        public static Plugin Instance { get; set; }
+
+        public Plugin()
+        {
+            Instance = this;
+        }
+
         public Guid GUID => new Guid();
 
         public IWin32Window ApplicationForm { get; set; }
@@ -27,9 +34,12 @@ namespace CurtainFireMakerPlugin
 
         public Image SmallImage => null;
 
+        public UserControl Control { get; set; }
+
         public UserControl CreateControl()
         {
-            return new PluginControl(this.Scene);
+            this.Control = new PluginControl(this.Scene);
+            return this.Control;
         }
 
         public void Dispose()

@@ -5,17 +5,17 @@ using System.Text;
 
 namespace CurtainFireMakerPlugin.Task
 {
-    class TaskManager
+    public class TaskManager
     {
         private List<Task> taskList = new List<Task>();
         private List<Task> addTaskList = new List<Task>();
 
-        public void addTask(Task task)
+        public void AddTask(Task task)
         {
             this.addTaskList.Add(task);
         }
 
-        public void frame()
+        public void Frame()
         {
             this.taskList.AddRange(this.addTaskList);
             this.addTaskList.Clear();

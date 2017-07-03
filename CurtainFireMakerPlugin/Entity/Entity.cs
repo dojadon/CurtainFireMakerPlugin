@@ -35,5 +35,20 @@ namespace CurtainFireMakerPlugin.Entity
         public int DeathFrameNo { get; }
 
         private TaskManager taskManager = new TaskManager();
+
+        public void Frame( )
+        {
+
+        }
+
+        public void AddTask(Task.Task task)
+        {
+            this.taskManager.AddTask(task);
+        }
+
+        public void AddTask(Action task, int interval, int executeTimes, int waitTime)
+        {
+            this.AddTask(new Task.Task(task, interval, executeTimes, waitTime));
+        }
     }
 }

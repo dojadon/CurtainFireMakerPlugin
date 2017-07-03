@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CurtainFireMakerPlugin.Task
 {
-    class Task
+    public class Task
     {
         private Action<Task> state;
         private Action task;
