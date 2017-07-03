@@ -55,7 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BezierCurve\CubicBezierCurve.cs" />
     <Compile Include="BezierCurve\EquationUtil.cs" />
+    <Compile Include="BezierCurve\VmdBezierCurve.cs" />
+    <Compile Include="Entity\Motion\MotionInterpolation.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\EntityShot.cs" />
