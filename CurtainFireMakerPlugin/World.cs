@@ -5,8 +5,8 @@ using System.Text;
 
 namespace CurtainFireMakerPlugin
 {
-    class World
+    public class World
     {
-        
+        public int FrameCount{ get; }
     }
 }
