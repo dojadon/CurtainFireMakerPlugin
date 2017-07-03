@@ -9,7 +9,7 @@ using MikuMikuPlugin;
 
 namespace CurtainFireMakerPlugin
 {
-    public class Core : IHaveUserControl
+    public class Plugin : IHaveUserControl, ICommandPlugin
     {
         public Guid GUID => new Guid();
 
@@ -17,13 +17,28 @@ namespace CurtainFireMakerPlugin
 
         public Scene Scene { get; set; }
 
+        public string Description => "Curtain Fire Maker Plugin";
+
+        public string Text => "弾幕生成";
+
+        public string EnglishText => "Generate Curtain Fire";
+
+        public Image Image => null;
+
+        public Image SmallImage => null;
+
         public UserControl CreateControl()
         {
-            return null;
+            return new PluginControl(this.Scene);
         }
 
         public void Dispose()
         {
+        }
+
+        public void Run(CommandArgs e)
+        {
+
         }
     }
 }

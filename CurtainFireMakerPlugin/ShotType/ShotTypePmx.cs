@@ -11,6 +11,8 @@ namespace CurtainFireMakerPlugin.ShotType
     {
         private PmxModelData data = new PmxModelData();
 
+
+
         public ShotTypePmx(String name, Stream outStream) : base(name)
         {
             PmxParser parser = new PmxParser(outStream);
