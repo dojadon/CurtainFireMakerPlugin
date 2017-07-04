@@ -41,25 +41,35 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void SetupShotModelData(ShotModelData data)
         {
-            PmxBoneData[] bones = data.bones;
-            PmxVertexData[] vertices = data.vertices;
-            int[] indices = data.indices;
-            PmxMaterialData[] materials = data.materials;
-            String[] textures = data.textures;
-            PmxMorphData morph = data.morph;
-
-            indices = Array.ConvertAll(indices, i => i + this.vertexList.Capacity);
+            int[] indices = Array.ConvertAll(data.indices, i => i + this.vertexList.Capacity);
             this.indexList.AddRange(indices);
 
-            Array.ForEach(vertices, v => v.boneId = Array.ConvertAll(v.boneId, i => i + this.boneList.Capacity));
-            this.vertexList.AddRange(vertices);
+            PmxVertexData[] vertices = data.vertices;
+            foreach (var vertex in vertices)
+            {
+                vertex.boneId = Array.ConvertAll(vertex.boneId, i => i + this.boneList.Capacity);
+                this.vertexList.Add(vertex);
+            }
 
-            Array.ForEach(textures, t => { if (!this.textureList.Contains(t)) { this.textureList.Add(t); } });
+            string[] textures = data.textures;
+            foreach (var texture in textures)
+            {
+                if (!this.textureList.Contains(texture))
+                {
+                    this.textureList.Add(texture);
+                }
+            }
 
+            PmxMaterialData[] materials = data.materials;
+            PmxMorphData morph = data.morph;
             morph.morphName = this.morphList.Capacity.ToString();
             morph.type = 4;
             morph.morphArray = new PmxMorphMaterialData[materials.Length];
-            Enumerable.Range(0, materials.Length).ToList().ForEach(i => morph.morphArray[i].Index = this.materialList.Capacity + i);
+
+            for (int i = 0; i < materials.Length; i++)
+            {
+                morph.morphArray[i].Index = this.materialList.Capacity + i;
+            }
             this.morphList.Add(morph);
 
             foreach (PmxMaterialData material in materials)
@@ -68,7 +78,7 @@ namespace CurtainFireMakerPlugin.Entities
                 material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.textureList.IndexOf(textures[material.textureId]) : -1;
                 this.materialList.Add(material);
             }
-            this.SetupBone(bones);
+            this.SetupBone(data.bones);
         }
 
         private void SetupBone(params PmxBoneData[] data)
