@@ -36,6 +36,7 @@ namespace CurtainFireMakerPlugin.Entities
         public EntityShot(ShotProperty property)
         {
             this.Property = property;
+            this.world.AddShot(this);
         }
 
         public override void Frame()

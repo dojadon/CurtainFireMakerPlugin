@@ -17,7 +17,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             parser.Parse(this.data);
         }
 
-        override public PmxVertexData[] GetVertices(EntityShot entity)
+        override public PmxVertexData[] GetVertices(ShotProperty property)
         {
             PmxVertexData[] result = new PmxVertexData[this.data.VertexArray.Length];
             for (int i = 0; i < result.Length; i++)
@@ -27,7 +27,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        override public int[] GetVertexIndices(EntityShot entity)
+        override public int[] GetVertexIndices(ShotProperty property)
         {
             var result = new int[this.data.VertexIndices.Length];
             Array.Copy(this.data.VertexIndices, result, this.data.VertexIndices.Length);
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        override public PmxMaterialData[] GetMaterials(EntityShot entity)
+        override public PmxMaterialData[] GetMaterials(ShotProperty property)
         {
             PmxMaterialData[] result = new PmxMaterialData[this.data.MaterialArray.Length];
             for (int i = 0; i < result.Length; i++)
@@ -45,7 +45,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        override public String[] GetTextures(EntityShot entity)
+        override public String[] GetTextures(ShotProperty property)
         {
             String[] result = new String[this.data.TextureFiles.Length];
             Array.Copy(this.data.TextureFiles, result, this.data.TextureFiles.Length);
@@ -53,7 +53,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        override public PmxBoneData[] GetBones(EntityShot entity)
+        override public PmxBoneData[] GetBones(ShotProperty property)
         {
             PmxBoneData[] result = new PmxBoneData[this.data.BoneArray.Length];
             for (int i = 0; i < result.Length; i++)

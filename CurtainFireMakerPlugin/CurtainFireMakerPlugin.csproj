@@ -62,6 +62,7 @@
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
     <Compile Include="Entities\Motion\MotionInterpolation.cs" />
+    <Compile Include="Entities\ShotManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entities\Entity.cs" />

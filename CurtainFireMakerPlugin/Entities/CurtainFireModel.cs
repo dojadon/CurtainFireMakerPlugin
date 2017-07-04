@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.boneList.Add(centerBone);
         }
 
-        public void SetupShotModelData(ShotModelData data, EntityShot entity)
+        public void InitShotModelData(ShotModelData data)
         {
             if (data.Property.Type.RecordMotion())
             {

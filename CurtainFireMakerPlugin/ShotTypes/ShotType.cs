@@ -36,15 +36,15 @@ namespace CurtainFireMakerPlugin.ShotTypes
             this.frameFunc.Invoke(entity);
         }
 
-        public abstract PmxVertexData[] GetVertices(EntityShot entity);
+        public abstract PmxVertexData[] GetVertices(ShotProperty property);
 
-        public abstract int[] GetVertexIndices(EntityShot entity);
+        public abstract int[] GetVertexIndices(ShotProperty property);
 
-        public abstract PmxMaterialData[] GetMaterials(EntityShot entity);
+        public abstract PmxMaterialData[] GetMaterials(ShotProperty property);
 
-        public abstract String[] GetTextures(EntityShot entity);
+        public abstract String[] GetTextures(ShotProperty property);
 
-        public abstract PmxBoneData[] GetBones(EntityShot entity);
+        public abstract PmxBoneData[] GetBones(ShotProperty property);
     }
 
     public class ShotTypeNone : ShotType
@@ -68,27 +68,27 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return this.recordMotion;
         }
 
-        public override PmxBoneData[] GetBones(EntityShot entity)
+        public override PmxBoneData[] GetBones(ShotProperty property)
         {
             return null;
         }
 
-        public override PmxMaterialData[] GetMaterials(EntityShot entity)
+        public override PmxMaterialData[] GetMaterials(ShotProperty property)
         {
             return null;
         }
 
-        public override string[] GetTextures(EntityShot entity)
+        public override string[] GetTextures(ShotProperty property)
         {
             return null;
         }
 
-        public override int[] GetVertexIndices(EntityShot entity)
+        public override int[] GetVertexIndices(ShotProperty property)
         {
             return null;
         }
 
-        public override PmxVertexData[] GetVertices(EntityShot entity)
+        public override PmxVertexData[] GetVertices(ShotProperty property)
         {
             return null;
         }

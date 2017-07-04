@@ -22,6 +22,12 @@ namespace CurtainFireMakerPlugin.Entities
         public ShotModelData(ShotProperty property)
         {
             this.property = property;
+
+            this.bones = this.Property.Type.GetBones(this.Property);
+            this.vertices = this.Property.Type.GetVertices(this.Property);
+            this.indices = this.Property.Type.GetVertexIndices(this.Property);
+            this.materials = this.Property.Type.GetMaterials(this.Property);
+            this.textures = this.Property.Type.GetTextures(this.Property);
         }
     }
 }
