@@ -5,7 +5,7 @@ using CurtainFireMakerPlugin.Entity;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace CurtainFireMakerPlugin.ShotType
+namespace CurtainFireMakerPlugin.ShotTypes
 {
     class ShotTypePmx : ShotType
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CurtainFireMakerPlugin.Entity;
+using CurtainFireMakerPlugin.Entities;
 using CPmx.Data;
 
-namespace CurtainFireMakerPlugin.ShotType
+namespace CurtainFireMakerPlugin.ShotTypes
 {
     public abstract class ShotType
     {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DxMath;
-using CurtainFireMakerPlugin.Task;
-using CurtainFireMakerPlugin.Entity.Motion;
+using CurtainFireMakerPlugin.Tasks;
+using CurtainFireMakerPlugin.Entities.Motion;
 
-namespace CurtainFireMakerPlugin.Entity
+namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity
     {
@@ -122,14 +122,14 @@ namespace CurtainFireMakerPlugin.Entity
             this.motionInterpolation = null;
         }
 
-        public void AddTask(Task.Task task)
+        public void AddTask(Task task)
         {
             this.taskManager.AddTask(task);
         }
 
         public void AddTask(Action task, int interval, int executeTimes, int waitTime)
         {
-            this.AddTask(new Task.Task(task, interval, executeTimes, waitTime));
+            this.AddTask(new Task(task, interval, executeTimes, waitTime));
         }
     }
 }

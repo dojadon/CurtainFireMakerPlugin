@@ -5,7 +5,7 @@ using System.Text;
 using CurtainFireMakerPlugin.BezierCurve;
 using DxMath;
 
-namespace CurtainFireMakerPlugin.Entity.Motion
+namespace CurtainFireMakerPlugin.Entities.Motion
 {
     public class MotionInterpolation
     {

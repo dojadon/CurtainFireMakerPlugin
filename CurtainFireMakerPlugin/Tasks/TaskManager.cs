@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CurtainFireMakerPlugin.Task
+namespace CurtainFireMakerPlugin.Tasks
 {
     public class TaskManager
     {

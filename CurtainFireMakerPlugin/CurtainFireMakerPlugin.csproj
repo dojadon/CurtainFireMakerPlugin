@@ -58,11 +58,11 @@
     <Compile Include="BezierCurve\CubicBezierCurve.cs" />
     <Compile Include="BezierCurve\EquationUtil.cs" />
     <Compile Include="BezierCurve\VmdBezierCurve.cs" />
-    <Compile Include="Entity\Motion\MotionInterpolation.cs" />
+    <Compile Include="Entities\Motion\MotionInterpolation.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="Entity\Entity.cs" />
-    <Compile Include="Entity\EntityShot.cs" />
-    <Compile Include="Entity\ShotProperty.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityShot.cs" />
+    <Compile Include="Entities\ShotProperty.cs" />
     <Compile Include="PluginControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -71,10 +71,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonRunner.cs" />
-    <Compile Include="ShotType\ShotType.cs" />
-    <Compile Include="ShotType\ShotTypePmx.cs" />
-    <Compile Include="Task\TaskManager.cs" />
-    <Compile Include="Task\Task.cs" />
+    <Compile Include="ShotTypes\ShotType.cs" />
+    <Compile Include="ShotTypes\ShotTypePmx.cs" />
+    <Compile Include="Tasks\TaskManager.cs" />
+    <Compile Include="Tasks\Task.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
