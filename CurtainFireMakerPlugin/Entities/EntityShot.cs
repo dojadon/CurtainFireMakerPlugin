@@ -56,9 +56,35 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        public override void OnSpawn()
+        {
+            base.OnSpawn();
+
+            this.AddVmdMorph(-this.world.FrameCount, 1.0F);
+            this.AddVmdMorph(0, 1.0F);
+            this.AddVmdMorph(1, 0.0F);
+
+            this.AddVmdMotion(0);
+        }
+
+        public override void OnDeath()
+        {
+            base.OnDeath();
+
+            this.AddVmdMorph(-1, 0.0F);
+            this.AddVmdMorph(0, 1.0F);
+
+            this.AddVmdMotion(0);
+        }
+
         public void AddVmdMotion(int frameOffset)
         {
             this.UpdateRot();
+        }
+
+        public void AddVmdMorph(int frameOffset, float rate)
+        {
+
         }
     }
 }

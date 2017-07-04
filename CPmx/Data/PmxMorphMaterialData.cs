@@ -9,7 +9,7 @@ namespace CPmx.Data
     [Serializable]
     public class PmxMorphMaterialData : IPmxMorphTypeData
     {
-        public int index;
+        public int Index { get; set; }
 
         public byte calcType;
         public Vector4 diffuse = new Vector4();
@@ -24,7 +24,7 @@ namespace CPmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxId(PmxExporter.SIZE_MATERIAL, this.index);
+            exporter.WritePmxId(PmxExporter.SIZE_MATERIAL, this.Index);
 
             exporter.Write(this.calcType);
             exporter.Write(this.diffuse);
@@ -40,7 +40,7 @@ namespace CPmx.Data
 
         public void Parse(PmxParser parser)
         {
-            this.index = parser.ReadPmxId(parser.SizeMaterial);
+            this.Index = parser.ReadPmxId(parser.SizeMaterial);
 
             this.calcType = parser.ReadByte();
             parser.ReadVector(this.diffuse);

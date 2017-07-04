@@ -8,18 +8,18 @@ namespace CPmx.Data
     [Serializable]
     public class PmxMorphGroupData : IPmxMorphTypeData
     {
-        public int index;
+        public int Index { get; set; }
         public float rate;
 
         public void Export(PmxExporter exporter)
         {
-                exporter.WritePmxId(PmxExporter.SIZE_MORPH, this.index);
+                exporter.WritePmxId(PmxExporter.SIZE_MORPH, this.Index);
                 exporter.Write(this.rate);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.index = parser.ReadPmxId(parser.SizeMorph);
+            this.Index = parser.ReadPmxId(parser.SizeMorph);
             this.rate = parser.ReadSingle();
         }
 

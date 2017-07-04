@@ -11,18 +11,18 @@ namespace CPmx.Data
     {
         public byte uvType;
 
-        public int index;
+        public int Index { get; set; }
         public Vector4 uv = new Vector4();
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxId(PmxExporter.SIZE_VERTEX, this.index);
+            exporter.WritePmxId(PmxExporter.SIZE_VERTEX, this.Index);
             exporter.Write(this.uv);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.index = parser.ReadPmxId(parser.SizeVertex);
+            this.Index = parser.ReadPmxId(parser.SizeVertex);
             parser.ReadVector(this.uv);
         }
 

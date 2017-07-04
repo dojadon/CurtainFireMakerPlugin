@@ -9,13 +9,13 @@ namespace CPmx.Data
     [Serializable]
     public class PmxMorphBoneData : IPmxMorphTypeData
     {
-        public int index;
+        public int Index { get; set; }
         public Vector3 position = new Vector3();
         public Quaternion rotation = new Quaternion();
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxId(PmxExporter.SIZE_BONE, this.index);
+            exporter.WritePmxId(PmxExporter.SIZE_BONE, this.Index);
 
             exporter.Write(this.position);
             exporter.Write(this.rotation);
@@ -23,7 +23,7 @@ namespace CPmx.Data
 
         public void Parse(PmxParser parser)
         {
-            this.index = parser.ReadPmxId(parser.SizeBone);
+            this.Index = parser.ReadPmxId(parser.SizeBone);
 
             parser.ReadVector(this.position);
             parser.ReadVector(this.rotation);

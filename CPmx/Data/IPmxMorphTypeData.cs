@@ -5,8 +5,9 @@ using System.Text;
 
 namespace CPmx.Data
 {
-   public interface IPmxMorphTypeData : IPmxData
+    public interface IPmxMorphTypeData : IPmxData
     {
         byte GetMorphType();
+        int Index { get; set; }
     }
 }
