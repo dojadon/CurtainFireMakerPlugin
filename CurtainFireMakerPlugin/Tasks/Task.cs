@@ -29,12 +29,12 @@ namespace CurtainFireMakerPlugin.Tasks
 
         public void Update()
         {
-            this.state.Invoke(this);
+            this.state(this);
         }
 
         private void Run()
         {
-            this.task.Invoke();
+            this.task();
         }
 
         public Boolean IsFinished()

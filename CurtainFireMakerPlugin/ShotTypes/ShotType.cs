@@ -21,12 +21,12 @@ namespace CurtainFireMakerPlugin.ShotTypes
             this.Name = name;
         }
 
-        public bool HasMmdData()
+        public virtual bool HasMmdData()
         {
             return true;
         }
 
-        public bool RecordMotion()
+        public virtual bool RecordMotion()
         {
             return true;
         }
@@ -45,5 +45,52 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public abstract String[] GetTextures(EntityShot entity);
 
         public abstract PmxBoneData[] GetBones(EntityShot entity);
+    }
+
+    public class ShotTypeNone : ShotType
+    {
+        private readonly bool hasMmd;
+        private readonly bool recordMotion;
+
+        public ShotTypeNone(string name, bool hasMmd, bool recordMotion) : base(name)
+        {
+            this.hasMmd = hasMmd;
+            this.recordMotion = recordMotion;
+        }
+
+        public override bool HasMmdData()
+        {
+            return this.hasMmd;
+        }
+
+        public override bool RecordMotion()
+        {
+            return this.recordMotion;
+        }
+
+        public override PmxBoneData[] GetBones(EntityShot entity)
+        {
+            return null;
+        }
+
+        public override PmxMaterialData[] GetMaterials(EntityShot entity)
+        {
+            return null;
+        }
+
+        public override string[] GetTextures(EntityShot entity)
+        {
+            return null;
+        }
+
+        public override int[] GetVertexIndices(EntityShot entity)
+        {
+            return null;
+        }
+
+        public override PmxVertexData[] GetVertices(EntityShot entity)
+        {
+            return null;
+        }
     }
 }
