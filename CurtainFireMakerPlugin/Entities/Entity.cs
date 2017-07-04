@@ -47,7 +47,7 @@ namespace CurtainFireMakerPlugin.Entities
         private TaskManager taskManager = new TaskManager();
         private World world;
 
-        public void Frame()
+        public virtual void Frame()
         {
             this.PrevPos = this.Pos;
             this.PrevRot = this.PrevRot;
@@ -86,7 +86,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.Pos += interpolatedVelocity;
         }
 
-        protected void UpdateRot()
+        protected virtual void UpdateRot()
         {
             this.Rot = this.RotFirst * this.RotSecond;
         }
@@ -95,19 +95,24 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.worldMat = Matrix.RotationQuaternion(this.Rot);
             Matrix.Translation(this.Pos.X, this.Pos.Y, this.Pos.Z, out this.worldMat);
+
+            if (this.parentEntity != null)
+            {
+                this.worldMat = this.parentEntity.WorldMat * this.worldMat;
+            }
         }
 
-        protected bool DeathCheck()
+        protected virtual bool DeathCheck()
         {
             return this.LivingLimit != 0 && this.FrameCount > this.LivingLimit || this.CheckWorldOut.Invoke(this);
         }
 
-        public void OnSpawn()
+        public virtual void OnSpawn()
         {
             this.SpawnFrameNo = this.world.AddEntity(this);
         }
 
-        public void OnDeath()
+        public virtual void OnDeath()
         {
             this.DeathFrameNo = this.world.RemoveEntity(this);
             this.IsDeath = true;

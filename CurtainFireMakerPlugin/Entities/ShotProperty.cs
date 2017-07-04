@@ -2,11 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CurtainFireMakerPlugin.ShotTypes;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     public class ShotProperty
     {
-        public int Color;
+        private readonly int color;
+        public int Color => color;
+        public float Red => (color >> 16 & 0x000000FF) / 255.0F;
+        public float Green => (color >> 8 & 0x000000FF) / 255.0F;
+        public float Blue => (color >> 0 & 0x000000FF) / 255.0F;
+
+        private readonly ShotType type;
+        public ShotType Type => type;
+
+        public ShotProperty(int color, ShotType type)
+        {
+            this.color = color;
+            this.type = type;
+        }
     }
 }
