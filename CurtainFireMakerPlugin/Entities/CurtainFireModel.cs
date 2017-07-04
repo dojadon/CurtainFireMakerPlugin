@@ -6,16 +6,16 @@ using CPmx.Data;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    internal class CurtainFireModelData
+    internal class CurtainFireModel
     {
-        public List<int> indexList = new List<int>();
-        public List<PmxVertexData> vertexList = new List<PmxVertexData>();
-        public List<PmxMaterialData> materialList = new List<PmxMaterialData>();
-        public List<PmxMorphData> morphList = new List<PmxMorphData>();
-        public List<PmxBoneData> boneList = new List<PmxBoneData>();
-        public List<string> textureList = new List<string>();
+        private readonly List<int> indexList = new List<int>();
+        private readonly List<PmxVertexData> vertexList = new List<PmxVertexData>();
+        private readonly List<PmxMaterialData> materialList = new List<PmxMaterialData>();
+        private readonly List<PmxMorphData> morphList = new List<PmxMorphData>();
+        private readonly List<PmxBoneData> boneList = new List<PmxBoneData>();
+        private readonly List<string> textureList = new List<string>();
 
-        public CurtainFireModelData()
+        public CurtainFireModel()
         {
             PmxBoneData centerBone = new PmxBoneData();
             centerBone.boneName = "センター";

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DxMath;
+using CPmx.Data;
+using MikuMikuPlugin;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -10,6 +12,10 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public ShotProperty Property { get; }
         public Entity ParentEntity { get => this.parentEntity; set { this.parentEntity = value; } }
+
+        public PmxBoneData rootBone;
+        public PmxBoneData[] bones;
+        public PmxMorphData materialMorph;
 
         private delegate bool ShouldRecordMotion(EntityShot entity);
         private static ShouldRecordMotion WhenVelocityChanges = e => e.Velocity.Equals(e.PrevVelocity) || e.Upward.Equals(e.PrevUpward);
@@ -77,14 +83,25 @@ namespace CurtainFireMakerPlugin.Entities
             this.AddVmdMotion(0);
         }
 
-        public void AddVmdMotion(int frameOffset)
+        public void AddVmdMotion(int frameOffset, bool replace = false)
         {
             this.UpdateRot();
+
+            var motion = new MotionFrameData(this.world.FrameCount + frameOffset, this.Pos, this.Rot);
+
+            if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.world.FrameCount)
+            {
+                replace = true;
+            }
+
+            this.world.motion.AddVmdMotion(this.rootBone.boneName, motion, replace);
         }
 
         public void AddVmdMorph(int frameOffset, float rate)
         {
+            var morph = new MorphFrameData(this.world.FrameCount + frameOffset, rate);
 
+            this.world.motion.AddVmdMorph(this.materialMorph.morphName, morph);
         }
     }
 }

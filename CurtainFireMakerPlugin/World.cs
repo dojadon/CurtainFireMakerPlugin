@@ -16,6 +16,9 @@ namespace CurtainFireMakerPlugin
 
         private TaskManager taskManager = new TaskManager();
 
+        internal CurtainFireModel model = new CurtainFireModel();
+        internal CurtainFireMotion motion = new CurtainFireMotion();
+
         public int AddEntity(Entity entity)
         {
             this.addEntityList.Add(entity);

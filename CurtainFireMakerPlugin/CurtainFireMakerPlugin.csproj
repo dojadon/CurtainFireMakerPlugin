@@ -58,7 +58,9 @@
     <Compile Include="BezierCurve\CubicBezierCurve.cs" />
     <Compile Include="BezierCurve\EquationUtil.cs" />
     <Compile Include="BezierCurve\VmdBezierCurve.cs" />
-    <Compile Include="Entities\CurtainFireModelData.cs" />
+    <Compile Include="Collections\MultiDictionary.cs" />
+    <Compile Include="Entities\CurtainFireModel.cs" />
+    <Compile Include="Entities\CurtainFireMotion.cs" />
     <Compile Include="Entities\Motion\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
     <Compile Include="Plugin.cs" />
