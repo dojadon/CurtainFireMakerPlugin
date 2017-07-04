@@ -102,5 +102,30 @@ namespace CurtainFireMakerPlugin.Entities
             }
             this.boneList.AddRange(data);
         }
+
+        public void GetData(PmxModelData data)
+        {
+            var header = new PmxHeaderData();
+            header.modelName = "弾";
+            header.version = 2.0F;
+
+            var boneSlot = new PmxSlotData();
+            boneSlot.slotName = "弾ボーン";
+            boneSlot.type = PmxSlotData.SLOT_TYPE_BONE;
+            boneSlot.indices = Enumerable.Range(0, this.boneList.Count).ToArray();
+
+            var morphSlot = new PmxSlotData();
+            morphSlot.slotName = "弾モーフ";
+            morphSlot.type = PmxSlotData.SLOT_TYPE_MORPH;
+            morphSlot.indices = Enumerable.Range(0, this.materialList.Count).ToArray();
+
+            data.Header = header;
+            data.VertexIndices = this.indexList.ToArray();
+            data.TextureFiles = this.textureList.ToArray();
+            data.VertexArray = this.vertexList.ToArray();
+            data.BoneArray = this.boneList.ToArray();
+            data.MorphArray = this.morphList.ToArray();
+            data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
+        }
     }
 }

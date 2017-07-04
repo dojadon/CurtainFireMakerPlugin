@@ -1,7 +1,7 @@
 ﻿using System;
 using CPmx;
 using CPmx.Data;
-using CurtainFireMakerPlugin.Entity;
+using CurtainFireMakerPlugin.Entities;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -10,8 +10,6 @@ namespace CurtainFireMakerPlugin.ShotTypes
     class ShotTypePmx : ShotType
     {
         private PmxModelData data = new PmxModelData();
-
-
 
         public ShotTypePmx(String name, Stream outStream) : base(name)
         {
