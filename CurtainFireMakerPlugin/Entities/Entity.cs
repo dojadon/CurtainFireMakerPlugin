@@ -36,10 +36,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public int FrameCount { get; set; }
         public int LivingLimit { get; set; }
-        public int SpawnFrameNo { get; }
-        public int DeathFrameNo { get; }
+        public int SpawnFrameNo { get; set; }
+        public int DeathFrameNo { get; set; }
 
         public Func<Entity, bool> CheckWorldOut { get; set; } = entity => (entity.Pos - entity.SpawnPos).Length() > 400.0;
+
+        public bool IsDeath { get; set; }
 
         protected MotionInterpolation motionInterpolation;
         private TaskManager taskManager = new TaskManager();
@@ -59,7 +61,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.UpdateWorldMat();
 
             this.FrameCount++;
-            if(this.DeathCheck())
+            if (this.DeathCheck())
             {
                 this.OnDeath();
             }
@@ -102,12 +104,13 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void OnSpawn()
         {
-
+            this.SpawnFrameNo = this.world.AddEntity(this);
         }
 
         public void OnDeath()
         {
-
+            this.DeathFrameNo = this.world.RemoveEntity(this);
+            this.IsDeath = true;
         }
 
         public void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
