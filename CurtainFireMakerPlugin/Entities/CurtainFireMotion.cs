@@ -13,25 +13,25 @@ namespace CurtainFireMakerPlugin.Entities
         private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
         private List<VmdMorphFrameData> morphList = new List<VmdMorphFrameData>();
 
-        public void AddVmdMotion(string boneName, VmdMotionFrameData motion, bool replace = false)
+        public void AddVmdMotion(VmdMotionFrameData motion, bool replace = false)
         {
             if (replace)
             {
-                motionList.RemoveAll(m => m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo);
+                motionList.RemoveAll(m => m == null || m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo);
                 motionList.Add(motion);
             }
             else
             {
-                if (!motionList.Exists(m => m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo))
+                if (!motionList.Exists(m => m == null || m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo))
                 {
                     motionList.Add(motion);
                 }
             }
         }
 
-        public void AddVmdMorph(string morphName, VmdMorphFrameData morph)
+        public void AddVmdMorph(VmdMorphFrameData morph)
         {
-            morphList.RemoveAll(m => m.morphName.Equals(morph.morphName) && m.keyFrameNo == morph.keyFrameNo);
+            morphList.RemoveAll(m => m == null || m.morphName.Equals(morph.morphName) && m.keyFrameNo == morph.keyFrameNo);
             morphList.Add(morph);
         }
 

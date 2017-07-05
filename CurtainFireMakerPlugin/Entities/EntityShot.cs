@@ -107,16 +107,17 @@ namespace CurtainFireMakerPlugin.Entities
                 replace = true;
             }
 
-            this.world.motion.AddVmdMotion(this.rootBone.boneName, motion, replace);
+            this.world.motion.AddVmdMotion(motion, replace);
         }
 
         public void AddVmdMorph(int frameOffset, float rate)
         {
             var morph = new VmdMorphFrameData();
+            morph.morphName = this.materialMorph.morphName;
             morph.keyFrameNo = this.world.FrameCount + frameOffset;
             morph.rate = rate;
 
-            this.world.motion.AddVmdMorph(this.materialMorph.morphName, morph);
+            this.world.motion.AddVmdMorph(morph);
         }
     }
 }

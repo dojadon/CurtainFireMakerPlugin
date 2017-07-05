@@ -10,13 +10,13 @@ namespace CsVmd
 {
     public class VmdExporter : BinaryWriter
     {
-        private static readonly Encoding ENCORDING = Encoding.GetEncoding("utf-16");
+        private static readonly Encoding ENCORDING = Encoding.GetEncoding("Shift_JIS");
         private static readonly byte[] NULL_STR = ENCORDING.GetBytes("\0");
 
         public const int BONE_NAME_LENGTH = 15;
         public const int MORPH_NAME_LENGTH = 15;
-        public const int MODEL_NAME_LENGTH = 15;
-        public const int HEADER_LENGTH = 15;
+        public const int MODEL_NAME_LENGTH = 20;
+        public const int HEADER_LENGTH = 30;
 
         public VmdExporter(Stream outStream) : base(outStream)
         {
@@ -57,18 +57,33 @@ namespace CsVmd
             this.Write(vec.W);
         }
 
-        public void WriteVmdText(string str, int maxLength)
+        private void WriteFiller(byte[] filler, int fillerLength)
+        {
+            if (filler.Length <= 0 || fillerLength <= 0)
+            {
+                return;
+            }
+
+            byte lastData = filler[filler.Length - 1];
+
+            int fillerIdx = 0;
+            for (int remain = fillerLength; remain > 0; remain--)
+            {
+                byte bVal = fillerIdx < filler.Length ? filler[fillerIdx++] : lastData;
+                this.Write(bVal);
+            }
+        }
+
+        public void WriteVmdText(string str, int fixedLength)
         {
             byte[] bytes = ENCORDING.GetBytes(str);
 
             this.Write(bytes);
 
-            maxLength -= bytes.Length;
-
-            while(maxLength > 0)
+            int remain = fixedLength - bytes.Length;
+            if (remain > 0)
             {
-                this.Write(NULL_STR);
-                maxLength -= NULL_STR.Length;
+                this.WriteFiller(NULL_STR, remain);
             }
         }
     }
