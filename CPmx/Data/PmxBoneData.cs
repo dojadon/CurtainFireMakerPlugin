@@ -44,11 +44,11 @@ namespace CPmx.Data
         /** 制限角度強度 */
         public float angleLimit;
         /** IK影響下ボーンID */
-        public int[] ikChilds;
+        public int[] ikChilds = { };
         /** 回転角制御 */
-        public Vector3[] ikAngleMin;
+        public Vector3[] ikAngleMin = { };
         /** 回転角制御 */
-        public Vector3[] ikAngleMax;
+        public Vector3[] ikAngleMax = { };
 
         public void Export(PmxExporter exporter)
         {

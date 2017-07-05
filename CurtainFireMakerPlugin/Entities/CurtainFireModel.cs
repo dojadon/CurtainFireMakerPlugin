@@ -107,7 +107,8 @@ namespace CurtainFireMakerPlugin.Entities
         public void GetData(PmxModelData data)
         {
             var header = new PmxHeaderData();
-            header.modelName = "弾";
+            header.modelName = "弾幕";
+            header.description = "this model was made by \"Curtain Fire Makaer Plugin\"";
             header.version = 2.0F;
 
             var boneSlot = new PmxSlotData();
@@ -124,6 +125,7 @@ namespace CurtainFireMakerPlugin.Entities
             data.VertexIndices = this.indexList.ToArray();
             data.TextureFiles = this.textureList.ToArray();
             data.VertexArray = this.vertexList.ToArray();
+            data.MaterialArray = this.materialList.ToArray();
             data.BoneArray = this.boneList.ToArray();
             data.MorphArray = this.morphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };

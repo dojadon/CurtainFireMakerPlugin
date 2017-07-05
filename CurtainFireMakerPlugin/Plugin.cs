@@ -55,33 +55,29 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-                World world = new World();
+            World world = new World();
 
-                PythonRunner.Init(this.Control.ReferenceScriptPath);
-                Console.WriteLine("finish init");
-                PythonRunner.RunShotTypeScript(this.Control.ShotTypeScriptPath);
-                PythonRunner.RunSpellScript(this.Control.SpellScriptPath, world);
-                Console.WriteLine("run");
-                //world.StartWorld();
+            PythonRunner.Init(this.Control.ReferenceScriptPath);
+            PythonRunner.RunShotTypeScript(this.Control.ShotTypeScriptPath);
+            PythonRunner.RunSpellScript(this.Control.SpellScriptPath, world);
+            Console.WriteLine("run");
+            world.StartWorld();
 
-                //this.ExportPmx(world);
+            this.ExportPmx(world);
 
-                Console.WriteLine("finish");
+            Console.WriteLine("finish");
         }
 
         private void ExportPmx(World world)
         {
             string exportPath = this.Control.ExportPath;
 
-            if (File.Exists(exportPath))
-            {
-                var pmxExporter = new PmxExporter(File.Create(this.Control.ExportPath));
+            var pmxExporter = new PmxExporter(new FileStream(this.Control.ExportPath, FileMode.Create, FileAccess.Write));
 
-                var data = new PmxModelData();
-                world.model.GetData(data);
+            var data = new PmxModelData();
+            world.model.GetData(data);
 
-                pmxExporter.Export(data);
-            }
+            pmxExporter.Export(data);
         }
     }
 }
