@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IronPython.Hosting;
+using IronPython.Runtime;
 using Microsoft.Scripting.Hosting;
 using CurtainFireMakerPlugin.ShotTypes;
 
@@ -12,32 +13,38 @@ namespace CurtainFireMakerPlugin
     {
         private static ScriptEngine engine;
 
-        public static void Init()
+        public static void Init(string path)
         {
             engine = Python.CreateEngine();
-            engine.Execute(
-            "# -*- coding: utf-8 -*- \n" +
-            "import clr \n" +
-            "clr.AddReference(\"CurtainFireMakerPlugin\") \n" +
-            "clr.AddReference(\"MikuMikuPlugin\")\n" +
-            "clr.AddReference(\"DxMath\")\n");
+            engine.ExecuteFile(path);
         }
 
         public static void RunShotTypeScript(string path)
         {
-            ScriptScope scope = engine.CreateScope();
+            dynamic scope = engine.ExecuteFile(path);
 
-            engine.ExecuteFile(path);
-            Action<List< ShotType >> action = engine.Operations.GetMember<Action<List<ShotType>>>(scope, "setup");
+            try
+            {
+                ShotTypeList.Init(list => scope.setup(list));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         public static void RunSpellScript(string path, World world)
         {
-            ScriptScope scope = engine.CreateScope();
+            dynamic scope = engine.ExecuteFile(path);
 
-            engine.ExecuteFile(path);
-            Action<World> action = engine.Operations.GetMember<Action<World>>(scope, "setup");
-            action(world);
+            try
+            {
+                scope.setup(world);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

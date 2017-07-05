@@ -33,8 +33,14 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        public EntityShot(string typeName, int color)  : this(new ShotProperty(typeName, color))
+        {
+        }
+
         public EntityShot(ShotProperty property)
         {
+            this.world = World.Instance;
+
             this.Property = property;
             this.world.AddShot(this);
         }

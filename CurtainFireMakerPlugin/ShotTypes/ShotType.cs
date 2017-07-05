@@ -9,7 +9,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 {
     public abstract class ShotType
     {
-        private String Name { get; }
+        public String Name { get; }
 
         private Action<EntityShot> frameFunc = entity =>
         {

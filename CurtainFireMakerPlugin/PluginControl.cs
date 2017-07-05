@@ -12,15 +12,19 @@ namespace CurtainFireMakerPlugin
 {
     public partial class PluginControl : UserControl
     {
-        public ListBox[] Indices { get; set; }
         public Scene Scene { get; set; }
+
+        public string ReferenceScriptPath => this.textBox2.Text + "\\reference.py";
+        public string SpellScriptPath => this.textBox2.Text + "\\spell.py";
+        public string ShotTypeScriptPath => this.textBox2.Text + "\\shottype.py";
+        public string ModelDir => this.textBox1.Text + "\\import\\resource";
+        public string ExportPath => this.textBox4.Text;
 
         public PluginControl(Scene scene)
         {
             InitializeComponent();
 
             this.Scene = scene;
-            this.Indices = new ListBox[] { listBox1, listBox2, listBox3, listBox4, listBox5, listBox6, listBox7, listBox8 };
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -52,15 +56,6 @@ namespace CurtainFireMakerPlugin
             if (result == DialogResult.OK || result == DialogResult.Yes)
             {
                 this.textBox4.Text = this.openFileDialog1.SafeFileName;
-            }
-        }
-
-        private void ListBox_Click(object sender, MouseEventArgs e)
-        {
-            Array.ForEach(this.Indices, t => t.Items.Clear());
-            foreach (Model model in this.Scene.Models)
-            {
-                Array.ForEach(this.Indices, t => t.Items.Add(model.Name));
             }
         }
     }

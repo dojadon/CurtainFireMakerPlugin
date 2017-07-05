@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using DxMath;
 using MikuMikuPlugin;
+using CPmx;
+using CPmx.Data;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace CurtainFireMakerPlugin
 {
@@ -13,9 +13,15 @@ namespace CurtainFireMakerPlugin
     {
         public static Plugin Instance { get; set; }
 
+        private StreamWriter outStream;
+
         public Plugin()
         {
             Instance = this;
+
+            this.outStream = new StreamWriter("log.txt", true, System.Text.Encoding.GetEncoding("Shift_JIS"));
+            Console.SetOut(outStream);
+            Console.WriteLine("start plugin");
         }
 
         public Guid GUID => new Guid();
@@ -34,7 +40,7 @@ namespace CurtainFireMakerPlugin
 
         public Image SmallImage => null;
 
-        public UserControl Control { get; set; }
+        public PluginControl Control { get; set; }
 
         public UserControl CreateControl()
         {
@@ -44,11 +50,38 @@ namespace CurtainFireMakerPlugin
 
         public void Dispose()
         {
+            this.outStream.Dispose();
         }
 
-        public void Run(CommandArgs e)
+        public void Run(CommandArgs args)
         {
+                World world = new World();
 
+                PythonRunner.Init(this.Control.ReferenceScriptPath);
+                Console.WriteLine("finish init");
+                PythonRunner.RunShotTypeScript(this.Control.ShotTypeScriptPath);
+                PythonRunner.RunSpellScript(this.Control.SpellScriptPath, world);
+                Console.WriteLine("run");
+                //world.StartWorld();
+
+                //this.ExportPmx(world);
+
+                Console.WriteLine("finish");
+        }
+
+        private void ExportPmx(World world)
+        {
+            string exportPath = this.Control.ExportPath;
+
+            if (File.Exists(exportPath))
+            {
+                var pmxExporter = new PmxExporter(File.Create(this.Control.ExportPath));
+
+                var data = new PmxModelData();
+                world.model.GetData(data);
+
+                pmxExporter.Export(data);
+            }
         }
     }
 }

@@ -17,7 +17,11 @@ namespace CurtainFireMakerPlugin.Entities
         private readonly ShotType type;
         public ShotType Type => type;
 
-        public ShotProperty(int color, ShotType type)
+        public ShotProperty(string typeName, int color) : this(ShotTypeList.GetShotType(typeName), color)
+        {
+        }
+
+        public ShotProperty(ShotType type, int color)
         {
             this.color = color;
             this.type = type;

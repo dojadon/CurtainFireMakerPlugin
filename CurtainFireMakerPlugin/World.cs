@@ -9,6 +9,10 @@ namespace CurtainFireMakerPlugin
 {
     public class World
     {
+        public static World Instance { get; set; }
+
+        public static int MAX_FRAME = 1000;
+
         private List<Entity> addEntityList = new List<Entity>();
         private List<Entity> removeEntityList = new List<Entity>();
         public List<Entity> EntityList { get; } = new List<Entity>();
@@ -22,9 +26,19 @@ namespace CurtainFireMakerPlugin
 
         public World()
         {
+            Instance = this;
+
             shotManager = new ShotManager(this);
             model = new CurtainFireModel();
             motion = new CurtainFireMotion();
+        }
+
+        public void StartWorld()
+        {
+            for (int i = 0; i < MAX_FRAME; i++)
+            {
+                this.Frame();
+            }
         }
 
         public void AddShot(EntityShot entity)

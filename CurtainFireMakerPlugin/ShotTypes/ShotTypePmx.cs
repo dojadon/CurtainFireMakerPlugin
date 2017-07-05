@@ -7,14 +7,22 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
-    class ShotTypePmx : ShotType
+    public class ShotTypePmx : ShotType
     {
         private PmxModelData data = new PmxModelData();
 
-        public ShotTypePmx(String name, Stream outStream) : base(name)
+        public ShotTypePmx(string name, string path) : this(name, new FileStream(Plugin.Instance.Control.ModelDir + "\\" + path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         {
-            PmxParser parser = new PmxParser(outStream);
-            parser.Parse(this.data);
+        }
+
+        public ShotTypePmx(string name, Stream inStream) : base(name)
+        {
+            using (inStream)
+            {
+                PmxParser parser = new PmxParser(inStream);
+
+                parser.Parse(this.data);
+            }
         }
 
         override public PmxVertexData[] GetVertices(ShotProperty property)

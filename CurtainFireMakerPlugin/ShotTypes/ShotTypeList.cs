@@ -11,7 +11,16 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public static void Init(Action<List<ShotType>> action)
         {
+            TYPE_LIST.Add(new ShotTypeNone("NULL", false, false));
+            TYPE_LIST.Add(new ShotTypeNone("BONE", false, true));
             action(TYPE_LIST);
+
+            TYPE_LIST.ForEach(t => Console.WriteLine(t.Name));
+        }
+
+        public static ShotType GetShotType(string name)
+        {
+            return TYPE_LIST.Find(t => t.Name.Equals(name));
         }
     }
 }
