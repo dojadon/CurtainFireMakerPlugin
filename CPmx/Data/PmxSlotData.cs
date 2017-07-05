@@ -52,9 +52,9 @@ namespace CPmx.Data
             for (int i = 0; i < elementCount; i++)
             {
                 byte type = parser.ReadByte();
-                byte size = type == SLOT_TYPE_BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
+                byte size = type == SLOT_TYPE_BONE ? parser.SizeBone : parser.SizeMorph;
 
-               this.indices[i] = parser.ReadPmxId(size);
+                this.indices[i] = parser.ReadPmxId(size);
             }
         }
     }
