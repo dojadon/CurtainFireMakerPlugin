@@ -17,22 +17,14 @@ namespace CPmx.Data
 
         public String morphName = "";
         public String morphNameE = "";
-        /**
-         * 操作パネル
-         * <ul>
-         * <li>1:眉(左下)
-         * <li>2:目(左上)
-         * <li>3:口(右上)
-         * <li>4:その他(右下)
-         * <li>0:システム予約
-         * </ul>
-         */
         public byte type;
 
         public IPmxMorphTypeData[] morphArray;
 
         public void Export(PmxExporter exporter)
         {
+            Console.WriteLine("export morph");
+
             exporter.WritePmxText(this.morphName);
             exporter.WritePmxText(this.morphNameE);
 

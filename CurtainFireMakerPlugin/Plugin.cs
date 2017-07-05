@@ -71,6 +71,7 @@ namespace CurtainFireMakerPlugin
         private void ExportPmx(World world)
         {
             string exportPath = this.Control.ExportPath;
+            File.Delete(exportPath);
 
             var pmxExporter = new PmxExporter(new FileStream(this.Control.ExportPath, FileMode.Create, FileAccess.Write));
 

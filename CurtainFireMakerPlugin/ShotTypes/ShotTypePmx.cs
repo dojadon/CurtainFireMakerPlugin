@@ -30,7 +30,6 @@ namespace CurtainFireMakerPlugin.ShotTypes
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = DeepCopy(this.data.VertexArray[i]);
-                Console.WriteLine(result[i].pos  +", " + this.data.VertexArray[i].pos) ;
             }
             return result;
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using CPmx.Data;
 using CPmx;
+using DxMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -76,6 +77,8 @@ namespace CurtainFireMakerPlugin.Entities
             foreach (PmxMaterialData material in materials)
             {
                 material.materialName = this.materialList.Capacity.ToString();
+                material.diffuse = new Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
+                material.ambient = new Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
                 material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.textureList.IndexOf(textures[material.textureId]) : -1;
                 this.materialList.Add(material);
             }
@@ -108,7 +111,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             var header = new PmxHeaderData();
             header.modelName = "弾幕";
-            header.description = "this model was made by \"Curtain Fire Makaer Plugin\"";
+            header.description = "This model was made by \"Curtain Fire Makaer Plugin\"";
             header.version = 2.0F;
 
             var boneSlot = new PmxSlotData();

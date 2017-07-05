@@ -70,54 +70,54 @@ namespace CPmx.Data
                 exporter.WritePmxId(PmxExporter.SIZE_BONE, this.arrowId);
             }
 
-            if (BoneFlags.ROTATE_LINK.check(this.flag) || BoneFlags.MOVE_LINK.check(this.flag))
-            {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.linkParent);
-                exporter.Write(this.rate);
-            }
+            //if (BoneFlags.ROTATE_LINK.check(this.flag) || BoneFlags.MOVE_LINK.check(this.flag))
+            //{
+            //    exporter.WritePmxId(PmxExporter.SIZE_BONE, this.linkParent);
+            //    exporter.Write(this.rate);
+            //}
 
-            if (BoneFlags.AXIS_ROTATE.check(this.flag))
-            {
-                exporter.Write(this.axisVec);
-            }
+            //if (BoneFlags.AXIS_ROTATE.check(this.flag))
+            //{
+            //    exporter.Write(this.axisVec);
+            //}
 
-            if (BoneFlags.LOCAL_AXIS.check(this.flag))
-            {
-                exporter.Write(this.localAxisVecX);
-                exporter.Write(this.localAxisVecZ);
-            }
+            //if (BoneFlags.LOCAL_AXIS.check(this.flag))
+            //{
+            //    exporter.Write(this.localAxisVecX);
+            //    exporter.Write(this.localAxisVecZ);
+            //}
 
-            if (BoneFlags.EXTRA.check(this.flag))
-            {
-                exporter.Write(this.extraParentId);
-            }
+            //if (BoneFlags.EXTRA.check(this.flag))
+            //{
+            //    exporter.Write(this.extraParentId);
+            //}
 
-            if (BoneFlags.IK.check(this.flag))
-            {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.ikTargetId);
+            //if (BoneFlags.IK.check(this.flag))
+            //{
+            //    exporter.WritePmxId(PmxExporter.SIZE_BONE, this.ikTargetId);
 
-                exporter.Write(this.ikDepth);
-                exporter.Write(this.angleLimit);
+            //    exporter.Write(this.ikDepth);
+            //    exporter.Write(this.angleLimit);
 
-                int boneNum = this.ikChilds.Length;
+            //    int boneNum = this.ikChilds.Length;
 
-                Vector3 zeroVec = new Vector3();
+            //    Vector3 zeroVec = new Vector3();
 
-                for (int i = 0; i < boneNum; i++)
-                {
-                    int ikElement = this.ikChilds[i];
-                    exporter.WritePmxId(PmxExporter.SIZE_BONE, ikElement);
+            //    for (int i = 0; i < boneNum; i++)
+            //    {
+            //        int ikElement = this.ikChilds[i];
+            //        exporter.WritePmxId(PmxExporter.SIZE_BONE, ikElement);
 
-                    int limit = this.ikAngleMin[i].Equals(zeroVec) && this.ikAngleMax[i].Equals(zeroVec) ? 0 : 1;
-                    exporter.Write((byte)limit);
+            //        int limit = this.ikAngleMin[i].Equals(zeroVec) && this.ikAngleMax[i].Equals(zeroVec) ? 0 : 1;
+            //        exporter.Write((byte)limit);
 
-                    if (limit > 0)
-                    {
-                        exporter.Write(this.ikAngleMin[i]);
-                        exporter.Write(this.ikAngleMax[i]);
-                    }
-                }
-            }
+            //        if (limit > 0)
+            //        {
+            //            exporter.Write(this.ikAngleMin[i]);
+            //            exporter.Write(this.ikAngleMax[i]);
+            //        }
+            //    }
+            //}
         }
 
         public void Parse(PmxParser parser)
@@ -195,29 +195,29 @@ namespace CPmx.Data
         /** オフセット. (0:のときオフセット. 1:のときボーン.) */
         public static readonly BoneFlags OFFSET = new BoneFlags(0x0001);
         /** 回転. */
-        public static readonly BoneFlags ROTATE = new BoneFlags(0x0001);
+        public static readonly BoneFlags ROTATE = new BoneFlags(0x0002);
         /** 移動. */
-        public static readonly BoneFlags MOVE = new BoneFlags(0x0001);
+        public static readonly BoneFlags MOVE = new BoneFlags(0x0004);
         /** 表示. */
-        public static readonly BoneFlags VISIBLE = new BoneFlags(0x0001);
+        public static readonly BoneFlags VISIBLE = new BoneFlags(0x0008);
         /** 操作. */
-        public static readonly BoneFlags OP = new BoneFlags(0x0001);
+        public static readonly BoneFlags OP = new BoneFlags(0x0010);
         /** IK. */
-        public static readonly BoneFlags IK = new BoneFlags(0x0001);
+        public static readonly BoneFlags IK = new BoneFlags(0x0020);
         /** ローカル付与フラグ. */
-        public static readonly BoneFlags LINK = new BoneFlags(0x0001);
+        public static readonly BoneFlags LINK = new BoneFlags(0x0080);
         /** 回転付与. */
-        public static readonly BoneFlags ROTATE_LINK = new BoneFlags(0x0001);
+        public static readonly BoneFlags ROTATE_LINK = new BoneFlags(0x0100);
         /** 移動付与. */
-        public static readonly BoneFlags MOVE_LINK = new BoneFlags(0x0001);
+        public static readonly BoneFlags MOVE_LINK = new BoneFlags(0x0200);
         /** 回転軸固定. */
-        public static readonly BoneFlags AXIS_ROTATE = new BoneFlags(0x0001);
+        public static readonly BoneFlags AXIS_ROTATE = new BoneFlags(0x0400);
         /** ローカル座標軸. */
-        public static readonly BoneFlags LOCAL_AXIS = new BoneFlags(0x0001);
+        public static readonly BoneFlags LOCAL_AXIS = new BoneFlags(0x0800);
         /** 物理後変形 */
-        public static readonly BoneFlags PHYSICAL = new BoneFlags(0x0001);
+        public static readonly BoneFlags PHYSICAL = new BoneFlags(0x1000);
         /** 外部親変形 */
-        public static readonly BoneFlags EXTRA = new BoneFlags(0x0001);
+        public static readonly BoneFlags EXTRA = new BoneFlags(0x2000);
 
         public static readonly BoneFlags[] FLAGS = { OFFSET, ROTATE, MOVE, VISIBLE, OP, IK, LINK, ROTATE_LINK, MOVE_LINK, AXIS_ROTATE, LOCAL_AXIS, PHYSICAL, EXTRA };
 
