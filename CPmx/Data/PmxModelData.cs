@@ -46,7 +46,6 @@ namespace CPmx.Data
         private void ExportData<T>(T[] data, Action<T, PmxExporter> action, PmxExporter exporter)
         {
             exporter.Write(data.Length);
-            Console.WriteLine(data.Length);
             Array.ForEach(data, d => action.Invoke(d, exporter));
         }
 
@@ -58,7 +57,6 @@ namespace CPmx.Data
         private void ExportPmxData<T>(T[] data, PmxExporter exporter) where T : IPmxData
         {
             exporter.Write(data.Length);
-            Console.WriteLine(data.Length);
             Array.ForEach(data, d => d.Export(exporter));
         }
 
