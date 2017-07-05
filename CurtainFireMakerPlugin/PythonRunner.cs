@@ -23,14 +23,7 @@ namespace CurtainFireMakerPlugin
         {
             dynamic scope = engine.ExecuteFile(path);
 
-            try
-            {
-                ShotTypeList.Init(list => scope.setup(list));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            ShotTypeList.Init(list => scope.setup(list));
         }
 
         public static void RunSpellScript(string path, World world)

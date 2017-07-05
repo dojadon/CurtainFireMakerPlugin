@@ -48,14 +48,13 @@ namespace CPmx.Data
             this.version = parser.ReadSingle();
             byte sizeLen = parser.ReadByte();
             this.size = parser.ReadBytes(sizeLen);
+            parser.Size = this.size;
 
             this.modelName = parser.ReadPmxText();
             this.modelNameE = parser.ReadPmxText();
 
             this.description = parser.ReadPmxText();
             this.descriptionE = parser.ReadPmxText();
-
-            parser.Size = this.size;
         }
     }
 }

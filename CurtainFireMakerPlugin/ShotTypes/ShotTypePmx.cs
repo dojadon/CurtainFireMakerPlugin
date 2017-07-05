@@ -21,7 +21,14 @@ namespace CurtainFireMakerPlugin.ShotTypes
             {
                 PmxParser parser = new PmxParser(inStream);
 
-                parser.Parse(this.data);
+                try
+                {
+                    parser.Parse(this.data);
+                }
+                catch (NullReferenceException e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 
