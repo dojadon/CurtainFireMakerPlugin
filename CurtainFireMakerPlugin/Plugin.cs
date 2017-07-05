@@ -62,13 +62,11 @@ namespace CurtainFireMakerPlugin
             PythonRunner.Init(this.Control.ReferenceScriptPath);
             PythonRunner.RunShotTypeScript(this.Control.ShotTypeScriptPath);
             PythonRunner.RunSpellScript(this.Control.SpellScriptPath, world);
-            Console.WriteLine("run");
+
             world.StartWorld();
 
             this.ExportPmx(world);
             this.ExportVmd(world);
-
-            Console.WriteLine("finish");
         }
 
         private void ExportPmx(World world)

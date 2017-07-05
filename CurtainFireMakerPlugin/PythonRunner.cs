@@ -30,14 +30,7 @@ namespace CurtainFireMakerPlugin
         {
             dynamic scope = engine.ExecuteFile(path);
 
-            try
-            {
-                scope.setup(world);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            scope.setup(world);
         }
     }
 }

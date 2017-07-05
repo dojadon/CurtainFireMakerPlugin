@@ -22,7 +22,7 @@ namespace CurtainFireMakerPlugin.Entities
         private static ShouldRecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
         private static ShouldRecordMotion WhenPosChanges = e => !e.Pos.Equals(e.PrevPos) || !e.Rot.Equals(e.PrevRot);
 
-        private ShouldRecordMotion ShouldRecord = WhenPosChanges;
+        private ShouldRecordMotion ShouldRecord = WhenVelocityChanges;
 
         public bool RotateAccodingToVelocity { get; set; }
         public bool RecordWhenVelocityChanges
