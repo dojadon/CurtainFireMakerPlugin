@@ -8,7 +8,7 @@ namespace CsPmx
 {
     public class PmxExporter : BinaryWriter
     {
-        private static Encoding ENCORDER = Encoding.GetEncoding("utf-16");
+        private static readonly Encoding ENCORDER = Encoding.GetEncoding("utf-16");
 
         public const byte SIZE_VERTEX = 4;
         public const byte SIZE_TEXTURE = 2;

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CsVmd
+namespace CsVmd.Data
 {
-    public class Class1
+    interface IVmdData
     {
+        void Export(VmdExporter exporter);
     }
 }

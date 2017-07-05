@@ -42,8 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Data\IVmdData.cs" />
+    <Compile Include="Data\VmdHeaderData.cs" />
+    <Compile Include="Data\VmdMorphFrameData.cs" />
+    <Compile Include="Data\VmdMotionData.cs" />
+    <Compile Include="Data\VmdMotionFrameData.cs" />
+    <Compile Include="VmdExporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
