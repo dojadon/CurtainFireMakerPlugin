@@ -23,7 +23,7 @@ namespace CPmx.Data
         public void Parse(PmxParser parser)
         {
             this.Index = parser.ReadPmxId(parser.SizeVertex);
-            parser.ReadVector(this.uv);
+            this.uv = parser.ReadVector4();
         }
 
         public byte GetMorphType()

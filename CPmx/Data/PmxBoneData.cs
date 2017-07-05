@@ -125,7 +125,7 @@ namespace CPmx.Data
             this.boneName = parser.ReadPmxText();
             this.boneNameE = parser.ReadPmxText();
 
-            parser.ReadVector(this.pos);
+            this.pos = parser.ReadVector3();
             this.parentId = parser.ReadPmxId(parser.SizeBone);
 
             this.depth = parser.ReadInt32();
@@ -133,7 +133,7 @@ namespace CPmx.Data
 
             if (!BoneFlags.OFFSET.check(this.flag))
             {
-                parser.ReadVector(this.posOffset);
+                this.posOffset = parser.ReadVector3();
             }
             else
             {
@@ -148,13 +148,13 @@ namespace CPmx.Data
 
             if (BoneFlags.AXIS_ROTATE.check(this.flag))
             {
-                parser.ReadVector(this.axisVec);
+                this.axisVec = parser.ReadVector3();
             }
 
             if (BoneFlags.LOCAL_AXIS.check(this.flag))
             {
-                parser.ReadVector(this.localAxisVecX);
-                parser.ReadVector(this.localAxisVecZ);
+                this.localAxisVecX = parser.ReadVector3();
+                this.localAxisVecZ = parser.ReadVector3();
             }
 
             if (BoneFlags.EXTRA.check(this.flag))
@@ -182,8 +182,8 @@ namespace CPmx.Data
 
                     if (limit > 0)
                     {
-                        parser.ReadVector(ikAngleMin[i]);
-                        parser.ReadVector(ikAngleMax[i]);
+                        ikAngleMin[i] = parser.ReadVector3();
+                        ikAngleMax[i] = parser.ReadVector3();
                     }
                 }
             }

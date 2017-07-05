@@ -91,14 +91,14 @@ namespace CPmx.Data
             this.materialName = parser.ReadPmxText();
             this.materialNameE = parser.ReadPmxText();
 
-            parser.ReadVector(this.diffuse);
-            parser.ReadVector(this.specular);
+            this.diffuse = parser.ReadVector4();
+            this.specular = parser.ReadVector3();
             this.shininess = parser.ReadSingle();
-            parser.ReadVector(this.ambient);
+            this.ambient = parser.ReadVector3();
 
             this.flag = parser.ReadByte();
 
-            parser.ReadVector(this.edge);
+            this.edge = parser.ReadVector4();
             this.edgeThick = parser.ReadSingle();
 
             this.textureId = parser.ReadPmxId(parser.SizeTexture);

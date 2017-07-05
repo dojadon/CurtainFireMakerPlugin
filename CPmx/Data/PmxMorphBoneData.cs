@@ -25,8 +25,8 @@ namespace CPmx.Data
         {
             this.Index = parser.ReadPmxId(parser.SizeBone);
 
-            parser.ReadVector(this.position);
-            parser.ReadVector(this.rotation);
+            this.position = parser.ReadVector3();
+            this.rotation = parser.ReadQuaternion();
         }
 
         public byte GetMorphType()

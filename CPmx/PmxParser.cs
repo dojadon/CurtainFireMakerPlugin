@@ -62,33 +62,30 @@ namespace CPmx
             return str;
         }
 
+        public Vector2 ReadVector2()
+        {
+            return new Vector2(this.ReadSingle(), this.ReadSingle());
+        }
+
+        public Vector3 ReadVector3()
+        {
+            return new Vector3(this.ReadSingle(), this.ReadSingle(), this.ReadSingle());
+        }
+
+        public Vector4 ReadVector4()
+        {
+            return new Vector4(this.ReadSingle(), this.ReadSingle(), this.ReadSingle(), this.ReadSingle());
+        }
+
+        public Quaternion ReadQuaternion()
+        {
+            return new Quaternion(this.ReadSingle(), this.ReadSingle(), this.ReadSingle(), this.ReadSingle());
+        }
+
         public void ReadVector(Vector2 vec)
         {
             vec.X = this.ReadSingle();
             vec.Y = this.ReadSingle();
-        }
-
-        public void ReadVector(Vector3 vec)
-        {
-            vec.X = this.ReadSingle();
-            vec.Y = this.ReadSingle();
-            vec.Z = this.ReadSingle();
-        }
-
-        public void ReadVector(Vector4 vec)
-        {
-            vec.X = this.ReadSingle();
-            vec.Y = this.ReadSingle();
-            vec.Z = this.ReadSingle();
-            vec.W = this.ReadSingle();
-        }
-
-        public void ReadVector(Quaternion vec)
-        {
-            vec.X = this.ReadSingle();
-            vec.Y = this.ReadSingle();
-            vec.Z = this.ReadSingle();
-            vec.W = this.ReadSingle();
         }
     }
 }

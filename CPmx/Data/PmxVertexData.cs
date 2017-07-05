@@ -82,9 +82,9 @@ namespace CPmx.Data
 
         public void Parse(PmxParser parser)
         {
-            parser.ReadVector(this.pos);
-            parser.ReadVector(this.normal);
-            parser.ReadVector(this.uv);
+            this.pos = parser.ReadVector3();
+            this.normal = parser.ReadVector3();
+            this.uv = parser.ReadVector2();
 
             this.weightType = parser.ReadByte();
 
@@ -96,24 +96,24 @@ namespace CPmx.Data
 
                 case WEIGHT_TYPE_BDEF2:
                 case WEIGHT_TYPE_SDEF:
-                    this.boneId = new int[2] ;
+                    this.boneId = new int[2];
                     break;
 
                 case WEIGHT_TYPE_BDEF4:
-                    this.boneId = new int[4] ;
+                    this.boneId = new int[4];
                     break;
             }
 
-            for (int i=0; i<this.boneId.Length; i++)
+            for (int i = 0; i < this.boneId.Length; i++)
             {
                 this.boneId[i] = parser.ReadPmxId(parser.SizeBone);
             }
 
             if (this.weightType == WEIGHT_TYPE_SDEF)
             {
-                parser.ReadVector(this.sdef_c);
-                parser.ReadVector(this.sdef_r0);
-                parser.ReadVector(this.sdef_r1);
+                this.sdef_c = parser.ReadVector3();
+                this.sdef_r0 = parser.ReadVector3();
+                this.sdef_r1 = parser.ReadVector3();
             }
             this.edge = parser.ReadSingle();
         }

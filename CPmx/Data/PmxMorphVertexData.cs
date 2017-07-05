@@ -10,18 +10,18 @@ namespace CPmx.Data
     public class PmxMorphVertexData : IPmxMorphTypeData
     {
         public int Index { get; set; }
-        public Vector3 positions = new Vector3();
+        public Vector3 position = new Vector3();
 
         public void Export(PmxExporter exporter)
         {
             exporter.WritePmxId(PmxExporter.SIZE_VERTEX, this.Index);
-            exporter.Write(this.positions);
+            exporter.Write(this.position);
         }
 
         public void Parse(PmxParser parser)
         {
             this.Index = parser.ReadPmxId(parser.SizeVertex);
-            parser.ReadVector(this.positions);
+            this.position = parser.ReadVector3();
         }
 
         public byte GetMorphType()

@@ -43,15 +43,15 @@ namespace CPmx.Data
             this.Index = parser.ReadPmxId(parser.SizeMaterial);
 
             this.calcType = parser.ReadByte();
-            parser.ReadVector(this.diffuse);
-            parser.ReadVector(this.specular);
+            this.diffuse = parser.ReadVector4();
+            this.specular = parser.ReadVector3();
             this.shininess = parser.ReadSingle();
-            parser.ReadVector(this.ambient);
-            parser.ReadVector(this.edge);
+            this.ambient = parser.ReadVector3();
+            this.edge = parser.ReadVector4();
             this.edgeThick = parser.ReadSingle();
-            parser.ReadVector(this.texture);
-            parser.ReadVector(this.sphereTexture);
-            parser.ReadVector(this.toonTexture);
+            this.texture = parser.ReadVector4();
+            this.sphereTexture = parser.ReadVector4();
+            this.toonTexture = parser.ReadVector4();
         }
 
         public byte GetMorphType()
