@@ -64,6 +64,7 @@ namespace CurtainFireMakerPlugin.Entities
             if (this.RotateAccodingToVelocity)
             {
                 Matrix rot = Matrix.LookAtLH(Vector3.Zero, this.Velocity, this.Upward);
+                this.Rot = Quaternion.RotationMatrix(rot);
             }
             else
             {

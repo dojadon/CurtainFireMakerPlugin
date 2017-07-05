@@ -30,7 +30,7 @@ namespace CsVmd
 
         public void Write(Vector2 vec)
         {
-            this.Write(vec.X);
+            this.Write(vec.X );
             this.Write(vec.Y);
         }
 

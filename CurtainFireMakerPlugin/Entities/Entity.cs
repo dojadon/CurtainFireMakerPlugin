@@ -20,14 +20,14 @@ namespace CurtainFireMakerPlugin.Entities
 
         public Vector3 Pos { get; set; } = new Vector3();
         public Vector3 PrevPos { get; set; } = new Vector3();
-        public Quaternion Rot { get; set; } = new Quaternion();
-        public Quaternion PrevRot { get; set; } = new Quaternion();
+        public Quaternion Rot { get; set; } = new Quaternion(0, 0, 0, 1);
+        public Quaternion PrevRot { get; set; } = new Quaternion(0, 0, 0, 1);
 
         public Vector3 Velocity { get; set; } = new Vector3();
         public Vector3 PrevVelocity { get; set; } = new Vector3();
 
-        public Quaternion RotFirst { get; set; } = new Quaternion();
-        public Quaternion RotSecond { get; set; } = new Quaternion();
+        public Quaternion RotFirst { get; set; } = new Quaternion(0, 0, 0, 1);
+        public Quaternion RotSecond { get; set; } = new Quaternion(0, 0, 0, 1);
 
         public Vector3 Upward { get; set; } = new Vector3();
         public Vector3 PrevUpward { get; set; } = new Vector3();
@@ -104,12 +104,18 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual bool DeathCheck()
         {
-            return this.LivingLimit != 0 && this.FrameCount > this.LivingLimit || this.CheckWorldOut.Invoke(this);
+            return this.LivingLimit != 0 && this.FrameCount > this.LivingLimit || this.CheckWorldOut(this);
+        }
+
+        public void __call__()
+        {
+            this.OnSpawn();
         }
 
         public virtual void OnSpawn()
         {
             this.SpawnFrameNo = this.world.AddEntity(this);
+            this.spawnPos = this.Pos;
         }
 
         public virtual void OnDeath()
