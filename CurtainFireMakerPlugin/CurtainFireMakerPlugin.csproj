@@ -64,6 +64,12 @@
     <Compile Include="Entities\Motion\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
+    <Compile Include="Forms\ImportSettingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ImportSettingControl.Designer.cs">
+      <DependentUpon>ImportSettingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Plugin.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />
@@ -94,9 +100,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\ImportSettingControl.resx">
+      <DependentUpon>ImportSettingControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PluginControl.resx">
       <DependentUpon>PluginControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

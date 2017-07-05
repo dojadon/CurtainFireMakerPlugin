@@ -7,56 +7,46 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using MikuMikuPlugin;
+using CurtainFireMakerPlugin.Forms;
 
 namespace CurtainFireMakerPlugin
 {
     public partial class PluginControl : UserControl
     {
         public Scene Scene { get; set; }
+        public IWin32Window ApplicationForm { get; }
 
-        public string ReferenceScriptPath => this.textBox2.Text + "\\reference.py";
-        public string SpellScriptPath => this.textBox2.Text + "\\spell.py";
-        public string ShotTypeScriptPath => this.textBox2.Text + "\\shottype.py";
-        public string ModelDir => this.textBox1.Text + "\\import\\resource";
-        public string ExportPmxPath => this.textBox4.Text;
-        public string ExportVmdPath => this.textBox4.Text.Replace(".pmx", ".vmd");
+        public string SpellScriptPath { get; set; }
+        public string ShotTypeScriptPath { get; set; }
+        public string ReferenceScriptPath { get; set; }
+        public string ModelDir { get; set; }
+        public string ExportPmxPath { get; set; }
+        public string ExportVmdPath { get; set; }
 
-        public PluginControl(Scene scene)
+        public PluginControl(IWin32Window form, Scene scene)
         {
             InitializeComponent();
 
+            this.ApplicationForm = form;
             this.Scene = scene;
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void Click_ImportSetting(object sender, EventArgs e)
         {
-            DialogResult result = this.folderBrowserDialog1.ShowDialog();
+            var form = new Form();
 
-            if (result == DialogResult.OK || result == DialogResult.Yes)
+            var control = new ImportSettingControl(form, this.Scene);
+            form.Controls.Add(control);
+            form.Size = control.Size;
+
+            form.Show(this.ApplicationForm);
+
+            if(form.DialogResult == DialogResult.OK)
             {
-                this.textBox1.Text = this.folderBrowserDialog1.SelectedPath;
-                this.textBox2.Text = this.textBox1.Text + "\\import\\script";
-                this.textBox4.Text = this.textBox1.Text + "\\export\\export.pmx";
-            }
-        }
-
-        private void Button2_Click(object sender, EventArgs e)
-        {
-            DialogResult result = this.folderBrowserDialog2.ShowDialog();
-
-            if (result == DialogResult.OK || result == DialogResult.Yes)
-            {
-                this.textBox2.Text = this.folderBrowserDialog2.SelectedPath;
-            }
-        }
-
-        private void Button4_Click(object sender, EventArgs e)
-        {
-            DialogResult result = this.openFileDialog1.ShowDialog();
-
-            if (result == DialogResult.OK || result == DialogResult.Yes)
-            {
-                this.textBox4.Text = this.openFileDialog1.SafeFileName;
+                this.SpellScriptPath = control.SpellScript;
+                this.ShotTypeScriptPath = control.ShotTypeScript;
+                this.ReferenceScriptPath = control.ReferenceScript;
+                this.ModelDir = control.ModelDir;
             }
         }
     }

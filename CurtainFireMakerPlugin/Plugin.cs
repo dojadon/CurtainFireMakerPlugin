@@ -46,7 +46,7 @@ namespace CurtainFireMakerPlugin
 
         public UserControl CreateControl()
         {
-            this.Control = new PluginControl(this.Scene);
+            this.Control = new PluginControl(this.ApplicationForm,  this.Scene);
             return this.Control;
         }
 
