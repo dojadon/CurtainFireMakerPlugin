@@ -42,13 +42,13 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void SetupShotModelData(ShotModelData data)
         {
-            int[] indices = Array.ConvertAll(data.indices, i => i + this.vertexList.Capacity);
+            int[] indices = Array.ConvertAll(data.indices, i => i + this.vertexList.Count);
             this.indexList.AddRange(indices);
 
             PmxVertexData[] vertices = data.vertices;
             foreach (var vertex in vertices)
             {
-                vertex.boneId = Array.ConvertAll(vertex.boneId, i => i + this.boneList.Capacity);
+                vertex.boneId = Array.ConvertAll(vertex.boneId, i => i + this.boneList.Count);
                 this.vertexList.Add(vertex);
             }
 
@@ -63,13 +63,13 @@ namespace CurtainFireMakerPlugin.Entities
 
             PmxMaterialData[] materials = data.materials;
             PmxMorphData morph = data.morph;
-            morph.morphName = this.morphList.Capacity.ToString();
+            morph.morphName = this.morphList.Count.ToString();
             morph.type = 4;
-            morph.morphArray = ArrayUtil.Set( new PmxMorphMaterialData[materials.Length], i=>new PmxMorphMaterialData());
+            morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
 
             for (int i = 0; i < materials.Length; i++)
             {
-                morph.morphArray[i].Index = this.materialList.Capacity + i;
+                morph.morphArray[i].Index = this.materialList.Count + i;
             }
             this.morphList.Add(morph);
 
@@ -88,17 +88,17 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 PmxBoneData bone = data[i];
 
-                bone.boneName = (this.boneList.Capacity + i - 1).ToString();
+                bone.boneName = (this.boneList.Count + i - 1).ToString();
                 bone.flag = 0x0001 | 0x0002 | 0x0004 | 0x0008 | 0x0010;
-                bone.boneId = this.boneList.Capacity + i;
+                bone.boneId = this.boneList.Count + i;
 
-                if (bone.parentId <= 0)
+                if (-1 < bone.parentId && bone.parentId < data.Length)
                 {
-                    bone.parentId = 0;
+                    bone.parentId = this.boneList.IndexOf(data[bone.parentId]);
                 }
                 else
                 {
-                    bone.parentId = this.boneList.IndexOf(data[bone.parentId]);
+                    bone.parentId = 0;
                 }
             }
             this.boneList.AddRange(data);
