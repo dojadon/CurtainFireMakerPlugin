@@ -105,6 +105,19 @@ namespace CPmx.Data
             this.sphereId = parser.ReadPmxId(parser.SizeTexture);
             this.mode = parser.ReadByte();
             this.sharedToon = parser.ReadByte();
+
+            if (this.sharedToon == 0)
+            {
+                this.toonId = parser.ReadPmxId(parser.SizeTexture);
+            }
+            else
+            {
+                this.toonId = parser.ReadByte();
+            }
+
+            this.script = parser.ReadPmxText();
+
+            this.faceCount = parser.ReadInt32();
         }
     }
 }

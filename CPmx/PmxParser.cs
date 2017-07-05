@@ -52,13 +52,15 @@ namespace CPmx
             return id;
         }
 
-        public String ReadPmxText()
+        public string ReadPmxText()
         {
             int len = this.ReadInt32();
             byte[] bytes = this.ReadBytes(len);
-            char[] chars = this.Encording.GetChars(bytes);
 
-            return new string(chars);
+            string str = this.Encording.GetString(bytes);
+            Console.WriteLine(str);
+
+            return str;
         }
 
         public void ReadVector(Vector2 vec)

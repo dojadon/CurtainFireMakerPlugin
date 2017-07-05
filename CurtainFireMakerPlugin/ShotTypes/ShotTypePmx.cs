@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
                 {
                     parser.Parse(this.data);
                 }
-                catch (NullReferenceException e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }

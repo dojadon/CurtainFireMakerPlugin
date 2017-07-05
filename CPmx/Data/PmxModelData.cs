@@ -34,8 +34,8 @@ namespace CPmx.Data
         public void Parse(PmxParser parser)
         {
             this.ParsePmxData(this.Header, parser);
-            this.VertexArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxVertexData[len], i=>new PmxVertexData()), parser);
-            this.VertexIndices = this.ParseData(len => new int[len], (p, i) => p.ReadInt32(), parser);
+            this.VertexArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxVertexData[len], i => new PmxVertexData()), parser);
+            this.VertexIndices = this.ParseData(len => new int[len], (p, i) => p.ReadPmxId(parser.SizeVertex), parser);
             this.TextureFiles = this.ParseData(len => new string[len], (p, i) => p.ReadPmxText(), parser);
             this.MaterialArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxMaterialData[len], i => new PmxMaterialData()), parser);
             this.BoneArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxBoneData[len], i => new PmxBoneData()), parser);
@@ -63,6 +63,7 @@ namespace CPmx.Data
         private T[] ParseData<T>(Func<int, T[]> func, Func<PmxParser, T, T> valueFunc, PmxParser parser)
         {
             int len = parser.ReadInt32();
+            Console.WriteLine("length : " + len);
             T[] array = func.Invoke(len);
 
             for (int i = 0; i < len; i++)
@@ -80,6 +81,7 @@ namespace CPmx.Data
         private T[] ParsePmxData<T>(Func<int, T[]> func, PmxParser parser) where T : IPmxData
         {
             int len = parser.ReadInt32();
+            Console.WriteLine("length : " + len);
             T[] array = func.Invoke(len);
             for (int i = 0; i < len; i++)
             {
