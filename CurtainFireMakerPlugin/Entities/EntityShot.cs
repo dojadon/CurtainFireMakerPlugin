@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public EntityShot(string typeName, int color)  : this(new ShotProperty(typeName, color))
+        public EntityShot(string typeName, int color) : this(new ShotProperty(typeName, color))
         {
         }
 
@@ -42,7 +42,15 @@ namespace CurtainFireMakerPlugin.Entities
             this.world = World.Instance;
 
             this.Property = property;
-            this.world.AddShot(this);
+
+            try
+            {
+                this.world.AddShot(this);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         public override void Frame()

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CPmx
 {
-    class ArrayUtil
+    public class ArrayUtil
     {
         public static T[] Set<T>(T[] array, Func<int, T> func)
         {

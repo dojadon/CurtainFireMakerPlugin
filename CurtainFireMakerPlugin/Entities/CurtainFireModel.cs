@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CPmx.Data;
+using CPmx;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -64,7 +65,7 @@ namespace CurtainFireMakerPlugin.Entities
             PmxMorphData morph = data.morph;
             morph.morphName = this.morphList.Capacity.ToString();
             morph.type = 4;
-            morph.morphArray = new PmxMorphMaterialData[materials.Length];
+            morph.morphArray = ArrayUtil.Set( new PmxMorphMaterialData[materials.Length], i=>new PmxMorphMaterialData());
 
             for (int i = 0; i < materials.Length; i++)
             {

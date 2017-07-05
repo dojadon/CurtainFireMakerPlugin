@@ -63,7 +63,6 @@ namespace CPmx.Data
         private T[] ParseData<T>(Func<int, T[]> func, Func<PmxParser, T, T> valueFunc, PmxParser parser)
         {
             int len = parser.ReadInt32();
-            Console.WriteLine("length : " + len);
             T[] array = func.Invoke(len);
 
             for (int i = 0; i < len; i++)
@@ -81,7 +80,6 @@ namespace CPmx.Data
         private T[] ParsePmxData<T>(Func<int, T[]> func, PmxParser parser) where T : IPmxData
         {
             int len = parser.ReadInt32();
-            Console.WriteLine("length : " + len);
             T[] array = func.Invoke(len);
             for (int i = 0; i < len; i++)
             {

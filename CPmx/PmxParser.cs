@@ -58,7 +58,6 @@ namespace CPmx
             byte[] bytes = this.ReadBytes(len);
 
             string str = this.Encording.GetString(bytes);
-            Console.WriteLine(str);
 
             return str;
         }
