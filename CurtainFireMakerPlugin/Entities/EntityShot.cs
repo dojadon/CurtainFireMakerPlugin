@@ -19,8 +19,8 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxMorphData materialMorph;
 
         private delegate bool ShouldRecordMotion(EntityShot entity);
-        private static ShouldRecordMotion WhenVelocityChanges = e => e.Velocity.Equals(e.PrevVelocity) || e.Upward.Equals(e.PrevUpward);
-        private static ShouldRecordMotion WhenPosChanges = e => e.Pos.Equals(e.PrevPos) || e.Rot.Equals(e.PrevRot);
+        private static ShouldRecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
+        private static ShouldRecordMotion WhenPosChanges = e => !e.Pos.Equals(e.PrevPos) || !e.Rot.Equals(e.PrevRot);
 
         private ShouldRecordMotion ShouldRecord = WhenPosChanges;
 
@@ -30,7 +30,7 @@ namespace CurtainFireMakerPlugin.Entities
             set
             {
                 this.ShouldRecord = value ? WhenVelocityChanges : WhenPosChanges;
-                this.RotateAccodingToVelocity = false;
+                this.RotateAccodingToVelocity = value;
             }
         }
 
