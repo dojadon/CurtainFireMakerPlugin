@@ -2,9 +2,9 @@
 using System.Text;
 using System.IO;
 using DxMath;
-using CPmx.Data;
+using CsPmx.Data;
 
-namespace CPmx
+namespace CsPmx
 {
     public class PmxExporter : BinaryWriter
     {

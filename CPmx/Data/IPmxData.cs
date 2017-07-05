@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CPmx.Data
+namespace CsPmx.Data
 {
     public interface IPmxData
     {

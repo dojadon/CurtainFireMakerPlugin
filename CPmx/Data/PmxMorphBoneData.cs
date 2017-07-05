@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using DxMath;
 
-namespace CPmx.Data
+namespace CsPmx.Data
 {
     [Serializable]
     public class PmxMorphBoneData : IPmxMorphTypeData

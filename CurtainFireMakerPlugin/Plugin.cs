@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MikuMikuPlugin;
-using CPmx;
-using CPmx.Data;
+using CsPmx;
+using CsPmx.Data;
 using System.IO;
 using System.Threading.Tasks;
 

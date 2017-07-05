@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CPmx.Data;
-using CPmx;
+using CsPmx.Data;
+using CsPmx;
 using DxMath;
 
 namespace CurtainFireMakerPlugin.Entities

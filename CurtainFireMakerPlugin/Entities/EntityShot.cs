@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DxMath;
-using CPmx.Data;
+using CsPmx.Data;
 using MikuMikuPlugin;
 
 namespace CurtainFireMakerPlugin.Entities

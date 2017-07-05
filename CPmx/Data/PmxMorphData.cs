@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CPmx.Data
+namespace CsPmx.Data
 {
     [Serializable]
     public class PmxMorphData : IPmxData
@@ -23,8 +23,6 @@ namespace CPmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            Console.WriteLine("export morph");
-
             exporter.WritePmxText(this.morphName);
             exporter.WritePmxText(this.morphNameE);
 

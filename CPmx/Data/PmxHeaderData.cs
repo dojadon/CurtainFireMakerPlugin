@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CPmx.Data
+namespace CsPmx.Data
 {
     [Serializable]
     public class PmxHeaderData : IPmxData

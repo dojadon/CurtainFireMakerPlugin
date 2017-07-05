@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Entities;
-using CPmx.Data;
+using CsPmx.Data;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {

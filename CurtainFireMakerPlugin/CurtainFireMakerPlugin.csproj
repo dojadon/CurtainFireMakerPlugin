@@ -84,9 +84,9 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CPmx\CPmx.csproj">
+    <ProjectReference Include="..\CPmx\CsPmx.csproj">
       <Project>{92cad24b-572d-430d-8157-b9cb8e56d9e5}</Project>
-      <Name>CPmx</Name>
+      <Name>CsPmx</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using CPmx.Data;
+using CsPmx.Data;
 using DxMath;
 
-namespace CPmx
+namespace CsPmx
 {
     public class PmxParser : BinaryReader
     {
