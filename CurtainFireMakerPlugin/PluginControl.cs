@@ -18,7 +18,8 @@ namespace CurtainFireMakerPlugin
         public string SpellScriptPath => this.textBox2.Text + "\\spell.py";
         public string ShotTypeScriptPath => this.textBox2.Text + "\\shottype.py";
         public string ModelDir => this.textBox1.Text + "\\import\\resource";
-        public string ExportPath => this.textBox4.Text;
+        public string ExportPmxPath => this.textBox4.Text;
+        public string ExportVmdPath => this.textBox4.Text.Replace(".pmx", ".vmd");
 
         public PluginControl(Scene scene)
         {

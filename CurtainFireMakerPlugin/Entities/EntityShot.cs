@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DxMath;
 using CsPmx.Data;
+using CsVmd.Data;
 using MikuMikuPlugin;
 
 namespace CurtainFireMakerPlugin.Entities
@@ -95,7 +96,11 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.UpdateRot();
 
-            var motion = new MotionFrameData(this.world.FrameCount + frameOffset, this.Pos, this.Rot);
+            var motion = new VmdMotionFrameData();
+            motion.boneName = this.rootBone.boneName;
+            motion.keyFrameNo = this.world.FrameCount + frameOffset;
+            motion.pos = this.Pos;
+            motion.rot = this.Rot;
 
             if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.world.FrameCount)
             {
@@ -107,7 +112,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddVmdMorph(int frameOffset, float rate)
         {
-            var morph = new MorphFrameData(this.world.FrameCount + frameOffset, rate);
+            var morph = new VmdMorphFrameData();
+            morph.keyFrameNo = this.world.FrameCount + frameOffset;
+            morph.rate = rate;
 
             this.world.motion.AddVmdMorph(this.materialMorph.morphName, morph);
         }

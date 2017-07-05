@@ -4,43 +4,43 @@ using System.Linq;
 using System.Text;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Collections;
+using CsVmd.Data;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireMotion
     {
-        private MultiDictionary<string, MotionFrameData> motionMap = new MultiDictionary<string, MotionFrameData>();
-        private MultiDictionary<string, MorphFrameData> morphMap = new MultiDictionary<string, MorphFrameData>();
+        private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
+        private List<VmdMorphFrameData> morphList = new List<VmdMorphFrameData>();
 
-        public void AddVmdMotion(string boneName, MotionFrameData motion)
+        public void AddVmdMotion(string boneName, VmdMotionFrameData motion, bool replace = false)
         {
-            this.AddVmdMotion(boneName, motion, false);
-        }
-
-        public void AddVmdMotion(string boneName, MotionFrameData motion, bool replace)
-        {
-            var list = this.motionMap[boneName];
-
             if (replace)
             {
-                list.RemoveAll(m => m.FrameNumber == motion.FrameNumber);
-                list.Add(motion);
+                motionList.RemoveAll(m => m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo);
+                motionList.Add(motion);
             }
             else
             {
-                if (list.Exists(m => m.FrameNumber == motion.FrameNumber))
+                if (!motionList.Exists(m => m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo))
                 {
-                    list.Add(motion);
+                    motionList.Add(motion);
                 }
             }
         }
 
-        public void AddVmdMorph(string morphName, MorphFrameData morph)
+        public void AddVmdMorph(string morphName, VmdMorphFrameData morph)
         {
-            var list = this.morphMap[morphName];
+            morphList.RemoveAll(m => m.morphName.Equals(morph.morphName) && m.keyFrameNo == morph.keyFrameNo);
+            morphList.Add(morph);
+        }
 
-            list.RemoveAll(m => m.FrameNumber == morph.FrameNumber);
-            list.Add(morph);
+        public void GetData(VmdMotionData data)
+        {
+            data.Header.modelName = "弾幕";
+
+            data.MotionArray = this.motionList.ToArray();
+            data.MorphArray = this.morphList.ToArray();
         }
     }
 }

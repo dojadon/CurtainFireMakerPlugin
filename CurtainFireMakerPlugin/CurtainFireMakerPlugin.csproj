@@ -88,6 +88,10 @@
       <Project>{92cad24b-572d-430d-8157-b9cb8e56d9e5}</Project>
       <Name>CsPmx</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CsVmd\CsVmd.csproj">
+      <Project>{1a7ff11c-e657-44fd-8a31-12117a755ae9}</Project>
+      <Name>CsVmd</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginControl.resx">

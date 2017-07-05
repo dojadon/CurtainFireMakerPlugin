@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using MikuMikuPlugin;
 using CsPmx;
 using CsPmx.Data;
+using CsVmd;
+using CsVmd.Data;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -64,21 +66,35 @@ namespace CurtainFireMakerPlugin
             world.StartWorld();
 
             this.ExportPmx(world);
+            this.ExportVmd(world);
 
             Console.WriteLine("finish");
         }
 
         private void ExportPmx(World world)
         {
-            string exportPath = this.Control.ExportPath;
+            string exportPath = this.Control.ExportPmxPath;
             File.Delete(exportPath);
 
-            var pmxExporter = new PmxExporter(new FileStream(this.Control.ExportPath, FileMode.Create, FileAccess.Write));
+            var exporter = new PmxExporter(new FileStream(exportPath, FileMode.Create, FileAccess.Write));
 
             var data = new PmxModelData();
             world.model.GetData(data);
 
-            pmxExporter.Export(data);
+            exporter.Export(data);
+        }
+
+        private void ExportVmd(World world)
+        {
+            string exportPath = this.Control.ExportVmdPath;
+            File.Delete(exportPath);
+
+            var exporter = new VmdExporter(new FileStream(exportPath, FileMode.Create, FileAccess.Write));
+
+            var data = new VmdMotionData();
+            world.motion.GetData(data);
+
+            exporter.Export(data);
         }
     }
 }
