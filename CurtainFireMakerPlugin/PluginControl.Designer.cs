@@ -101,6 +101,7 @@
             this.button2.TabIndex = 3;
             this.button2.Text = "出力設定";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Click_ExportSetting);
             // 
             // PluginControl
             // 

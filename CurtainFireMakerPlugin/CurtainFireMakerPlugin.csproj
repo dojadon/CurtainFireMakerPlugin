@@ -64,6 +64,12 @@
     <Compile Include="Entities\Motion\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
+    <Compile Include="Forms\ExportSettingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ExportSettingControl.Designer.cs">
+      <DependentUpon>ExportSettingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ImportSettingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\ExportSettingControl.resx">
+      <DependentUpon>ExportSettingControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSettingControl.resx">
       <DependentUpon>ImportSettingControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -15,10 +15,10 @@ namespace CurtainFireMakerPlugin.Forms
         public Scene Scene { get; set; }
         public Form Form { get; }
 
-        public string ModelDir { get; set; }
-        public string SpellScript { get; set; }
-        public string ShotTypeScript { get; set; }
-        public string ReferenceScript { get; set; }
+        public string ModelDir { get { return this.shotModelText.Text; } set { this.shotModelText.Text = value; } }
+        public string SpellScript { get { return this.spellScriptText.Text; } set { this.spellScriptText.Text = value; } }
+        public string ShotTypeScript { get { return this.spellScriptText.Text; } set { this.spellScriptText.Text = value; } }
+        public string ReferenceScript { get { return this.referenceScriptText.Text; } set { this.referenceScriptText.Text = value; } }
 
         public ImportSettingControl(Form form, Scene scene)
         {
@@ -30,14 +30,14 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void Click_OK(object sender, EventArgs e)
         {
-            this.Form.DialogResult = DialogResult.OK;
             this.Form.Close();
+            this.Form.DialogResult = DialogResult.OK;
         }
 
         private void Click_Cancel(object sender, EventArgs e)
         {
-            this.Form.DialogResult = DialogResult.Cancel;
             this.Form.Close();
+            this.Form.DialogResult = DialogResult.Cancel;
         }
 
         private void Click_ShotModel(object sender, EventArgs e)
@@ -45,7 +45,7 @@ namespace CurtainFireMakerPlugin.Forms
             DialogResult result = this.modelDirBrowserDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.ModelDir = this.modelDirBrowserDialog.SelectedPath;
+                this.shotModelText.Text = this.modelDirBrowserDialog.SelectedPath;
             }
         }
 
@@ -54,7 +54,7 @@ namespace CurtainFireMakerPlugin.Forms
             DialogResult result = this.spellScriptFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.SpellScript = this.spellScriptFileDialog.FileName;
+                this.spellScriptText.Text = this.spellScriptFileDialog.FileName;
             }
         }
 
@@ -63,7 +63,7 @@ namespace CurtainFireMakerPlugin.Forms
             DialogResult result = this.shottypeScriptFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.ShotTypeScript = this.shottypeScriptFileDialog.FileName;
+                this.shottypeScriptText.Text = this.shottypeScriptFileDialog.FileName;
             }
         }
 
@@ -72,7 +72,7 @@ namespace CurtainFireMakerPlugin.Forms
             DialogResult result = this.referenceScriptFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.ReferenceScript = this.referenceScriptFileDialog.FileName;
+                this.referenceScriptText.Text = this.referenceScriptFileDialog.FileName;
             }
         }
     }

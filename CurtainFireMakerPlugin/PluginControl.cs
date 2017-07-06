@@ -22,6 +22,8 @@ namespace CurtainFireMakerPlugin
         public string ModelDir { get; set; }
         public string ExportPmxPath { get; set; }
         public string ExportVmdPath { get; set; }
+        public string ModelName{ get; set; }
+        public string ModelDescription{ get; set; }
 
         public PluginControl(IWin32Window form, Scene scene)
         {
@@ -36,10 +38,16 @@ namespace CurtainFireMakerPlugin
             var form = new Form();
 
             var control = new ImportSettingControl(form, this.Scene);
-            form.Controls.Add(control);
-            form.Size = control.Size;
+            control.SpellScript = this.SpellScriptPath;
+            control.ShotTypeScript = this.ShotTypeScriptPath;
+            control.ReferenceScript = this.ReferenceScriptPath;
+            control.ModelDir = this.ModelDir;
 
-            form.Show(this.ApplicationForm);
+            form.Controls.Add(control);
+            form.Size = new Size(control.Size.Width, control.Size.Height + 40);
+            form.Name = "入力設定";
+
+            form.ShowDialog(this.ApplicationForm);
 
             if(form.DialogResult == DialogResult.OK)
             {
@@ -47,6 +55,31 @@ namespace CurtainFireMakerPlugin
                 this.ShotTypeScriptPath = control.ShotTypeScript;
                 this.ReferenceScriptPath = control.ReferenceScript;
                 this.ModelDir = control.ModelDir;
+            }
+        }
+
+        private void Click_ExportSetting(object sender, EventArgs e)
+        {
+            var form = new Form();
+
+            var control = new ExportSettingControl(form);
+            control.ExportPmx = this.ExportPmxPath;
+            control.ExportVmd = this.ExportVmdPath;
+            control.ModelName = this.ModelName;
+            control.ModelDescription = this.ModelDescription;
+
+            form.Controls.Add(control);
+            form.Size = new Size(control.Size.Width, control.Size.Height + 40);
+            form.Name = "出力設定";
+
+            form.ShowDialog(this.ApplicationForm);
+
+            if (form.DialogResult == DialogResult.OK)
+            {
+                this.ExportPmxPath = control.ExportPmx;
+                this.ExportVmdPath = control.ExportVmd;
+                this.ModelName = control.ModelName;
+                this.ModelDescription = control.ModelDescription;
             }
         }
     }

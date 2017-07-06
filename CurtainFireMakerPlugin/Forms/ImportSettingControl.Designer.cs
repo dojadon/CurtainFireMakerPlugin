@@ -28,52 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.shotModelText = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.spellScriptText = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.shottypeScriptText = new System.Windows.Forms.TextBox();
             this.button5 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.referenceScriptText = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.modelDirBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.spellScriptFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.shottypeScriptFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.referenceScriptFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.button5);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.textBox5);
-            this.groupBox1.Controls.Add(this.button4);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.textBox4);
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBox3);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(492, 192);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "入力設定";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(437, 34);
+            this.button2.Location = new System.Drawing.Point(434, 19);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(49, 23);
             this.button2.TabIndex = 5;
@@ -84,52 +61,52 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 21);
+            this.label2.Location = new System.Drawing.Point(3, 6);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 12);
             this.label2.TabIndex = 4;
             this.label2.Text = "Shot Model";
             // 
-            // textBox2
+            // shotModelText
             // 
-            this.textBox2.Location = new System.Drawing.Point(6, 36);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(425, 19);
-            this.textBox2.TabIndex = 3;
+            this.shotModelText.Location = new System.Drawing.Point(3, 21);
+            this.shotModelText.Name = "shotModelText";
+            this.shotModelText.ReadOnly = true;
+            this.shotModelText.Size = new System.Drawing.Size(425, 19);
+            this.shotModelText.TabIndex = 3;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(437, 77);
+            this.button3.Location = new System.Drawing.Point(434, 62);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(49, 23);
             this.button3.TabIndex = 8;
             this.button3.Text = "参照";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.ClientSizeChanged += new System.EventHandler(this.Click_SpellScript);
+            this.button3.Click += new System.EventHandler(this.Click_SpellScript);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 64);
+            this.label3.Location = new System.Drawing.Point(3, 49);
             this.label3.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 12);
             this.label3.TabIndex = 7;
             this.label3.Text = "Spell Script";
             // 
-            // textBox3
+            // spellScriptText
             // 
-            this.textBox3.Location = new System.Drawing.Point(6, 79);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(425, 19);
-            this.textBox3.TabIndex = 6;
+            this.spellScriptText.Location = new System.Drawing.Point(3, 64);
+            this.spellScriptText.Name = "spellScriptText";
+            this.spellScriptText.ReadOnly = true;
+            this.spellScriptText.Size = new System.Drawing.Size(425, 19);
+            this.spellScriptText.TabIndex = 6;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(437, 120);
+            this.button4.Location = new System.Drawing.Point(434, 105);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(49, 23);
             this.button4.TabIndex = 11;
@@ -140,24 +117,24 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 107);
+            this.label4.Location = new System.Drawing.Point(3, 92);
             this.label4.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(105, 12);
             this.label4.TabIndex = 10;
             this.label4.Text = "Type of Shot Script";
             // 
-            // textBox4
+            // shottypeScriptText
             // 
-            this.textBox4.Location = new System.Drawing.Point(6, 122);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(425, 19);
-            this.textBox4.TabIndex = 9;
+            this.shottypeScriptText.Location = new System.Drawing.Point(3, 107);
+            this.shottypeScriptText.Name = "shottypeScriptText";
+            this.shottypeScriptText.ReadOnly = true;
+            this.shottypeScriptText.Size = new System.Drawing.Size(425, 19);
+            this.shottypeScriptText.TabIndex = 9;
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(437, 163);
+            this.button5.Location = new System.Drawing.Point(434, 148);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(49, 23);
             this.button5.TabIndex = 14;
@@ -168,24 +145,24 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 150);
+            this.label5.Location = new System.Drawing.Point(3, 135);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(91, 12);
             this.label5.TabIndex = 13;
             this.label5.Text = "Reference Script";
             // 
-            // textBox5
+            // referenceScriptText
             // 
-            this.textBox5.Location = new System.Drawing.Point(6, 165);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(425, 19);
-            this.textBox5.TabIndex = 12;
+            this.referenceScriptText.Location = new System.Drawing.Point(3, 150);
+            this.referenceScriptText.Name = "referenceScriptText";
+            this.referenceScriptText.ReadOnly = true;
+            this.referenceScriptText.Size = new System.Drawing.Size(425, 19);
+            this.referenceScriptText.TabIndex = 12;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(89, 201);
+            this.button6.Location = new System.Drawing.Point(91, 191);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 1;
@@ -195,7 +172,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(339, 201);
+            this.button7.Location = new System.Drawing.Point(336, 191);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 2;
@@ -219,32 +196,40 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.button7);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.button6);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.referenceScriptText);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.shottypeScriptText);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.shotModelText);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.spellScriptText);
             this.Name = "ImportSettingControl";
-            this.Size = new System.Drawing.Size(499, 234);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.Size = new System.Drawing.Size(500, 224);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox referenceScriptText;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox shottypeScriptText;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox spellScriptText;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox shotModelText;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.FolderBrowserDialog modelDirBrowserDialog;
