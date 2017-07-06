@@ -22,8 +22,8 @@ namespace CurtainFireMakerPlugin
         public string ModelDir { get; set; }
         public string ExportPmxPath { get; set; }
         public string ExportVmdPath { get; set; }
-        public string ModelName{ get; set; }
-        public string ModelDescription{ get; set; }
+        public string ModelName { get; set; }
+        public string ModelDescription { get; set; }
 
         public PluginControl(IWin32Window form, Scene scene)
         {
@@ -49,7 +49,7 @@ namespace CurtainFireMakerPlugin
 
             form.ShowDialog(this.ApplicationForm);
 
-            if(form.DialogResult == DialogResult.OK)
+            if (form.DialogResult == DialogResult.OK)
             {
                 this.SpellScriptPath = control.SpellScript;
                 this.ShotTypeScriptPath = control.ShotTypeScript;
@@ -81,6 +81,21 @@ namespace CurtainFireMakerPlugin
                 this.ModelName = control.ModelName;
                 this.ModelDescription = control.ModelDescription;
             }
+        }
+
+        private void Click_GenerateCurtainFire(object sender, EventArgs e)
+        {
+            Plugin.Instance.RunSpellScript(this.SpellScriptPath);
+        }
+
+        private void Click_LoadShotType(object sender, EventArgs e)
+        {
+            Plugin.Instance.RunShotTypeScript(this.ShotTypeScriptPath);
+        }
+
+        private void Click_InitIronPython(object sender, EventArgs e)
+        {
+            Plugin.Instance.InitIronPython(this.ReferenceScriptPath);
         }
     }
 }

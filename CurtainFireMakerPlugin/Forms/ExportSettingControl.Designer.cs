@@ -102,7 +102,7 @@
             // 
             this.modelNameText.Location = new System.Drawing.Point(5, 123);
             this.modelNameText.Name = "modelNameText";
-            this.modelNameText.Size = new System.Drawing.Size(434, 19);
+            this.modelNameText.Size = new System.Drawing.Size(413, 19);
             this.modelNameText.TabIndex = 7;
             // 
             // label3
@@ -120,7 +120,7 @@
             this.modelDescriptionText.Location = new System.Drawing.Point(5, 166);
             this.modelDescriptionText.Multiline = true;
             this.modelDescriptionText.Name = "modelDescriptionText";
-            this.modelDescriptionText.Size = new System.Drawing.Size(434, 85);
+            this.modelDescriptionText.Size = new System.Drawing.Size(413, 85);
             this.modelDescriptionText.TabIndex = 9;
             // 
             // label4

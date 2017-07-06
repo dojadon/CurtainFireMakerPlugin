@@ -110,8 +110,7 @@ namespace CurtainFireMakerPlugin.Entities
         public void GetData(PmxModelData data)
         {
             var header = new PmxHeaderData();
-            header.modelName = "弾幕";
-            header.description = "This model was made by \"Curtain Fire Makaer Plugin\"";
+            header.description = "This model was made by \"Curtain Fire Makaer Plugin\"\n";
             header.version = 2.0F;
 
             var boneSlot = new PmxSlotData();

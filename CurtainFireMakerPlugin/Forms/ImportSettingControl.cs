@@ -17,7 +17,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public string ModelDir { get { return this.shotModelText.Text; } set { this.shotModelText.Text = value; } }
         public string SpellScript { get { return this.spellScriptText.Text; } set { this.spellScriptText.Text = value; } }
-        public string ShotTypeScript { get { return this.spellScriptText.Text; } set { this.spellScriptText.Text = value; } }
+        public string ShotTypeScript { get { return this.shottypeScriptText.Text; } set { this.shottypeScriptText.Text = value; } }
         public string ReferenceScript { get { return this.referenceScriptText.Text; } set { this.referenceScriptText.Text = value; } }
 
         public ImportSettingControl(Form form, Scene scene)

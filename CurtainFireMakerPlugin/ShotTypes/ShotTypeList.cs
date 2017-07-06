@@ -11,6 +11,8 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public static void Init(Action<List<ShotType>> action)
         {
+            TYPE_LIST.Clear();
+
             TYPE_LIST.Add(new ShotTypeNone("NULL", false, false));
             TYPE_LIST.Add(new ShotTypeNone("BONE", false, true));
 

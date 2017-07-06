@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CurtainFireMakerPlugin
 {
-    public class Plugin : IHaveUserControl, ICommandPlugin
+    public class Plugin : IHaveUserControl, ICommandPlugin, ICanSavePlugin
     {
         public static Plugin Instance { get; set; }
 
@@ -46,7 +46,7 @@ namespace CurtainFireMakerPlugin
 
         public UserControl CreateControl()
         {
-            this.Control = new PluginControl(this.ApplicationForm,  this.Scene);
+            this.Control = new PluginControl(this.ApplicationForm, this.Scene);
             return this.Control;
         }
 
@@ -55,18 +55,31 @@ namespace CurtainFireMakerPlugin
             this.outStream.Dispose();
         }
 
+        public void InitIronPython(string path)
+        {
+            PythonRunner.Init(path);
+        }
+
         public void Run(CommandArgs args)
+        {
+            this.RunSpellScript(this.Control.SpellScriptPath);
+        }
+
+        public void RunSpellScript(string path)
         {
             World world = new World();
 
-            PythonRunner.Init(this.Control.ReferenceScriptPath);
-            PythonRunner.RunShotTypeScript(this.Control.ShotTypeScriptPath);
-            PythonRunner.RunSpellScript(this.Control.SpellScriptPath, world);
+            PythonRunner.RunSpellScript(path, world);
 
             world.StartWorld();
 
             this.ExportPmx(world);
             this.ExportVmd(world);
+        }
+
+        public void RunShotTypeScript(string path)
+        {
+            PythonRunner.RunShotTypeScript(path);
         }
 
         private void ExportPmx(World world)
@@ -78,6 +91,9 @@ namespace CurtainFireMakerPlugin
 
             var data = new PmxModelData();
             world.model.GetData(data);
+
+            data.Header.modelName = this.Control.ModelName;
+            data.Header.description += this.Control.ModelDescription;
 
             exporter.Export(data);
         }
@@ -92,7 +108,18 @@ namespace CurtainFireMakerPlugin
             var data = new VmdMotionData();
             world.motion.GetData(data);
 
+            data.Header.modelName = this.Control.ModelName;
+
             exporter.Export(data);
+        }
+
+        public Stream OnSaveProject()
+        {
+            return null;
+        }
+
+        public void OnLoadProject(Stream stream)
+        {
         }
     }
 }
