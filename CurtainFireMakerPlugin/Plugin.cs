@@ -35,13 +35,10 @@ namespace CurtainFireMakerPlugin
         public Scene Scene { get; set; }
 
         public string Description => "Curtain Fire Maker Plugin";
-
         public string Text => "弾幕生成";
-
         public string EnglishText => "Generate Curtain Fire";
 
         public Image Image => null;
-
         public Image SmallImage => null;
 
         public PluginControl Control { get; set; }
