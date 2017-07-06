@@ -17,7 +17,14 @@ namespace CurtainFireMakerPlugin.Collections
         /// </summary>
         public List<TValue> this[TKey key]
         {
-            get { return mDictionary[key]; }
+            get
+            {
+                if (!mDictionary.ContainsKey(key))
+                {
+                    mDictionary.Add(key, new List<TValue>());
+                }
+                return mDictionary[key];
+            }
             set { mDictionary[key] = value; }
         }
 
@@ -50,11 +57,7 @@ namespace CurtainFireMakerPlugin.Collections
         /// </summary>
         public void Add(TKey key, TValue value)
         {
-            if (!mDictionary.ContainsKey(key))
-            {
-                mDictionary.Add(key, new List<TValue>());
-            }
-            mDictionary[key].Add(value);
+            this[key].Add(value);
         }
 
         /// <summary>
@@ -84,7 +87,7 @@ namespace CurtainFireMakerPlugin.Collections
         /// </summary>
         public bool Remove(TKey key, TValue value)
         {
-            return mDictionary[key].Remove(value);
+            return this[key].Remove(value);
         }
 
         /// <summary>
@@ -108,7 +111,7 @@ namespace CurtainFireMakerPlugin.Collections
         /// </summary>
         public bool Contains(TKey key, TValue value)
         {
-            return mDictionary[key].Contains(value);
+            return this[key].Contains(value);
         }
 
         /// <summary>

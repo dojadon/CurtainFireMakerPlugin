@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using DxMath;
 using CurtainFireMakerPlugin.Collections;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Mathematics
 {
@@ -44,7 +46,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             vertices.Add(new Vector3(0.723600F, -0.447215F, -0.525720F));
             vertices.Add(new Vector3(-0.276385F, -0.447215F, -0.850640F));
             vertices.Add(new Vector3(-0.894425F, -0.447215F, 0.000000F));
-            vertices.Add(new Vector3(-0.276385F, 0.447215F, 0.850640F));
+            vertices.Add(new Vector3(-0.276385F, -0.447215F, 0.850640F));
 
             var faces = new List<Face>();
 
@@ -82,15 +84,8 @@ namespace CurtainFireMakerPlugin.Mathematics
             faces.Add(new Face(vertices[index2++], vertices[index1++], vertices[index1]));
             faces.Add(new Face(vertices[index2++], vertices[index1++], vertices[1]));
 
-            foreach (var v in vertices)
-            {
-                vertexMap.Add(0, v);
-            }
-
-            foreach (var f in faces)
-            {
-                faceMap.Add(0, f);
-            }
+            vertexMap.Add(0, vertices);
+            faceMap.Add(0, faces);
         }
 
         private void CreateVertices(int level)
@@ -103,7 +98,6 @@ namespace CurtainFireMakerPlugin.Mathematics
                 }
 
                 var faces = this.faceMap[level - 1];
-                var vertices = this.vertexMap[level - 1];
 
                 foreach (var face in faces)
                 {
@@ -115,34 +109,45 @@ namespace CurtainFireMakerPlugin.Mathematics
                     v23.Normalize();
                     v31.Normalize();
 
-                    faces.Add(new Face(face.v1, v31, v12));
-                    faces.Add(new Face(face.v2, v12, v23));
-                    faces.Add(new Face(face.v3, v23, v31));
-                    faces.Add(new Face(v12, v23, v31));
+                    this.faceMap.Add(level, new Face(face.v1, v31, v12));
+                    this.faceMap.Add(level, new Face(face.v2, v12, v23));
+                    this.faceMap.Add(level, new Face(face.v3, v23, v31));
+                    this.faceMap.Add(level, new Face(v12, v23, v31));
 
-                    if (!vertices.Contains(v12))
+                    if (!this.vertexMap.Contains(level, v12))
                     {
-                        vertices.Add(v12);
+                        this.vertexMap.Add(level, v12);
                     }
-                    if (!vertices.Contains(v23))
+
+                    if (!this.vertexMap.Contains(level, v23))
                     {
-                        vertices.Add(v23);
+                        this.vertexMap.Add(level, v23);
                     }
-                    if (!vertices.Contains(v31))
+                    if (!this.vertexMap.Contains(level, v31))
                     {
-                        vertices.Add(v31);
+                        this.vertexMap.Add(level, v31);
                     }
                 }
             }
         }
 
-        public void GetVertices(Action<Vector3> action, int level)
+        public static void GetVertices(Action<Vector3> action, int level)
         {
             if (level >= 0)
             {
-                this.GetVertices(action, level - 1);
-                this.vertexMap[level].ForEach(action);
+                if (!Instance.faceMap.ContainsKey(level))
+                {
+                    Instance.CreateVertices(level);
+                }
+
+                GetVertices(action, level - 1);
+                Instance.vertexMap[level].ForEach(action);
             }
+        }
+
+        public static void GetVertices(PythonFunction action, int level)
+        {
+            GetVertices(v => PythonCalls.Call(action, v), level);
         }
     }
 }
