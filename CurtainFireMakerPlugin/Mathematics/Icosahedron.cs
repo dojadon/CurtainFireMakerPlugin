@@ -5,7 +5,7 @@ using System.Text;
 using DxMath;
 using CurtainFireMakerPlugin.Collections;
 
-namespace CurtainFireMakerPlugin.Math
+namespace CurtainFireMakerPlugin.Mathematics
 {
     struct Face
     {

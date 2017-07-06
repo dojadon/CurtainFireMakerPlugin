@@ -76,7 +76,7 @@
     <Compile Include="Forms\ImportSettingControl.Designer.cs">
       <DependentUpon>ImportSettingControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Math\Icosahedron.cs" />
+    <Compile Include="Mathematics\Icosahedron.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />
