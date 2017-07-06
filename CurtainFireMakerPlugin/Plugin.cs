@@ -7,7 +7,6 @@ using CsPmx.Data;
 using CsVmd;
 using CsVmd.Data;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace CurtainFireMakerPlugin
 {
@@ -115,11 +114,19 @@ namespace CurtainFireMakerPlugin
 
         public Stream OnSaveProject()
         {
-            return null;
+            var stream = new MemoryStream();
+            var writer = new BinaryWriter(stream);
+
+            this.Control.Export(writer);
+
+            return stream;
         }
 
         public void OnLoadProject(Stream stream)
         {
+            var reader =new BinaryReader(stream);
+
+            this.Control.Parse(reader);
         }
     }
 }

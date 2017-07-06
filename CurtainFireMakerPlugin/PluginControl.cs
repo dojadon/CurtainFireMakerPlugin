@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
+using System.IO;
 
 namespace CurtainFireMakerPlugin
 {
@@ -96,6 +97,30 @@ namespace CurtainFireMakerPlugin
         private void Click_InitIronPython(object sender, EventArgs e)
         {
             Plugin.Instance.InitIronPython(this.ReferenceScriptPath);
+        }
+
+        public void Export(BinaryWriter writer)
+        {
+            writer.Write(this.SpellScriptPath);
+            writer.Write(this.ShotTypeScriptPath);
+            writer.Write(this.ReferenceScriptPath);
+            writer.Write(this.ModelDir);
+            writer.Write(this.ExportPmxPath);
+            writer.Write(this.ExportVmdPath);
+            writer.Write(this.ModelName);
+            writer.Write(this.ModelDescription);
+        }
+
+        public void Parse(BinaryReader reader)
+        {
+            this.SpellScriptPath = reader.ReadString();
+            this.ShotTypeScriptPath = reader.ReadString();
+            this.ReferenceScriptPath = reader.ReadString();
+            this.ModelDir = reader.ReadString();
+            this.ExportPmxPath = reader.ReadString();
+            this.ExportVmdPath = reader.ReadString();
+            this.ModelName = reader.ReadString();
+            this.ModelDescription = reader.ReadString();
         }
     }
 }
