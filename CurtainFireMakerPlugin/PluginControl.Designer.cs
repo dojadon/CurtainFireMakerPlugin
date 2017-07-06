@@ -61,7 +61,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(7, 47);
+            this.button3.Location = new System.Drawing.Point(7, 76);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(129, 23);
             this.button3.TabIndex = 4;
@@ -75,7 +75,7 @@
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Location = new System.Drawing.Point(177, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(111, 87);
+            this.groupBox1.Size = new System.Drawing.Size(111, 79);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "設定";
@@ -94,21 +94,21 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(7, 76);
+            this.button5.Location = new System.Drawing.Point(6, 18);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(128, 23);
             this.button5.TabIndex = 6;
-            this.button5.Text = "Generate Curtain Fire";
+            this.button5.Text = "弾幕生成";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.Click_GenerateCurtainFire);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(6, 18);
+            this.button4.Location = new System.Drawing.Point(7, 47);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(129, 23);
             this.button4.TabIndex = 5;
-            this.button4.Text = "Init IronPython";
+            this.button4.Text = "IronPython初期化";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Click_InitIronPython);
             // 

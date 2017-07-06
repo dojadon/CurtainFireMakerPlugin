@@ -16,6 +16,9 @@ namespace CurtainFireMakerPlugin
 
         private StreamWriter outStream;
 
+        private bool InitPython { get; set; }
+        private bool InitShotType { get; set; }
+
         public Plugin()
         {
             Instance = this;
@@ -57,6 +60,8 @@ namespace CurtainFireMakerPlugin
         public void InitIronPython(string path)
         {
             PythonRunner.Init(path);
+
+            this.InitPython = true;
         }
 
         public void Run(CommandArgs args)
@@ -66,6 +71,16 @@ namespace CurtainFireMakerPlugin
 
         public void RunSpellScript(string path)
         {
+            if (!this.InitPython)
+            {
+                this.InitIronPython(this.Control.ReferenceScriptPath);
+            }
+
+            if (!this.InitShotType)
+            {
+                this.RunShotTypeScript(this.Control.ShotTypeScriptPath);
+            }
+
             World world = new World();
 
             PythonRunner.RunSpellScript(path, world);
@@ -79,6 +94,8 @@ namespace CurtainFireMakerPlugin
         public void RunShotTypeScript(string path)
         {
             PythonRunner.RunShotTypeScript(path);
+
+            this.InitShotType = true;
         }
 
         private void ExportPmx(World world)
@@ -124,7 +141,7 @@ namespace CurtainFireMakerPlugin
 
         public void OnLoadProject(Stream stream)
         {
-            var reader =new BinaryReader(stream);
+            var reader = new BinaryReader(stream);
 
             this.Control.Parse(reader);
         }
