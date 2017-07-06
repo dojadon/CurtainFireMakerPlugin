@@ -5,6 +5,8 @@ using System.Text;
 using DxMath;
 using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.Entities.Motion;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -144,6 +146,11 @@ namespace CurtainFireMakerPlugin.Entities
         public void AddTask(Action task, int interval, int executeTimes, int waitTime)
         {
             this.AddTask(new Task(task, interval, executeTimes, waitTime));
+        }
+
+        public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime)
+        {
+            this.AddTask(() => PythonCalls.Call(task), interval, executeTimes, waitTime);
         }
     }
 }

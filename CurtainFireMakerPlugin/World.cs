@@ -84,5 +84,10 @@ namespace CurtainFireMakerPlugin
         {
             this.AddTask(new Task(task, interval, executeTimes, waitTime));
         }
+
+        public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime)
+        {
+            this.AddTask(() => PythonCalls.Call(task), interval, executeTimes, waitTime);
+        }
     }
 }
