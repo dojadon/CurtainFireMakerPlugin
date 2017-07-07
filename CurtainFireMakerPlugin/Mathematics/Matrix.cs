@@ -128,6 +128,29 @@ namespace CurtainFireMakerPlugin.Mathematics
             return m3;
         }
 
+        public static Matrix LookAt(Vector3 eye, Vector3 at, Vector3 upward)
+        {
+            var m1 = Identity();
+
+            var z = +(eye - at);
+            var x = +(upward ^ z);
+            var y = +(z ^ x);
+
+            m1.m00 = x.x;
+            m1.m01 = x.y;
+            m1.m02 = x.z;
+
+            m1.m10 = y.x;
+            m1.m11 = y.y;
+            m1.m12 = y.z;
+
+            m1.m20 = z.x;
+            m1.m21 = z.y;
+            m1.m22 = z.z;
+
+            return m1;
+        }
+
         public static Matrix Inverse(Matrix m1)
         {
             Matrix m2;

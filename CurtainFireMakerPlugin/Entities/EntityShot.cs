@@ -63,7 +63,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.RotateAccodingToVelocity)
             {
-                this.Rot =(Quaternion)Matrix.LookAtLH(Vector3.Zero, this.Velocity, this.Upward);
+                this.Rot =(Quaternion)Matrix.LookAt(Vector3.Zero, this.Velocity, this.Upward);
             }
             else
             {

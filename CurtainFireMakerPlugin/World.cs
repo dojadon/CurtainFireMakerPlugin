@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Tasks;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin
 {
