@@ -50,6 +50,33 @@ namespace CurtainFireMakerPlugin.Mathematics
             this.m33 = m33;
         }
 
+        public Matrix(Vector3 x, Vector3 y, Vector3 z, Vector3 trans)
+        {
+            this.m00 = x.x;
+            this.m01 = x.y;
+            this.m02 = x.z;
+            this.m03 = trans.x;
+
+            this.m10 = y.x;
+            this.m11 = y.y;
+            this.m12 = y.z;
+            this.m13 = trans.y;
+
+            this.m20 = z.x;
+            this.m21 = z.y;
+            this.m22 = z.z;
+            this.m23 = trans.z;
+
+            this.m30 = 0;
+            this.m31 = 0;
+            this.m32 = 0;
+            this.m33 = 1;
+        }
+
+        public Matrix(Vector3 x, Vector3 y, Vector3 z) : this(x, y, z, Vector3.Zero)
+        {
+        }
+
         public static Matrix Identity()
         {
             var m1 = new Matrix();
@@ -77,7 +104,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return m1;
         }
 
-        public static Matrix FromQuaternion(Quaternion q)
+        public static Matrix RotationQuaternion(Quaternion q)
         {
             var m1 = Identity();
 
@@ -99,6 +126,39 @@ namespace CurtainFireMakerPlugin.Mathematics
             m1.m22 = 1 - 2 * (xx + yy);
 
             return m1;
+        }
+
+        public static Matrix RotationAxisAngle(Vector3 axis, double angle)
+        {
+            var m1 = Identity();
+
+            double cos = Math.Cos(angle);
+            double sin = Math.Sin(angle);
+
+            Vector3 x = Vector3.UnitX;
+            Vector3 n = axis.x * axis;
+            x = cos * (x - n) + sin * (axis ^ x) + n;
+
+            Vector3 y = Vector3.UnitY;
+            n = axis.y * axis;
+            y = cos * (y - n) + sin * (axis ^ y) + n;
+
+            Vector3 z = Vector3.UnitZ;
+            n = axis.z * axis;
+            z = cos * (z - n) + sin * (axis ^ z) + n;
+
+            return new Matrix(x, y, z);
+        }
+
+        public static Matrix LookAt(Vector3 eye, Vector3 at, Vector3 upward)
+        {
+            var m1 = Identity();
+
+            var z = +(eye - at);
+            var x = +(upward ^ z);
+            var y = +(z ^ x);
+
+            return new Matrix(x, y, z);
         }
 
         public static Matrix Mul(Matrix m1, Matrix m2)
@@ -126,29 +186,6 @@ namespace CurtainFireMakerPlugin.Mathematics
             m3.m33 = m1.m30 * m2.m03 + m1.m31 * m2.m13 + m1.m32 * m2.m23 + m1.m33 * m2.m33;
 
             return m3;
-        }
-
-        public static Matrix LookAt(Vector3 eye, Vector3 at, Vector3 upward)
-        {
-            var m1 = Identity();
-
-            var z = +(eye - at);
-            var x = +(upward ^ z);
-            var y = +(z ^ x);
-
-            m1.m00 = x.x;
-            m1.m01 = x.y;
-            m1.m02 = x.z;
-
-            m1.m10 = y.x;
-            m1.m11 = y.y;
-            m1.m12 = y.z;
-
-            m1.m20 = z.x;
-            m1.m21 = z.y;
-            m1.m22 = z.z;
-
-            return m1;
         }
 
         public static Matrix Inverse(Matrix m1)
@@ -395,7 +432,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix operator *(Matrix m1, Matrix m2) => Mul(m1, m2);
 
-        public static implicit operator Matrix(Quaternion q1) => FromQuaternion(q1);
+        public static implicit operator Matrix(Quaternion q1) => RotationQuaternion(q1);
 
         public static explicit operator Vector3(Matrix m1) => new Vector3(m1.m03, m1.m13, m1.m23);
 

@@ -80,7 +80,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return q2;
         }
 
-        public static Quaternion FromAxisAngle(Vector3 a, double angle)
+        public static Quaternion RotationAxisAngle(Vector3 a, double angle)
         {
             var q1 = new Quaternion();
 
@@ -105,7 +105,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return q1;
         }
 
-        public static Quaternion FromMatrix(Matrix m1)
+        public static Quaternion RotationMatrix(Matrix m1)
         {
             var q1 = new Quaternion();
 
@@ -198,7 +198,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Quaternion operator *(Quaternion q1, Quaternion q2) => Mul(q1, q2);
 
-        public static implicit operator Quaternion(Matrix m1) => FromMatrix(m1);
+        public static implicit operator Quaternion(Matrix m1) => RotationMatrix(m1);
 
         public static implicit operator Quaternion(DxMath.Quaternion q1) => new Quaternion(q1.X, q1.Y, q1.Z, q1.W);
 

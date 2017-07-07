@@ -8,6 +8,9 @@ namespace CurtainFireMakerPlugin.Mathematics
     public struct Vector3
     {
         public static readonly Vector3 Zero = new Vector3();
+        public static readonly Vector3 UnitX = new Vector3(1, 0, 0);
+        public static readonly Vector3 UnitY = new Vector3(0, 1, 0);
+        public static readonly Vector3 UnitZ = new Vector3(0, 0, 1);
 
         public double x;
         public double y;
@@ -158,6 +161,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static Vector3 operator -(Vector3 v1, Vector3 v2) => Sub(v1, v2);
 
         public static Vector3 operator *(Vector3 v1, double d1) => Scale(v1, d1);
+
+        public static Vector3 operator *(double d1, Vector3 v1) => Scale(v1, d1);
 
         public static double operator *(Vector3 v1, Vector3 v2) => Dot(v1, v2);
 
