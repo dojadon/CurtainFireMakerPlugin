@@ -7,7 +7,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 {
     public struct Matrix
     {
-        private const double EPS = 1.0E-10;
+        public static readonly Matrix Identity = new Matrix(Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, Vector3.Zero);
 
         public double m00;
         public double m01;
@@ -77,36 +77,9 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
         }
 
-        public static Matrix Identity()
-        {
-            var m1 = new Matrix();
-
-            m1.m00 = 1.0;
-            m1.m01 = 0.0;
-            m1.m02 = 0.0;
-            m1.m03 = 0.0;
-
-            m1.m10 = 0.0;
-            m1.m11 = 1.0;
-            m1.m12 = 0.0;
-            m1.m13 = 0.0;
-
-            m1.m20 = 0.0;
-            m1.m21 = 0.0;
-            m1.m22 = 1.0;
-            m1.m23 = 0.0;
-
-            m1.m30 = 0.0;
-            m1.m31 = 0.0;
-            m1.m32 = 0.0;
-            m1.m33 = 1.0;
-
-            return m1;
-        }
-
         public static Matrix RotationQuaternion(Quaternion q)
         {
-            var m1 = Identity();
+            var m1 = Identity;
 
             double ww = q.w * q.w;
             double xx = q.x * q.x;
@@ -130,7 +103,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix RotationAxisAngle(Vector3 axis, double angle)
         {
-            var m1 = Identity();
+            var m1 = Identity;
 
             double cos = Math.Cos(angle);
             double sin = Math.Sin(angle);
@@ -152,7 +125,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix LookAt(Vector3 eye, Vector3 at, Vector3 upward)
         {
-            var m1 = Identity();
+            var m1 = Identity;
 
             var z = +(eye - at);
             var x = +(upward ^ z);
@@ -346,7 +319,7 @@ namespace CurtainFireMakerPlugin.Mathematics
         private static Matrix LuBacksubstitution(Matrix m1, int[] row_perm)
         {
             double[] matrix1 = (double[])m1;
-            double[] matrix2 = (double[])Identity();
+            double[] matrix2 = (double[])Identity;
 
             int i, ii, ip, j, k;
             int rp;

@@ -25,6 +25,8 @@ namespace CurtainFireMakerPlugin.Tasks
             this.interval = this.updateCount = interval;
             this.executionTimes = executionTimes;
             this.waitTime = waitTime;
+
+            this.state = waitTime > 0 ? WAITING : ACTIVE;
         }
 
         public void Update()
