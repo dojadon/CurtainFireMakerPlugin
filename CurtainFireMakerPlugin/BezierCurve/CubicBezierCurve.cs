@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DxMath;
+using CurtainFireMakerPlugin.Mathematics;
 
 namespace CurtainFireMakerPlugin.BezierCurve
 {
@@ -24,13 +24,13 @@ namespace CurtainFireMakerPlugin.BezierCurve
         public double X(double t)
         {
             double inv = 1 - t;
-            return inv * inv * inv * p0.X + 3 * inv * inv * t * p1.X + 3 * inv * t * t * p2.X + t * t * t * p3.X;
+            return inv * inv * inv * p0.x + 3 * inv * inv * t * p1.x + 3 * inv * t * t * p2.x+ t * t * t * p3.x;
         }
 
         public double Y(double t)
         {
             double inv = 1 - t;
-            return inv * inv * inv * p0.Y+ 3 * inv * inv * t * p1.Y + 3 * inv * t * t * p2.Y + t * t * t * p3.Y;
+            return inv * inv * inv * p0.y+ 3 * inv * inv * t * p1.y + 3 * inv * t * t * p2.y + t * t * t * p3.y;
         }
     }
 }

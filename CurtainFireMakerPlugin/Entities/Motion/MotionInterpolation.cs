@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.BezierCurve;
-using DxMath;
+using CurtainFireMakerPlugin.Mathematics;
 
 namespace CurtainFireMakerPlugin.Entities.Motion
 {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DxMath;
 using CurtainFireMakerPlugin.Collections;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
@@ -101,13 +100,9 @@ namespace CurtainFireMakerPlugin.Mathematics
 
                 foreach (var face in faces)
                 {
-                    var v12 = (face.v1 + face.v2) * 0.5F;
-                    var v23 = (face.v2 + face.v3) * 0.5F;
-                    var v31 = (face.v3 + face.v1) * 0.5F;
-
-                    v12.Normalize();
-                    v23.Normalize();
-                    v31.Normalize();
+                    var v12 = +((face.v1 + face.v2) * 0.5F);
+                    var v23 = +((face.v2 + face.v3) * 0.5F);
+                    var v31 = +((face.v3 + face.v1) * 0.5F);
 
                     this.faceMap.Add(level, new Face(face.v1, v31, v12));
                     this.faceMap.Add(level, new Face(face.v2, v12, v23));

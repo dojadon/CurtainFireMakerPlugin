@@ -156,6 +156,40 @@ namespace CurtainFireMakerPlugin.Mathematics
             return q3;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            var p = obj as Quaternion?;
+            if (p == null)
+            {
+                return false;
+            }
+
+            return this.Equals((Quaternion)obj);
+        }
+
+        public bool Equals(Quaternion p1) => p1.x == this.x && p1.y == this.y && p1.z == this.z && p1.w == this.w;
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = x.GetHashCode();
+                hashCode = (hashCode * 397) ^ y.GetHashCode();
+                hashCode = (hashCode * 397) ^ z.GetHashCode();
+                hashCode = (hashCode * 397) ^ w.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(Quaternion q1, Quaternion q2) => q1.Equals(q2);
+
+        public static bool operator !=(Quaternion q1, Quaternion q2) => !q1.Equals(q2);
+
         public static Quaternion operator +(Quaternion q1) => Normalize(q1);
 
         public static Quaternion operator -(Quaternion q1) => Conjugate(q1);

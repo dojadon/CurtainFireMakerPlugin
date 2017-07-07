@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CsPmx.Data;
 using CsPmx;
-using DxMath;
+using CurtainFireMakerPlugin.Mathematics;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -77,8 +77,8 @@ namespace CurtainFireMakerPlugin.Entities
             foreach (PmxMaterialData material in materials)
             {
                 material.materialName = this.materialList.Capacity.ToString();
-                material.diffuse = new Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
-                material.ambient = new Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
+                material.diffuse = new DxMath.Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
+                material.ambient = new DxMath.Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
                 material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.textureList.IndexOf(textures[material.textureId]) : -1;
                 this.materialList.Add(material);
             }

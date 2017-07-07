@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DxMath;
+using CurtainFireMakerPlugin.Mathematics;
 
 namespace CurtainFireMakerPlugin.BezierCurve
 {
@@ -15,9 +15,9 @@ namespace CurtainFireMakerPlugin.BezierCurve
         public double GetT(double x)
         {
             double a0 = -x;
-            double a1 = 3 * this.p1.X;
-            double a2 = -3 * (2 * this.p1.X - this.p2.X);
-            double a3 = 3 * (this.p1.X - this.p2.X) + 1;
+            double a1 = 3 * this.p1.x;
+            double a2 = -3 * (2 * this.p1.x - this.p2.x);
+            double a3 = 3 * (this.p1.x - this.p2.x) + 1;
 
             double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
             double t = solution[0];

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DxMath;
+using CurtainFireMakerPlugin.Mathematics;
 using CsPmx.Data;
 using CsVmd.Data;
 using MikuMikuPlugin;
@@ -63,8 +63,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.RotateAccodingToVelocity)
             {
-                Matrix rot = Matrix.LookAtLH(Vector3.Zero, this.Velocity, this.Upward);
-                this.Rot = Quaternion.RotationMatrix(rot);
+                this.Rot =(Quaternion)Matrix.LookAtLH(Vector3.Zero, this.Velocity, this.Upward);
             }
             else
             {
@@ -100,8 +99,8 @@ namespace CurtainFireMakerPlugin.Entities
             var motion = new VmdMotionFrameData();
             motion.boneName = this.rootBone.boneName;
             motion.keyFrameNo = this.world.FrameCount + frameOffset;
-            motion.pos = this.Pos;
-            motion.rot = this.Rot;
+            motion.pos = (DxMath.Vector3)this.Pos;
+            motion.rot =(DxMath.Quaternion) this.Rot;
 
             if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.world.FrameCount)
             {

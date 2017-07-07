@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 Add(Vector3 v1, Vector3 v2)
         {
-            Vector3 v3 = new Vector3();
+            var v3 = new Vector3();
 
             v3.x = v1.x + v2.x;
             v3.y = v1.y + v2.y;
@@ -36,7 +36,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 Sub(Vector3 v1, Vector3 v2)
         {
-            Vector3 v3 = new Vector3();
+            var v3 = new Vector3();
 
             v3.x = v1.x - v2.x;
             v3.y = v1.y - v2.y;
@@ -47,7 +47,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 Scale(Vector3 v1, double d1)
         {
-            Vector3 v3 = new Vector3();
+            var v3 = new Vector3();
 
             v3.x = v1.x * d1;
             v3.y = v1.y * d1;
@@ -63,7 +63,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 Cross(Vector3 v1, Vector3 v2)
         {
-            Vector3 v3 = new Vector3();
+            var v3 = new Vector3();
 
             v3.x = v1.y * v2.z - v1.z * v2.y;
             v3.y = v1.z * v2.x - v1.x * v2.z;
@@ -72,9 +72,31 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
+        public static Vector3 Transform(Matrix m1, Vector3 v1)
+        {
+            var v2 = new Vector3();
+
+            v2.x = m1.m00 * v1.x + m1.m01 * v1.y + m1.m02 * v1.z + m1.m03;
+            v2.y = m1.m10 * v1.x + m1.m11 * v1.y + m1.m12 * v1.z + m1.m13;
+            v2.z = m1.m20 * v1.x + m1.m21 * v1.y + m1.m22 * v1.z + m1.m23;
+
+            return v2;
+        }
+
+        public static Vector3 TransformNormal(Matrix m1, Vector3 v1)
+        {
+            var v2 = new Vector3();
+
+            v2.x = m1.m00 * v1.x + m1.m01 * v1.y + m1.m02 * v1.z;
+            v2.y = m1.m10 * v1.x + m1.m11 * v1.y + m1.m12 * v1.z;
+            v2.z = m1.m20 * v1.x + m1.m21 * v1.y + m1.m22 * v1.z;
+
+            return v2;
+        }
+
         public static Vector3 Normalize(Vector3 v1)
         {
-            Vector3 v2 = new Vector3();
+            var v2 = new Vector3();
 
             double len = Length(v1);
 
@@ -93,6 +115,11 @@ namespace CurtainFireMakerPlugin.Mathematics
             return Math.Sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
         }
 
+        public double Length()
+        {
+            return Length(this);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -109,12 +136,12 @@ namespace CurtainFireMakerPlugin.Mathematics
             return this.Equals((Vector3)obj);
         }
 
+        public bool Equals(Vector3 v1) => v1.x == this.x && v1.y == this.y && v1.z == this.z;
+
         public override int GetHashCode()
         {
             return x.GetHashCode() ^ y.GetHashCode() << 2 ^ z.GetHashCode() >> 2;
         }
-
-        public bool Equals(Vector3 v1) => v1.x == this.x && v1.y == this.y && v1.z == this.z;
 
         public static Vector3 operator -(Vector3 v1) => v1 * -1;
 
@@ -131,6 +158,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static Vector3 operator *(Vector3 v1, double d1) => Scale(v1, d1);
 
         public static double operator *(Vector3 v1, Vector3 v2) => Dot(v1, v2);
+
+        public static Vector3 operator *(Matrix m1, Vector3 v1) => TransformNormal(m1, v1);
 
         public static Vector3 operator /(Vector3 v1, double d1) => Scale(v1, 1.0 / d1);
 

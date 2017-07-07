@@ -79,7 +79,9 @@
     <Compile Include="Mathematics\Icosahedron.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
+    <Compile Include="Mathematics\Vector2.cs" />
     <Compile Include="Mathematics\Vector3.cs" />
+    <Compile Include="Mathematics\Vector4.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />

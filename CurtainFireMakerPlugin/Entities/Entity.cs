@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DxMath;
+using CurtainFireMakerPlugin.Mathematics;
 using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.Entities.Motion;
 using IronPython.Runtime;
@@ -14,8 +14,8 @@ namespace CurtainFireMakerPlugin.Entities
     {
         private Matrix worldMat = new Matrix();
         public Matrix WorldMat => worldMat;
-        public Vector3 WorldPos { get { return new Vector3(WorldMat.M14, WorldMat.M24, WorldMat.M34); } }
-        public Quaternion WorldRot { get { return Quaternion.RotationMatrix(WorldMat); } }
+        public Vector3 WorldPos { get { return (Vector3)WorldMat; } }
+        public Quaternion WorldRot { get { return WorldMat; } }
 
         private Vector3 spawnPos = new Vector3();
         public Vector3 SpawnPos => this.spawnPos;
@@ -95,8 +95,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected void UpdateWorldMat()
         {
-            this.worldMat = Matrix.RotationQuaternion(this.Rot);
-            Matrix.Translation(this.Pos.X, this.Pos.Y, this.Pos.Z, out this.worldMat);
+            this.worldMat = (Matrix)this.Rot + this.Pos;
 
             if (this.parentEntity != null)
             {
@@ -126,7 +125,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.IsDeath = true;
         }
 
-        public void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
+        public void SetMotionBezier(DxMath.Vector2 pos1, DxMath.Vector2 pos2, int length)
         {
             Vector3 endPos = this.Velocity * length + this.Pos;
             int frame = this.world.FrameCount;

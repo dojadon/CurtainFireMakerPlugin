@@ -348,9 +348,33 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix operator ~(Matrix m1) => Inverse(m1);
 
+        public static Matrix operator +(Matrix m1, Vector3 v1)
+        {
+            var m2 = m1;
+
+            m2.m03 += v1.x;
+            m2.m13 += v1.y;
+            m2.m23 += v1.z;
+
+            return m2;
+        }
+
+        public static Matrix operator -(Matrix m1, Vector3 v1)
+        {
+            var m2 = m1;
+
+            m2.m03 -= v1.x;
+            m2.m13 -= v1.y;
+            m2.m23 -= v1.z;
+
+            return m2;
+        }
+
         public static Matrix operator *(Matrix m1, Matrix m2) => Mul(m1, m2);
 
         public static implicit operator Matrix(Quaternion q1) => FromQuaternion(q1);
+
+        public static explicit operator Vector3(Matrix m1) => new Vector3(m1.m03, m1.m13, m1.m23);
 
         public static explicit operator double[] (Matrix m)
         {
