@@ -77,9 +77,9 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 if (this.motionInterpolation.Within(this.world.FrameCount))
                 {
-                    double changeAmount = this.motionInterpolation.GetChangeAmount(this.world.FrameCount);
-                    interpolatedVelocity *= (float)changeAmount;
-                    Console.WriteLine(changeAmount);
+                    //double changeAmount = this.motionInterpolation.GetChangeAmount(this.world.FrameCount);
+                    //interpolatedVelocity *= (float)changeAmount;
+                    //Console.WriteLine(changeAmount);
                 }
                 else
                 {

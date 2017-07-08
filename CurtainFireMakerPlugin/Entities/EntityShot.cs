@@ -120,6 +120,14 @@ namespace CurtainFireMakerPlugin.Entities
             if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.world.FrameCount)
             {
                 replace = true;
+
+                var interpolation = new byte[4];
+                interpolation[0] = (byte)(127 * this.motionInterpolation.curve.p1.x);
+                interpolation[1] = (byte)(127 * this.motionInterpolation.curve.p1.y);
+                interpolation[2] = (byte)(127 * this.motionInterpolation.curve.p2.x);
+                interpolation[3] = (byte)(127 * this.motionInterpolation.curve.p2.y);
+
+                motion.interpolatePointX = motion.interpolatePointY = motion.interpolatePointZ = motion.interpolatePointR = interpolation;
             }
 
             this.world.motion.AddVmdMotion(motion, replace);

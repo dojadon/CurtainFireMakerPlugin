@@ -9,7 +9,7 @@ namespace CurtainFireMakerPlugin.Entities.Motion
 {
     public class MotionInterpolation
     {
-        private VmdBezierCurve curve;
+        public VmdBezierCurve curve;
         private Vector3 startPos;
         private Vector3 endPos;
         public int startFrame;
