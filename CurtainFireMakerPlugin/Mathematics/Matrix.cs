@@ -163,220 +163,55 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix Inverse(Matrix m1)
         {
-            Matrix m2;
-            int[] row = new int[4];
+            Matrix m2 = Identity;
 
-            if (LuDecomposition(m1, row, out m2))
+            double[,] mat = (double[,])m1;
+            double[,] inv = (double[,])Identity;
+            double buf = 0;
+
+            for (int i = 0; i < 4; i++)
             {
-                throw new Exception("An exception occurred in solve the inverse matrix");
-            }
-
-            return LuBacksubstitution(m2, row);
-        }
-
-        private static bool LuDecomposition(Matrix m1, int[] row_perm, out Matrix result)
-        {
-            var matrix0 = (double[])m1;
-            var row_scale = new double[4];
-            result = new double[16];
-
-            // Determine implicit scaling information by looping over rows
-            {
-                int i, j;
-                int ptr, rs;
-                double big, temp;
-
-                ptr = 0;
-                rs = 0;
-
-                // For each row ...
-                i = 4;
-                while (i-- != 0)
+                buf = 1 / mat[i, i];
+                for (int j = 0; j < 4; j++)
                 {
-                    big = 0.0;
-
-                    // For each column, find the largest element in the row
-                    j = 4;
-                    while (j-- != 0)
-                    {
-                        temp = matrix0[ptr++];
-                        temp = Math.Abs(temp);
-                        if (temp > big)
-                        {
-                            big = temp;
-                        }
-                    }
-
-                    // Is the matrix singular?
-                    if (big == 0.0) { return false; }
-                    row_scale[rs++] = 1.0 / big;
+                    mat[i, j] *= buf;
+                    inv[i, j] *= buf;
                 }
-            }
-
-            {
-                int j;
-                int mtx;
-
-                mtx = 0;
-
-                // For all columns, execute Crout's method
-                for (j = 0; j < 4; j++)
+                for (int j = 0; j < 4; j++)
                 {
-                    int i, imax, k;
-                    int target, p1, p2;
-                    double sum, big, temp;
-
-                    // Determine elements of upper diagonal matrix U
-                    for (i = 0; i < j; i++)
+                    if (i != j)
                     {
-                        target = mtx + 4 * i + j;
-                        sum = matrix0[target];
-                        k = i;
-                        p1 = mtx + 4 * i;
-                        p2 = mtx + j;
-                        while (k-- != 0)
+                        buf = mat[j, i];
+                        for (int k = 0; k < 4; k++)
                         {
-                            sum -= matrix0[p1] * matrix0[p2];
-                            p1++;
-                            p2 += 4;
-                        }
-                        matrix0[target] = sum;
-                    }
-
-                    // Search for largest pivot element and calculate
-                    // intermediate elements of lower diagonal matrix L.
-                    big = 0.0;
-                    imax = -1;
-                    for (i = j; i < 4; i++)
-                    {
-                        target = mtx + 4 * i + j;
-                        sum = matrix0[target];
-                        k = j;
-                        p1 = mtx + 4 * i;
-                        p2 = mtx + j;
-                        while (k-- != 0)
-                        {
-                            sum -= matrix0[p1] * matrix0[p2];
-                            p1++;
-                            p2 += 4;
-                        }
-                        matrix0[target] = sum;
-
-                        // Is this the best pivot so far?
-                        if ((temp = row_scale[i] * Math.Abs(sum)) >= big)
-                        {
-                            big = temp;
-                            imax = i;
-                        }
-                    }
-
-                    if (imax < 0) { return false; }
-
-                    // Is a row exchange necessary?
-                    if (j != imax)
-                    {
-                        // Yes: exchange rows
-                        k = 4;
-                        p1 = mtx + 4 * imax;
-                        p2 = mtx + 4 * j;
-                        while (k-- != 0)
-                        {
-                            temp = matrix0[p1];
-                            matrix0[p1++] = matrix0[p2];
-                            matrix0[p2++] = temp;
-                        }
-
-                        // Record change in scale factor
-                        row_scale[imax] = row_scale[j];
-                    }
-
-                    // Record row permutation
-                    row_perm[j] = imax;
-
-                    // Is the matrix singular
-                    if (matrix0[mtx + 4 * j + j] == 0.0) { return false; }
-
-                    // Divide elements of lower diagonal matrix L by pivot
-                    if (j != 4 - 1)
-                    {
-                        temp = 1.0 / matrix0[mtx + 4 * j + j];
-                        target = mtx + 4 * (j + 1) + j;
-                        i = 3 - j;
-                        while (i-- != 0)
-                        {
-                            matrix0[target] *= temp;
-                            target += 4;
+                            mat[j, k] -= mat[i, k] * buf;
+                            inv[j, k] -= inv[i, k] * buf;
                         }
                     }
                 }
             }
 
-            result = matrix0;
-
-            return true;
-        }
-
-        private static Matrix LuBacksubstitution(Matrix m1, int[] row_perm)
-        {
-            double[] matrix1 = (double[])m1;
-            double[] matrix2 = (double[])Identity;
-
-            int i, ii, ip, j, k;
-            int rp;
-            int cv, rv;
-
-            // rp = row_perm;
-            rp = 0;
-
-            // For each column vector of matrix2 ...
-            for (k = 0; k < 4; k++)
+            for (int i = 0; i < 4; i++)
             {
-                // cv = &(matrix2[0][k]);
-                cv = k;
-                ii = -1;
-
-                // Forward substitution
-                for (i = 0; i < 4; i++)
+                buf = 1 / mat[i, i];
+                for (int j = 0; j < 4; j++)
                 {
-                    double sum;
-
-                    ip = row_perm[rp + i];
-                    sum = matrix2[cv + 4 * ip];
-                    matrix2[cv + 4 * ip] = matrix2[cv + 4 * i];
-                    if (ii >= 0)
+                    mat[i, j] *= buf; inv[i, j] *= buf;
+                }
+                for (int j = 0; j < 4; j++)
+                {
+                    if (i != j)
                     {
-                        // rv = &(matrix1[i][0]);
-                        rv = i * 4;
-                        for (j = ii; j <= i - 1; j++)
+                        buf = mat[j, i];
+                        for (int k = 0; k < 4; k++)
                         {
-                            sum -= matrix1[rv + j] * matrix2[cv + 4 * j];
+                            mat[j, k] -= mat[i, k] * buf;
+                            inv[j, k] -= inv[i, k] * buf;
                         }
                     }
-                    else if (sum != 0.0)
-                    {
-                        ii = i;
-                    }
-                    matrix2[cv + 4 * i] = sum;
                 }
-
-                // Backsubstitution
-                // rv = &(matrix1[3][0]);
-                rv = 3 * 4;
-                matrix2[cv + 4 * 3] /= matrix1[rv + 3];
-
-                rv -= 4;
-                matrix2[cv + 4 * 2] = (matrix2[cv + 4 * 2] - matrix1[rv + 3] * matrix2[cv + 4 * 3]) / matrix1[rv + 2];
-
-                rv -= 4;
-                matrix2[cv + 4 * 1] = (matrix2[cv + 4 * 1] - matrix1[rv + 2] * matrix2[cv + 4 * 2] - matrix1[rv + 3] * matrix2[cv + 4 * 3])
-                        / matrix1[rv + 1];
-
-                rv -= 4;
-                matrix2[cv + 4 * 0] = (matrix2[cv + 4 * 0] - matrix1[rv + 1] * matrix2[cv + 4 * 1] - matrix1[rv + 2] * matrix2[cv + 4 * 2]
-                        - matrix1[rv + 3] * matrix2[cv + 4 * 3]) / matrix1[rv + 0];
             }
-
-            return matrix2;
+            return inv;
         }
 
         public static Matrix operator ~(Matrix m1) => Inverse(m1);
@@ -433,6 +268,70 @@ namespace CurtainFireMakerPlugin.Mathematics
             result[index++] = m.m31;
             result[index++] = m.m32;
             result[index++] = m.m33;
+
+            return result;
+        }
+
+        public static implicit operator Matrix(double[,] d)
+        {
+            var m = new Matrix();
+
+            int index1 = 0;
+            int index2 = 0;
+            m.m00 = d[index2, index1++];
+            m.m01 = d[index2, index1++];
+            m.m02 = d[index2, index1++];
+            m.m03 = d[index2++, index1++];
+
+            index1 = 0;
+            m.m10 = d[index2, index1++];
+            m.m11 = d[index2, index1++];
+            m.m12 = d[index2, index1++];
+            m.m13 = d[index2++, index1++];
+
+            index1 = 0;
+            m.m20 = d[index2, index1++];
+            m.m21 = d[index2, index1++];
+            m.m22 = d[index2, index1++];
+            m.m23 = d[index2++, index1++];
+
+            index1 = 0;
+            m.m30 = d[index2, index1++];
+            m.m31 = d[index2, index1++];
+            m.m32 = d[index2, index1++];
+            m.m33 = d[index2++, index1++];
+
+            return m;
+        }
+
+        public static explicit operator double[,] (Matrix m)
+        {
+            double[,] result = new double[4, 4];
+
+            int index1 = 0;
+            int index2 = 0;
+            result[index2, index1++] = m.m00;
+            result[index2, index1++] = m.m01;
+            result[index2, index1++] = m.m02;
+            result[index2++, index1++] = m.m03;
+
+            index1 = 0;
+            result[index2, index1++] = m.m10;
+            result[index2, index1++] = m.m11;
+            result[index2, index1++] = m.m12;
+            result[index2++, index1++] = m.m13;
+
+            index1 = 0;
+            result[index2, index1++] = m.m20;
+            result[index2, index1++] = m.m21;
+            result[index2, index1++] = m.m22;
+            result[index2++, index1++] = m.m23;
+
+            index1 = 0;
+            result[index2, index1++] = m.m30;
+            result[index2, index1++] = m.m31;
+            result[index2, index1++] = m.m32;
+            result[index2++, index1++] = m.m33;
 
             return result;
         }

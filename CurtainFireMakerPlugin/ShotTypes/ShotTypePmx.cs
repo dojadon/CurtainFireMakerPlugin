@@ -10,18 +10,20 @@ namespace CurtainFireMakerPlugin.ShotTypes
     public class ShotTypePmx : ShotType
     {
         private PmxModelData data = new PmxModelData();
+        private double scale;
 
-        public ShotTypePmx(string name, string path) : this(name, new FileStream(Plugin.Instance.Control.ModelDir + "\\" + path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        public ShotTypePmx(string name, string fileName, double scale) : base(name)
         {
-        }
+            string path = Plugin.Instance.Control.ModelDir + "\\" + fileName;
+            var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-        public ShotTypePmx(string name, Stream inStream) : base(name)
-        {
             using (inStream)
             {
                 PmxParser parser = new PmxParser(inStream);
                 parser.Parse(this.data);
             }
+
+            this.scale = scale;
         }
 
         override public PmxVertexData[] GetVertices(ShotProperty property)
@@ -30,6 +32,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = DeepCopy(this.data.VertexArray[i]);
+                result[i].pos *= (float)this.scale;
             }
             return result;
         }

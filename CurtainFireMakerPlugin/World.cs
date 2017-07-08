@@ -65,6 +65,8 @@ namespace CurtainFireMakerPlugin
 
         public void Frame()
         {
+            this.taskManager.Frame();
+
             this.EntityList.AddRange(this.addEntityList);
             this.removeEntityList.ForEach(e => this.EntityList.Remove(e));
 
