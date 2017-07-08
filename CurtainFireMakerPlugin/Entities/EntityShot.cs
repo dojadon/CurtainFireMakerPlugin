@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private ShouldRecordMotion ShouldRecord = WhenVelocityChanges;
 
-        public bool RotateAccodingToVelocity { get; set; }
+        public bool RotateAccodingToVelocity { get; set; } = true;
         public bool RecordWhenVelocityChanges
         {
             set
@@ -63,7 +63,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.RotateAccodingToVelocity)
             {
-                this.Rot =(Quaternion)Matrix.LookAt(Vector3.Zero, this.Velocity, this.Upward);
+                this.Rot =Matrix.LookAt(Vector3.Zero, this.Velocity, this.Upward);
             }
             else
             {

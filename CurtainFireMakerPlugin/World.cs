@@ -42,6 +42,8 @@ namespace CurtainFireMakerPlugin
                 this.Frame();
             }
             this.EntityList.ForEach(e => e.OnDeath());
+
+            this.shotManager.Build();
         }
 
         public void AddShot(EntityShot entity)

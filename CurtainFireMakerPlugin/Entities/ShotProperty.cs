@@ -26,5 +26,23 @@ namespace CurtainFireMakerPlugin.Entities
             this.color = color;
             this.type = type;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            var p = obj as ShotProperty;
+            if (p == null)
+            {
+                return false;
+            }
+
+            return this.Equals((ShotProperty)obj);
+        }
+
+        public bool Equals(ShotProperty p) => p.Color == this.color && this.Type.Name.Equals(p.type.Name);
     }
 }

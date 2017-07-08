@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.ShotTypes;
+using CurtainFireMakerPlugin.Collections;
+using CsPmx.Data;
+using CsPmx;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -24,9 +27,17 @@ namespace CurtainFireMakerPlugin.Entities
             }
             this.timelineMap[entity.Property.Type].AddEntity(entity);
         }
+
+        public void Build()
+        {
+            foreach (var timeline in this.timelineMap.Values)
+            {
+                timeline.Build();
+            }
+        }
     }
 
-    class TimeLine
+    internal class TimeLine
     {
         private readonly ShotType type;
         private List<TimeLineRow> rowList = new List<TimeLineRow>();
@@ -53,9 +64,72 @@ namespace CurtainFireMakerPlugin.Entities
                 this.rowList.Add(row);
             }
         }
+
+        public void Build()
+        {
+            if (!this.type.HasMmdData())
+            {
+                return;
+            }
+
+            MultiDictionary<int[], TimeLineRow> rowMap = new MultiDictionary<int[], TimeLineRow>();
+
+            var pmxModel = this.world.model;
+
+            foreach (TimeLineRow row in this.rowList)
+            {
+                List<int> keyFrameNoSet = new List<int>();
+
+                HashSet<int> spawnFrameSet = new HashSet<int>();
+                HashSet<int> deathFrameSet = new HashSet<int>();
+
+                row.shotList.ForEach(e => spawnFrameSet.Add(e.SpawnFrameNo));
+                row.shotList.ForEach(e => deathFrameSet.Add(e.DeathFrameNo));
+
+                keyFrameNoSet.AddRange(spawnFrameSet);
+                keyFrameNoSet.AddRange(deathFrameSet);
+
+                keyFrameNoSet.Sort();
+
+                rowMap.Add(keyFrameNoSet.ToArray(), row);
+            }
+
+            foreach (int[] keyFrameNo in rowMap.Keys)
+            {
+                TimeLineRow[] rowArr = rowMap[keyFrameNo].ToArray();
+
+                if (rowArr.Length > 1)
+                {
+                    for (int i = 1; i < rowArr.Length; i++)
+                    {
+                        pmxModel.morphList.Remove(rowArr[i].data.morph);
+                    }
+
+                    HashSet<int> indicesSet = new HashSet<int>();
+
+                    foreach (TimeLineRow row in rowArr)
+                    {
+                        foreach (var material in row.data.materials)
+                        {
+                            indicesSet.Add(pmxModel.materialList.IndexOf(material));
+                        }
+                    }
+
+                    int[] indices = indicesSet.ToArray();
+                    PmxMorphData morph = rowArr[0].data.morph;
+
+                    morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[indices.Length], i => new PmxMorphMaterialData());
+
+                    for (int i = 0; i < indices.Length; i++)
+                    {
+                        morph.morphArray[i].Index = indices[i];
+                    }
+                }
+            }
+        }
     }
 
-    class TimeLineRow
+    internal class TimeLineRow
     {
         public readonly List<EntityShot> shotList = new List<EntityShot>();
         public readonly ShotModelData data;

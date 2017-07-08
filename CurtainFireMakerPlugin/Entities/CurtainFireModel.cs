@@ -10,12 +10,12 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireModel
     {
-        private readonly List<int> indexList = new List<int>();
-        private readonly List<PmxVertexData> vertexList = new List<PmxVertexData>();
-        private readonly List<PmxMaterialData> materialList = new List<PmxMaterialData>();
-        private readonly List<PmxMorphData> morphList = new List<PmxMorphData>();
-        private readonly List<PmxBoneData> boneList = new List<PmxBoneData>();
-        private readonly List<string> textureList = new List<string>();
+        public readonly List<int> indexList = new List<int>();
+        public readonly List<PmxVertexData> vertexList = new List<PmxVertexData>();
+        public readonly List<PmxMaterialData> materialList = new List<PmxMaterialData>();
+        public readonly List<PmxMorphData> morphList = new List<PmxMorphData>();
+        public readonly List<PmxBoneData> boneList = new List<PmxBoneData>();
+        public readonly List<string> textureList = new List<string>();
 
         public CurtainFireModel()
         {
@@ -131,6 +131,9 @@ namespace CurtainFireMakerPlugin.Entities
             data.BoneArray = this.boneList.ToArray();
             data.MorphArray = this.morphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
+
+            Console.WriteLine(boneList.Count);
+            Console.WriteLine(morphList.Count);
         }
     }
 }

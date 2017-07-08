@@ -125,7 +125,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.IsDeath = true;
         }
 
-        public void SetMotionBezier(DxMath.Vector2 pos1, DxMath.Vector2 pos2, int length)
+        public void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
         {
             Vector3 endPos = this.Velocity * length + this.Pos;
             int frame = this.world.FrameCount;
