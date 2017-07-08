@@ -63,7 +63,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.RotateAccodingToVelocity)
             {
-                this.Rot =Matrix.LookAt(Vector3.Zero, this.Velocity, this.Upward);
+                var mat = DxMath.Matrix.LookAtLH(DxMath.Vector3.Zero, (DxMath.Vector3)this.Velocity, (DxMath.Vector3)this.Upward);
+                this.Rot = DxMath.Quaternion.RotationMatrix(mat);
             }
             else
             {
@@ -92,6 +93,20 @@ namespace CurtainFireMakerPlugin.Entities
             this.AddVmdMotion(0);
         }
 
+        public override void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
+        {
+            this.AddVmdMotion(0);
+
+            base.SetMotionBezier(pos1, pos2, length);
+        }
+
+        public override void RemoveMotionBezier()
+        {
+            this.AddVmdMotion(0, true);
+
+            base.RemoveMotionBezier();
+        }
+
         public void AddVmdMotion(int frameOffset, bool replace = false)
         {
             this.UpdateRot();
@@ -100,7 +115,7 @@ namespace CurtainFireMakerPlugin.Entities
             motion.boneName = this.rootBone.boneName;
             motion.keyFrameNo = this.world.FrameCount + frameOffset;
             motion.pos = (DxMath.Vector3)this.Pos;
-            motion.rot =(DxMath.Quaternion) this.Rot;
+            motion.rot = (DxMath.Quaternion)this.Rot;
 
             if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.world.FrameCount)
             {

@@ -79,6 +79,7 @@ namespace CurtainFireMakerPlugin.Entities
                 {
                     double changeAmount = this.motionInterpolation.GetChangeAmount(this.world.FrameCount);
                     interpolatedVelocity *= (float)changeAmount;
+                    Console.WriteLine(changeAmount);
                 }
                 else
                 {
@@ -125,14 +126,14 @@ namespace CurtainFireMakerPlugin.Entities
             this.IsDeath = true;
         }
 
-        public void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
+        public virtual void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
         {
             Vector3 endPos = this.Velocity * length + this.Pos;
             int frame = this.world.FrameCount;
             this.motionInterpolation = new MotionInterpolation(frame, frame + length, pos1, pos2, this.Pos, endPos);
         }
 
-        protected void RemoveMotionBezier()
+        public virtual void RemoveMotionBezier()
         {
             this.motionInterpolation = null;
         }

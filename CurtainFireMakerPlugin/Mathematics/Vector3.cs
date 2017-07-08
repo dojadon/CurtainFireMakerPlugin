@@ -143,6 +143,11 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public bool Equals(Vector3 v1) => v1.x == this.x && v1.y == this.y && v1.z == this.z;
 
+        public override string ToString()
+        {
+            return "[" + this.x + ", " + this.y + ", " + this.z + "]";
+        }
+
         public override int GetHashCode()
         {
             return x.GetHashCode() ^ y.GetHashCode() << 2 ^ z.GetHashCode() >> 2;

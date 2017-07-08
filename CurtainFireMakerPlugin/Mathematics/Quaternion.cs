@@ -16,6 +16,17 @@ namespace CurtainFireMakerPlugin.Mathematics
         public double z;
         public double w;
 
+        public Vector3 Vec
+        {
+            get { return new Vector3(x, y, z); }
+            set
+            {
+                this.x = value.x;
+                this.y = value.y;
+                this.z = value.z;
+            }
+        }
+
         public Quaternion(double x, double y, double z, double w)
         {
             double mag;
@@ -33,24 +44,14 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Quaternion Conjugate(Quaternion q1)
         {
-            var q2 = new Quaternion(q1);
+            var q2 = new Quaternion();
+
+            q2.w = q1.w;
             q2.x = -q2.x;
             q2.y = -q2.y;
             q2.z = -q2.z;
 
             return q2;
-        }
-
-        public static Quaternion Mul(Quaternion q1, Quaternion q2)
-        {
-            var q3 = new Quaternion();
-
-            q3.w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
-            q3.x = q1.w * q2.x + q2.w * q1.x + q1.y * q2.z - q1.z * q2.y;
-            q3.y = q1.w * q2.y + q2.w * q1.y - q1.x * q2.z + q1.z * q2.x;
-            q3.z = q1.w * q2.z + q2.w * q1.z + q1.x * q2.y - q1.y * q2.x;
-
-            return q3;
         }
 
         public static Quaternion Inverse(Quaternion q1)
@@ -64,6 +65,19 @@ namespace CurtainFireMakerPlugin.Mathematics
             q2.z = -norm * q1.z;
 
             return q2;
+        }
+
+        public static Quaternion Mul(Quaternion q1, Quaternion q2)
+        {
+            var q3 = new Quaternion();
+
+            Vector3 v1 = q1.Vec;
+            Vector3 v2 = q2.Vec;
+
+            q3.w = q1.w * q2.w - v1 * v2;
+            q3.Vec = q1.w * v2 + q2.w * v1 + v1 ^ v2;
+
+            return q3;
         }
 
         public static Quaternion Normalize(Quaternion q1)
@@ -109,12 +123,61 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var q1 = new Quaternion();
 
-            q1.w = Math.Sqrt(m1.m00 + m1.m11 + m1.m22 + 1) * 0.5;
-            double ww = 0.25 / q1.w;
+            double ww = 0.25 * (m1.m00 + m1.m11 + m1.m22 + m1.m33);
 
-            q1.x = (m1.m12 + m1.m21) * ww;
-            q1.y = (m1.m20 + m1.m02) * ww;
-            q1.z = (m1.m01 + m1.m10) * ww;
+            if (ww >= 0)
+            {
+                if (ww >= EPS2)
+                {
+                    q1.w = Math.Sqrt(ww);
+                    ww = 0.25 / q1.w;
+                    q1.x = (m1.m21 - m1.m12) * ww;
+                    q1.y = (m1.m02 - m1.m20) * ww;
+                    q1.z = (m1.m10 - m1.m01) * ww;
+                    return q1;
+                }
+            }
+            else
+            {
+                q1.w = 0;
+                q1.x = 0;
+                q1.y = 0;
+                q1.z = 1;
+                return q1;
+            }
+
+            q1.w = 0;
+            ww = -0.5 * (m1.m11 + m1.m22);
+            if (ww >= 0)
+            {
+                if (ww >= EPS2)
+                {
+                    q1.x = Math.Sqrt(ww);
+                    ww = 1.0 / (2.0 * q1.x);
+                    q1.y = m1.m10 * ww;
+                    q1.z = m1.m20 * ww;
+                    return q1;
+                }
+            }
+            else
+            {
+                q1.x = 0;
+                q1.y = 0;
+                q1.z = 1;
+                return q1;
+            }
+
+            q1.x = 0;
+            ww = 0.5 * (1.0 - m1.m22);
+            if (ww >= EPS2)
+            {
+                q1.y = Math.Sqrt(ww);
+                q1.z = m1.m21 / (2.0 * q1.y);
+                return q1;
+            }
+
+            q1.y = 0;
+            q1.z = 1;
 
             return q1;
         }
@@ -172,7 +235,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return this.Equals((Quaternion)obj);
         }
 
-        public bool Equals(Quaternion p1) => p1.x == this.x && p1.y == this.y && p1.z == this.z && p1.w == this.w;
+        public bool Equals(Quaternion q1) => q1.x == this.x && q1.y == this.y && q1.z == this.z && q1.w == this.w;
 
         public override int GetHashCode()
         {
@@ -186,9 +249,9 @@ namespace CurtainFireMakerPlugin.Mathematics
             }
         }
 
-        public static bool operator ==(Quaternion q1, Quaternion q2) => q1.Equals(q2);
+        public static bool operator ==(Quaternion q1, Quaternion q2) => q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w;
 
-        public static bool operator !=(Quaternion q1, Quaternion q2) => !q1.Equals(q2);
+        public static bool operator !=(Quaternion q1, Quaternion q2) => !(q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w);
 
         public static Quaternion operator +(Quaternion q1) => Normalize(q1);
 

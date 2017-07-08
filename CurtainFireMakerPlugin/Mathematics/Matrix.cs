@@ -123,13 +123,14 @@ namespace CurtainFireMakerPlugin.Mathematics
             return new Matrix(x, y, z);
         }
 
-        public static Matrix LookAt(Vector3 eye, Vector3 at, Vector3 upward)
+        public static Matrix LookAt(Vector3 forward, Vector3 upward)
         {
-            var m1 = Identity;
+            var side = +(upward ^ forward);
+            upward = +(forward ^ side);
 
-            var z = +(eye - at);
-            var x = +(upward ^ z);
-            var y = +(z ^ x);
+            var x = new Vector3(side.x, upward.x, forward.x);
+            var y = new Vector3(side.y, upward.y, forward.y);
+            var z = new Vector3(side.z, upward.z, forward.z);
 
             return new Matrix(x, y, z);
         }
@@ -212,6 +213,33 @@ namespace CurtainFireMakerPlugin.Mathematics
                 }
             }
             return inv;
+        }
+
+        public static Matrix Transpose(Matrix m1)
+        {
+            var m2 = new Matrix();
+
+            m2.m00 = m1.m00;
+            m2.m01 = m1.m10;
+            m2.m02 = m1.m20;
+            m2.m03 = m1.m30;
+
+            m2.m10 = m1.m01;
+            m2.m11 = m1.m11;
+            m2.m12 = m1.m21;
+            m2.m13 = m1.m31;
+
+            m2.m20 = m1.m02;
+            m2.m21 = m1.m12;
+            m2.m22 = m1.m22;
+            m2.m23 = m1.m32;
+
+            m2.m30 = m1.m03;
+            m2.m31 = m1.m13;
+            m2.m32 = m1.m23;
+            m2.m33 = m1.m33;
+
+            return m2;
         }
 
         public static Matrix operator ~(Matrix m1) => Inverse(m1);
