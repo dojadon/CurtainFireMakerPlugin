@@ -5,7 +5,6 @@ using System.Text;
 using CurtainFireMakerPlugin.Mathematics;
 using CsPmx.Data;
 using CsVmd.Data;
-using MikuMikuPlugin;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -18,11 +17,11 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData[] bones;
         public PmxMorphData materialMorph;
 
-        private delegate bool ShouldRecordMotion(EntityShot entity);
-        private static ShouldRecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
-        private static ShouldRecordMotion WhenPosChanges = e => !e.Pos.Equals(e.PrevPos) || !e.Rot.Equals(e.PrevRot);
+        private delegate bool RecordMotion(EntityShot entity);
+        private static RecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
+        private static RecordMotion WhenPosChanges = e => !e.Pos.Equals(e.PrevPos) || !e.Rot.Equals(e.PrevRot);
 
-        private ShouldRecordMotion ShouldRecord = WhenVelocityChanges;
+        private RecordMotion ShouldRecord = WhenVelocityChanges;
 
         public bool RotateAccodingToVelocity { get; set; } = true;
         public bool RecordWhenVelocityChanges
@@ -63,8 +62,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.RotateAccodingToVelocity)
             {
-                var mat = DxMath.Matrix.LookAtLH(DxMath.Vector3.Zero, (DxMath.Vector3)this.Velocity, (DxMath.Vector3)this.Upward);
-                this.Rot = DxMath.Quaternion.RotationMatrix(mat);
+                this.Rot = Matrix.LookAt(+this.Velocity, +this.Upward);
             }
             else
             {

@@ -27,6 +27,53 @@ namespace CurtainFireMakerPlugin.Mathematics
             }
         }
 
+        public double this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0:
+                        return x;
+
+                    case 1:
+                        return y;
+
+                    case 2:
+                        return z;
+
+                    case 3:
+                        return w;
+                }
+
+                throw new ArgumentOutOfRangeException();
+            }
+
+            set
+            {
+                switch (index)
+                {
+                    case 0:
+                        x = value;
+                        return;
+
+                    case 1:
+                        y = value;
+                        return;
+
+                    case 2:
+                        z = value;
+                        return;
+
+                    case 3:
+                        w = value;
+                        return;
+                }
+
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public Quaternion(double x, double y, double z, double w)
         {
             double mag;
@@ -123,61 +170,60 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var q1 = new Quaternion();
 
-            double ww = 0.25 * (m1.m00 + m1.m11 + m1.m22 + m1.m33);
+            double m00 = m1.m00;
+            double m01 = m1.m01;
+            double m02 = m1.m02;
 
-            if (ww >= 0)
-            {
-                if (ww >= EPS2)
-                {
-                    q1.w = Math.Sqrt(ww);
-                    ww = 0.25 / q1.w;
-                    q1.x = (m1.m21 - m1.m12) * ww;
-                    q1.y = (m1.m02 - m1.m20) * ww;
-                    q1.z = (m1.m10 - m1.m01) * ww;
-                    return q1;
-                }
-            }
-            else
-            {
-                q1.w = 0;
-                q1.x = 0;
-                q1.y = 0;
-                q1.z = 1;
-                return q1;
-            }
+            double m10 = m1.m10;
+            double m11 = m1.m11;
+            double m12 = m1.m12;
 
-            q1.w = 0;
-            ww = -0.5 * (m1.m11 + m1.m22);
-            if (ww >= 0)
+            double m20 = m1.m20;
+            double m21 = m1.m21;
+            double m22 = m1.m22;
+
+            double[] values = new double[4];
+            values[0] = m00 - m11 - m22;
+            values[1] = -m00 + m11 - m22;
+            values[2] = -m00 - m11 + m22;
+            values[3] = m00 + m11 + m22;
+
+            int biggestIndex = 0;
+            for (int i = 1; i < 4; i++)
             {
-                if (ww >= EPS2)
-                {
-                    q1.x = Math.Sqrt(ww);
-                    ww = 1.0 / (2.0 * q1.x);
-                    q1.y = m1.m10 * ww;
-                    q1.z = m1.m20 * ww;
-                    return q1;
-                }
-            }
-            else
-            {
-                q1.x = 0;
-                q1.y = 0;
-                q1.z = 1;
-                return q1;
+                if (values[i] > values[biggestIndex]) biggestIndex = i;
             }
 
-            q1.x = 0;
-            ww = 0.5 * (1.0 - m1.m22);
-            if (ww >= EPS2)
-            {
-                q1.y = Math.Sqrt(ww);
-                q1.z = m1.m21 / (2.0 * q1.y);
-                return q1;
-            }
+            double val = Math.Sqrt(values[biggestIndex] + 1.0) * 0.5;
+            double mult = 0.25 / val;
+            q1[biggestIndex] = val;
 
-            q1.y = 0;
-            q1.z = 1;
+            switch (biggestIndex)
+            {
+                case 0:
+                    q1.y = (m01 + m10) * mult;
+                    q1.z = (m20 + m02) * mult;
+                    q1.w = (m12 - m21) * mult;
+                    break;
+
+                case 1:
+                    q1.x = (m01 + m10) * mult;
+                    q1.z = (m12 + m21) * mult;
+                    q1.w = (m20 - m02) * mult;
+                    break;
+
+                case 2:
+                    q1.x = (m20 + m02) * mult;
+                    q1.y = (m12 + m21) * mult;
+                    q1.w = (m01 - m10) * mult;
+                    break;
+
+                case 3:
+                    q1.x = (m12 - m21) * mult;
+                    q1.y = (m20 - m02) * mult;
+                    q1.z = (m01 - m10) * mult;
+                    break;
+            }
 
             return q1;
         }

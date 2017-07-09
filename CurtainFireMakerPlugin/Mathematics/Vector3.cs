@@ -77,28 +77,6 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
-        public static Vector3 Transform(Matrix m1, Vector3 v1)
-        {
-            var v2 = new Vector3();
-
-            v2.x = m1.m00 * v1.x + m1.m01 * v1.y + m1.m02 * v1.z + m1.m03;
-            v2.y = m1.m10 * v1.x + m1.m11 * v1.y + m1.m12 * v1.z + m1.m13;
-            v2.z = m1.m20 * v1.x + m1.m21 * v1.y + m1.m22 * v1.z + m1.m23;
-
-            return v2;
-        }
-
-        public static Vector3 TransformNormal(Matrix m1, Vector3 v1)
-        {
-            var v2 = new Vector3();
-
-            v2.x = m1.m00 * v1.x + m1.m01 * v1.y + m1.m02 * v1.z;
-            v2.y = m1.m10 * v1.x + m1.m11 * v1.y + m1.m12 * v1.z;
-            v2.z = m1.m20 * v1.x + m1.m21 * v1.y + m1.m22 * v1.z;
-
-            return v2;
-        }
-
         public static Vector3 Normalize(Vector3 v1)
         {
             var v2 = new Vector3();
@@ -171,11 +149,13 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static double operator *(Vector3 v1, Vector3 v2) => Dot(v1, v2);
 
-        public static Vector3 operator *(Matrix m1, Vector3 v1) => TransformNormal(m1, v1);
-
         public static Vector3 operator /(Vector3 v1, double d1) => Scale(v1, 1.0 / d1);
 
         public static Vector3 operator ^(Vector3 v1, Vector3 v2) => Cross(v1, v2);
+
+        public static explicit operator Vector4(Vector3 v1) => new Vector4(v1.x, v1.y, v1.z, 1);
+
+        public static implicit operator Vector3(Vector4 v1) => new Vector3(v1.x, v1.y, v1.z);
 
         public static explicit operator DxMath.Vector3(Vector3 v1) => new DxMath.Vector3((float)v1.x, (float)v1.y, (float)v1.z);
 

@@ -128,11 +128,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             var side = +(upward ^ forward);
             upward = +(forward ^ side);
 
-            var x = new Vector3(side.x, upward.x, forward.x);
-            var y = new Vector3(side.y, upward.y, forward.y);
-            var z = new Vector3(side.z, upward.z, forward.z);
-
-            return new Matrix(x, y, z);
+            return Transpose(new Matrix(side, upward, forward));
         }
 
         public static Matrix Mul(Matrix m1, Matrix m2)
@@ -242,6 +238,29 @@ namespace CurtainFireMakerPlugin.Mathematics
             return m2;
         }
 
+        public static Vector4 Transform(Vector4 v1, Matrix m1)
+        {
+            var v2 = new Vector4();
+
+            v2.x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02 + v1.w * m1.m03;
+            v2.y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12 + v1.w * m1.m13;
+            v2.z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22 + v1.w * m1.m23;
+            v2.w = v1.x * m1.m30 + v1.y * m1.m31 + v1.z * m1.m32 + v1.w * m1.m33;
+
+            return v2;
+        }
+
+        public static Vector3 Transform(Vector3 v1, Matrix m1)
+        {
+            var v2 = new Vector3();
+
+            v2.x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02;
+            v2.y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12;
+            v2.z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22;
+
+            return v2;
+        }
+
         public static Matrix operator ~(Matrix m1) => Inverse(m1);
 
         public static Matrix operator +(Matrix m1, Vector3 v1)
@@ -267,6 +286,10 @@ namespace CurtainFireMakerPlugin.Mathematics
         }
 
         public static Matrix operator *(Matrix m1, Matrix m2) => Mul(m1, m2);
+
+        public static Vector4 operator *(Vector4 v1, Matrix m1) => Transform(v1, m1);
+
+        public static Vector3 operator *(Vector3 v1, Matrix m1) => Transform(v1, m1);
 
         public static implicit operator Matrix(Quaternion q1) => RotationQuaternion(q1);
 
