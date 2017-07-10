@@ -31,8 +31,8 @@ namespace CurtainFireMakerPlugin.Entities
         public Quaternion RotFirst { get; set; } = new Quaternion(0, 0, 0, 1);
         public Quaternion RotSecond { get; set; } = new Quaternion(0, 0, 0, 1);
 
-        public Vector3 Upward { get; set; } = new Vector3();
-        public Vector3 PrevUpward { get; set; } = new Vector3();
+        public Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
+        public Vector3 PrevUpward { get; set; } = new Vector3(0, 1, 0);
 
         protected Entity parentEntity;
 

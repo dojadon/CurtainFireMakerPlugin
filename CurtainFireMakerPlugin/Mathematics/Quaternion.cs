@@ -27,53 +27,6 @@ namespace CurtainFireMakerPlugin.Mathematics
             }
         }
 
-        public double this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0:
-                        return x;
-
-                    case 1:
-                        return y;
-
-                    case 2:
-                        return z;
-
-                    case 3:
-                        return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0:
-                        x = value;
-                        return;
-
-                    case 1:
-                        y = value;
-                        return;
-
-                    case 2:
-                        z = value;
-                        return;
-
-                    case 3:
-                        w = value;
-                        return;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
         public Quaternion(double x, double y, double z, double w)
         {
             double mag;
@@ -196,11 +149,11 @@ namespace CurtainFireMakerPlugin.Mathematics
 
             double val = Math.Sqrt(values[biggestIndex] + 1.0) * 0.5;
             double mult = 0.25 / val;
-            q1[biggestIndex] = val;
 
             switch (biggestIndex)
             {
                 case 0:
+                    q1.x = val;
                     q1.y = (m01 + m10) * mult;
                     q1.z = (m20 + m02) * mult;
                     q1.w = (m12 - m21) * mult;
@@ -208,6 +161,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
                 case 1:
                     q1.x = (m01 + m10) * mult;
+                    q1.y = val;
                     q1.z = (m12 + m21) * mult;
                     q1.w = (m20 - m02) * mult;
                     break;
@@ -215,6 +169,7 @@ namespace CurtainFireMakerPlugin.Mathematics
                 case 2:
                     q1.x = (m20 + m02) * mult;
                     q1.y = (m12 + m21) * mult;
+                    q1.z = val;
                     q1.w = (m01 - m10) * mult;
                     break;
 
@@ -222,6 +177,7 @@ namespace CurtainFireMakerPlugin.Mathematics
                     q1.x = (m12 - m21) * mult;
                     q1.y = (m20 - m02) * mult;
                     q1.z = (m01 - m10) * mult;
+                    q1.w = val;
                     break;
             }
 

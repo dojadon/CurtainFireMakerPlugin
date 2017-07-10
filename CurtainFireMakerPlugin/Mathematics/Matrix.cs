@@ -81,7 +81,6 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var m1 = Identity;
 
-            double ww = q.w * q.w;
             double xx = q.x * q.x;
             double yy = q.y * q.y;
             double zz = q.z * q.z;
@@ -259,6 +258,20 @@ namespace CurtainFireMakerPlugin.Mathematics
             v2.z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22;
 
             return v2;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.Append("\n");
+            sb.Append(this.m00).Append(", ").Append(this.m01).Append(", ").Append(this.m02).Append(", ").Append(this.m03);
+            sb.Append(this.m10).Append(", ").Append(this.m11).Append(", ").Append(this.m12).Append(", ").Append(this.m13);
+            sb.Append(this.m20).Append(", ").Append(this.m21).Append(", ").Append(this.m22).Append(", ").Append(this.m23);
+            sb.Append(this.m30).Append(", ").Append(this.m31).Append(", ").Append(this.m32).Append(", ").Append(this.m33);
+            sb.Append("\n");
+
+            return sb.ToString();
         }
 
         public static Matrix operator ~(Matrix m1) => Inverse(m1);
