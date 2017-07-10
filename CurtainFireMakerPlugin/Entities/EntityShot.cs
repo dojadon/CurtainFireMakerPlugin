@@ -54,7 +54,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (this.FrameCount == 1 || this.ShouldRecord(this))
             {
-                this.AddVmdMotion(0);
+                this.AddVmdMotion();
             }
         }
 
@@ -62,22 +62,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.RotateAccodingToVelocity)
             {
-                if (this.Velocity != Vector3.Zero && this.Upward != Vector3.Zero)
-                {
-                    var mat = Matrix.LookAt(+this.Velocity, +this.Upward);
-                    this.Rot = mat;
-
-                    if (this.FrameCount == 10 && this.Property.Type.Name.Equals("AMULET"))
-                    {
-                        Console.WriteLine("----------------------------------------------------------------------------");
-                        Console.WriteLine(+this.Velocity + ", " + +this.Upward);
-                        Console.WriteLine("*********************************************************");
-                        Console.WriteLine(mat);
-                        Console.WriteLine("*********************************************************");
-                        Console.WriteLine((Matrix)this.Rot);
-                        Console.WriteLine("----------------------------------------------------------------------------");
-                    }
-                }
+                this.Rot = Matrix.LookAt(+this.Velocity, +this.Upward);
             }
             else
             {
@@ -93,7 +78,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.AddVmdMorph(0, 1.0F);
             this.AddVmdMorph(1, 0.0F);
 
-            this.AddVmdMotion(0);
+            this.AddVmdMotion();
         }
 
         public override void OnDeath()
@@ -103,30 +88,30 @@ namespace CurtainFireMakerPlugin.Entities
             this.AddVmdMorph(-1, 0.0F);
             this.AddVmdMorph(0, 1.0F);
 
-            this.AddVmdMotion(0);
+            this.AddVmdMotion();
         }
 
         public override void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
         {
-            this.AddVmdMotion(0);
+            this.AddVmdMotion();
 
             base.SetMotionBezier(pos1, pos2, length);
         }
 
         public override void RemoveMotionBezier()
         {
-            this.AddVmdMotion(0, true);
+            this.AddVmdMotion(true);
 
             base.RemoveMotionBezier();
         }
 
-        public void AddVmdMotion(int frameOffset, bool replace = false)
+        public void AddVmdMotion(bool replace = false)
         {
             this.UpdateRot();
 
             var motion = new VmdMotionFrameData();
             motion.boneName = this.rootBone.boneName;
-            motion.keyFrameNo = this.world.FrameCount + frameOffset;
+            motion.keyFrameNo = this.world.FrameCount;
             motion.pos = (DxMath.Vector3)this.Pos;
             motion.rot = (DxMath.Quaternion)this.Rot;
 

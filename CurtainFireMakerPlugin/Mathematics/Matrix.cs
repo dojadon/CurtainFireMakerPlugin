@@ -127,7 +127,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             var side = +(upward ^ forward);
             upward = +(forward ^ side);
 
-            return Transpose(new Matrix(side, upward, forward));
+            return new Matrix(side, upward, forward);
         }
 
         public static Matrix Mul(Matrix m1, Matrix m2)
