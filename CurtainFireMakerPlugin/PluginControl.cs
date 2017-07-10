@@ -40,8 +40,6 @@ namespace CurtainFireMakerPlugin
 
             var control = new ImportSettingControl(form, this.Scene);
             control.SpellScript = this.SpellScriptPath;
-            control.ShotTypeScript = this.ShotTypeScriptPath;
-            control.ReferenceScript = this.ReferenceScriptPath;
             control.ModelDir = this.ModelDir;
 
             form.Controls.Add(control);
@@ -53,8 +51,6 @@ namespace CurtainFireMakerPlugin
             if (form.DialogResult == DialogResult.OK)
             {
                 this.SpellScriptPath = control.SpellScript;
-                this.ShotTypeScriptPath = control.ShotTypeScript;
-                this.ReferenceScriptPath = control.ReferenceScript;
                 this.ModelDir = control.ModelDir;
             }
         }
