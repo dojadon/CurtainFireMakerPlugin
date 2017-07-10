@@ -66,7 +66,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        protected void UpdatePos()
+        protected virtual void UpdatePos()
         {
             Vector3 interpolatedVelocity = this.Velocity;
 
