@@ -23,8 +23,6 @@ namespace CurtainFireMakerPlugin
             this.outStream = new StreamWriter("log.txt", true, System.Text.Encoding.GetEncoding("Shift_JIS"));
             Console.SetOut(outStream);
             Console.WriteLine("start plugin");
-
-            PythonRunner.Init();
         }
 
         public Guid GUID => new Guid();
@@ -44,6 +42,8 @@ namespace CurtainFireMakerPlugin
 
         public UserControl CreateControl()
         {
+            PythonRunner.Init();
+
             this.Control = new PluginControl(this.ApplicationForm, this.Scene);
             return this.Control;
         }

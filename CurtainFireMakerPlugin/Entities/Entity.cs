@@ -88,7 +88,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdateRot()
         {
-            this.Rot = +this.Rot;
         }
 
         protected void UpdateWorldMat()
