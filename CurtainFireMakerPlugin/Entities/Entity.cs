@@ -28,9 +28,6 @@ namespace CurtainFireMakerPlugin.Entities
         public Vector3 Velocity { get; set; } = new Vector3();
         public Vector3 PrevVelocity { get; set; } = new Vector3();
 
-        public Quaternion RotFirst { get; set; } = new Quaternion(0, 0, 0, 1);
-        public Quaternion RotSecond { get; set; } = new Quaternion(0, 0, 0, 1);
-
         public Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
         public Vector3 PrevUpward { get; set; } = new Vector3(0, 1, 0);
 
@@ -91,7 +88,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdateRot()
         {
-            this.Rot = this.RotFirst * this.RotSecond;
+            this.Rot = +this.Rot;
         }
 
         protected void UpdateWorldMat()

@@ -89,16 +89,6 @@ namespace CurtainFireMakerPlugin
             Plugin.Instance.RunSpellScript(this.SpellScriptPath);
         }
 
-        private void Click_LoadShotType(object sender, EventArgs e)
-        {
-            Plugin.Instance.RunShotTypeScript(this.ShotTypeScriptPath);
-        }
-
-        private void Click_InitIronPython(object sender, EventArgs e)
-        {
-            Plugin.Instance.InitIronPython(this.ReferenceScriptPath);
-        }
-
         public void Export(BinaryWriter writer)
         {
             writer.Write(this.SpellScriptPath);

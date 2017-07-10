@@ -16,9 +16,6 @@ namespace CurtainFireMakerPlugin
 
         private StreamWriter outStream;
 
-        private bool InitPython { get; set; }
-        private bool InitShotType { get; set; }
-
         public Plugin()
         {
             Instance = this;
@@ -26,6 +23,8 @@ namespace CurtainFireMakerPlugin
             this.outStream = new StreamWriter("log.txt", true, System.Text.Encoding.GetEncoding("Shift_JIS"));
             Console.SetOut(outStream);
             Console.WriteLine("start plugin");
+
+            PythonRunner.Init();
         }
 
         public Guid GUID => new Guid();
@@ -54,13 +53,6 @@ namespace CurtainFireMakerPlugin
             this.outStream.Dispose();
         }
 
-        public void InitIronPython(string path)
-        {
-            PythonRunner.Init(path);
-
-            this.InitPython = true;
-        }
-
         public void Run(CommandArgs args)
         {
             this.RunSpellScript(this.Control.SpellScriptPath);
@@ -68,16 +60,6 @@ namespace CurtainFireMakerPlugin
 
         public void RunSpellScript(string path)
         {
-            if (!this.InitPython)
-            {
-                this.InitIronPython(this.Control.ReferenceScriptPath);
-            }
-
-            if (!this.InitShotType)
-            {
-                this.RunShotTypeScript(this.Control.ShotTypeScriptPath);
-            }
-
             World world = new World();
 
             PythonRunner.RunSpellScript(path, world);
@@ -86,13 +68,6 @@ namespace CurtainFireMakerPlugin
 
             this.ExportPmx(world);
             this.ExportVmd(world);
-        }
-
-        public void RunShotTypeScript(string path)
-        {
-            PythonRunner.RunShotTypeScript(path);
-
-            this.InitShotType = true;
         }
 
         private void ExportPmx(World world)

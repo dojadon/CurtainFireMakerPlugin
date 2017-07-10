@@ -64,10 +64,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 this.Rot = Matrix.LookAt(+this.Velocity, +this.Upward);
             }
-            else
-            {
-                base.UpdateRot();
-            }
+            base.UpdateRot();
         }
 
         public override void OnSpawn()
