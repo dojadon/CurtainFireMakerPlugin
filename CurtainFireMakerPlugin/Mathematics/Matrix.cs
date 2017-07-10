@@ -264,12 +264,15 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var sb = new StringBuilder();
 
-            sb.Append("\n");
+            sb.Append("[");
             sb.Append(this.m00).Append(", ").Append(this.m01).Append(", ").Append(this.m02).Append(", ").Append(this.m03);
+            sb.Append("]\n[");
             sb.Append(this.m10).Append(", ").Append(this.m11).Append(", ").Append(this.m12).Append(", ").Append(this.m13);
+            sb.Append("]\n[");
             sb.Append(this.m20).Append(", ").Append(this.m21).Append(", ").Append(this.m22).Append(", ").Append(this.m23);
+            sb.Append("]\n[");
             sb.Append(this.m30).Append(", ").Append(this.m31).Append(", ").Append(this.m32).Append(", ").Append(this.m33);
-            sb.Append("\n");
+            sb.Append("]");
 
             return sb.ToString();
         }

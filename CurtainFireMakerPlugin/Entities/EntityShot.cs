@@ -62,15 +62,21 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.RotateAccodingToVelocity)
             {
-                var mat = Matrix.LookAt(+this.Velocity, +this.Upward);
-                this.Rot = mat;
-
-                if (this.FrameCount == 10)
+                if (this.Velocity != Vector3.Zero && this.Upward != Vector3.Zero)
                 {
-                    Console.WriteLine("-------------------------------------------------------------------------------------------------------------");
-                    Console.WriteLine(mat);
-                    Console.WriteLine("**********************************************************************************");
-                    Console.WriteLine((Matrix)this.Rot);
+                    var mat = Matrix.LookAt(+this.Velocity, +this.Upward);
+                    this.Rot = mat;
+
+                    if (this.FrameCount == 10 && this.Property.Type.Name.Equals("AMULET"))
+                    {
+                        Console.WriteLine("----------------------------------------------------------------------------");
+                        Console.WriteLine(+this.Velocity + ", " + +this.Upward);
+                        Console.WriteLine("*********************************************************");
+                        Console.WriteLine(mat);
+                        Console.WriteLine("*********************************************************");
+                        Console.WriteLine((Matrix)this.Rot);
+                        Console.WriteLine("----------------------------------------------------------------------------");
+                    }
                 }
             }
             else

@@ -79,7 +79,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 Normalize(Vector3 v1)
         {
-            var v2 = new Vector3();
+            var v2 = new Vector3(v1);
 
             double len = Length(v1);
 
