@@ -33,23 +33,23 @@ namespace CurtainFireMakerPlugin
 
             XmlElement element = doc.CreateElement("script");
             element.InnerText = Plugin.Instance.ScriptPath;
-            doc.AppendChild(element);
+            root.AppendChild(element);
 
             element = doc.CreateElement("export_pmx");
             element.InnerText = Plugin.Instance.ExportPmxPath;
-            doc.AppendChild(element);
+            root.AppendChild(element);
 
             element = doc.CreateElement("export_vmd");
-            element.InnerText = Plugin.Instance.ModelName;
-            doc.AppendChild(element);
+            element.InnerText = Plugin.Instance.ExportVmdPath;
+            root.AppendChild(element);
 
             element = doc.CreateElement("model_name");
-            element.InnerText = Plugin.Instance.ScriptPath;
-            doc.AppendChild(element);
+            element.InnerText = Plugin.Instance.ModelName;
+            root.AppendChild(element);
 
             element = doc.CreateElement("model_description");
             element.InnerText = Plugin.Instance.ModelDescription;
-            doc.AppendChild(element);
+            root.AppendChild(element);
 
             doc.Save(CondigPath);
         }

@@ -49,6 +49,8 @@ namespace CurtainFireMakerPlugin
 
         public void Dispose()
         {
+            Configuration.Save();
+
             this.outStream.Dispose();
         }
 
