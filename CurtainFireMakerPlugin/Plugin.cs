@@ -42,8 +42,6 @@ namespace CurtainFireMakerPlugin
 
         public UserControl CreateControl()
         {
-            PythonRunner.Init();
-
             this.Control = new PluginControl(this.ApplicationForm, this.Scene);
             return this.Control;
         }

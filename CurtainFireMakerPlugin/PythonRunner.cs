@@ -13,22 +13,27 @@ namespace CurtainFireMakerPlugin
     {
         private static ScriptEngine engine;
 
-        public static void Init()
+        private static void Init()
         {
             engine = Python.CreateEngine();
             engine.Execute(
-            "# -*- coding: utf-8 -*- \n" +
-            "import sys" +
-            "sys.path.append(r\"C:\\tool\\model\\MikuMikuMoving64_v1272\\Plugins\")" +
-            "import clr" +
-            "clr.AddReference(\"CurtainFireMakerPlugin\")" +
-            "clr.AddReference(\"MikuMikuPlugin\")" +
-            "clr.AddReference(\"DxMath\")"
+            "# -*- coding: utf-8 -*-\n" +
+            "import sys\n" +
+            "sys.path.append(r\"C:\\tool\\model\\MikuMikuMoving64_v1272\\Plugins\")\n" +
+            "import clr\n" +
+            "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
+            "clr.AddReference(\"MikuMikuPlugin\")\n" +
+            "clr.AddReference(\"DxMath\")\n"
             );
         }
 
         public static void RunSpellScript(string path, World world)
         {
+            if (engine == null)
+            {
+                Init();
+            }
+
             dynamic scope = engine.ExecuteFile(path);
 
             ShotTypeList.Init(list => scope.setup_shottype(list));

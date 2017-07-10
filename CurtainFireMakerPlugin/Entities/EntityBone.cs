@@ -14,20 +14,29 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityBone(string modelName, string boneName)
         {
+            this.world = World.Instance;
+
             Modelname = modelName;
             BoneName = boneName;
 
-            Bone bone = this.GetBone();
-
-            BoneCollection bones = this.GetBones();
-
-            if(bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
+            try
             {
-                var parentBone = new EntityBone(Modelname, bones[bone.ParentBoneID].Name);
-                this.parentEntity = parentBone;
-            }
+                Bone bone = this.GetBone();
 
-            this.OnSpawn();
+                BoneCollection bones = this.GetBones();
+
+                if (bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
+                {
+                    var parentBone = new EntityBone(Modelname, bones[bone.ParentBoneID].Name);
+                    this.parentEntity = parentBone;
+                }
+
+                this.OnSpawn();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         protected override void UpdatePos()
