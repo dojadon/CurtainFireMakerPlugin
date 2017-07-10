@@ -12,9 +12,8 @@ namespace CurtainFireMakerPlugin.ShotTypes
         private PmxModelData data = new PmxModelData();
         private double scale;
 
-        public ShotTypePmx(string name, string fileName, double scale) : base(name)
+        public ShotTypePmx(string name, string path, double scale) : base(name)
         {
-            string path = Plugin.Instance.Control.ModelDir + "\\" + fileName;
             var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             using (inStream)

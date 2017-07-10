@@ -46,6 +46,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.scriptFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -178,8 +179,10 @@
             // 
             // scriptText
             // 
+            this.scriptText.BackColor = System.Drawing.SystemColors.Window;
             this.scriptText.Location = new System.Drawing.Point(14, 40);
             this.scriptText.Name = "scriptText";
+            this.scriptText.ReadOnly = true;
             this.scriptText.Size = new System.Drawing.Size(383, 19);
             this.scriptText.TabIndex = 13;
             // 
@@ -201,6 +204,7 @@
             this.button5.TabIndex = 14;
             this.button5.Text = "参照";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.Click_Script);
             // 
             // label5
             // 
@@ -211,6 +215,10 @@
             this.label5.Size = new System.Drawing.Size(46, 12);
             this.label5.TabIndex = 15;
             this.label5.Text = "スクリプト";
+            // 
+            // scriptFileDialog
+            // 
+            this.scriptFileDialog.FileName = "openFileDialog1";
             // 
             // ExportSettingControl
             // 
@@ -251,5 +259,6 @@
         private System.Windows.Forms.TextBox scriptText;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.OpenFileDialog scriptFileDialog;
     }
 }

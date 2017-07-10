@@ -15,9 +15,7 @@ C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\Cur
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMakerPlugin\obj\Debug\CurtainFireMakerPlugin.csprojResolveAssemblyReference.cache
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMakerPlugin\obj\Debug\CurtainFireMakerPlugin.dll
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMakerPlugin\obj\Debug\CurtainFireMakerPlugin.pdb
-C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMakerPlugin\obj\Debug\CurtainFireMakerPlugin.PluginControl.resources
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMakerPlugin\obj\Debug\CurtainFireMakerPlugin.csproj.GenerateResource.Cache
 C:\tool\model\MikuMikuMoving64_v1272\Plugins\CurtainFireMakerPlugin.dll
 C:\tool\model\MikuMikuMoving64_v1272\Plugins\CurtainFireMakerPlugin.pdb
-C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMakerPlugin\obj\Debug\CurtainFireMakerPlugin.Forms.ImportSettingControl.resources
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMakerPlugin\obj\Debug\CurtainFireMakerPlugin.Forms.ExportSettingControl.resources

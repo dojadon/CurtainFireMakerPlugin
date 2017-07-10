@@ -57,5 +57,15 @@ namespace CurtainFireMakerPlugin.Forms
                 this.exportVmdText.Text = this.vmdFileDialog.FileName;
             }
         }
+
+        private void Click_Script(object sender, EventArgs e)
+        {
+            var result = this.scriptFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                this.scriptText.Text = this.scriptFileDialog.FileName;
+            }
+        }
     }
 }
