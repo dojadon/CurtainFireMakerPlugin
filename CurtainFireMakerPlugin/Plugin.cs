@@ -17,6 +17,8 @@ namespace CurtainFireMakerPlugin
 
         private StreamWriter outStream;
 
+        public string CurtainFireMakerPath { get; } = Application.StartupPath + @"\CurtainFireMaker";
+
         public string ScriptPath { get; set; }
         public string ExportPmxPath { get; set; }
         public string ExportVmdPath { get; set; }
@@ -33,9 +35,7 @@ namespace CurtainFireMakerPlugin
         }
 
         public Guid GUID => new Guid();
-
         public IWin32Window ApplicationForm { get; set; }
-
         public Scene Scene { get; set; }
 
         public string Description => "Curtain Fire Maker Plugin";
@@ -52,6 +52,8 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
+            Configuration.Load();
+
             var form = new Form();
 
             var control = new ExportSettingControl(form);
@@ -63,7 +65,6 @@ namespace CurtainFireMakerPlugin
 
             form.Controls.Add(control);
             form.Size = new Size(control.Size.Width, control.Size.Height + 40);
-            form.Name = "出力設定";
 
             form.ShowDialog(this.ApplicationForm);
 
