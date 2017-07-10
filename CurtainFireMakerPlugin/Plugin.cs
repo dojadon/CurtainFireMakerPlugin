@@ -7,14 +7,21 @@ using CsPmx.Data;
 using CsVmd;
 using CsVmd.Data;
 using System.IO;
+using CurtainFireMakerPlugin.Forms;
 
 namespace CurtainFireMakerPlugin
 {
-    public class Plugin : IHaveUserControl, ICommandPlugin, ICanSavePlugin
+    public class Plugin : ICommandPlugin
     {
         public static Plugin Instance { get; set; }
 
         private StreamWriter outStream;
+
+        public string ScriptPath { get; set; }
+        public string ExportPmxPath { get; set; }
+        public string ExportVmdPath { get; set; }
+        public string ModelName { get; set; }
+        public string ModelDescription { get; set; }
 
         public Plugin()
         {
@@ -38,14 +45,6 @@ namespace CurtainFireMakerPlugin
         public Image Image => null;
         public Image SmallImage => null;
 
-        public PluginControl Control { get; set; }
-
-        public UserControl CreateControl()
-        {
-            this.Control = new PluginControl(this.ApplicationForm, this.Scene);
-            return this.Control;
-        }
-
         public void Dispose()
         {
             this.outStream.Dispose();
@@ -53,7 +52,31 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            this.RunSpellScript(this.Control.SpellScriptPath);
+            var form = new Form();
+
+            var control = new ExportSettingControl(form);
+            control.ScriptPath = this.ScriptPath;
+            control.ExportPmx = this.ExportPmxPath;
+            control.ExportVmd = this.ExportVmdPath;
+            control.ModelName = this.ModelName;
+            control.ModelDescription = this.ModelDescription;
+
+            form.Controls.Add(control);
+            form.Size = new Size(control.Size.Width, control.Size.Height + 40);
+            form.Name = "出力設定";
+
+            form.ShowDialog(this.ApplicationForm);
+
+            if (form.DialogResult == DialogResult.OK)
+            {
+                this.ScriptPath = control.ScriptPath;
+                this.ExportPmxPath = control.ExportPmx;
+                this.ExportVmdPath = control.ExportVmd;
+                this.ModelName = control.ModelName;
+                this.ModelDescription = control.ModelDescription;
+
+                this.RunSpellScript(this.ScriptPath);
+            }
         }
 
         public void RunSpellScript(string path)
@@ -70,7 +93,7 @@ namespace CurtainFireMakerPlugin
 
         private void ExportPmx(World world)
         {
-            string exportPath = this.Control.ExportPmxPath;
+            string exportPath = this.ExportPmxPath;
             File.Delete(exportPath);
 
             var exporter = new PmxExporter(new FileStream(exportPath, FileMode.Create, FileAccess.Write));
@@ -78,15 +101,15 @@ namespace CurtainFireMakerPlugin
             var data = new PmxModelData();
             world.model.GetData(data);
 
-            data.Header.modelName = this.Control.ModelName;
-            data.Header.description += this.Control.ModelDescription;
+            data.Header.modelName = this.ModelName;
+            data.Header.description += this.ModelDescription;
 
             exporter.Export(data);
         }
 
         private void ExportVmd(World world)
         {
-            string exportPath = this.Control.ExportVmdPath;
+            string exportPath = this.ExportVmdPath;
             File.Delete(exportPath);
 
             var exporter = new VmdExporter(new FileStream(exportPath, FileMode.Create, FileAccess.Write));
@@ -94,26 +117,9 @@ namespace CurtainFireMakerPlugin
             var data = new VmdMotionData();
             world.motion.GetData(data);
 
-            data.Header.modelName = this.Control.ModelName;
+            data.Header.modelName = this.ModelName;
 
             exporter.Export(data);
-        }
-
-        public Stream OnSaveProject()
-        {
-            var stream = new MemoryStream();
-            var writer = new BinaryWriter(stream);
-
-            this.Control.Export(writer);
-
-            return stream;
-        }
-
-        public void OnLoadProject(Stream stream)
-        {
-            var reader = new BinaryReader(stream);
-
-            this.Control.Parse(reader);
         }
     }
 }

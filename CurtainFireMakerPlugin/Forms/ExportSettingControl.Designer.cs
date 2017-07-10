@@ -30,7 +30,6 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.exportPmxText = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.exportVmdText = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,12 +41,18 @@
             this.button4 = new System.Windows.Forms.Button();
             this.pmxFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.vmdFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.scriptText = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 6);
+            this.label1.Location = new System.Drawing.Point(6, 21);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 12);
@@ -56,24 +61,14 @@
             // 
             // exportPmxText
             // 
-            this.exportPmxText.Location = new System.Drawing.Point(5, 21);
+            this.exportPmxText.Location = new System.Drawing.Point(8, 36);
             this.exportPmxText.Name = "exportPmxText";
             this.exportPmxText.Size = new System.Drawing.Size(383, 19);
             this.exportPmxText.TabIndex = 1;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(394, 19);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(45, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "参照";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Click_ExportPmx);
-            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(394, 62);
+            this.button2.Location = new System.Drawing.Point(397, 77);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(45, 23);
             this.button2.TabIndex = 5;
@@ -83,7 +78,7 @@
             // 
             // exportVmdText
             // 
-            this.exportVmdText.Location = new System.Drawing.Point(5, 64);
+            this.exportVmdText.Location = new System.Drawing.Point(8, 79);
             this.exportVmdText.Name = "exportVmdText";
             this.exportVmdText.Size = new System.Drawing.Size(383, 19);
             this.exportVmdText.TabIndex = 4;
@@ -91,7 +86,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 49);
+            this.label2.Location = new System.Drawing.Point(6, 64);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 12);
@@ -100,7 +95,7 @@
             // 
             // modelNameText
             // 
-            this.modelNameText.Location = new System.Drawing.Point(5, 123);
+            this.modelNameText.Location = new System.Drawing.Point(8, 122);
             this.modelNameText.Name = "modelNameText";
             this.modelNameText.Size = new System.Drawing.Size(413, 19);
             this.modelNameText.TabIndex = 7;
@@ -108,7 +103,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 108);
+            this.label3.Location = new System.Drawing.Point(6, 107);
             this.label3.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 12);
@@ -117,7 +112,7 @@
             // 
             // modelDescriptionText
             // 
-            this.modelDescriptionText.Location = new System.Drawing.Point(5, 166);
+            this.modelDescriptionText.Location = new System.Drawing.Point(8, 165);
             this.modelDescriptionText.Multiline = true;
             this.modelDescriptionText.Name = "modelDescriptionText";
             this.modelDescriptionText.Size = new System.Drawing.Size(413, 85);
@@ -126,7 +121,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 151);
+            this.label4.Location = new System.Drawing.Point(6, 150);
             this.label4.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(58, 12);
@@ -135,7 +130,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(82, 274);
+            this.button3.Location = new System.Drawing.Point(91, 354);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 10;
@@ -145,7 +140,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(291, 274);
+            this.button4.Location = new System.Drawing.Point(300, 354);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 11;
@@ -161,24 +156,76 @@
             // 
             this.vmdFileDialog.FileName = "openFileDialog1";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.exportPmxText);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.modelDescriptionText);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.exportVmdText);
+            this.groupBox1.Controls.Add(this.modelNameText);
+            this.groupBox1.Controls.Add(this.button2);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Location = new System.Drawing.Point(6, 88);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(461, 257);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "出力設定";
+            // 
+            // scriptText
+            // 
+            this.scriptText.Location = new System.Drawing.Point(14, 40);
+            this.scriptText.Name = "scriptText";
+            this.scriptText.Size = new System.Drawing.Size(383, 19);
+            this.scriptText.TabIndex = 13;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(397, 34);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(45, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "参照";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Click_ExportPmx);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(403, 38);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(45, 23);
+            this.button5.TabIndex = 14;
+            this.button5.Text = "参照";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 25);
+            this.label5.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(46, 12);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "スクリプト";
+            // 
             // ExportSettingControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.scriptText);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.modelDescriptionText);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.modelNameText);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.exportVmdText);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.exportPmxText);
-            this.Controls.Add(this.label1);
             this.Name = "ExportSettingControl";
-            this.Size = new System.Drawing.Size(454, 320);
+            this.Size = new System.Drawing.Size(473, 402);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -188,7 +235,6 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox exportPmxText;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox exportVmdText;
         private System.Windows.Forms.Label label2;
@@ -200,5 +246,10 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.OpenFileDialog pmxFileDialog;
         private System.Windows.Forms.OpenFileDialog vmdFileDialog;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox scriptText;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label5;
     }
 }

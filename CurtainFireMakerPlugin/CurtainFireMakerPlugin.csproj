@@ -59,6 +59,7 @@
     <Compile Include="BezierCurve\EquationUtil.cs" />
     <Compile Include="BezierCurve\VmdBezierCurve.cs" />
     <Compile Include="Collections\MultiDictionary.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
     <Compile Include="Entities\EntityBone.cs" />
@@ -71,12 +72,6 @@
     <Compile Include="Forms\ExportSettingControl.Designer.cs">
       <DependentUpon>ExportSettingControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ImportSettingControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\ImportSettingControl.Designer.cs">
-      <DependentUpon>ImportSettingControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Mathematics\Icosahedron.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
@@ -87,12 +82,6 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />
     <Compile Include="Entities\ShotProperty.cs" />
-    <Compile Include="PluginControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PluginControl.Designer.cs">
-      <DependentUpon>PluginControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonRunner.cs" />
     <Compile Include="ShotTypes\ShotType.cs" />
@@ -115,12 +104,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\ExportSettingControl.resx">
       <DependentUpon>ExportSettingControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ImportSettingControl.resx">
-      <DependentUpon>ImportSettingControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PluginControl.resx">
-      <DependentUpon>PluginControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

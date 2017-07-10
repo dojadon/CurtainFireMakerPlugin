@@ -13,6 +13,7 @@ namespace CurtainFireMakerPlugin.Forms
     {
         public Form Form { get; set; }
 
+        public string ScriptPath { get { return this.scriptText.Text; } set { this.scriptText.Text = value; } }
         public string ModelName { get { return this.modelNameText.Text; } set { this.modelNameText.Text = value; } }
         public string ModelDescription { get { return this.modelDescriptionText.Text; } set { this.modelDescriptionText.Text = value; } }
         public string ExportPmx { get { return this.exportPmxText.Text; } set { this.exportPmxText.Text = value; } }
