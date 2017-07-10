@@ -32,6 +32,8 @@ namespace CurtainFireMakerPlugin
             this.outStream = new StreamWriter("log.txt", true, System.Text.Encoding.GetEncoding("Shift_JIS"));
             Console.SetOut(outStream);
             Console.WriteLine("start plugin");
+
+            Configuration.Load();
         }
 
         public Guid GUID => new Guid();
@@ -52,8 +54,6 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            Configuration.Load();
-
             var form = new Form();
 
             var control = new ExportSettingControl(form);

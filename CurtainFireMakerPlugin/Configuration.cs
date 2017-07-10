@@ -6,10 +6,12 @@ namespace CurtainFireMakerPlugin
 {
     internal class Configuration
     {
+        private static string CondigPath => Plugin.Instance.CurtainFireMakerPath + "\\config.xml";
+
         public static void Load()
         {
             var doc = new XmlDocument();
-            doc.Load(Plugin.Instance.CurtainFireMakerPath + "\\config.xml");
+            doc.Load(CondigPath);
 
             XmlNode rootNode = doc.SelectSingleNode(@"//configuration");
             Plugin.Instance.ScriptPath = GetPath(rootNode.SelectSingleNode("script").InnerText);
@@ -17,6 +19,39 @@ namespace CurtainFireMakerPlugin
             Plugin.Instance.ExportVmdPath = GetPath(rootNode.SelectSingleNode("export_vmd").InnerText);
             Plugin.Instance.ModelName = rootNode.SelectSingleNode("model_name").InnerText;
             Plugin.Instance.ModelDescription = rootNode.SelectSingleNode("model_description").InnerText;
+        }
+
+        public static void Save()
+        {
+            var doc = new XmlDocument();
+
+            XmlDeclaration declaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlElement root = doc.CreateElement("configuration");
+
+            doc.AppendChild(declaration);
+            doc.AppendChild(root);
+
+            XmlElement element = doc.CreateElement("script");
+            element.InnerText = Plugin.Instance.ScriptPath;
+            doc.AppendChild(element);
+
+            element = doc.CreateElement("export_pmx");
+            element.InnerText = Plugin.Instance.ExportPmxPath;
+            doc.AppendChild(element);
+
+            element = doc.CreateElement("export_vmd");
+            element.InnerText = Plugin.Instance.ModelName;
+            doc.AppendChild(element);
+
+            element = doc.CreateElement("model_name");
+            element.InnerText = Plugin.Instance.ScriptPath;
+            doc.AppendChild(element);
+
+            element = doc.CreateElement("model_description");
+            element.InnerText = Plugin.Instance.ModelDescription;
+            doc.AppendChild(element);
+
+            doc.Save(CondigPath);
         }
 
         private static string GetPath(string path)
