@@ -56,27 +56,23 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new Form();
+            var form = new ExportSettingForm();
 
-            var control = new ExportSettingControl(form);
-            control.ScriptPath = this.ScriptPath;
-            control.ExportPmx = this.ExportPmxPath;
-            control.ExportVmd = this.ExportVmdPath;
-            control.ModelName = this.ModelName;
-            control.ModelDescription = this.ModelDescription;
-
-            form.Controls.Add(control);
-            form.Size = new Size(control.Size.Width, control.Size.Height + 40);
+            form.ScriptPath = this.ScriptPath;
+            form.ExportPmx = this.ExportPmxPath;
+            form.ExportVmd = this.ExportVmdPath;
+            form.ModelName = this.ModelName;
+            form.ModelDescription = this.ModelDescription;
 
             form.ShowDialog(this.ApplicationForm);
 
             if (form.DialogResult == DialogResult.OK)
             {
-                this.ScriptPath = control.ScriptPath;
-                this.ExportPmxPath = control.ExportPmx;
-                this.ExportVmdPath = control.ExportVmd;
-                this.ModelName = control.ModelName;
-                this.ModelDescription = control.ModelDescription;
+                this.ScriptPath = form.ScriptPath;
+                this.ExportPmxPath = form.ExportPmx;
+                this.ExportVmdPath = form.ExportVmd;
+                this.ModelName = form.ModelName;
+                this.ModelDescription = form.ModelDescription;
 
                 this.RunSpellScript(this.ScriptPath);
             }

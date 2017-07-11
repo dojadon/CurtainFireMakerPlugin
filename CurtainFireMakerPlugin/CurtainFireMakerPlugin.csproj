@@ -66,11 +66,17 @@
     <Compile Include="Entities\Motion\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
-    <Compile Include="Forms\ExportSettingControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Forms\ExportSettingForm.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ExportSettingControl.Designer.cs">
-      <DependentUpon>ExportSettingControl.cs</DependentUpon>
+    <Compile Include="Forms\ExportSettingForm.Designer.cs">
+      <DependentUpon>ExportSettingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Mathematics\Icosahedron.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
@@ -102,8 +108,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\ExportSettingControl.resx">
-      <DependentUpon>ExportSettingControl.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ExportSettingForm.resx">
+      <DependentUpon>ExportSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
