@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin
 
         private StreamWriter outStream;
 
-        public string CurtainFireMakerPath { get; } = Application.StartupPath + @"\CurtainFireMaker";
+        public string CurtainFireMakerPath => Application.StartupPath+ (!Application.StartupPath.Contains("CurtainFireMaker") ?  @"\CurtainFireMaker" : "");
 
         public string ScriptPath { get; set; }
         public string ExportPmxPath { get; set; }
