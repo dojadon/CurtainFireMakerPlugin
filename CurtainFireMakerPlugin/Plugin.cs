@@ -18,7 +18,8 @@ namespace CurtainFireMakerPlugin
 
         private StreamWriter outStream;
 
-        public string CurtainFireMakerPath => Application.StartupPath+ (!Application.StartupPath.Contains("CurtainFireMaker") ?  @"\CurtainFireMaker" : "");
+        public bool IsPlugin => !Application.ExecutablePath.Contains("CurtainFireMaker");
+        public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? @"\CurtainFireMaker" : "");
 
         public string ScriptPath { get; set; }
         public string ExportPmxPath { get; set; }
@@ -57,24 +58,35 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm();
-
-            form.ScriptPath = this.ScriptPath;
-            form.ExportPmx = this.ExportPmxPath;
-            form.ExportVmd = this.ExportVmdPath;
-            form.ModelName = this.ModelName;
-            form.ModelDescription = this.ModelDescription;
-
-            form.ShowDialog(this.ApplicationForm);
-
-            if (form.DialogResult == DialogResult.OK)
+            if (IsPlugin)
             {
-                this.ScriptPath = form.ScriptPath;
-                this.ExportPmxPath = form.ExportPmx;
-                this.ExportVmdPath = form.ExportVmd;
-                this.ModelName = form.ModelName;
-                this.ModelDescription = form.ModelDescription;
+                var form = new ExportSettingForm();
 
+                form.ScriptPath = this.ScriptPath;
+                form.ExportPmx = this.ExportPmxPath;
+                form.ExportVmd = this.ExportVmdPath;
+                form.ModelName = this.ModelName;
+                form.ModelDescription = this.ModelDescription;
+
+                form.ShowDialog(this.ApplicationForm);
+
+                if (form.DialogResult == DialogResult.OK)
+                {
+                    this.ScriptPath = form.ScriptPath;
+                    this.ExportPmxPath = form.ExportPmx;
+                    this.ExportVmdPath = form.ExportVmd;
+                    this.ModelName = form.ModelName;
+                    this.ModelDescription = form.ModelDescription;
+
+                    var progressForm = new ProgressForm();
+
+                    this.RunSpellScript(this.ScriptPath, progressForm);
+
+                    progressForm.ShowDialog();
+                }
+            }
+            else
+            {
                 var progressForm = new ProgressForm();
 
                 this.RunSpellScript(this.ScriptPath, progressForm);
