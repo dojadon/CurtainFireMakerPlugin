@@ -11,6 +11,8 @@ namespace CurtainFireMakerPlugin.Forms
 {
     public partial class ProgressForm : Form
     {
+        public ProgressBar Progress => this.progressBar;
+
         public ProgressForm()
         {
             InitializeComponent();

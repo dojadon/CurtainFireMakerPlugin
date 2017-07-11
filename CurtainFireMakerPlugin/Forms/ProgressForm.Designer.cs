@@ -28,19 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(12, 12);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(358, 23);
+            this.progressBar.TabIndex = 0;
             // 
             // ProgressForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 261);
+            this.ClientSize = new System.Drawing.Size(382, 46);
+            this.Controls.Add(this.progressBar);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ProgressForm";
-            this.Text = "ProgressForm";
+            this.ShowInTaskbar = false;
+            this.Text = "生成中";
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }

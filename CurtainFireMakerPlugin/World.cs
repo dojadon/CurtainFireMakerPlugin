@@ -35,11 +35,12 @@ namespace CurtainFireMakerPlugin
             motion = new CurtainFireMotion();
         }
 
-        public void StartWorld()
+        public void StartWorld(Action<int> action)
         {
             for (int i = 0; i < MAX_FRAME; i++)
             {
                 this.Frame();
+                action(this.FrameCount);
             }
             this.EntityList.ForEach(e => e.OnDeath());
 

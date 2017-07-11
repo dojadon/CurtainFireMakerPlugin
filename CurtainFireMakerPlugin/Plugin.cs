@@ -8,6 +8,7 @@ using CsVmd;
 using CsVmd.Data;
 using System.IO;
 using CurtainFireMakerPlugin.Forms;
+using System.Threading.Tasks;
 
 namespace CurtainFireMakerPlugin
 {
@@ -74,20 +75,33 @@ namespace CurtainFireMakerPlugin
                 this.ModelName = form.ModelName;
                 this.ModelDescription = form.ModelDescription;
 
-                this.RunSpellScript(this.ScriptPath);
+                var progressForm = new ProgressForm();
+
+                this.RunSpellScript(this.ScriptPath, progressForm);
+
+                progressForm.ShowDialog();
             }
         }
 
-        public void RunSpellScript(string path)
+        public void RunSpellScript(string path, ProgressForm form)
         {
-            World world = new World();
+            Task task = new Task(() =>
+            {
+                World world = new World();
 
-            PythonRunner.RunSpellScript(path, world);
+                PythonRunner.RunSpellScript(path, world);
 
-            world.StartWorld();
+                form.Progress.Minimum = 0;
+                form.Progress.Maximum = World.MAX_FRAME;
+                form.Progress.Step = 1;
+                world.StartWorld(i => form.Progress.PerformStep());
 
-            this.ExportPmx(world);
-            this.ExportVmd(world);
+                this.ExportPmx(world);
+                this.ExportVmd(world);
+
+                form.Close();
+            });
+            task.Start();
         }
 
         private void ExportPmx(World world)
