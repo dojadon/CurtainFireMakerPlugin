@@ -25,6 +25,7 @@ namespace CurtainFireMakerPlugin
         public string ExportVmdPath { get; set; }
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
+        public bool KeepLogOpen { get; set; }
 
         public Plugin() : this(true)
         {
@@ -65,6 +66,7 @@ namespace CurtainFireMakerPlugin
                 form.ExportVmd = this.ExportVmdPath;
                 form.ModelName = this.ModelName;
                 form.ModelDescription = this.ModelDescription;
+                form.KeepLogOpen = this.KeepLogOpen;
 
                 form.ShowDialog(this.ApplicationForm);
 
@@ -75,10 +77,9 @@ namespace CurtainFireMakerPlugin
                     this.ExportVmdPath = form.ExportVmd;
                     this.ModelName = form.ModelName;
                     this.ModelDescription = form.ModelDescription;
+                    this.KeepLogOpen = form.KeepLogOpen;
 
                     var progressForm = new ProgressForm();
-                    var writer = new ActionTextWriter(s => progressForm.LogText += s);
-                    Console.SetOut(writer);
 
                     this.RunScript(this.ScriptPath, progressForm);
 
@@ -99,6 +100,11 @@ namespace CurtainFireMakerPlugin
         {
             Task task = new Task(() =>
             {
+                var console = Console.Out;
+
+                var writer = new ActionTextWriter(s => form.LogText += s);
+                Console.SetOut(writer);
+
                 World world = new World();
 
                 PythonRunner.RunSpellScript(path, world);
@@ -108,10 +114,14 @@ namespace CurtainFireMakerPlugin
                 form.Progress.Step = 1;
                 world.StartWorld(i => form.Progress.PerformStep());
 
-                this.ExportPmx(world);
                 this.ExportVmd(world);
+                this.ExportPmx(world);
 
-                Console.SetOut(Console.Out);
+                Console.SetOut(console);
+                if(!this.KeepLogOpen)
+                {
+                    form.Close();
+                }
             });
             task.Start();
         }
@@ -130,12 +140,6 @@ namespace CurtainFireMakerPlugin
             data.Header.description += this.ModelDescription;
 
             exporter.Export(data);
-
-            Console.WriteLine("出力完了");
-            Console.WriteLine("頂点数 : " + data.VertexArray.Length);
-            Console.WriteLine("材質数 : " + data.MaterialArray.Length);
-            Console.WriteLine("ボーン数 : " + data.BoneArray.Length);
-            Console.WriteLine("モーフ数 : " + data.MorphArray.Length);
         }
 
         private void ExportVmd(World world)

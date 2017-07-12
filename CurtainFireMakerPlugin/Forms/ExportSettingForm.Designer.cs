@@ -47,6 +47,7 @@
             this.pmxFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.vmdFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.scriptFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,10 +92,10 @@
             this.groupBox1.Controls.Add(this.modelNameText);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(6, 78);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(6);
+            this.groupBox1.Location = new System.Drawing.Point(10, 88);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(461, 257);
+            this.groupBox1.Size = new System.Drawing.Size(456, 257);
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "出力設定";
@@ -190,7 +191,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(300, 344);
+            this.button4.Location = new System.Drawing.Point(301, 358);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 17;
@@ -200,7 +201,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(91, 344);
+            this.button3.Location = new System.Drawing.Point(92, 358);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 16;
@@ -220,11 +221,22 @@
             // 
             this.scriptFileDialog.FileName = "openFileDialog1";
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(14, 55);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(128, 16);
+            this.checkBox1.TabIndex = 22;
+            this.checkBox1.Text = "ログを開いたままにする";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // ExportSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 376);
+            this.ClientSize = new System.Drawing.Size(476, 393);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.scriptText);
@@ -261,5 +273,6 @@
         private System.Windows.Forms.OpenFileDialog pmxFileDialog;
         private System.Windows.Forms.OpenFileDialog vmdFileDialog;
         private System.Windows.Forms.OpenFileDialog scriptFileDialog;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

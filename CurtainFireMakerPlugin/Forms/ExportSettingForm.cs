@@ -16,6 +16,7 @@ namespace CurtainFireMakerPlugin.Forms
         public string ModelDescription { get { return this.modelDescriptionText.Text; } set { this.modelDescriptionText.Text = value; } }
         public string ExportPmx { get { return this.exportPmxText.Text; } set { this.exportPmxText.Text = value; } }
         public string ExportVmd { get { return this.exportVmdText.Text; } set { this.exportVmdText.Text = value; } }
+        public bool KeepLogOpen { get { return this.checkBox1.Checked; } set { this.checkBox1.Checked = value; } }
 
         public ExportSettingForm()
         {

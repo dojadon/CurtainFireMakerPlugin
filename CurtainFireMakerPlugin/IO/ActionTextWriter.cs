@@ -25,6 +25,11 @@ namespace CurtainFireMakerPlugin.IO
             this.action(value);
         }
 
-        public override Encoding Encoding => Encoding.UTF8;
+        public override void Write(string format, object arg0)
+        {
+            this.Write(string.Format(format, arg0));
+        }
+
+        public override Encoding Encoding => Encoding.Unicode;
     }
 }

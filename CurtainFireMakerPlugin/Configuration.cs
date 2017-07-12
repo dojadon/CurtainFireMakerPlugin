@@ -19,6 +19,7 @@ namespace CurtainFireMakerPlugin
             Plugin.Instance.ExportVmdPath = GetPath(rootNode.SelectSingleNode("export_vmd").InnerText);
             Plugin.Instance.ModelName = rootNode.SelectSingleNode("model_name").InnerText;
             Plugin.Instance.ModelDescription = rootNode.SelectSingleNode("model_description").InnerText;
+            Plugin.Instance.KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("keep_log_open").InnerText);
         }
 
         public static void Save()
@@ -49,6 +50,10 @@ namespace CurtainFireMakerPlugin
 
             element = doc.CreateElement("model_description");
             element.InnerText = Plugin.Instance.ModelDescription;
+            root.AppendChild(element);
+
+            element = doc.CreateElement("keep_log_open");
+            element.InnerText = Plugin.Instance.KeepLogOpen.ToString();
             root.AppendChild(element);
 
             doc.Save(CondigPath);

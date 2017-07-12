@@ -41,11 +41,13 @@
             // 
             // logTextBox
             // 
+            this.logTextBox.AcceptsReturn = true;
+            this.logTextBox.AcceptsTab = true;
             this.logTextBox.Location = new System.Drawing.Point(12, 41);
             this.logTextBox.Multiline = true;
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.ReadOnly = true;
-            this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.logTextBox.Size = new System.Drawing.Size(358, 270);
             this.logTextBox.TabIndex = 1;
             // 

@@ -130,9 +130,6 @@ namespace CurtainFireMakerPlugin.Entities
             data.BoneArray = this.boneList.ToArray();
             data.MorphArray = this.morphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
-
-            Console.WriteLine(boneList.Count);
-            Console.WriteLine(morphList.Count);
         }
     }
 }
