@@ -25,9 +25,12 @@ namespace CurtainFireMakerPlugin
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
 
+        private TextWriter stream;
+
         public Plugin() : this(true)
         {
-
+            stream = File.CreateText("log.txt");
+            Console.SetOut(stream);
         }
 
         public Plugin(bool isPlugin = true)
@@ -52,6 +55,8 @@ namespace CurtainFireMakerPlugin
         public void Dispose()
         {
             Configuration.Save();
+
+            stream.Dispose();
         }
 
         public void Run(CommandArgs args)

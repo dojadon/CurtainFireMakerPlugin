@@ -10,7 +10,18 @@ namespace CurtainFireMakerPlugin.Collections
     /// </summary>
     public class MultiDictionary<TKey, TValue>
     {
-        private readonly Dictionary<TKey, List<TValue>> mDictionary = new Dictionary<TKey, List<TValue>>();
+        private readonly Dictionary<TKey, List<TValue>> mDictionary;
+
+        public MultiDictionary() 
+        {
+            mDictionary = new Dictionary<TKey, List<TValue>>();
+        }
+
+        public MultiDictionary(IEqualityComparer<TKey> comparer)
+        {
+            mDictionary = new Dictionary<TKey, List<TValue>>(comparer);
+        }
+
 
         /// <summary>
         /// 指定したキーに関連付けられている複数の値を取得または設定します

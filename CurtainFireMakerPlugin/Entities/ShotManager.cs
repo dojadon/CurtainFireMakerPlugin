@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.ShotTypes;
@@ -71,14 +72,14 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 return;
             }
-
-            MultiDictionary<int[], TimeLineRow> rowMap = new MultiDictionary<int[], TimeLineRow>();
-
+            
+            MultiDictionary<int[], TimeLineRow> rowMap = new MultiDictionary<int[], TimeLineRow>(new IntegerArrayEqualityComparer());
+            
             var pmxModel = this.world.model;
 
             foreach (TimeLineRow row in this.rowList)
             {
-                List<int> keyFrameNoSet = new List<int>();
+                List<int> keyFrameNoList = new List<int>();
 
                 HashSet<int> spawnFrameSet = new HashSet<int>();
                 HashSet<int> deathFrameSet = new HashSet<int>();
@@ -86,12 +87,12 @@ namespace CurtainFireMakerPlugin.Entities
                 row.shotList.ForEach(e => spawnFrameSet.Add(e.SpawnFrameNo));
                 row.shotList.ForEach(e => deathFrameSet.Add(e.DeathFrameNo));
 
-                keyFrameNoSet.AddRange(spawnFrameSet);
-                keyFrameNoSet.AddRange(deathFrameSet);
+                keyFrameNoList.AddRange(spawnFrameSet);
+                keyFrameNoList.AddRange(deathFrameSet);
 
-                keyFrameNoSet.Sort();
+                keyFrameNoList.Sort();
 
-                rowMap.Add(keyFrameNoSet.ToArray(), row);
+                rowMap.Add(keyFrameNoList.ToArray(), row);
             }
 
             foreach (int[] keyFrameNo in rowMap.Keys)
@@ -164,6 +165,38 @@ namespace CurtainFireMakerPlugin.Entities
             }
 
             return false;
+        }
+    }
+
+    internal class IntegerArrayEqualityComparer : IEqualityComparer<int[]>
+    {
+        public bool Equals(int[] x, int[] y)
+        {
+            if (x.Length != y.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < x.Length; i++)
+            {
+                if (x[i] != y[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public int GetHashCode(int[] obj)
+        {
+            int result = 17;
+            for (int i = 0; i < obj.Length; i++)
+            {
+                unchecked
+                {
+                    result = result * 23 + obj[i];
+                }
+            }
+            return result;
         }
     }
 }
