@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin
         public static Plugin Instance { get; set; }
 
         public bool IsPlugin { get; }
-        public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? @"\CurtainFireMaker" : "");
+        public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
 
         public string ScriptPath { get; set; }
         public string ExportPmxPath { get; set; }
