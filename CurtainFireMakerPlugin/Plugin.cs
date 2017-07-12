@@ -8,6 +8,7 @@ using CsVmd;
 using CsVmd.Data;
 using System.IO;
 using CurtainFireMakerPlugin.Forms;
+using CurtainFireMakerPlugin.IO;
 using System.Threading.Tasks;
 
 namespace CurtainFireMakerPlugin
@@ -25,12 +26,8 @@ namespace CurtainFireMakerPlugin
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
 
-        private TextWriter stream;
-
         public Plugin() : this(true)
         {
-            stream = File.CreateText("log.txt");
-            Console.SetOut(stream);
         }
 
         public Plugin(bool isPlugin = true)
@@ -55,8 +52,6 @@ namespace CurtainFireMakerPlugin
         public void Dispose()
         {
             Configuration.Save();
-
-            stream.Dispose();
         }
 
         public void Run(CommandArgs args)
@@ -82,6 +77,8 @@ namespace CurtainFireMakerPlugin
                     this.ModelDescription = form.ModelDescription;
 
                     var progressForm = new ProgressForm();
+                    var writer = new ActionTextWriter(s => progressForm.LogText += s);
+                    Console.SetOut(writer);
 
                     this.RunScript(this.ScriptPath, progressForm);
 
@@ -114,7 +111,7 @@ namespace CurtainFireMakerPlugin
                 this.ExportPmx(world);
                 this.ExportVmd(world);
 
-                form.Close();
+                Console.SetOut(Console.Out);
             });
             task.Start();
         }
@@ -133,6 +130,12 @@ namespace CurtainFireMakerPlugin
             data.Header.description += this.ModelDescription;
 
             exporter.Export(data);
+
+            Console.WriteLine("出力完了");
+            Console.WriteLine("頂点数 : " + data.VertexArray.Length);
+            Console.WriteLine("材質数 : " + data.MaterialArray.Length);
+            Console.WriteLine("ボーン数 : " + data.BoneArray.Length);
+            Console.WriteLine("モーフ数 : " + data.MorphArray.Length);
         }
 
         private void ExportVmd(World world)

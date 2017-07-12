@@ -13,6 +13,8 @@ namespace CurtainFireMakerPlugin.Forms
     {
         public ProgressBar Progress => this.progressBar;
 
+        public string LogText { get { return this.logTextBox.Text; } set { this.logTextBox.Text = value; } }
+
         public ProgressForm()
         {
             InitializeComponent();
