@@ -76,7 +76,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (PmxMaterialData material in materials)
             {
-                material.materialName = this.materialList.Capacity.ToString();
+                material.materialName = this.materialList.Count.ToString();
                 material.diffuse = new DxMath.Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
                 material.ambient = new DxMath.Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
                 material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.textureList.IndexOf(textures[material.textureId]) : -1;
@@ -120,7 +120,7 @@ namespace CurtainFireMakerPlugin.Entities
             var morphSlot = new PmxSlotData();
             morphSlot.slotName = "弾モーフ";
             morphSlot.type = PmxSlotData.SLOT_TYPE_MORPH;
-            morphSlot.indices = Enumerable.Range(0, this.materialList.Count).ToArray();
+            morphSlot.indices = Enumerable.Range(0, this.morphList.Count).ToArray();
 
             data.Header = header;
             data.VertexIndices = this.indexList.ToArray();
