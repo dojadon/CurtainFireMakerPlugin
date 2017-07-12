@@ -11,7 +11,7 @@ namespace CurtainFireMakerPlugin
 {
     public class World
     {
-        public static World Instance { get; set; }
+        internal static World Instance { get; set; }
 
         public static int MAX_FRAME = 1000;
 
@@ -26,7 +26,7 @@ namespace CurtainFireMakerPlugin
         internal readonly CurtainFireModel model;
         internal readonly CurtainFireMotion motion;
 
-        public World()
+        internal World()
         {
             Instance = this;
 
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin
             motion = new CurtainFireMotion();
         }
 
-        public void StartWorld(Action<int> action)
+        internal void StartWorld(Action<int> action)
         {
             for (int i = 0; i < MAX_FRAME; i++)
             {
@@ -47,26 +47,26 @@ namespace CurtainFireMakerPlugin
             this.shotManager.Build();
         }
 
-        public void AddShot(EntityShot entity)
+        internal void AddShot(EntityShot entity)
         {
             this.shotManager.AddEntity(entity);
         }
 
-        public int AddEntity(Entity entity)
+        internal int AddEntity(Entity entity)
         {
             this.addEntityList.Add(entity);
 
             return this.FrameCount;
         }
 
-        public int RemoveEntity(Entity entity)
+        internal int RemoveEntity(Entity entity)
         {
             this.removeEntityList.Add(entity);
 
             return this.FrameCount;
         }
 
-        public void Frame()
+        internal void Frame()
         {
             this.taskManager.Frame();
 

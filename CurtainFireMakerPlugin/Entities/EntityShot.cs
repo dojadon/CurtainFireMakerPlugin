@@ -95,7 +95,7 @@ namespace CurtainFireMakerPlugin.Entities
             base.SetMotionBezier(pos1, pos2, length);
         }
 
-        public override void RemoveMotionBezier()
+        internal override void RemoveMotionBezier()
         {
             this.AddVmdMotion(true);
 

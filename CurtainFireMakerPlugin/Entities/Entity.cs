@@ -46,7 +46,7 @@ namespace CurtainFireMakerPlugin.Entities
         private TaskManager taskManager = new TaskManager();
         public World world;
 
-        public virtual void Frame()
+        internal virtual void Frame()
         {
             this.PrevPos = this.Pos;
             this.PrevRot = this.PrevRot;
@@ -129,7 +129,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.motionInterpolation = new MotionInterpolation(frame, frame + length, pos1, pos2, this.Pos, endPos);
         }
 
-        public virtual void RemoveMotionBezier()
+        internal virtual void RemoveMotionBezier()
         {
             this.motionInterpolation = null;
         }
