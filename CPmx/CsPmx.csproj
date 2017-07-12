@@ -7,8 +7,8 @@
     <ProjectGuid>{92CAD24B-572D-430D-8157-B9CB8E56D9E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CPmx</RootNamespace>
-    <AssemblyName>CPmx</AssemblyName>
+    <RootNamespace>CsPmx</RootNamespace>
+    <AssemblyName>CsPmx</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -32,15 +32,15 @@ namespace CurtainFireMakerPlugin
             doc.AppendChild(root);
 
             XmlElement element = doc.CreateElement("script");
-            element.InnerText = Plugin.Instance.ScriptPath;
+            element.InnerText = Plugin.Instance.ScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("export_pmx");
-            element.InnerText = Plugin.Instance.ExportPmxPath;
+            element.InnerText = Plugin.Instance.ExportPmxPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("export_vmd");
-            element.InnerText = Plugin.Instance.ExportVmdPath;
+            element.InnerText = Plugin.Instance.ExportVmdPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("model_name");

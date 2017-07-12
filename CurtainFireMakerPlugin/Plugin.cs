@@ -25,6 +25,11 @@ namespace CurtainFireMakerPlugin
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
 
+        public Plugin() : this(true)
+        {
+
+        }
+
         public Plugin(bool isPlugin = true)
         {
             Instance = this;
