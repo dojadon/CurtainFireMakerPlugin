@@ -194,7 +194,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 17;
-            this.button4.Text = "Cansel";
+            this.button4.Text = "キャンセル";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Click_Cancel);
             // 
@@ -204,7 +204,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 16;
-            this.button3.Text = "OK";
+            this.button3.Text = "出力";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Click_OK);
             // 

@@ -73,7 +73,7 @@ namespace CurtainFireMakerPlugin
 
                     var progressForm = new ProgressForm();
 
-                    this.RunSpellScript(this.ScriptPath, progressForm);
+                    this.RunScript(this.ScriptPath, progressForm);
 
                     progressForm.ShowDialog();
                 }
@@ -82,13 +82,13 @@ namespace CurtainFireMakerPlugin
             {
                 var progressForm = new ProgressForm();
 
-                this.RunSpellScript(this.ScriptPath, progressForm);
+                this.RunScript(this.ScriptPath, progressForm);
 
                 progressForm.ShowDialog();
             }
         }
 
-        public void RunSpellScript(string path, ProgressForm form)
+        public void RunScript(string path, ProgressForm form)
         {
             Task task = new Task(() =>
             {
