@@ -11,7 +11,7 @@ namespace CurtainFireMaker
     {
         public static void Main(string[] args)
         {
-            var plugin = new Plugin();
+            var plugin = new Plugin(false);
 
             plugin.Run(null);
 

@@ -16,9 +16,7 @@ namespace CurtainFireMakerPlugin
     {
         public static Plugin Instance { get; set; }
 
-        private StreamWriter outStream;
-
-        public bool IsPlugin => !Application.ExecutablePath.Contains("CurtainFireMaker");
+        public bool IsPlugin { get; }
         public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? @"\CurtainFireMaker" : "");
 
         public string ScriptPath { get; set; }
@@ -27,13 +25,10 @@ namespace CurtainFireMakerPlugin
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
 
-        public Plugin()
+        public Plugin(bool isPlugin = true)
         {
             Instance = this;
-
-            this.outStream = new StreamWriter("log.txt", true, System.Text.Encoding.GetEncoding("Shift_JIS"));
-            Console.SetOut(outStream);
-            Console.WriteLine("start plugin");
+            IsPlugin = isPlugin;
 
             Configuration.Load();
         }
@@ -52,8 +47,6 @@ namespace CurtainFireMakerPlugin
         public void Dispose()
         {
             Configuration.Save();
-
-            this.outStream.Dispose();
         }
 
         public void Run(CommandArgs args)
