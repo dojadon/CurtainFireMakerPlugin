@@ -20,12 +20,10 @@ namespace CurtainFireMakerPlugin
             engine.Execute(
             "# -*- coding: utf-8 -*-\n" +
             "import sys\n" +
-            "sys.path.append(r\"" +  Application.StartupPath +  "\\Plugins\")\n" +
+            "sys.path.append(r\"" + Application.StartupPath + "\\Plugins\")\n" +
             "import clr\n" +
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
-            "clr.AddReference(\"MikuMikuPlugin\")\n" +
-            "clr.AddReference(\"DxMath\")\n"
-            );
+            "clr.AddReference(\"MikuMikuPlugin\")\n");
         }
 
         public static void RunSpellScript(string path, World world)
