@@ -6,6 +6,7 @@ using IronPython.Hosting;
 using IronPython.Runtime;
 using Microsoft.Scripting.Hosting;
 using CurtainFireMakerPlugin.ShotTypes;
+using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin
 {
@@ -19,7 +20,7 @@ namespace CurtainFireMakerPlugin
             engine.Execute(
             "# -*- coding: utf-8 -*-\n" +
             "import sys\n" +
-            "sys.path.append(r\"C:\\tool\\model\\MikuMikuMoving64_v1272\\Plugins\")\n" +
+            "sys.path.append(r\"" +  Application.StartupPath +  "\\Plugins\")\n" +
             "import clr\n" +
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
             "clr.AddReference(\"MikuMikuPlugin\")\n" +

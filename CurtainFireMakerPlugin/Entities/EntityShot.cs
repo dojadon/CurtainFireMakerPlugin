@@ -46,7 +46,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.world.AddShot(this);
         }
 
-        public override void Frame()
+        internal override void Frame()
         {
             base.Frame();
 
