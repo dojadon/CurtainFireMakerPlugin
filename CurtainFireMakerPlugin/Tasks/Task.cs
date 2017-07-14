@@ -8,7 +8,7 @@ namespace CurtainFireMakerPlugin.Tasks
     public class Task
     {
         private Action<Task> state;
-        private Action task;
+        private Action<Task> task;
 
         public int interval;
         public int updateCount;
@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin.Tasks
         private int waitTime;
         private int waitCount;
 
-        public Task(Action task, int interval, int executionTimes, int waitTime)
+        public Task(Action<Task> task, int interval, int executionTimes, int waitTime)
         {
             this.task = task;
             this.interval = this.updateCount = interval;
@@ -36,7 +36,7 @@ namespace CurtainFireMakerPlugin.Tasks
 
         private void Run()
         {
-            this.task();
+            this.task(this);
         }
 
         public Boolean IsFinished()

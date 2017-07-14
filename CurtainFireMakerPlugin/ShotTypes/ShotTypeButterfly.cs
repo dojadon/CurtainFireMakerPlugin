@@ -17,7 +17,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public override void Init(EntityShot entity)
         {
             double angle = Math.PI / 4;
-            entity.AddTask(() =>
+            entity.AddTask(task =>
             {
                 var motion = this.GetMotionData();
                 motion.boneName = entity.bones[1].boneName;
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
             }, 120, 0, 0);
 
-            entity.AddTask(() =>
+            entity.AddTask(task =>
             {
                 var motion = this.GetMotionData();
                 motion.boneName = entity.bones[1].boneName;
