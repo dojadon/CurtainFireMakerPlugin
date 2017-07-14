@@ -43,14 +43,14 @@ namespace CurtainFireMakerPlugin.Entities
 
             this.Property = property;
 
+            this.Property.Type.Init(this);
+
             this.world.AddShot(this);
         }
 
         internal override void Frame()
         {
             base.Frame();
-
-            this.Property.Type.Frame(this);
 
             if (this.FrameCount == 1 || this.ShouldRecord(this))
             {

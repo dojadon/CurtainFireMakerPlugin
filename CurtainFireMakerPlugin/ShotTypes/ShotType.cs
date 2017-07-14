@@ -11,11 +11,6 @@ namespace CurtainFireMakerPlugin.ShotTypes
     {
         public String Name { get; }
 
-        private Action<EntityShot> frameFunc = entity =>
-        {
-
-        };
-
         public ShotType(String name)
         {
             this.Name = name;
@@ -31,9 +26,9 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return true;
         }
 
-        public void Frame(EntityShot entity)
+        public virtual void Init(EntityShot entity)
         {
-            this.frameFunc.Invoke(entity);
+
         }
 
         public abstract PmxVertexData[] GetVertices(ShotProperty property);
