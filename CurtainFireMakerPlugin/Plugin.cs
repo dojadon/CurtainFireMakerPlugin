@@ -118,7 +118,7 @@ namespace CurtainFireMakerPlugin
                 this.ExportPmx(world);
 
                 Console.SetOut(console);
-                if(!this.KeepLogOpen)
+                if (!this.KeepLogOpen)
                 {
                     form.Close();
                 }

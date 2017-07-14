@@ -91,8 +91,8 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 PmxBoneData bone = data[i];
 
-                bone.boneName = (this.boneList.Count + i - 1).ToString();
-                bone.flag = 0x0001 | 0x0002 | 0x0004 | 0x0008 | 0x0010;
+                bone.boneName = (this.boneList.Count - 1).ToString();
+                bone.flag = 0x0001 | 0x0002 | 0x0004 | 0x0010;
                 bone.boneId = this.boneList.Count + i;
 
                 if (-1 < bone.parentId && bone.parentId < data.Length)
@@ -103,8 +103,8 @@ namespace CurtainFireMakerPlugin.Entities
                 {
                     bone.parentId = 0;
                 }
+                this.boneList.Add(bone);
             }
-            this.boneList.AddRange(data);
         }
 
         public void GetData(PmxModelData data)
