@@ -21,6 +21,7 @@ namespace CurtainFireMakerPlugin
         public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
 
         public string ScriptPath { get; set; }
+        public string SettingScriptPath { get; set; }
         public string ExportPmxPath { get; set; }
         public string ExportVmdPath { get; set; }
         public string ModelName { get; set; }
@@ -37,6 +38,8 @@ namespace CurtainFireMakerPlugin
             IsPlugin = isPlugin;
 
             Configuration.Load();
+
+            PythonRunner.Init(this.SettingScriptPath);
         }
 
         public Guid GUID => new Guid();

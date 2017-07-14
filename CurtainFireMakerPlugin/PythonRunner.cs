@@ -14,7 +14,7 @@ namespace CurtainFireMakerPlugin
     {
         private static ScriptEngine engine;
 
-        private static void Init()
+        public static void Init(string path)
         {
             engine = Python.CreateEngine();
             engine.Execute(
@@ -24,18 +24,16 @@ namespace CurtainFireMakerPlugin
             "import clr\n" +
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
             "clr.AddReference(\"MikuMikuPlugin\")\n");
-        }
-
-        public static void RunSpellScript(string path, World world)
-        {
-            if (engine == null)
-            {
-                Init();
-            }
 
             dynamic scope = engine.ExecuteFile(path);
 
             ShotTypeList.Init(list => scope.setup_shottype(list));
+        }
+
+        public static void RunSpellScript(string path, World world)
+        {
+            dynamic scope = engine.ExecuteFile(path);
+
             scope.setup_world(world);
         }
     }

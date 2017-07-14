@@ -15,6 +15,7 @@ namespace CurtainFireMakerPlugin
 
             XmlNode rootNode = doc.SelectSingleNode(@"//configuration");
             Plugin.Instance.ScriptPath = GetPath(rootNode.SelectSingleNode("script").InnerText);
+            Plugin.Instance.SettingScriptPath = GetPath(rootNode.SelectSingleNode("setting").InnerText);
             Plugin.Instance.ExportPmxPath = GetPath(rootNode.SelectSingleNode("export_pmx").InnerText);
             Plugin.Instance.ExportVmdPath = GetPath(rootNode.SelectSingleNode("export_vmd").InnerText);
             Plugin.Instance.ModelName = rootNode.SelectSingleNode("model_name").InnerText;
@@ -34,6 +35,10 @@ namespace CurtainFireMakerPlugin
 
             XmlElement element = doc.CreateElement("script");
             element.InnerText = Plugin.Instance.ScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            root.AppendChild(element);
+
+            element = doc.CreateElement("setting");
+            element.InnerText = Plugin.Instance.SettingScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("export_pmx");
