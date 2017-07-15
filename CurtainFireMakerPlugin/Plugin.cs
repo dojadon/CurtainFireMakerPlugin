@@ -94,13 +94,13 @@ namespace CurtainFireMakerPlugin
 
                     var consoleOut = Console.Out;
 
-                    Action action = this.RunScript(this.ScriptPath, progressForm, () =>
+                    var task = new Task(() =>
                     {
                         this.running = true;
-
                         Console.SetOut(new TextBoxConsole(progressForm.LogTextBox));
-                    }, () =>
-                    {
+
+                        this.RunScript(this.ScriptPath, progressForm);
+
                         Console.SetOut(consoleOut);
 
                         if (!this.KeepLogOpen)
@@ -109,7 +109,7 @@ namespace CurtainFireMakerPlugin
                         }
                         this.running = false;
                     });
-                    var task = Task.Factory.StartNew(action);
+                    task.Start();
 
                     progressForm.ShowDialog();
                 }
@@ -119,26 +119,19 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public Action RunScript(string path, ProgressForm form, Action initialize, Action finalize)
+        public void RunScript(string path, ProgressForm form)
         {
-            return () =>
-            {
-                initialize();
+            World world = new World();
 
-                World world = new World();
+            PythonRunner.RunSpellScript(path, world);
 
-                PythonRunner.RunSpellScript(path, world);
+            form.Progress.Minimum = 0;
+            form.Progress.Maximum = World.MAX_FRAME;
+            form.Progress.Step = 1;
+            world.StartWorld(i => form.Progress.PerformStep());
 
-                form.Progress.Minimum = 0;
-                form.Progress.Maximum = World.MAX_FRAME;
-                form.Progress.Step = 1;
-                world.StartWorld(i => form.Progress.PerformStep());
-
-                this.ExportVmd(world);
-                this.ExportPmx(world);
-
-                finalize();
-            };
+            this.ExportVmd(world);
+            this.ExportPmx(world);
         }
 
         private void ExportPmx(World world)

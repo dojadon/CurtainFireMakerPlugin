@@ -34,8 +34,6 @@ namespace CurtainFireMakerPlugin
         {
             ScriptScope scope = engine.CreateScope(rootScope);
 
-            scope.SetVariable("world", world);
-
             engine.ExecuteFile(path, scope);
         }
     }
