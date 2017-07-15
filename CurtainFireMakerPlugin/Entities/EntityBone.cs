@@ -12,10 +12,8 @@ namespace CurtainFireMakerPlugin.Entities
         private string Modelname { get; }
         private string BoneName { get; }
 
-        public EntityBone(string modelName, string boneName)
+        public EntityBone(string modelName, string boneName) : base()
         {
-            this.world = World.Instance;
-
             Modelname = modelName;
             BoneName = boneName;
 

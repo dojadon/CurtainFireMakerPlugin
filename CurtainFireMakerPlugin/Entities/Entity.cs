@@ -46,6 +46,11 @@ namespace CurtainFireMakerPlugin.Entities
         private TaskManager taskManager = new TaskManager();
         public World world;
 
+        public Entity()
+        {
+            this.world = World.Instance;
+        }
+
         internal virtual void Frame()
         {
             this.PrevPos = this.Pos;

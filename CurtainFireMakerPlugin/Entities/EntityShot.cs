@@ -37,10 +37,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
         }
 
-        public EntityShot(ShotProperty property)
+        public EntityShot(ShotProperty property) : base()
         {
-            this.world = World.Instance;
-
             this.Property = property;
 
             this.Property.Type.Init(this);
