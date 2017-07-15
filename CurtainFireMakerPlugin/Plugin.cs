@@ -28,6 +28,9 @@ namespace CurtainFireMakerPlugin
         public string ModelDescription { get; set; }
         public bool KeepLogOpen { get; set; }
 
+        private bool running;
+        public bool Running { get; }
+
         public Plugin() : this(true)
         {
         }
@@ -60,6 +63,11 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
+            if (this.running)
+            {
+                return;
+            }
+
             if (IsPlugin)
             {
                 var form = new ExportSettingForm();
@@ -84,29 +92,39 @@ namespace CurtainFireMakerPlugin
 
                     var progressForm = new ProgressForm();
 
-                    this.RunScript(this.ScriptPath, progressForm);
+                    var consoleOut = Console.Out;
+
+                    Action action = this.RunScript(this.ScriptPath, progressForm, () =>
+                    {
+                        this.running = true;
+
+                        var writer = new ActionTextWriter(s => progressForm.LogText += s);
+                        Console.SetOut(writer);
+                    }, () =>
+                    {
+                        Console.SetOut(consoleOut);
+
+                        if (!this.KeepLogOpen)
+                        {
+                            progressForm.Close();
+                        }
+                        this.running = false;
+                    });
+                    Task.Factory.StartNew(action);
 
                     progressForm.ShowDialog();
                 }
             }
             else
             {
-                var progressForm = new ProgressForm();
-
-                this.RunScript(this.ScriptPath, progressForm);
-
-                progressForm.ShowDialog();
             }
         }
 
-        public void RunScript(string path, ProgressForm form)
+        public Action RunScript(string path, ProgressForm form, Action initialize, Action finalize)
         {
-            Task task = new Task(() =>
+            return () =>
             {
-                var console = Console.Out;
-
-                var writer = new ActionTextWriter(s => form.LogText += s);
-                Console.SetOut(writer);
+                initialize();
 
                 World world = new World();
 
@@ -120,13 +138,8 @@ namespace CurtainFireMakerPlugin
                 this.ExportVmd(world);
                 this.ExportPmx(world);
 
-                Console.SetOut(console);
-                if (!this.KeepLogOpen)
-                {
-                    form.Close();
-                }
-            });
-            task.Start();
+                finalize();
+            };
         }
 
         private void ExportPmx(World world)
