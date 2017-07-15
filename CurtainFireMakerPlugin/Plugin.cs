@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using MikuMikuPlugin;
@@ -8,7 +9,6 @@ using CsVmd;
 using CsVmd.Data;
 using System.IO;
 using CurtainFireMakerPlugin.Forms;
-using CurtainFireMakerPlugin.IO;
 using System.Threading.Tasks;
 
 namespace CurtainFireMakerPlugin
@@ -92,22 +92,37 @@ namespace CurtainFireMakerPlugin
 
                     var progressForm = new ProgressForm();
 
-                    var consoleOut = Console.Out;
-
                     var task = new Task(() =>
                     {
+                        StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
+                        Console.SetOut(sw);
+
                         this.running = true;
-                        Console.SetOut(new TextBoxConsole(progressForm.LogTextBox));
 
-                        this.RunScript(this.ScriptPath, progressForm);
-
-                        Console.SetOut(consoleOut);
-
-                        if (!this.KeepLogOpen)
+                        try
                         {
-                            progressForm.Close();
+                            this.RunScript(this.ScriptPath, progressForm);
+
+                            if (!this.KeepLogOpen)
+                            {
+                                progressForm.Close();
+                            }
                         }
-                        this.running = false;
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                        finally
+                        {
+                            sw.Dispose();
+                            this.running = false;
+
+                            StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput());
+                            standardOutput.AutoFlush = true;
+                            Console.SetOut(standardOutput);
+
+                            progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
+                        }
                     });
                     task.Start();
 

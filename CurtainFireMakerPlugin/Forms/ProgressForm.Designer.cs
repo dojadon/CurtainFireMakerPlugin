@@ -43,6 +43,7 @@
             // 
             this.logTextBox.AcceptsReturn = true;
             this.logTextBox.AcceptsTab = true;
+            this.logTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.logTextBox.Location = new System.Drawing.Point(12, 41);
             this.logTextBox.Multiline = true;
             this.logTextBox.Name = "logTextBox";

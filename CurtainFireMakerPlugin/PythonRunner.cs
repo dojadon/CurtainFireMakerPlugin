@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.IO;
 using IronPython.Hosting;
 using IronPython.Runtime;
 using Microsoft.Scripting.Hosting;
-using CurtainFireMakerPlugin.ShotTypes;
 using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin
@@ -33,6 +32,8 @@ namespace CurtainFireMakerPlugin
         public static void RunSpellScript(string path, World world)
         {
             ScriptScope scope = engine.CreateScope(rootScope);
+
+            scope.SetVariable("world", world);
 
             engine.ExecuteFile(path, scope);
         }
