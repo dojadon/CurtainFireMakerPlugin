@@ -303,9 +303,9 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix operator *(Matrix m1, Matrix m2) => Mul(m1, m2);
 
-        public static Vector4 operator *(Vector4 v1, Matrix m1) => Transform(m1, v1);
+        public static Vector4 operator *(Matrix m1, Vector4 v1) => Transform(m1, v1);
 
-        public static Vector3 operator *(Vector3 v1, Matrix m1) => Transform(m1, v1);
+        public static Vector3 operator *(Matrix m1, Vector3 v1) => Transform(m1, v1);
 
         public static implicit operator Matrix(Quaternion q1) => RotationQuaternion(q1);
 
