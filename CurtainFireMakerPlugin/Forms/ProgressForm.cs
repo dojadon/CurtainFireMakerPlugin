@@ -6,8 +6,7 @@ namespace CurtainFireMakerPlugin.Forms
     public partial class ProgressForm : Form
     {
         public ProgressBar Progress => this.progressBar;
-
-        public string LogText { get { return this.logTextBox.Text; } set { this.logTextBox.Text = value; } }
+        public TextBox LogTextBox => this.logTextBox;
 
         public ProgressForm()
         {

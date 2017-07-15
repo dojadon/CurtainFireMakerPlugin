@@ -98,8 +98,7 @@ namespace CurtainFireMakerPlugin
                     {
                         this.running = true;
 
-                        var writer = new ActionTextWriter(s => progressForm.LogText += s);
-                        Console.SetOut(writer);
+                        Console.SetOut(new TextBoxConsole(progressForm.LogTextBox));
                     }, () =>
                     {
                         Console.SetOut(consoleOut);
@@ -110,7 +109,7 @@ namespace CurtainFireMakerPlugin
                         }
                         this.running = false;
                     });
-                    Task.Factory.StartNew(action);
+                    var task = Task.Factory.StartNew(action);
 
                     progressForm.ShowDialog();
                 }

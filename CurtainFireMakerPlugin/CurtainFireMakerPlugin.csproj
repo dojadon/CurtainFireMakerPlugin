@@ -78,7 +78,7 @@
     <Compile Include="Forms\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IO\ActionTextWriter.cs" />
+    <Compile Include="IO\TextBoxConsole.cs" />
     <Compile Include="Mathematics\Icosahedron.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
