@@ -184,6 +184,24 @@ namespace CurtainFireMakerPlugin.Mathematics
             return q1;
         }
 
+        public static Quaternion Pow(Quaternion q1, double exponent)
+        {
+            var q2 = new Quaternion();
+
+            double alpha1 = Math.Acos(q1.w);
+            double alpha2 = alpha1 * exponent;
+
+            q2.w = Math.Cos(alpha2);
+
+            double mult = Math.Sin(alpha1) / Math.Sin(alpha2);
+
+            q2.x = q1.x * mult;
+            q2.y = q1.y * mult;
+            q2.z = q1.z * mult;
+
+            return q2;
+        }
+
         public static Quaternion Interpolate(Quaternion q1, Quaternion q2, double alpha)
         {
             var q3 = new Quaternion();
@@ -262,6 +280,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static Quaternion operator ~(Quaternion q1) => Inverse(q1);
 
         public static Quaternion operator *(Quaternion q1, Quaternion q2) => Mul(q1, q2);
+
+        public static Quaternion operator ^(Quaternion q1, double d1) => Pow(q1, d1);
 
         public static implicit operator Quaternion(Matrix m1) => RotationMatrix(m1);
 

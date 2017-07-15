@@ -157,6 +157,11 @@ namespace CurtainFireMakerPlugin.Mathematics
             return m3;
         }
 
+        public static Matrix Pow(Matrix m1, double exponent)
+        {
+            return ((Quaternion)m1) ^ exponent;
+        }
+
         public static Matrix Inverse(Matrix m1)
         {
             Matrix m2 = Identity;
@@ -306,6 +311,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static Vector4 operator *(Matrix m1, Vector4 v1) => Transform(m1, v1);
 
         public static Vector3 operator *(Matrix m1, Vector3 v1) => Transform(m1, v1);
+
+        public static Matrix operator ^(Matrix m1, double d1) => Pow(m1, d1);
 
         public static implicit operator Matrix(Quaternion q1) => RotationQuaternion(q1);
 
