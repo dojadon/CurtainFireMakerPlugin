@@ -9,7 +9,7 @@ namespace CurtainFireMakerPlugin
     public class World
     {
         private static List<World> worldList = new List<World>();
-        public static List<World> WorldList => WorldList;
+        public static List<World> WorldList => worldList;
 
         public static int MAX_FRAME = 1000;
 
@@ -31,11 +31,6 @@ namespace CurtainFireMakerPlugin
             motion = new CurtainFireMotion();
         }
 
-        internal void StartWorld(Action<int> action)
-        {
-            this.shotManager.Build();
-        }
-
         internal void AddShot(EntityShot entity)
         {
             this.shotManager.AddEntity(entity);
@@ -55,7 +50,7 @@ namespace CurtainFireMakerPlugin
             return this.FrameCount;
         }
 
-        internal bool Frame()
+        internal void Frame()
         {
             this.EntityList.AddRange(this.addEntityList);
             this.removeEntityList.ForEach(e => this.EntityList.Remove(e));
@@ -67,8 +62,6 @@ namespace CurtainFireMakerPlugin
             this.EntityList.RemoveAll(e => e.IsDeath);
 
             this.FrameCount++;
-
-            return this.EntityList.Count != 0 && this.addEntityList.Count != 0;
         }
 
         internal void Finish()

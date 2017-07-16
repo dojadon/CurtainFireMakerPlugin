@@ -152,38 +152,20 @@ namespace CurtainFireMakerPlugin
 
             List<World> worldList = World.WorldList;
 
-            if (worldList.Count == 1)
+            for (int i = 0; i < World.MAX_FRAME; i++)
             {
-                for (int i = 0; i < World.MAX_FRAME; i++)
-                {
-                    worldList[0].Frame();
-                    form.Progress.PerformStep();
-                }
-
-                worldList[0].Finish();
-                this.Export(worldList[0]);
+                worldList.ForEach(w => w.Frame());
+                form.Progress.PerformStep();
             }
-            else
+
+            for (int i = 0; i < worldList.Count; i++)
             {
-                for (int i = 0; i < World.MAX_FRAME; i++)
-                {
-                    worldList.ForEach(w => w.Frame());
-                    form.Progress.PerformStep();
-                }
+                var world = worldList[i];
+                world.Finish();
 
-                worldList.ForEach(w => w.Finish());
-
-                for (int i = 0; i < worldList.Count; i++)
-                {
-                    this.Export(worldList[i], (i + 1).ToString());
-                }
+                this.ExportPmx(world, worldList.Count > 1 ? (i + 1).ToString() : "");
+                this.ExportVmd(world, worldList.Count > 1 ? (i + 1).ToString() : "");
             }
-        }
-
-        private void Export(World world, string text = "")
-        {
-            this.ExportPmx(world, text);
-            this.ExportVmd(world, text);
         }
 
         private void ExportPmx(World world, string text)
