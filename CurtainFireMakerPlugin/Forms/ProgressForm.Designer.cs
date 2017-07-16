@@ -30,6 +30,7 @@
         {
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.logTextBox = new System.Windows.Forms.TextBox();
+            this.label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // progressBar
@@ -49,14 +50,23 @@
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.ReadOnly = true;
             this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(358, 270);
+            this.logTextBox.Size = new System.Drawing.Size(358, 254);
             this.logTextBox.TabIndex = 1;
+            // 
+            // label
+            // 
+            this.label.AutoSize = true;
+            this.label.Location = new System.Drawing.Point(12, 13);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(0, 12);
+            this.label.TabIndex = 2;
             // 
             // ProgressForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 323);
+            this.ClientSize = new System.Drawing.Size(382, 308);
+            this.Controls.Add(this.label);
             this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.progressBar);
             this.MaximizeBox = false;
@@ -73,5 +83,6 @@
 
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.TextBox logTextBox;
+        private System.Windows.Forms.Label label;
     }
 }

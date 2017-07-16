@@ -23,5 +23,7 @@ namespace CurtainFireMakerPlugin.Tasks
             this.taskList.ForEach(task => task.Update());
             this.taskList.RemoveAll(task => task.IsFinished());
         }
+
+        public bool IsEmpty => this.taskList.Count == 0 && this.addTaskList.Count == 0;
     }
 }

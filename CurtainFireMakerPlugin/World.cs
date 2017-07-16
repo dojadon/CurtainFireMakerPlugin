@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Entities;
-using CurtainFireMakerPlugin.Tasks;
-using IronPython.Runtime;
-using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin
 {
     public class World
     {
-        internal static World Instance { get; set; }
+        private static List<World> worldList = new List<World>();
+        public static List<World> WorldList => WorldList;
 
         public static int MAX_FRAME = 1000;
 
@@ -20,15 +18,13 @@ namespace CurtainFireMakerPlugin
         public List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
-        private TaskManager taskManager = new TaskManager();
-
         internal readonly ShotManager shotManager;
         internal readonly CurtainFireModel model;
         internal readonly CurtainFireMotion motion;
 
-        internal World()
+        public World()
         {
-            Instance = this;
+            worldList.Add(this);
 
             shotManager = new ShotManager(this);
             model = new CurtainFireModel();
@@ -37,13 +33,6 @@ namespace CurtainFireMakerPlugin
 
         internal void StartWorld(Action<int> action)
         {
-            for (int i = 0; i < MAX_FRAME; i++)
-            {
-                this.Frame();
-                action(this.FrameCount);
-            }
-            this.EntityList.ForEach(e => e.OnDeath());
-
             this.shotManager.Build();
         }
 
@@ -66,10 +55,8 @@ namespace CurtainFireMakerPlugin
             return this.FrameCount;
         }
 
-        internal void Frame()
+        internal bool Frame()
         {
-            this.taskManager.Frame();
-
             this.EntityList.AddRange(this.addEntityList);
             this.removeEntityList.ForEach(e => this.EntityList.Remove(e));
 
@@ -80,28 +67,13 @@ namespace CurtainFireMakerPlugin
             this.EntityList.RemoveAll(e => e.IsDeath);
 
             this.FrameCount++;
+
+            return this.EntityList.Count != 0 && this.addEntityList.Count != 0;
         }
 
-        public void AddTask(Task task)
+        internal void Finish()
         {
-            this.taskManager.AddTask(task);
-        }
-
-        public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
-        {
-            this.AddTask(new Task(task, interval, executeTimes, waitTime));
-        }
-
-        public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
-        {
-            if (withArg)
-            {
-                this.AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
-            }
-            else
-            {
-                this.AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
-            }
+            this.shotManager.Build();
         }
     }
 }

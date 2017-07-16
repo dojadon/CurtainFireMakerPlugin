@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
@@ -143,23 +144,52 @@ namespace CurtainFireMakerPlugin
 
         public void RunScript(string path, ProgressForm form)
         {
-            World world = new World();
-
-            PythonRunner.RunSpellScript(path, world);
+            PythonRunner.RunSpellScript(path);
 
             form.Progress.Minimum = 0;
             form.Progress.Maximum = World.MAX_FRAME;
             form.Progress.Step = 1;
-            world.StartWorld(i => form.Progress.PerformStep());
 
-            this.ExportVmd(world);
-            this.ExportPmx(world);
+            List<World> worldList = World.WorldList;
+
+            if (worldList.Count == 1)
+            {
+                for (int i = 0; i < World.MAX_FRAME; i++)
+                {
+                    worldList[0].Frame();
+                    form.Progress.PerformStep();
+                }
+
+                worldList[0].Finish();
+                this.Export(worldList[0]);
+            }
+            else
+            {
+                for (int i = 0; i < World.MAX_FRAME; i++)
+                {
+                    worldList.ForEach(w => w.Frame());
+                    form.Progress.PerformStep();
+                }
+
+                worldList.ForEach(w => w.Finish());
+
+                for (int i = 0; i < worldList.Count; i++)
+                {
+                    this.Export(worldList[i], (i + 1).ToString());
+                }
+            }
         }
 
-        private void ExportPmx(World world)
+        private void Export(World world, string text = "")
+        {
+            this.ExportPmx(world, text);
+            this.ExportVmd(world, text);
+        }
+
+        private void ExportPmx(World world, string text)
         {
             string fileName = ScriptFileName.Replace(".py", "");
-            string exportPath = this.ExportDirPath + "\\" + fileName + ".pmx";
+            string exportPath = this.ExportDirPath + "\\" + fileName + text + ".pmx";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
@@ -176,10 +206,10 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        private void ExportVmd(World world)
+        private void ExportVmd(World world, string text)
         {
             string fileName = ScriptFileName.Replace(".py", "");
-            string exportPath = this.ExportDirPath + "\\" + fileName + ".vmd";
+            string exportPath = this.ExportDirPath + "\\" + fileName + text + ".vmd";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))

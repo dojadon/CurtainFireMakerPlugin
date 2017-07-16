@@ -44,11 +44,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected MotionInterpolation motionInterpolation;
         private TaskManager taskManager = new TaskManager();
-        public World world;
+        public readonly World world;
 
-        public Entity()
+        public Entity(World world)
         {
-            this.world = World.Instance;
+            this.world = world;
         }
 
         internal virtual void Frame()

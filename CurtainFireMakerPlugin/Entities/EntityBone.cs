@@ -12,7 +12,7 @@ namespace CurtainFireMakerPlugin.Entities
         private string Modelname { get; }
         private string BoneName { get; }
 
-        public EntityBone(string modelName, string boneName) : base()
+        public EntityBone(World world, string modelName, string boneName) : base(world)
         {
             Modelname = modelName;
             BoneName = boneName;
@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin.Entities
 
                 if (bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
                 {
-                    var parentBone = new EntityBone(Modelname, bones[bone.ParentBoneID].Name);
+                    var parentBone = new EntityBone(world, Modelname, bones[bone.ParentBoneID].Name);
                     this.parentEntity = parentBone;
                 }
 
