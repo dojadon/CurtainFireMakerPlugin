@@ -16,6 +16,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public double y;
         public double z;
 
+        public double Length => Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+
         public Vector3(double x, double y, double z)
         {
             this.x = x;
@@ -81,7 +83,7 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var v2 = new Vector3(v1);
 
-            double len = Length(v1);
+            double len = v1.Length;
 
             if (len != 1.0 && len != 0.0)
             {
@@ -91,16 +93,6 @@ namespace CurtainFireMakerPlugin.Mathematics
             }
 
             return v2;
-        }
-
-        public static double Length(Vector3 v1)
-        {
-            return Math.Sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
-        }
-
-        public double Length()
-        {
-            return Length(this);
         }
 
         public override bool Equals(object obj)

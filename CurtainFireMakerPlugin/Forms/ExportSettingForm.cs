@@ -14,8 +14,7 @@ namespace CurtainFireMakerPlugin.Forms
         public string ScriptPath { get { return this.scriptText.Text; } set { this.scriptText.Text = value; } }
         public string ModelName { get { return this.modelNameText.Text; } set { this.modelNameText.Text = value; } }
         public string ModelDescription { get { return this.modelDescriptionText.Text; } set { this.modelDescriptionText.Text = value; } }
-        public string ExportPmx { get { return this.exportPmxText.Text; } set { this.exportPmxText.Text = value; } }
-        public string ExportVmd { get { return this.exportVmdText.Text; } set { this.exportVmdText.Text = value; } }
+        public string ExportDirPath { get { return this.exportDirText.Text; } set { this.exportDirText.Text = value; } }
         public bool KeepLogOpen { get { return this.checkBox1.Checked; } set { this.checkBox1.Checked = value; } }
 
         public ExportSettingForm()
@@ -35,26 +34,6 @@ namespace CurtainFireMakerPlugin.Forms
             this.DialogResult = DialogResult.Cancel;
         }
 
-        private void Click_ExportPmx(object sender, EventArgs e)
-        {
-            var result = this.pmxFileDialog.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                this.exportPmxText.Text = this.pmxFileDialog.FileName;
-            }
-        }
-
-        private void Click_ExportVmd(object sender, EventArgs e)
-        {
-            var result = this.vmdFileDialog.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-                this.exportVmdText.Text = this.vmdFileDialog.FileName;
-            }
-        }
-
         private void Click_Script(object sender, EventArgs e)
         {
             var result = this.scriptFileDialog.ShowDialog();
@@ -62,6 +41,16 @@ namespace CurtainFireMakerPlugin.Forms
             if (result == DialogResult.OK)
             {
                 this.scriptText.Text = this.scriptFileDialog.FileName;
+            }
+        }
+
+        private void Click_ExportDir(object sender, EventArgs e)
+        {
+            var result = this.exportDirDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                this.exportDirText.Text = this.exportDirDialog.SelectedPath;
             }
         }
     }

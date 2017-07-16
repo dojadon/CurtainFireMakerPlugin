@@ -38,7 +38,7 @@ namespace CurtainFireMakerPlugin.Entities
         public int SpawnFrameNo { get; set; }
         public int DeathFrameNo { get; set; }
 
-        public Func<Entity, bool> CheckWorldOut { get; set; } = entity => (entity.Pos - entity.SpawnPos).Length() > 400.0;
+        public Func<Entity, bool> CheckWorldOut { get; set; } = entity => (entity.Pos - entity.SpawnPos).Length > 400.0;
 
         public bool IsDeath { get; set; }
 

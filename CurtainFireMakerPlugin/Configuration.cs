@@ -16,8 +16,7 @@ namespace CurtainFireMakerPlugin
             XmlNode rootNode = doc.SelectSingleNode(@"//configuration");
             Plugin.Instance.ScriptPath = GetPath(rootNode.SelectSingleNode("script").InnerText);
             Plugin.Instance.SettingScriptPath = GetPath(rootNode.SelectSingleNode("setting").InnerText);
-            Plugin.Instance.ExportPmxPath = GetPath(rootNode.SelectSingleNode("export_pmx").InnerText);
-            Plugin.Instance.ExportVmdPath = GetPath(rootNode.SelectSingleNode("export_vmd").InnerText);
+            Plugin.Instance.ExportDirPath = GetPath(rootNode.SelectSingleNode("export").InnerText);
             Plugin.Instance.ModelName = rootNode.SelectSingleNode("model_name").InnerText;
             Plugin.Instance.ModelDescription = rootNode.SelectSingleNode("model_description").InnerText;
             Plugin.Instance.KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("keep_log_open").InnerText);
@@ -41,12 +40,8 @@ namespace CurtainFireMakerPlugin
             element.InnerText = Plugin.Instance.SettingScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
-            element = doc.CreateElement("export_pmx");
-            element.InnerText = Plugin.Instance.ExportPmxPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
-            root.AppendChild(element);
-
-            element = doc.CreateElement("export_vmd");
-            element.InnerText = Plugin.Instance.ExportVmdPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element = doc.CreateElement("export");
+            element.InnerText = Plugin.Instance.ExportDirPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("model_name");

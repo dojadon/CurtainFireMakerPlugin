@@ -20,10 +20,19 @@ namespace CurtainFireMakerPlugin
         public bool IsPlugin { get; }
         public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
 
+        public string ScriptFileName
+        {
+            get
+            {
+                string[] split = ScriptPath.Split('\\');
+                return split[split.Length - 1];
+            }
+        }
         public string ScriptPath { get; set; }
         public string SettingScriptPath { get; set; }
         public string ExportPmxPath { get; set; }
         public string ExportVmdPath { get; set; }
+        public string ExportDirPath { get; set; }
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
         public bool KeepLogOpen { get; set; }
@@ -73,8 +82,7 @@ namespace CurtainFireMakerPlugin
                 var form = new ExportSettingForm();
 
                 form.ScriptPath = this.ScriptPath;
-                form.ExportPmx = this.ExportPmxPath;
-                form.ExportVmd = this.ExportVmdPath;
+                form.ExportDirPath = this.ExportDirPath;
                 form.ModelName = this.ModelName;
                 form.ModelDescription = this.ModelDescription;
                 form.KeepLogOpen = this.KeepLogOpen;
@@ -84,8 +92,7 @@ namespace CurtainFireMakerPlugin
                 if (form.DialogResult == DialogResult.OK)
                 {
                     this.ScriptPath = form.ScriptPath;
-                    this.ExportPmxPath = form.ExportPmx;
-                    this.ExportVmdPath = form.ExportVmd;
+                    this.ExportDirPath = form.ExportDirPath;
                     this.ModelName = form.ModelName;
                     this.ModelDescription = form.ModelDescription;
                     this.KeepLogOpen = form.KeepLogOpen;
@@ -151,33 +158,41 @@ namespace CurtainFireMakerPlugin
 
         private void ExportPmx(World world)
         {
-            string exportPath = this.ExportPmxPath;
+            string fileName = ScriptFileName.Replace(".py", "");
+            string exportPath = this.ExportDirPath + "\\" + fileName + ".pmx";
             File.Delete(exportPath);
 
-            var exporter = new PmxExporter(new FileStream(exportPath, FileMode.Create, FileAccess.Write));
+            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
+            {
+                var exporter = new PmxExporter(stream);
 
-            var data = new PmxModelData();
-            world.model.GetData(data);
+                var data = new PmxModelData();
+                world.model.GetData(data);
 
-            data.Header.modelName = this.ModelName;
-            data.Header.description += this.ModelDescription;
+                data.Header.modelName = this.ModelName;
+                data.Header.description += this.ModelDescription;
 
-            exporter.Export(data);
+                exporter.Export(data);
+            }
         }
 
         private void ExportVmd(World world)
         {
-            string exportPath = this.ExportVmdPath;
+            string fileName = ScriptFileName.Replace(".py", "");
+            string exportPath = this.ExportDirPath + "\\" + fileName + ".vmd";
             File.Delete(exportPath);
 
-            var exporter = new VmdExporter(new FileStream(exportPath, FileMode.Create, FileAccess.Write));
+            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
+            {
+                var exporter = new VmdExporter(stream);
 
-            var data = new VmdMotionData();
-            world.motion.GetData(data);
+                var data = new VmdMotionData();
+                world.motion.GetData(data);
 
-            data.Header.modelName = this.ModelName;
+                data.Header.modelName = this.ModelName;
 
-            exporter.Export(data);
+                exporter.Export(data);
+            }
         }
     }
 }

@@ -16,6 +16,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public double z;
         public double w;
 
+        public double Length => Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+
         public Vector3 Vec
         {
             get { return new Vector3(x, y, z); }
@@ -38,6 +40,11 @@ namespace CurtainFireMakerPlugin.Mathematics
         }
 
         public Quaternion(Quaternion q1) : this(q1.x, q1.y, q1.z, q1.w)
+        {
+
+        }
+
+        public Quaternion(Vector3 v1, double w) : this(v1.x, v1.y, v1.z, w)
         {
 
         }
@@ -180,24 +187,19 @@ namespace CurtainFireMakerPlugin.Mathematics
                     q1.w = val;
                     break;
             }
-
             return q1;
+        }
+
+        public static Quaternion Scale(Quaternion q1, double scale)
+        {
+            return new Quaternion(q1.x * scale, q1.y * scale, q1.z * scale, q1.w * scale);
         }
 
         public static Quaternion Pow(Quaternion q1, double exponent)
         {
             var q2 = new Quaternion();
 
-            double alpha1 = Math.Acos(q1.w);
-            double alpha2 = alpha1 * exponent;
 
-            q2.w = Math.Cos(alpha2);
-
-            double mult = Math.Sin(alpha1) / Math.Sin(alpha2);
-
-            q2.x = q1.x * mult;
-            q2.y = q1.y * mult;
-            q2.z = q1.z * mult;
 
             return q2;
         }
@@ -280,6 +282,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static Quaternion operator ~(Quaternion q1) => Inverse(q1);
 
         public static Quaternion operator *(Quaternion q1, Quaternion q2) => Mul(q1, q2);
+
+        public static Quaternion operator *(Quaternion q1, double d1) => Scale(q1, d1);
 
         public static Quaternion operator ^(Quaternion q1, double d1) => Pow(q1, d1);
 

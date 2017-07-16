@@ -72,9 +72,9 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 return;
             }
-            
+
             MultiDictionary<int[], TimeLineRow> rowMap = new MultiDictionary<int[], TimeLineRow>(new IntegerArrayEqualityComparer());
-            
+
             var pmxModel = this.world.model;
 
             foreach (TimeLineRow row in this.rowList)
@@ -125,6 +125,8 @@ namespace CurtainFireMakerPlugin.Entities
                     {
                         morph.morphArray[i].Index = indices[i];
                     }
+
+
                 }
             }
         }
@@ -165,6 +167,20 @@ namespace CurtainFireMakerPlugin.Entities
             }
 
             return false;
+        }
+    }
+
+    internal class MaterialEqualityComparer : IEqualityComparer<PmxMaterialData>
+    {
+        public bool Equals(PmxMaterialData x, PmxMaterialData y)
+        {
+            return x.flag == y.flag && x.diffuse == y.diffuse && x.specular == y.specular && x.ambient == y.ambient
+             && x.shininess == y.shininess && x.textureId == y.textureId && x.sphereId == y.sphereId; 
+        }
+
+        public int GetHashCode(PmxMaterialData obj)
+        {
+            return obj.diffuse.GetHashCode();
         }
     }
 
