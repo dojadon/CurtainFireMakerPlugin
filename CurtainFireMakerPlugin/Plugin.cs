@@ -144,6 +144,8 @@ namespace CurtainFireMakerPlugin
 
         public void RunScript(string path, ProgressForm form)
         {
+            World.WorldList.Clear();
+
             PythonRunner.RunSpellScript(path);
 
             form.Progress.Minimum = 0;
@@ -185,6 +187,13 @@ namespace CurtainFireMakerPlugin
                 data.Header.description += this.ModelDescription;
 
                 exporter.Export(data);
+
+                Console.WriteLine("出力完了 : " + fileName);
+                Console.WriteLine("頂点数 : " + data.VertexArray.Length);
+                Console.WriteLine("面数 : " + (data.VertexIndices.Length / 3));
+                Console.WriteLine("材質数 : " + data.MaterialArray.Length);
+                Console.WriteLine("ボーン数 : " + data.BoneArray.Length);
+                Console.WriteLine("モーフ数 : " + data.MorphArray.Length);
             }
         }
 
