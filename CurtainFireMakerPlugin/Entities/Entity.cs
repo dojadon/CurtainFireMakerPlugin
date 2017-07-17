@@ -12,10 +12,10 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity
     {
-        private Matrix worldMat = new Matrix();
+        private Matrix worldMat = Matrix.Identity;
         public Matrix WorldMat => worldMat;
-        public Vector3 WorldPos { get { return (Vector3)WorldMat; } }
-        public Quaternion WorldRot { get { return WorldMat; } }
+        public Vector3 WorldPos => (Vector3)WorldMat;
+        public Quaternion WorldRot => WorldMat;
 
         private Vector3 spawnPos = new Vector3();
         public Vector3 SpawnPos => this.spawnPos;
@@ -54,7 +54,7 @@ namespace CurtainFireMakerPlugin.Entities
         internal virtual void Frame()
         {
             this.PrevPos = this.Pos;
-            this.PrevRot = this.PrevRot;
+            this.PrevRot = this.Rot;
             this.PrevUpward = this.Upward;
             this.PrevVelocity = this.Velocity;
 

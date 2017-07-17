@@ -11,7 +11,24 @@ namespace CurtainFireMakerPlugin.Entities
     public class EntityShot : Entity
     {
         public ShotProperty Property { get; }
-        public Entity ParentEntity { get => this.parentEntity; set { this.parentEntity = value; } }
+        public Entity ParentEntity
+        {
+            get => this.parentEntity;
+            set
+            {
+                this.parentEntity = value;
+
+                if (value is EntityShot)
+                {
+                    EntityShot entity = (EntityShot)value;
+
+                    if(entity.Property.Type.HasMmdData())
+                    {
+                        this.rootBone.parentId = this.world.model.GetBoneId(entity.rootBone);
+                    }
+                }
+            }
+        }
 
         public PmxBoneData rootBone;
         public PmxBoneData[] bones;

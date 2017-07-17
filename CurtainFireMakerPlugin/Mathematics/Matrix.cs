@@ -81,6 +81,10 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var m1 = Identity;
 
+            if (q == Quaternion.Identity)
+            {
+                return m1;
+            }
             double xx = q.x * q.x;
             double yy = q.y * q.y;
             double zz = q.z * q.z;

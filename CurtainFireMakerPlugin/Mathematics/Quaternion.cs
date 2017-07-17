@@ -7,6 +7,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 {
     public struct Quaternion
     {
+        public static readonly Quaternion Identity = new Quaternion(0, 0, 0, 1);
         private const double EPS = 1.0e-12;
         private const double EPS2 = 1.0e-30;
         private const double PIO2 = 1.57079632679;
@@ -269,6 +270,11 @@ namespace CurtainFireMakerPlugin.Mathematics
                 hashCode = (hashCode * 397) ^ w.GetHashCode();
                 return hashCode;
             }
+        }
+
+        public override string ToString()
+        {
+            return "[" + x + ", " + y + ", " + z + ", " + w + "]";
         }
 
         public static bool operator ==(Quaternion q1, Quaternion q2) => q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w;

@@ -65,7 +65,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override PmxBoneData[] GetBones(ShotProperty property)
         {
-            return null;
+            return new PmxBoneData[] { new PmxBoneData() };
         }
 
         public override PmxMaterialData[] GetMaterials(ShotProperty property)

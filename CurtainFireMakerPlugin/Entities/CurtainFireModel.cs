@@ -107,6 +107,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        public int GetBoneId(PmxBoneData bone) => this.boneList.IndexOf(bone);
+
         public void GetData(PmxModelData data)
         {
             var header = new PmxHeaderData();
