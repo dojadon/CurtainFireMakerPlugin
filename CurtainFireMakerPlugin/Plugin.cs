@@ -189,11 +189,11 @@ namespace CurtainFireMakerPlugin
                 exporter.Export(data);
 
                 Console.WriteLine("出力完了 : " + fileName);
-                Console.WriteLine("頂点数 : " + data.VertexArray.Length);
-                Console.WriteLine("面数 : " + (data.VertexIndices.Length / 3));
-                Console.WriteLine("材質数 : " + data.MaterialArray.Length);
-                Console.WriteLine("ボーン数 : " + data.BoneArray.Length);
-                Console.WriteLine("モーフ数 : " + data.MorphArray.Length);
+                Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
+                Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
+                Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
+                Console.WriteLine("ボーン数 : " + String.Format("{0:#,0}", data.BoneArray.Length));
+                Console.WriteLine("モーフ数 : " + String.Format("{0:#,0}", data.MorphArray.Length));
             }
         }
 

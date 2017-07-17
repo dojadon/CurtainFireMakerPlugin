@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Entities;
+using CurtainFireMakerPlugin.Tasks;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin
 {
@@ -21,6 +24,8 @@ namespace CurtainFireMakerPlugin
         internal readonly ShotManager shotManager;
         internal readonly CurtainFireModel model;
         internal readonly CurtainFireMotion motion;
+
+        private readonly TaskManager taskManager = new TaskManager();
 
         public World()
         {
@@ -52,6 +57,8 @@ namespace CurtainFireMakerPlugin
 
         internal void Frame()
         {
+            this.taskManager.Frame();
+
             this.EntityList.AddRange(this.addEntityList);
             this.removeEntityList.ForEach(e => this.EntityList.Remove(e));
 
@@ -67,6 +74,28 @@ namespace CurtainFireMakerPlugin
         internal void Finish()
         {
             this.shotManager.Build();
+        }
+
+        public void AddTask(Task task)
+        {
+            this.taskManager.AddTask(task);
+        }
+
+        public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
+        {
+            this.AddTask(new Task(task, interval, executeTimes, waitTime));
+        }
+
+        public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
+        {
+            if (withArg)
+            {
+                this.AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
+            }
+            else
+            {
+                this.AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
+            }
         }
     }
 }
