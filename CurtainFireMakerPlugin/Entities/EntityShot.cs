@@ -18,14 +18,11 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 this.parentEntity = value;
 
-                if (value is EntityShot)
-                {
-                    EntityShot entity = (EntityShot)value;
+                EntityShot entity = value as EntityShot;
 
-                    if(entity.Property.Type.HasMmdData())
-                    {
-                        this.rootBone.parentId = this.world.model.GetBoneId(entity.rootBone);
-                    }
+                if (entity != null && entity.Property.Type.RecordMotion())
+                {
+                    this.rootBone.parentId = entity.rootBone.boneId;
                 }
             }
         }

@@ -90,15 +90,15 @@ namespace CurtainFireMakerPlugin.Mathematics
             double zz = q.z * q.z;
 
             m1.m00 = 1 - 2 * (yy + zz);
-            m1.m01 = 2 * (q.x * q.y + q.w * q.z);
-            m1.m02 = 2 * (q.x * q.z - q.w * q.y);
+            m1.m10 = 2 * (q.x * q.y + q.w * q.z);
+            m1.m20 = 2 * (q.x * q.z - q.w * q.y);
 
-            m1.m10 = 2 * (q.x * q.y - q.w * q.z);
+            m1.m01 = 2 * (q.x * q.y - q.w * q.z);
             m1.m11 = 1 - 2 * (zz + xx);
-            m1.m12 = 2 * (q.y * q.z + q.w * q.x);
+            m1.m21 = 2 * (q.y * q.z + q.w * q.x);
 
-            m1.m20 = 2 * (q.x * q.z + q.w * q.y);
-            m1.m21 = 2 * (q.y * q.z - q.w * q.x);
+            m1.m02 = 2 * (q.x * q.z + q.w * q.y);
+            m1.m12 = 2 * (q.y * q.z - q.w * q.x);
             m1.m22 = 1 - 2 * (xx + yy);
 
             return m1;
