@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.ShotTypes;
+using CurtainFireMakerPlugin.Mathematics;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     public class ShotProperty
     {
-        private readonly int color;
-        public int Color => color;
-        public float Red => (color >> 16 & 0x000000FF) / 255.0F;
-        public float Green => (color >> 8 & 0x000000FF) / 255.0F;
-        public float Blue => (color >> 0 & 0x000000FF) / 255.0F;
+        public int Color { get; }
+        public float Red => (Color >> 16 & 0x000000FF) / 255.0F;
+        public float Green => (Color >> 8 & 0x000000FF) / 255.0F;
+        public float Blue => (Color >> 0 & 0x000000FF) / 255.0F;
 
-        private readonly ShotType type;
-        public ShotType Type => type;
+        public ShotType Type { get; }
+        public Vector3 Size { get; set; } = new Vector3(1, 1, 1);
 
         public ShotProperty(string typeName, int color) : this(ShotTypeList.GetShotType(typeName), color)
         {
@@ -23,8 +23,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotProperty(ShotType type, int color)
         {
-            this.color = color;
-            this.type = type;
+            this.Color = color;
+            this.Type = type;
         }
 
         public override bool Equals(object obj)
@@ -43,6 +43,14 @@ namespace CurtainFireMakerPlugin.Entities
             return this.Equals((ShotProperty)obj);
         }
 
-        public bool Equals(ShotProperty p) => p.Color == this.color && this.Type.Name.Equals(p.type.Name);
+        public bool Equals(ShotProperty p)
+        {
+            return p.Color == Color && Type.Name == p.Type.Name && Size == p.Size;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

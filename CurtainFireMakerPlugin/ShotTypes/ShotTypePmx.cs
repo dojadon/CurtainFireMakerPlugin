@@ -2,6 +2,7 @@
 using CsPmx;
 using CsPmx.Data;
 using CurtainFireMakerPlugin.Entities;
+using CurtainFireMakerPlugin.Mathematics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -10,9 +11,13 @@ namespace CurtainFireMakerPlugin.ShotTypes
     public class ShotTypePmx : ShotType
     {
         private PmxModelData data = new PmxModelData();
-        private double scale;
+        private Vector3 scale;
 
-        public ShotTypePmx(string name, string path, double scale) : base(name)
+        public ShotTypePmx(string name, string path, double scale) : this(name, path, new Vector3(scale, scale, scale))
+        {
+        }
+
+        public ShotTypePmx(string name, string path, Vector3 scale) : base(name)
         {
             var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
@@ -31,7 +36,9 @@ namespace CurtainFireMakerPlugin.ShotTypes
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = DeepCopy(this.data.VertexArray[i]);
-                result[i].pos *= (float)this.scale;
+                result[i].pos.X *= (float)(this.scale.x * property.Size.x);
+                result[i].pos.Y *= (float)(this.scale.y * property.Size.y);
+                result[i].pos.Z *= (float)(this.scale.z * property.Size.z);
             }
             return result;
         }
