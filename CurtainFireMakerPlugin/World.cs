@@ -11,34 +11,33 @@ namespace CurtainFireMakerPlugin
 {
     public class World
     {
-        private static List<World> worldList = new List<World>();
-        public static List<World> WorldList => worldList;
+        public static List<World> WorldList { get; } = new List<World>();
 
-        public static int MAX_FRAME = 1000;
+        public static int MaxFrame { get; set; } = 1000;
 
         private List<Entity> addEntityList = new List<Entity>();
         private List<Entity> removeEntityList = new List<Entity>();
         public List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
-        internal readonly ShotManager shotManager;
-        internal readonly CurtainFireModel model;
-        internal readonly CurtainFireMotion motion;
+        internal ShotManager ShotManager { get; }
+        internal CurtainFireModel PmxModel { get; }
+        internal CurtainFireMotion VmdMotion { get; }
 
         private readonly TaskManager taskManager = new TaskManager();
 
         public World()
         {
-            worldList.Add(this);
+            WorldList.Add(this);
 
-            shotManager = new ShotManager(this);
-            model = new CurtainFireModel();
-            motion = new CurtainFireMotion();
+            ShotManager = new ShotManager(this);
+            PmxModel = new CurtainFireModel();
+            VmdMotion = new CurtainFireMotion();
         }
 
-        internal void AddShot(EntityShot entity)
+        internal ShotModelData AddShot(EntityShot entity)
         {
-            this.shotManager.AddEntity(entity);
+            return this.ShotManager.AddEntity(entity);
         }
 
         internal int AddEntity(Entity entity)
@@ -73,7 +72,7 @@ namespace CurtainFireMakerPlugin
 
         internal void Finish()
         {
-            this.shotManager.Build();
+            this.ShotManager.Build();
         }
 
         public void AddTask(Task task)

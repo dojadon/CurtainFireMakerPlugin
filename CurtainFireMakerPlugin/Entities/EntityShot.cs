@@ -18,18 +18,16 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 this.parentEntity = value;
 
-                EntityShot entity = value as EntityShot;
-
-                if (entity != null && entity.Property.Type.RecordMotion())
+                if (value is EntityShot entity && entity.Property.Type.RecordMotion())
                 {
-                    this.rootBone.parentId = entity.rootBone.boneId;
+                    this.RootBone.parentId = entity.RootBone.boneId;
                 }
             }
         }
 
-        public PmxBoneData rootBone;
-        public PmxBoneData[] bones;
-        public PmxMorphData materialMorph;
+        public PmxBoneData RootBone { get; }
+        public PmxBoneData[] Bones { get; }
+        public PmxMorphData MaterialMorph { get; }
 
         private delegate bool RecordMotion(EntityShot entity);
         private static RecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
@@ -57,7 +55,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             this.Property.Type.Init(this);
 
-            this.world.AddShot(this);
+            ShotModelData data = this.world.AddShot(this);
         }
 
         internal override void Frame()
@@ -114,12 +112,17 @@ namespace CurtainFireMakerPlugin.Entities
             base.RemoveMotionBezier();
         }
 
+        public void AddVertexMorph(Func<Vector3, Vector3> func)
+        {
+            var morph = new PmxMorphData();
+        }
+
         public void AddVmdMotion(bool replace = false)
         {
             this.UpdateRot();
 
             var motion = new VmdMotionFrameData();
-            motion.boneName = this.rootBone.boneName;
+            motion.boneName = this.RootBone.boneName;
             motion.keyFrameNo = this.world.FrameCount;
             motion.pos = (DxMath.Vector3)this.Pos;
             motion.rot = (DxMath.Quaternion)this.Rot;
@@ -137,17 +140,17 @@ namespace CurtainFireMakerPlugin.Entities
                 motion.interpolatePointX = motion.interpolatePointY = motion.interpolatePointZ = motion.interpolatePointR = interpolation;
             }
 
-            this.world.motion.AddVmdMotion(motion, replace);
+            this.world.VmdMotion.AddVmdMotion(motion, replace);
         }
 
         public void AddVmdMorph(int frameOffset, float rate)
         {
             var morph = new VmdMorphFrameData();
-            morph.morphName = this.materialMorph.morphName;
+            morph.morphName = this.MaterialMorph.morphName;
             morph.keyFrameNo = this.world.FrameCount + frameOffset;
             morph.rate = rate;
 
-            this.world.motion.AddVmdMorph(morph);
+            this.world.VmdMotion.AddVmdMorph(morph);
         }
     }
 }

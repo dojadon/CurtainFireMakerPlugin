@@ -149,12 +149,12 @@ namespace CurtainFireMakerPlugin
             PythonRunner.RunSpellScript(path);
 
             form.Progress.Minimum = 0;
-            form.Progress.Maximum = World.MAX_FRAME;
+            form.Progress.Maximum = World.MaxFrame;
             form.Progress.Step = 1;
 
             List<World> worldList = World.WorldList;
 
-            for (int i = 0; i < World.MAX_FRAME; i++)
+            for (int i = 0; i < World.MaxFrame; i++)
             {
                 worldList.ForEach(w => w.Frame());
                 form.Progress.PerformStep();
@@ -181,7 +181,7 @@ namespace CurtainFireMakerPlugin
                 var exporter = new PmxExporter(stream);
 
                 var data = new PmxModelData();
-                world.model.GetData(data);
+                world.PmxModel.GetData(data);
 
                 data.Header.modelName = this.ModelName;
                 data.Header.description += this.ModelDescription;
@@ -208,7 +208,7 @@ namespace CurtainFireMakerPlugin
                 var exporter = new VmdExporter(stream);
 
                 var data = new VmdMotionData();
-                world.motion.GetData(data);
+                world.VmdMotion.GetData(data);
 
                 data.Header.modelName = this.ModelName;
 

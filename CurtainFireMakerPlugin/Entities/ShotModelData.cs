@@ -8,26 +8,25 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class ShotModelData
     {
-        public PmxMorphData morph = new PmxMorphData();
+        public PmxMorphData Morph { get; } = new PmxMorphData();
 
-        public PmxBoneData[] bones;
-        public PmxVertexData[] vertices;
-        public int[] indices;
-        public PmxMaterialData[] materials;
-        public String[] textures;
+        public PmxBoneData[] Bones { get; }
+        public PmxVertexData[] Vertices { get; }
+        public int[] Indices { get; }
+        public PmxMaterialData[] Materials { get; }
+        public String[] Textures { get; }
 
-        private readonly ShotProperty property;
-        public ShotProperty Property => this.property;
+        public ShotProperty Property { get; }
 
         public ShotModelData(ShotProperty property)
         {
-            this.property = property;
+            this.Property = property;
 
-            this.bones = this.Property.Type.GetBones(this.Property);
-            this.vertices = this.Property.Type.GetVertices(this.Property);
-            this.indices = this.Property.Type.GetVertexIndices(this.Property);
-            this.materials = this.Property.Type.GetMaterials(this.Property);
-            this.textures = this.Property.Type.GetTextures(this.Property);
+            this.Bones = this.Property.Type.GetBones(this.Property);
+            this.Vertices = this.Property.Type.GetVertices(this.Property);
+            this.Indices = this.Property.Type.GetVertexIndices(this.Property);
+            this.Materials = this.Property.Type.GetMaterials(this.Property);
+            this.Textures = this.Property.Type.GetTextures(this.Property);
         }
     }
 }

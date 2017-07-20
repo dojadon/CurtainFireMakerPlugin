@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotType Type { get; }
         public Vector3 Size { get; set; } = new Vector3(1, 1, 1);
-
+        
         public ShotProperty(string typeName, int color) : this(ShotTypeList.GetShotType(typeName), color)
         {
         }

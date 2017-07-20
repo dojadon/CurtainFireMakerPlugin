@@ -12,112 +12,128 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class ShotManager
     {
-        private Dictionary<ShotType, TimeLine> timelineMap = new Dictionary<ShotType, TimeLine>();
-        private readonly World world;
+        private Dictionary<ShotType, ShotTypeGroup> TypeGroupMap { get; } = new Dictionary<ShotType, ShotTypeGroup>();
+        private World World { get; }
 
         public ShotManager(World world)
         {
-            this.world = world;
+            this.World = world;
         }
 
-        public void AddEntity(EntityShot entity)
+        public ShotModelData AddEntity(EntityShot entity)
         {
-            if (!this.timelineMap.ContainsKey(entity.Property.Type))
+            if (!this.TypeGroupMap.ContainsKey(entity.Property.Type))
             {
-                this.timelineMap[entity.Property.Type] = new TimeLine(entity.Property.Type, this.world);
+                this.TypeGroupMap[entity.Property.Type] = new ShotTypeGroup(entity.Property.Type, this.World);
             }
-            this.timelineMap[entity.Property.Type].AddEntity(entity);
+
+            ShotTypeGroup typeGroup = this.TypeGroupMap[entity.Property.Type];
+
+            ShotModelData data = typeGroup.AddEntityToGroup(entity);
+            if (data == null)
+            {
+                data = typeGroup.CreateGroup(entity);
+                this.World.PmxModel.InitShotModelData(data);
+            }
+
+            return data;
         }
 
         public void Build()
         {
-            foreach (var timeline in this.timelineMap.Values)
+            foreach (var typeGroup in this.TypeGroupMap.Values)
             {
-                timeline.Build();
+                typeGroup.Build();
             }
         }
     }
 
-    internal class TimeLine
+    internal class ShotTypeGroup
     {
-        private readonly ShotType type;
-        private List<TimeLineRow> rowList = new List<TimeLineRow>();
+        private ShotType Type { get; }
+        private List<ShotGroup> GroupList { get; } = new List<ShotGroup>();
 
-        private readonly World world;
+        private World World { get; }
 
-        public TimeLine(ShotType type, World world)
+        public ShotTypeGroup(ShotType type, World world)
         {
-            this.type = type;
-            this.world = world;
+            this.Type = type;
+            this.World = world;
         }
 
-        public void AddEntity(EntityShot entity)
+        public ShotModelData AddEntityToGroup(EntityShot entity)
         {
-            if (this.type.Equals(entity.Property.Type))
+            foreach (ShotGroup group in this.GroupList)
             {
-                foreach (TimeLineRow r in this.rowList)
+                if(group.IsAddable(entity))
                 {
-                    if (r.AddEntity(entity)) { return; }
+                    group.AddEntity(entity);
+                    return group.Data;
                 }
-
-                TimeLineRow row = new TimeLineRow(entity.Property, this.world);
-                row.AddEntity(entity);
-                this.rowList.Add(row);
             }
+            return null;
+        }
+
+        public ShotModelData CreateGroup(EntityShot entity)
+        {
+            ShotGroup group = new ShotGroup(entity.Property);
+            group.AddEntity(entity);
+            this.GroupList.Add(group);
+
+            return group.Data;
         }
 
         public void Build()
         {
-            if (!this.type.HasMmdData())
+            if (!this.Type.HasMmdData())
             {
                 return;
             }
 
-            MultiDictionary<int[], TimeLineRow> rowMap = new MultiDictionary<int[], TimeLineRow>(new IntegerArrayEqualityComparer());
+            MultiDictionary<int[], ShotGroup> groupMap = new MultiDictionary<int[], ShotGroup>(new IntegerArrayEqualityComparer());
+            var pmxModel = this.World.PmxModel;
 
-            var pmxModel = this.world.model;
-
-            foreach (TimeLineRow row in this.rowList)
+            foreach (ShotGroup group in this.GroupList)
             {
                 List<int> keyFrameNoList = new List<int>();
 
                 HashSet<int> spawnFrameSet = new HashSet<int>();
                 HashSet<int> deathFrameSet = new HashSet<int>();
 
-                row.shotList.ForEach(e => spawnFrameSet.Add(e.SpawnFrameNo));
-                row.shotList.ForEach(e => deathFrameSet.Add(e.DeathFrameNo));
+                group.ShotList.ForEach(e => spawnFrameSet.Add(e.SpawnFrameNo));
+                group.ShotList.ForEach(e => deathFrameSet.Add(e.DeathFrameNo));
 
                 keyFrameNoList.AddRange(spawnFrameSet);
                 keyFrameNoList.AddRange(deathFrameSet);
 
                 keyFrameNoList.Sort();
 
-                rowMap.Add(keyFrameNoList.ToArray(), row);
+                groupMap.Add(keyFrameNoList.ToArray(), group);
             }
 
-            foreach (int[] keyFrameNo in rowMap.Keys)
+            foreach (int[] keyFrameNo in groupMap.Keys)
             {
-                TimeLineRow[] rowArr = rowMap[keyFrameNo].ToArray();
+                ShotGroup[] groupArr = groupMap[keyFrameNo].ToArray();
 
-                if (rowArr.Length > 1)
+                if (groupArr.Length > 1)
                 {
-                    for (int i = 1; i < rowArr.Length; i++)
+                    for (int i = 1; i < groupArr.Length; i++)
                     {
-                        pmxModel.morphList.Remove(rowArr[i].data.morph);
+                        pmxModel.morphList.Remove(groupArr[i].Data.Morph);
                     }
 
                     HashSet<int> indicesSet = new HashSet<int>();
 
-                    foreach (TimeLineRow row in rowArr)
+                    foreach (ShotGroup group in groupArr)
                     {
-                        foreach (var material in row.data.materials)
+                        foreach (var material in group.Data.Materials)
                         {
                             indicesSet.Add(pmxModel.materialList.IndexOf(material));
                         }
                     }
 
                     int[] indices = indicesSet.ToArray();
-                    PmxMorphData morph = rowArr[0].data.morph;
+                    PmxMorphData morph = groupArr[0].Data.Morph;
 
                     morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[indices.Length], i => new PmxMorphMaterialData());
 
@@ -125,62 +141,33 @@ namespace CurtainFireMakerPlugin.Entities
                     {
                         morph.morphArray[i].Index = indices[i];
                     }
-
-
                 }
             }
         }
     }
 
-    internal class TimeLineRow
+    internal class ShotGroup
     {
-        public readonly List<EntityShot> shotList = new List<EntityShot>();
-        public readonly ShotModelData data;
+        public List<EntityShot> ShotList { get; } = new List<EntityShot>();
+        public ShotModelData Data { get; }
 
-        private readonly ShotProperty property;
+        private ShotProperty Property { get; }
 
-        private readonly World world;
-
-        public TimeLineRow(ShotProperty property, World world)
+        public ShotGroup(ShotProperty property)
         {
-            this.property = property;
-            this.world = world;
+            this.Property = property;
 
-            this.data = new ShotModelData(this.property);
-            this.world.model.InitShotModelData(this.data);
+            this.Data = new ShotModelData(this.Property);
         }
 
-        private void SetupShot(EntityShot entity)
+        public bool IsAddable(EntityShot entity)
         {
-            entity.rootBone = this.data.bones[0];
-            entity.bones = this.data.bones;
-            entity.materialMorph = this.data.morph;
+            return this.Property.Equals(entity.Property) && !this.ShotList.Exists(e => !e.IsDeath);
         }
 
-        public bool AddEntity(EntityShot entity)
+        public void AddEntity(EntityShot entity)
         {
-            if (this.property.Equals(entity.Property) && !this.shotList.Exists(e => !e.IsDeath))
-            {
-                this.shotList.Add(entity);
-                this.SetupShot(entity);
-                return true;
-            }
-
-            return false;
-        }
-    }
-
-    internal class MaterialEqualityComparer : IEqualityComparer<PmxMaterialData>
-    {
-        public bool Equals(PmxMaterialData x, PmxMaterialData y)
-        {
-            return x.flag == y.flag && x.diffuse == y.diffuse && x.specular == y.specular && x.ambient == y.ambient
-             && x.shininess == y.shininess && x.textureId == y.textureId && x.sphereId == y.sphereId; 
-        }
-
-        public int GetHashCode(PmxMaterialData obj)
-        {
-            return obj.diffuse.GetHashCode();
+            this.ShotList.Add(entity);
         }
     }
 

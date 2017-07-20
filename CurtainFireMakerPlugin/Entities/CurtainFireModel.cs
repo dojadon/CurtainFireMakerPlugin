@@ -36,24 +36,24 @@ namespace CurtainFireMakerPlugin.Entities
                 }
                 else
                 {
-                    this.SetupBone(data.bones[0]);
+                    this.SetupBone(data.Bones[0]);
                 }
             }
         }
 
         private void SetupShotModelData(ShotModelData data)
         {
-            int[] indices = Array.ConvertAll(data.indices, i => i + this.vertexList.Count);
+            int[] indices = Array.ConvertAll(data.Indices, i => i + this.vertexList.Count);
             this.indexList.AddRange(indices);
 
-            PmxVertexData[] vertices = data.vertices;
+            PmxVertexData[] vertices = data.Vertices;
             foreach (var vertex in vertices)
             {
                 vertex.boneId = Array.ConvertAll(vertex.boneId, i => i + this.boneList.Count);
                 this.vertexList.Add(vertex);
             }
 
-            string[] textures = data.textures;
+            string[] textures = data.Textures;
             foreach (var texture in textures)
             {
                 if (!this.textureList.Contains(texture))
@@ -62,8 +62,8 @@ namespace CurtainFireMakerPlugin.Entities
                 }
             }
 
-            PmxMaterialData[] materials = data.materials;
-            PmxMorphData morph = data.morph;
+            PmxMaterialData[] materials = data.Materials;
+            PmxMorphData morph = data.Morph;
             morph.morphName = this.morphList.Count.ToString();
             morph.type = 4;
             morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
@@ -82,7 +82,7 @@ namespace CurtainFireMakerPlugin.Entities
                 material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.textureList.IndexOf(textures[material.textureId]) : -1;
                 this.materialList.Add(material);
             }
-            this.SetupBone(data.bones);
+            this.SetupBone(data.Bones);
         }
 
         private void SetupBone(params PmxBoneData[] data)
