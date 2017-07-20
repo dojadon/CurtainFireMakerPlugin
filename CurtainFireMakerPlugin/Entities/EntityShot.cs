@@ -181,6 +181,7 @@ namespace CurtainFireMakerPlugin.Entities
 
                 vertexMorph.Index = this.world.PmxModel.VertexList.IndexOf(vertex);
                 vertexMorph.Position = (DxMath.Vector3)func(vertex.pos);
+                morph.MorphArray[i] = vertexMorph;
             }
             this.VertexMorph = morph;
             this.world.PmxModel.MorphList.Add(VertexMorph);
