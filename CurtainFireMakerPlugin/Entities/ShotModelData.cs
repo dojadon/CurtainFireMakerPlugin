@@ -8,7 +8,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class ShotModelData
     {
-        public PmxMorphData Morph { get; } = new PmxMorphData();
+        public PmxMorphData MaterialMorph { get; } = new PmxMorphData();
 
         public PmxBoneData[] Bones { get; }
         public PmxVertexData[] Vertices { get; }

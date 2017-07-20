@@ -63,7 +63,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
 
             PmxMaterialData[] materials = data.Materials;
-            PmxMorphData morph = data.Morph;
+            PmxMorphData morph = data.MaterialMorph;
             morph.morphName = this.morphList.Count.ToString();
             morph.type = 4;
             morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());

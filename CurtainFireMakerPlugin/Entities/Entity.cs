@@ -31,7 +31,7 @@ namespace CurtainFireMakerPlugin.Entities
         public Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
         public Vector3 PrevUpward { get; set; } = new Vector3(0, 1, 0);
 
-        protected Entity parentEntity;
+        public virtual Entity ParentEntity { get; set; }
 
         public int FrameCount { get; set; }
         public int LivingLimit { get; set; }
@@ -99,9 +99,9 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.worldMat = (Matrix)this.Rot + this.Pos;
 
-            if (this.parentEntity != null)
+            if (this.ParentEntity != null)
             {
-                this.worldMat = this.parentEntity.WorldMat * this.worldMat;
+                this.worldMat = this.ParentEntity.WorldMat * this.worldMat;
             }
         }
 

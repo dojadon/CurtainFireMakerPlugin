@@ -11,9 +11,11 @@ namespace CurtainFireMakerPlugin.Entities
     public class EntityShot : Entity
     {
         public ShotProperty Property { get; }
-        public Entity ParentEntity
+
+        private Entity parentEntity;
+        public override Entity ParentEntity
         {
-            get => this.parentEntity;
+            get => parentEntity;
             set
             {
                 this.parentEntity = value;
@@ -56,6 +58,9 @@ namespace CurtainFireMakerPlugin.Entities
             this.Property.Type.Init(this);
 
             ShotModelData data = this.world.AddShot(this);
+            Bones = data.Bones;
+            RootBone = Bones[0];
+            MaterialMorph = data.MaterialMorph;
         }
 
         internal override void Frame()

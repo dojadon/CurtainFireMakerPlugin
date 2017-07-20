@@ -26,7 +26,7 @@ namespace CurtainFireMakerPlugin.Entities
                 if (bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
                 {
                     var parentBone = new EntityBone(world, Modelname, bones[bone.ParentBoneID].Name);
-                    this.parentEntity = parentBone;
+                    this.ParentEntity = parentBone;
                 }
 
                 this.OnSpawn();

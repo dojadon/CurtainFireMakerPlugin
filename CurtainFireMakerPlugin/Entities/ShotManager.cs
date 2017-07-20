@@ -119,7 +119,7 @@ namespace CurtainFireMakerPlugin.Entities
                 {
                     for (int i = 1; i < groupArr.Length; i++)
                     {
-                        pmxModel.morphList.Remove(groupArr[i].Data.Morph);
+                        pmxModel.morphList.Remove(groupArr[i].Data.MaterialMorph);
                     }
 
                     HashSet<int> indicesSet = new HashSet<int>();
@@ -133,7 +133,7 @@ namespace CurtainFireMakerPlugin.Entities
                     }
 
                     int[] indices = indicesSet.ToArray();
-                    PmxMorphData morph = groupArr[0].Data.Morph;
+                    PmxMorphData morph = groupArr[0].Data.MaterialMorph;
 
                     morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[indices.Length], i => new PmxMorphMaterialData());
 
