@@ -40,11 +40,11 @@ namespace CurtainFireMakerPlugin.Entities
             return data;
         }
 
-        public void Build()
+        public void CompressMorph()
         {
             foreach (var typeGroup in this.TypeGroupDict.Values)
             {
-                typeGroup.Build();
+                typeGroup.Compress();
             }
         }
     }
@@ -84,7 +84,7 @@ namespace CurtainFireMakerPlugin.Entities
             return group.Data;
         }
 
-        public void Build()
+        public void Compress()
         {
             if (!this.Type.HasMmdData())
             {
@@ -97,7 +97,7 @@ namespace CurtainFireMakerPlugin.Entities
             var typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
             foreach (var morph in vmdMotion.MorphDict.Keys)
             {
-                typeMorphDict.Add(morph.type, morph);
+                typeMorphDict.Add(morph.Type, morph);
             }
 
             foreach (var morphList in typeMorphDict.Values)
@@ -165,50 +165,6 @@ namespace CurtainFireMakerPlugin.Entities
         public void AddEntity(EntityShot entity)
         {
             this.ShotList.Add(entity);
-        }
-    }
-
-    internal class MorphFrameDataComparer : IEqualityComparer<VmdMorphFrameData[]>
-    {
-        public bool Equals(VmdMorphFrameData x, VmdMorphFrameData y)
-        {
-            return x.keyFrameNo == y.keyFrameNo;
-        }
-
-        public bool Equals(VmdMorphFrameData[] x, VmdMorphFrameData[] y)
-        {
-            if (x.Length != y.Length)
-            {
-                return false;
-            }
-            for (int i = 0; i < x.Length; i++)
-            {
-                if (!Equals(x[i], y[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public int GetHashCode(VmdMorphFrameData[] obj)
-        {
-            int result = 17;
-            for (int i = 0; i < obj.Length; i++)
-            {
-                unchecked
-                {
-                    result = result * 23 + obj[i].GetHashCode();
-                }
-            }
-            return result;
-        }
-
-        public int GetHashCode(VmdMorphFrameData obj)
-        {
-            int result = 17;
-            result = 31 * result + obj.keyFrameNo;
-            return result;
         }
     }
 

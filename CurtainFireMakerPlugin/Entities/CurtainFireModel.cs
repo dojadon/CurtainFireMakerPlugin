@@ -64,8 +64,8 @@ namespace CurtainFireMakerPlugin.Entities
 
             PmxMaterialData[] materials = data.Materials;
             PmxMorphData morph = data.MaterialMorph;
-            morph.morphName = this.MorphList.Count.ToString();
-            morph.type = 4;
+            morph.MorphName = this.MorphList.Count.ToString();
+            morph.Type = 4;
             morph.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
 
             for (int i = 0; i < materials.Length; i++)
@@ -76,10 +76,10 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (PmxMaterialData material in materials)
             {
-                material.materialName = this.MaterialList.Count.ToString();
-                material.diffuse = new DxMath.Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
-                material.ambient = new DxMath.Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
-                material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.TextureList.IndexOf(textures[material.textureId]) : -1;
+                material.MaterialName = this.MaterialList.Count.ToString();
+                material.Diffuse = new DxMath.Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
+                material.Ambient = new DxMath.Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
+                material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? this.TextureList.IndexOf(textures[material.TextureId]) : -1;
                 this.MaterialList.Add(material);
             }
             this.SetupBone(data.Bones);

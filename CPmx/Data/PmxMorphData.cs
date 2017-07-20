@@ -15,18 +15,18 @@ namespace CsPmx.Data
         public const byte MORPHTYPE_EXUV_4 = 7;
         public const byte MORPHTYPE_MATERIAL = 8;
 
-        public String morphName = "";
-        public String morphNameE = "";
-        public byte type;
+        public String MorphName { get; set; } = "";
+        public String MorphNameE { get; set; } = "";
+        public byte Type { get; set; }
 
-        public IPmxMorphTypeData[] MorphArray{ get; set; }
+        public IPmxMorphTypeData[] MorphArray { get; set; }
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(this.morphName);
-            exporter.WritePmxText(this.morphNameE);
+            exporter.WritePmxText(this.MorphName);
+            exporter.WritePmxText(this.MorphNameE);
 
-            exporter.Write(this.type);
+            exporter.Write(this.Type);
 
             byte morphType = this.MorphArray[0].GetMorphType();
             exporter.Write(morphType);
@@ -42,10 +42,10 @@ namespace CsPmx.Data
 
         public void Parse(PmxParser parser)
         {
-            this.morphName = parser.ReadPmxText();
-            this.morphName = parser.ReadPmxText();
+            this.MorphName = parser.ReadPmxText();
+            this.MorphName = parser.ReadPmxText();
 
-            this.type = parser.ReadByte();
+            this.Type = parser.ReadByte();
 
             byte morphType = parser.ReadByte();
 

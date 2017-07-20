@@ -9,8 +9,8 @@ namespace CsPmx.Data
     [Serializable]
     public class PmxMaterialData : IPmxData
     {
-        public String materialName = "";
-        public String materialNameE = "";
+        public String MaterialName { get; set; } = "";
+        public String MaterialNameE { get; set; } = "";
 
         public String script = "";
 
@@ -24,18 +24,18 @@ namespace CsPmx.Data
          * <li>0x10:エッジ描画
          * </ul>
          */
-        public byte flag;
+        public byte Flag { get; set; }
 
-        public Vector4 edge = new Vector4();
-        public float edgeThick;
+        public Vector4 Edge { get; set; } = new Vector4();
+        public float EdgeThick { get; set; }
 
-        public Vector4 diffuse = new Vector4();
-        public Vector3 specular = new Vector3();
-        public Vector3 ambient = new Vector3();
-        public float shininess;
+        public Vector4 Diffuse { get; set; } = new Vector4();
+        public Vector3 Specular { get; set; } = new Vector3();
+        public Vector3 Ambient { get; set; } = new Vector3();
+        public float Shininess { get; set; }
 
-        public int textureId;
-        public int sphereId;
+        public int TextureId { get; set; }
+        public int SphereId { get; set; }
         /**
          * スフィアモード
          * <ul>
@@ -45,79 +45,79 @@ namespace CsPmx.Data
          * <li>3:サブテクスチャ(追加UV1のx,yをUV参照して通常テクスチャ描画を行う)
          * </ul>
          */
-        public byte mode;
+        public byte Mode { get; set; }
         /** 0: トゥーンはテクスチャーファイル. 1: 共有ファイル. */
-        public byte sharedToon;
+        public byte SharedToon { get; set; }
         /** トゥーンファイル番号。 shared:1 では, 0ならtoon01.bmp, 9ならtoon10.bmp. 0xffならtoon0.bmp. shared:0 では, texture ID. */
-        public int toonId;
-        public int faceCount;
+        public int ToonId { get; set; }
+        public int FaceCount { get; set; }
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(this.materialName);
-            exporter.WritePmxText(this.materialNameE);
+            exporter.WritePmxText(this.MaterialName);
+            exporter.WritePmxText(this.MaterialNameE);
 
-            exporter.Write(this.diffuse);
-            exporter.Write(this.specular);
-            exporter.Write(this.shininess);
-            exporter.Write(this.ambient);
+            exporter.Write(this.Diffuse);
+            exporter.Write(this.Specular);
+            exporter.Write(this.Shininess);
+            exporter.Write(this.Ambient);
 
-            exporter.Write(this.flag);
+            exporter.Write(this.Flag);
 
-            exporter.Write(this.edge);
-            exporter.Write(this.edgeThick);
+            exporter.Write(this.Edge);
+            exporter.Write(this.EdgeThick);
 
-            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.textureId);
-            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.sphereId);
-            exporter.Write(this.mode);
-            exporter.Write(this.sharedToon);
+            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.TextureId);
+            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.SphereId);
+            exporter.Write(this.Mode);
+            exporter.Write(this.SharedToon);
 
-            if (this.sharedToon == 0)
+            if (this.SharedToon == 0)
             {
-                exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.toonId);
+                exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.ToonId);
             }
             else
             {
-                exporter.Write((byte)this.toonId);
+                exporter.Write((byte)this.ToonId);
             }
 
             exporter.WritePmxText(this.script);
 
-            exporter.Write(this.faceCount);
+            exporter.Write(this.FaceCount);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.materialName = parser.ReadPmxText();
-            this.materialNameE = parser.ReadPmxText();
+            this.MaterialName = parser.ReadPmxText();
+            this.MaterialNameE = parser.ReadPmxText();
 
-            this.diffuse = parser.ReadVector4();
-            this.specular = parser.ReadVector3();
-            this.shininess = parser.ReadSingle();
-            this.ambient = parser.ReadVector3();
+            this.Diffuse = parser.ReadVector4();
+            this.Specular = parser.ReadVector3();
+            this.Shininess = parser.ReadSingle();
+            this.Ambient = parser.ReadVector3();
 
-            this.flag = parser.ReadByte();
+            this.Flag = parser.ReadByte();
 
-            this.edge = parser.ReadVector4();
-            this.edgeThick = parser.ReadSingle();
+            this.Edge = parser.ReadVector4();
+            this.EdgeThick = parser.ReadSingle();
 
-            this.textureId = parser.ReadPmxId(parser.SizeTexture);
-            this.sphereId = parser.ReadPmxId(parser.SizeTexture);
-            this.mode = parser.ReadByte();
-            this.sharedToon = parser.ReadByte();
+            this.TextureId = parser.ReadPmxId(parser.SizeTexture);
+            this.SphereId = parser.ReadPmxId(parser.SizeTexture);
+            this.Mode = parser.ReadByte();
+            this.SharedToon = parser.ReadByte();
 
-            if (this.sharedToon == 0)
+            if (this.SharedToon == 0)
             {
-                this.toonId = parser.ReadPmxId(parser.SizeTexture);
+                this.ToonId = parser.ReadPmxId(parser.SizeTexture);
             }
             else
             {
-                this.toonId = parser.ReadByte();
+                this.ToonId = parser.ReadByte();
             }
 
             this.script = parser.ReadPmxText();
 
-            this.faceCount = parser.ReadInt32();
+            this.FaceCount = parser.ReadInt32();
         }
     }
 }

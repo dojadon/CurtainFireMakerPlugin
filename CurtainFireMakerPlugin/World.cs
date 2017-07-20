@@ -72,7 +72,7 @@ namespace CurtainFireMakerPlugin
 
         internal void Finish()
         {
-            this.ShotManager.Build();
+            this.ShotManager.CompressMorph();
         }
 
         public void AddTask(Task task)

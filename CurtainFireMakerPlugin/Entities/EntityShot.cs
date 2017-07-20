@@ -5,6 +5,8 @@ using System.Text;
 using CurtainFireMakerPlugin.Mathematics;
 using CsPmx.Data;
 using CsVmd.Data;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -27,9 +29,11 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        internal ShotModelData ModelData { get; }
         public PmxBoneData RootBone { get; }
         public PmxBoneData[] Bones { get; }
         public PmxMorphData MaterialMorph { get; }
+        public PmxMorphData VertexMorph { get; set; }
 
         private delegate bool RecordMotion(EntityShot entity);
         private static RecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
@@ -57,10 +61,10 @@ namespace CurtainFireMakerPlugin.Entities
 
             this.Property.Type.Init(this);
 
-            ShotModelData data = this.world.AddShot(this);
-            Bones = data.Bones;
+            ModelData = this.world.AddShot(this);
+            Bones = ModelData.Bones;
             RootBone = Bones[0];
-            MaterialMorph = data.MaterialMorph;
+            MaterialMorph = ModelData.MaterialMorph;
         }
 
         internal override void Frame()
@@ -153,12 +157,38 @@ namespace CurtainFireMakerPlugin.Entities
             if (this.Property.Type.HasMmdData())
             {
                 var frameData = new VmdMorphFrameData();
-                frameData.morphName = morph.morphName;
+                frameData.morphName = morph.MorphName;
                 frameData.keyFrameNo = this.world.FrameCount + frameOffset;
                 frameData.rate = rate;
 
                 this.world.VmdMotion.AddVmdMorph(frameData, morph);
             }
+        }
+
+        public void CreateVertexMorph(Func<Vector3, Vector3> func)
+        {
+            var vertices = ModelData.Vertices;
+
+            var morph = new PmxMorphData();
+            morph.MorphName = "v" + this.MaterialMorph.MorphName;
+            morph.Type = PmxMorphData.MORPHTYPE_VERTEX;
+            morph.MorphArray = new PmxMorphVertexData[vertices.Length];
+
+            for (int i = 0; i < morph.MorphArray.Length; i++)
+            {
+                var vertex = vertices[i];
+                var vertexMorph = new PmxMorphVertexData();
+
+                vertexMorph.Index = this.world.PmxModel.VertexList.IndexOf(vertex);
+                vertexMorph.Position = (DxMath.Vector3)func(vertex.pos);
+            }
+            this.VertexMorph = morph;
+            this.world.PmxModel.MorphList.Add(VertexMorph);
+        }
+
+        public void CreateVertexMorph(PythonFunction func)
+        {
+            this.CreateVertexMorph(v => (Vector3)PythonCalls.Call(func, v));
         }
     }
 }
