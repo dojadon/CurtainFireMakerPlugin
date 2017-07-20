@@ -86,9 +86,9 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnSpawn();
 
-            this.AddVmdMorph(-this.world.FrameCount, 1.0F);
-            this.AddVmdMorph(0, 1.0F);
-            this.AddVmdMorph(1, 0.0F);
+            this.AddVmdMorph(-this.world.FrameCount, 1.0F, this.MaterialMorph);
+            this.AddVmdMorph(0, 1.0F, this.MaterialMorph);
+            this.AddVmdMorph(1, 0.0F, this.MaterialMorph);
 
             this.AddVmdMotion();
         }
@@ -97,8 +97,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnDeath();
 
-            this.AddVmdMorph(-1, 0.0F);
-            this.AddVmdMorph(0, 1.0F);
+            this.AddVmdMorph(-1, 0.0F, this.MaterialMorph);
+            this.AddVmdMorph(0, 1.0F, this.MaterialMorph);
 
             this.AddVmdMotion();
         }
@@ -148,14 +148,17 @@ namespace CurtainFireMakerPlugin.Entities
             this.world.VmdMotion.AddVmdMotion(motion, replace);
         }
 
-        public void AddVmdMorph(int frameOffset, float rate)
+        public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph)
         {
-            var morph = new VmdMorphFrameData();
-            morph.morphName = this.MaterialMorph.morphName;
-            morph.keyFrameNo = this.world.FrameCount + frameOffset;
-            morph.rate = rate;
+            if (this.Property.Type.HasMmdData())
+            {
+                var frameData = new VmdMorphFrameData();
+                frameData.morphName = morph.morphName;
+                frameData.keyFrameNo = this.world.FrameCount + frameOffset;
+                frameData.rate = rate;
 
-            this.world.VmdMotion.AddVmdMorph(morph);
+                this.world.VmdMotion.AddVmdMorph(frameData, morph);
+            }
         }
     }
 }

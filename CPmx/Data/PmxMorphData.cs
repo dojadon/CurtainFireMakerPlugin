@@ -19,7 +19,7 @@ namespace CsPmx.Data
         public String morphNameE = "";
         public byte type;
 
-        public IPmxMorphTypeData[] morphArray;
+        public IPmxMorphTypeData[] MorphArray{ get; set; }
 
         public void Export(PmxExporter exporter)
         {
@@ -28,15 +28,15 @@ namespace CsPmx.Data
 
             exporter.Write(this.type);
 
-            byte morphType = this.morphArray[0].GetMorphType();
+            byte morphType = this.MorphArray[0].GetMorphType();
             exporter.Write(morphType);
 
-            int elementCount = this.morphArray.Length;
+            int elementCount = this.MorphArray.Length;
             exporter.Write(elementCount);
 
-            for (int i = 0; i < this.morphArray.Length; i++)
+            for (int i = 0; i < this.MorphArray.Length; i++)
             {
-                this.morphArray[i].Export(exporter);
+                this.MorphArray[i].Export(exporter);
             }
         }
 
@@ -54,15 +54,15 @@ namespace CsPmx.Data
             switch (morphType)
             {
                 case MORPHTYPE_GROUP:
-                    this.morphArray = ArrayUtil.Set(new PmxMorphGroupData[elementCount], i => new PmxMorphGroupData());
+                    this.MorphArray = ArrayUtil.Set(new PmxMorphGroupData[elementCount], i => new PmxMorphGroupData());
                     break;
 
                 case MORPHTYPE_VERTEX:
-                    this.morphArray = ArrayUtil.Set(new PmxMorphVertexData[elementCount], i => new PmxMorphVertexData());
+                    this.MorphArray = ArrayUtil.Set(new PmxMorphVertexData[elementCount], i => new PmxMorphVertexData());
                     break;
 
                 case MORPHTYPE_BONE:
-                    this.morphArray = ArrayUtil.Set(new PmxMorphBoneData[elementCount], i => new PmxMorphBoneData());
+                    this.MorphArray = ArrayUtil.Set(new PmxMorphBoneData[elementCount], i => new PmxMorphBoneData());
                     break;
 
                 case MORPHTYPE_UV:
@@ -70,17 +70,17 @@ namespace CsPmx.Data
                 case MORPHTYPE_EXUV_2:
                 case MORPHTYPE_EXUV_3:
                 case MORPHTYPE_EXUV_4:
-                    this.morphArray = ArrayUtil.Set(new PmxMorphUVData[elementCount], i => new PmxMorphUVData());
+                    this.MorphArray = ArrayUtil.Set(new PmxMorphUVData[elementCount], i => new PmxMorphUVData());
                     break;
 
                 case MORPHTYPE_MATERIAL:
-                    this.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[elementCount], i => new PmxMorphMaterialData());
+                    this.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[elementCount], i => new PmxMorphMaterialData());
                     break;
             }
 
-            for (int i = 0; i < this.morphArray.Length; i++)
+            for (int i = 0; i < this.MorphArray.Length; i++)
             {
-                this.morphArray[i].Parse(parser);
+                this.MorphArray[i].Parse(parser);
             }
         }
     }

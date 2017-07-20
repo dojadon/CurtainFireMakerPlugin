@@ -5,6 +5,7 @@ using System.Text;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Collections;
 using CsVmd.Data;
+using CsPmx.Data;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -12,6 +13,7 @@ namespace CurtainFireMakerPlugin.Entities
     {
         private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
         private List<VmdMorphFrameData> morphList = new List<VmdMorphFrameData>();
+        public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphDict { get; } = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
 
         public void AddVmdMotion(VmdMotionFrameData motion, bool replace = false)
         {
@@ -29,10 +31,12 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public void AddVmdMorph(VmdMorphFrameData morph)
+        public void AddVmdMorph(VmdMorphFrameData frameData, PmxMorphData morph)
         {
-            morphList.RemoveAll(m => m == null || m.morphName.Equals(morph.morphName) && m.keyFrameNo == morph.keyFrameNo);
-            morphList.Add(morph);
+            morphList.RemoveAll(m => m.morphName.Equals(frameData.morphName) && m.keyFrameNo == frameData.keyFrameNo);
+            morphList.Add(frameData);
+
+            MorphDict.Add(morph, frameData);
         }
 
         public void GetData(VmdMotionData data)

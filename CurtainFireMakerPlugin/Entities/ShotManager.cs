@@ -7,12 +7,13 @@ using CurtainFireMakerPlugin.ShotTypes;
 using CurtainFireMakerPlugin.Collections;
 using CsPmx.Data;
 using CsPmx;
+using CsVmd.Data;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     internal class ShotManager
     {
-        private Dictionary<ShotType, ShotTypeGroup> TypeGroupMap { get; } = new Dictionary<ShotType, ShotTypeGroup>();
+        private Dictionary<ShotType, ShotTypeGroup> TypeGroupDict { get; } = new Dictionary<ShotType, ShotTypeGroup>();
         private World World { get; }
 
         public ShotManager(World world)
@@ -22,12 +23,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotModelData AddEntity(EntityShot entity)
         {
-            if (!this.TypeGroupMap.ContainsKey(entity.Property.Type))
+            if (!this.TypeGroupDict.ContainsKey(entity.Property.Type))
             {
-                this.TypeGroupMap[entity.Property.Type] = new ShotTypeGroup(entity.Property.Type, this.World);
+                this.TypeGroupDict[entity.Property.Type] = new ShotTypeGroup(entity.Property.Type, this.World);
             }
 
-            ShotTypeGroup typeGroup = this.TypeGroupMap[entity.Property.Type];
+            ShotTypeGroup typeGroup = this.TypeGroupDict[entity.Property.Type];
 
             ShotModelData data = typeGroup.AddEntityToGroup(entity);
             if (data == null)
@@ -41,7 +42,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void Build()
         {
-            foreach (var typeGroup in this.TypeGroupMap.Values)
+            foreach (var typeGroup in this.TypeGroupDict.Values)
             {
                 typeGroup.Build();
             }
@@ -65,7 +66,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             foreach (ShotGroup group in this.GroupList)
             {
-                if(group.IsAddable(entity))
+                if (group.IsAddable(entity))
                 {
                     group.AddEntity(entity);
                     return group.Data;
@@ -90,59 +91,55 @@ namespace CurtainFireMakerPlugin.Entities
                 return;
             }
 
-            MultiDictionary<int[], ShotGroup> groupMap = new MultiDictionary<int[], ShotGroup>(new IntegerArrayEqualityComparer());
             var pmxModel = this.World.PmxModel;
+            var vmdMotion = this.World.VmdMotion;
 
-            foreach (ShotGroup group in this.GroupList)
+            var typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
+            foreach (var morph in vmdMotion.MorphDict.Keys)
             {
-                List<int> keyFrameNoList = new List<int>();
-
-                HashSet<int> spawnFrameSet = new HashSet<int>();
-                HashSet<int> deathFrameSet = new HashSet<int>();
-
-                group.ShotList.ForEach(e => spawnFrameSet.Add(e.SpawnFrameNo));
-                group.ShotList.ForEach(e => deathFrameSet.Add(e.DeathFrameNo));
-
-                keyFrameNoList.AddRange(spawnFrameSet);
-                keyFrameNoList.AddRange(deathFrameSet);
-
-                keyFrameNoList.Sort();
-
-                groupMap.Add(keyFrameNoList.ToArray(), group);
+                typeMorphDict.Add(morph.type, morph);
             }
 
-            foreach (int[] keyFrameNo in groupMap.Keys)
+            foreach (var morphList in typeMorphDict.Values)
             {
-                ShotGroup[] groupArr = groupMap[keyFrameNo].ToArray();
+                this.Compress(morphList, vmdMotion.MorphDict);
+            }
+        }
 
-                if (groupArr.Length > 1)
+        private void Compress(List<PmxMorphData> morphList, MultiDictionary<PmxMorphData, VmdMorphFrameData> frameDataDict)
+        {
+            var dict = new MultiDictionary<int[], PmxMorphData>(new IntegerArrayComparer());
+
+            foreach (var morph in morphList)
+            {
+                dict.Add(Array.ConvertAll(frameDataDict[morph].ToArray(), m => m.keyFrameNo), morph);
+            }
+
+            foreach (var key in dict.Keys)
+            {
+                var removeList = dict[key];
+
+                if (removeList.Count > 1)
                 {
-                    for (int i = 1; i < groupArr.Length; i++)
-                    {
-                        pmxModel.morphList.Remove(groupArr[i].Data.MaterialMorph);
-                    }
+                    PmxMorphData addMoroh = this.Compress(removeList);
 
-                    HashSet<int> indicesSet = new HashSet<int>();
-
-                    foreach (ShotGroup group in groupArr)
-                    {
-                        foreach (var material in group.Data.Materials)
-                        {
-                            indicesSet.Add(pmxModel.materialList.IndexOf(material));
-                        }
-                    }
-
-                    int[] indices = indicesSet.ToArray();
-                    PmxMorphData morph = groupArr[0].Data.MaterialMorph;
-
-                    morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[indices.Length], i => new PmxMorphMaterialData());
-
-                    for (int i = 0; i < indices.Length; i++)
-                    {
-                        morph.morphArray[i].Index = indices[i];
-                    }
+                    removeList.ForEach(m => this.World.PmxModel.MorphList.Remove(m));
+                    this.World.PmxModel.MorphList.Add(addMoroh);
                 }
             }
+        }
+
+        private PmxMorphData Compress(List<PmxMorphData> morphList)
+        {
+            var morphTypeDataList = new List<IPmxMorphTypeData>();
+            foreach (var morph in morphList)
+            {
+                morphTypeDataList.AddRange(morph.MorphArray);
+            }
+
+            morphList[0].MorphArray = morphTypeDataList.ToArray();
+
+            return morphList[0];
         }
     }
 
@@ -171,7 +168,51 @@ namespace CurtainFireMakerPlugin.Entities
         }
     }
 
-    internal class IntegerArrayEqualityComparer : IEqualityComparer<int[]>
+    internal class MorphFrameDataComparer : IEqualityComparer<VmdMorphFrameData[]>
+    {
+        public bool Equals(VmdMorphFrameData x, VmdMorphFrameData y)
+        {
+            return x.keyFrameNo == y.keyFrameNo;
+        }
+
+        public bool Equals(VmdMorphFrameData[] x, VmdMorphFrameData[] y)
+        {
+            if (x.Length != y.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < x.Length; i++)
+            {
+                if (!Equals(x[i], y[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public int GetHashCode(VmdMorphFrameData[] obj)
+        {
+            int result = 17;
+            for (int i = 0; i < obj.Length; i++)
+            {
+                unchecked
+                {
+                    result = result * 23 + obj[i].GetHashCode();
+                }
+            }
+            return result;
+        }
+
+        public int GetHashCode(VmdMorphFrameData obj)
+        {
+            int result = 17;
+            result = 31 * result + obj.keyFrameNo;
+            return result;
+        }
+    }
+
+    internal class IntegerArrayComparer : IEqualityComparer<int[]>
     {
         public bool Equals(int[] x, int[] y)
         {

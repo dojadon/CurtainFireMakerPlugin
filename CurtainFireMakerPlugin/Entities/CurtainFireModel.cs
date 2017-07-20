@@ -10,12 +10,12 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireModel
     {
-        public readonly List<int> indexList = new List<int>();
-        public readonly List<PmxVertexData> vertexList = new List<PmxVertexData>();
-        public readonly List<PmxMaterialData> materialList = new List<PmxMaterialData>();
-        public readonly List<PmxMorphData> morphList = new List<PmxMorphData>();
-        public readonly List<PmxBoneData> boneList = new List<PmxBoneData>();
-        public readonly List<string> textureList = new List<string>();
+        public List<int> IndexList { get; } = new List<int>();
+        public List<PmxVertexData> VertexList { get; } = new List<PmxVertexData>();
+        public List<PmxMaterialData> MaterialList { get; } = new List<PmxMaterialData>();
+        public List<PmxMorphData> MorphList { get; } = new List<PmxMorphData>();
+        public List<PmxBoneData> BoneList { get; } = new List<PmxBoneData>();
+        public List<string> TextureList { get; } = new List<string>();
 
         public CurtainFireModel()
         {
@@ -23,7 +23,7 @@ namespace CurtainFireMakerPlugin.Entities
             centerBone.boneName = "センター";
             centerBone.parentId = -1;
             centerBone.flag = 0x0002 | 0x0004 | 0x0008 | 0x0010;
-            this.boneList.Add(centerBone);
+            this.BoneList.Add(centerBone);
         }
 
         public void InitShotModelData(ShotModelData data)
@@ -43,44 +43,44 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void SetupShotModelData(ShotModelData data)
         {
-            int[] indices = Array.ConvertAll(data.Indices, i => i + this.vertexList.Count);
-            this.indexList.AddRange(indices);
+            int[] indices = Array.ConvertAll(data.Indices, i => i + this.VertexList.Count);
+            this.IndexList.AddRange(indices);
 
             PmxVertexData[] vertices = data.Vertices;
             foreach (var vertex in vertices)
             {
-                vertex.boneId = Array.ConvertAll(vertex.boneId, i => i + this.boneList.Count);
-                this.vertexList.Add(vertex);
+                vertex.boneId = Array.ConvertAll(vertex.boneId, i => i + this.BoneList.Count);
+                this.VertexList.Add(vertex);
             }
 
             string[] textures = data.Textures;
             foreach (var texture in textures)
             {
-                if (!this.textureList.Contains(texture))
+                if (!this.TextureList.Contains(texture))
                 {
-                    this.textureList.Add(texture);
+                    this.TextureList.Add(texture);
                 }
             }
 
             PmxMaterialData[] materials = data.Materials;
             PmxMorphData morph = data.MaterialMorph;
-            morph.morphName = this.morphList.Count.ToString();
+            morph.morphName = this.MorphList.Count.ToString();
             morph.type = 4;
-            morph.morphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
+            morph.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
 
             for (int i = 0; i < materials.Length; i++)
             {
-                morph.morphArray[i].Index = this.materialList.Count + i;
+                morph.MorphArray[i].Index = this.MaterialList.Count + i;
             }
-            this.morphList.Add(morph);
+            this.MorphList.Add(morph);
 
             foreach (PmxMaterialData material in materials)
             {
-                material.materialName = this.materialList.Count.ToString();
+                material.materialName = this.MaterialList.Count.ToString();
                 material.diffuse = new DxMath.Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
                 material.ambient = new DxMath.Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
-                material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.textureList.IndexOf(textures[material.textureId]) : -1;
-                this.materialList.Add(material);
+                material.textureId = textures.Length > 0 && material.textureId >= 0 ? this.TextureList.IndexOf(textures[material.textureId]) : -1;
+                this.MaterialList.Add(material);
             }
             this.SetupBone(data.Bones);
         }
@@ -91,23 +91,23 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 PmxBoneData bone = data[i];
 
-                bone.boneName = (this.boneList.Count - 1).ToString();
+                bone.boneName = (this.BoneList.Count - 1).ToString();
                 bone.flag = 0x0001 | 0x0002 | 0x0004 | 0x0010;
-                bone.boneId = this.boneList.Count + i;
+                bone.boneId = this.BoneList.Count + i;
 
                 if (-1 < bone.parentId && bone.parentId < data.Length)
                 {
-                    bone.parentId = this.boneList.IndexOf(data[bone.parentId]);
+                    bone.parentId = this.BoneList.IndexOf(data[bone.parentId]);
                 }
                 else
                 {
                     bone.parentId = 0;
                 }
-                this.boneList.Add(bone);
+                this.BoneList.Add(bone);
             }
         }
 
-        public int GetBoneId(PmxBoneData bone) => this.boneList.IndexOf(bone);
+        public int GetBoneId(PmxBoneData bone) => this.BoneList.IndexOf(bone);
 
         public void GetData(PmxModelData data)
         {
@@ -117,20 +117,20 @@ namespace CurtainFireMakerPlugin.Entities
             var boneSlot = new PmxSlotData();
             boneSlot.slotName = "弾ボーン";
             boneSlot.type = PmxSlotData.SLOT_TYPE_BONE;
-            boneSlot.indices = Enumerable.Range(0, this.boneList.Count).ToArray();
+            boneSlot.indices = Enumerable.Range(0, this.BoneList.Count).ToArray();
 
             var morphSlot = new PmxSlotData();
             morphSlot.slotName = "弾モーフ";
             morphSlot.type = PmxSlotData.SLOT_TYPE_MORPH;
-            morphSlot.indices = Enumerable.Range(0, this.morphList.Count).ToArray();
+            morphSlot.indices = Enumerable.Range(0, this.MorphList.Count).ToArray();
 
             data.Header = header;
-            data.VertexIndices = this.indexList.ToArray();
-            data.TextureFiles = this.textureList.ToArray();
-            data.VertexArray = this.vertexList.ToArray();
-            data.MaterialArray = this.materialList.ToArray();
-            data.BoneArray = this.boneList.ToArray();
-            data.MorphArray = this.morphList.ToArray();
+            data.VertexIndices = this.IndexList.ToArray();
+            data.TextureFiles = this.TextureList.ToArray();
+            data.VertexArray = this.VertexList.ToArray();
+            data.MaterialArray = this.MaterialList.ToArray();
+            data.BoneArray = this.BoneList.ToArray();
+            data.MorphArray = this.MorphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
         }
     }

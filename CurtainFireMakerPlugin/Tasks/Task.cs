@@ -10,21 +10,21 @@ namespace CurtainFireMakerPlugin.Tasks
         private Action<Task> state;
         private Action<Task> task;
 
-        public int interval;
-        public int updateCount;
+        public int Interval { get; set; }
+        public int UpdateCount { get; }
 
-        public int executionTimes;
-        public int runCount;
+        public int ExecutionTimes { get; set; }
+        public int RunCount { get; }
 
-        private int waitTime;
-        private int waitCount;
+        private int WaitTime { get; }
+        private int WaitCount { get; }
 
         public Task(Action<Task> task, int interval, int executionTimes, int waitTime)
         {
             this.task = task;
-            this.interval = this.updateCount = interval;
-            this.executionTimes = executionTimes;
-            this.waitTime = waitTime;
+            this.Interval = this.UpdateCount = interval;
+            this.ExecutionTimes = executionTimes;
+            this.WaitTime = waitTime;
 
             this.state = waitTime > 0 ? WAITING : ACTIVE;
         }
@@ -46,18 +46,18 @@ namespace CurtainFireMakerPlugin.Tasks
 
         private static Action<Task> WAITING = (task) =>
         {
-            if (++task.waitCount > task.waitTime)
+            if (++task.waitCount > task.WaitTime)
             {
                 task.state = ACTIVE;
             }
         };
         private static Action<Task> ACTIVE = (task) =>
         {
-            if (++task.updateCount >= task.interval)
+            if (++task.updateCount >= task.Interval)
             {
                 task.updateCount = 0;
 
-                if (++task.runCount > task.executionTimes && task.executionTimes != 0)
+                if (++task.runCount > task.ExecutionTimes && task.ExecutionTimes != 0)
                 {
                     task.state = FINISHED;
                 }
