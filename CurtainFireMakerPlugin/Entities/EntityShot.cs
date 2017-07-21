@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin.Entities
 
                 if (value is EntityShot entity && entity.Property.Type.RecordMotion())
                 {
-                    this.RootBone.parentId = entity.RootBone.boneId;
+                    this.RootBone.ParentId = entity.RootBone.BoneId;
                 }
             }
         }
@@ -33,7 +33,6 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone { get; }
         public PmxBoneData[] Bones { get; }
         public PmxMorphData MaterialMorph { get; }
-        public PmxMorphData VertexMorph { get; set; }
 
         private delegate bool RecordMotion(EntityShot entity);
         private static RecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
@@ -130,11 +129,13 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.UpdateRot();
 
-            var motion = new VmdMotionFrameData();
-            motion.boneName = this.RootBone.boneName;
-            motion.keyFrameNo = this.world.FrameCount;
-            motion.pos = (DxMath.Vector3)this.Pos;
-            motion.rot = (DxMath.Quaternion)this.Rot;
+            var motion = new VmdMotionFrameData()
+            {
+                BoneName = this.RootBone.BoneName,
+                KeyFrameNo = this.world.FrameCount,
+                Pos = (DxMath.Vector3)this.Pos,
+                Rot = (DxMath.Quaternion)this.Rot
+            };
 
             if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.world.FrameCount)
             {
@@ -146,7 +147,7 @@ namespace CurtainFireMakerPlugin.Entities
                 interpolation[2] = (byte)(127 * this.motionInterpolation.curve.p2.x);
                 interpolation[3] = (byte)(127 * this.motionInterpolation.curve.p2.y);
 
-                motion.interpolatePointX = motion.interpolatePointY = motion.interpolatePointZ = motion.interpolatePointR = interpolation;
+                motion.InterpolatePointX = motion.InterpolatePointY = motion.InterpolatePointZ = motion.InterpolatePointR = interpolation;
             }
 
             this.world.VmdMotion.AddVmdMotion(motion, replace);
@@ -156,35 +157,46 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (this.Property.Type.HasMmdData())
             {
-                var frameData = new VmdMorphFrameData();
-                frameData.morphName = morph.MorphName;
-                frameData.keyFrameNo = this.world.FrameCount + frameOffset;
-                frameData.rate = rate;
-
+                var frameData = new VmdMorphFrameData()
+                {
+                    MorphName = morph.MorphName,
+                    KeyFrameNo = this.world.FrameCount + frameOffset,
+                    Rate = rate
+                };
                 this.world.VmdMotion.AddVmdMorph(frameData, morph);
             }
         }
 
-        public void CreateVertexMorph(Func<Vector3, Vector3> func)
+        public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
             var vertices = ModelData.Vertices;
 
-            var morph = new PmxMorphData();
-            morph.MorphName = "v" + this.MaterialMorph.MorphName;
-            morph.Type = PmxMorphData.MORPHTYPE_VERTEX;
-            morph.MorphArray = new PmxMorphVertexData[vertices.Length];
+            var morph = new PmxMorphData()
+            {
+                MorphName = "v" + this.MaterialMorph.MorphName,
+                Type = PmxMorphData.MORPHTYPE_VERTEX,
+                MorphArray = new PmxMorphVertexData[vertices.Length]
+            };
 
             for (int i = 0; i < morph.MorphArray.Length; i++)
             {
                 var vertex = vertices[i];
-                var vertexMorph = new PmxMorphVertexData();
+                var pos = new Vector3()
+                {
+                    x = vertex.Pos.X * Property.Scale.x,
+                    y = vertex.Pos.Y * Property.Scale.y,
+                    z = vertex.Pos.Z * Property.Scale.z
+                };
 
-                vertexMorph.Index = this.world.PmxModel.VertexList.IndexOf(vertex);
-                vertexMorph.Position = (DxMath.Vector3)func(vertex.pos);
+                var vertexMorph = new PmxMorphVertexData()
+                {
+                    Index = this.world.PmxModel.VertexList.IndexOf(vertex),
+                    Position = (DxMath.Vector3)func(pos)
+                };
                 morph.MorphArray[i] = vertexMorph;
             }
-            this.VertexMorph = morph;
-            this.world.PmxModel.MorphList.Add(VertexMorph);
+            this.world.PmxModel.MorphList.Add(morph);
+            return morph;
         }
 
         public void CreateVertexMorph(PythonFunction func)

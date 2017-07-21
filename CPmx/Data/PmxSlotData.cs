@@ -11,50 +11,50 @@ namespace CsPmx.Data
         public const byte SLOT_TYPE_BONE = 0;
         public const byte SLOT_TYPE_MORPH = 1;
 
-        public String slotName = "";
-        public String slotNameE = "";
+        public String SlotName { get; set; } = "";
+        public String SlotNameE { get; set; } = "";
 
-        public bool normalSlot = true;
-        public byte type;
-        public int[] indices;
+        public bool NormalSlot { get; set; } = true;
+        public byte Type { get; set; }
+        public int[] Indices { get; set; }
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(this.slotName);
-            exporter.WritePmxText(this.slotNameE);
+            exporter.WritePmxText(this.SlotName);
+            exporter.WritePmxText(this.SlotNameE);
 
-            exporter.Write((byte)(this.normalSlot ? 0 : 1));
+            exporter.Write((byte)(this.NormalSlot ? 0 : 1));
 
-            int elementCount = this.indices.Length;
+            int elementCount = this.Indices.Length;
             exporter.Write(elementCount);
 
-            byte size = this.type == SLOT_TYPE_BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
+            byte size = this.Type == SLOT_TYPE_BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
 
             for (int i = 0; i < elementCount; i++)
             {
-                exporter.Write(this.type);
+                exporter.Write(this.Type);
 
-                int id = this.indices[i];
+                int id = this.Indices[i];
                 exporter.WritePmxId(size, id);
             }
         }
 
         public void Parse(PmxParser parser)
         {
-            this.slotName = parser.ReadPmxText();
-            this.slotNameE = parser.ReadPmxText();
+            this.SlotName = parser.ReadPmxText();
+            this.SlotNameE = parser.ReadPmxText();
 
-            this.normalSlot = parser.ReadByte() == 0;
+            this.NormalSlot = parser.ReadByte() == 0;
 
             int elementCount = parser.ReadInt32();
-            this.indices = new int[elementCount];
+            this.Indices = new int[elementCount];
 
             for (int i = 0; i < elementCount; i++)
             {
                 byte type = parser.ReadByte();
                 byte size = type == SLOT_TYPE_BONE ? parser.SizeBone : parser.SizeMorph;
 
-                this.indices[i] = parser.ReadPmxId(size);
+                this.Indices[i] = parser.ReadPmxId(size);
             }
         }
     }

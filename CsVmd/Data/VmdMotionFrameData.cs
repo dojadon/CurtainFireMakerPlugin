@@ -8,28 +8,28 @@ namespace CsVmd.Data
 {
     public class VmdMotionFrameData : IVmdData
     {
-        public string boneName;
-        public int keyFrameNo;
-        public Vector3 pos = new Vector3();
-        public Quaternion rot = new Quaternion();
+        public string BoneName { get; set; }
+        public int KeyFrameNo { get; set; }
+        public Vector3 Pos { get; set; } = new Vector3();
+        public Quaternion Rot { get; set; } = new Quaternion();
 
-        public byte[] interpolatePointX = new byte[4];
-        public byte[] interpolatePointY = new byte[4];
-        public byte[] interpolatePointZ = new byte[4];
-        public byte[] interpolatePointR = new byte[4];
+        public byte[] InterpolatePointX { get; set; } = new byte[4];
+        public byte[] InterpolatePointY { get; set; } = new byte[4];
+        public byte[] InterpolatePointZ { get; set; } = new byte[4];
+        public byte[] InterpolatePointR { get; set; } = new byte[4];
 
         public void Export(VmdExporter exporter)
         {
-            exporter.WriteVmdText(this.boneName, VmdExporter.BONE_NAME_LENGTH);
-            exporter.Write(this.keyFrameNo);
-            exporter.Write(this.pos);
-            exporter.Write(this.rot);
+            exporter.WriteVmdText(this.BoneName, VmdExporter.BONE_NAME_LENGTH);
+            exporter.Write(this.KeyFrameNo);
+            exporter.Write(this.Pos);
+            exporter.Write(this.Rot);
             this.ExportInterpolateData(exporter);
         }
 
         private void ExportInterpolateData(VmdExporter exporter)
         {
-            byte[][] interpolatePoint = new byte[][] { interpolatePointX, interpolatePointY, interpolatePointZ, interpolatePointR };
+            byte[][] interpolatePoint = new byte[][] { InterpolatePointX, InterpolatePointY, InterpolatePointZ, InterpolatePointR };
 
             byte[] distPart = new byte[16];
 

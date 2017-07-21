@@ -19,12 +19,12 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (replace)
             {
-                motionList.RemoveAll(m => m == null || m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo);
+                motionList.RemoveAll(m => m == null || m.BoneName.Equals(motion.BoneName) && m.KeyFrameNo == motion.KeyFrameNo);
                 motionList.Add(motion);
             }
             else
             {
-                if (!motionList.Exists(m => m == null || m.boneName.Equals(motion.boneName) && m.keyFrameNo == motion.keyFrameNo))
+                if (!motionList.Exists(m => m == null || m.BoneName.Equals(motion.BoneName) && m.KeyFrameNo == motion.KeyFrameNo))
                 {
                     motionList.Add(motion);
                 }
@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddVmdMorph(VmdMorphFrameData frameData, PmxMorphData morph)
         {
-            morphList.RemoveAll(m => m.morphName.Equals(frameData.morphName) && m.keyFrameNo == frameData.keyFrameNo);
+            morphList.RemoveAll(m => m.MorphName.Equals(frameData.MorphName) && m.KeyFrameNo == frameData.KeyFrameNo);
             morphList.Add(frameData);
 
             MorphDict.Add(morph, frameData);
@@ -41,7 +41,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void GetData(VmdMotionData data)
         {
-            data.Header.modelName = "弾幕";
+            data.Header.ModelName = "弾幕";
 
             data.MotionArray = this.motionList.ToArray();
             data.MorphArray = this.morphList.ToArray();

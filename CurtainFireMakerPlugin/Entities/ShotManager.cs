@@ -112,7 +112,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (var morph in morphList)
             {
-                dict.Add(Array.ConvertAll(frameDataDict[morph].ToArray(), m => m.keyFrameNo), morph);
+                dict.Add(Array.ConvertAll(frameDataDict[morph].ToArray(), m => m.KeyFrameNo), morph);
             }
 
             foreach (var key in dict.Keys)

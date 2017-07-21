@@ -9,18 +9,18 @@ namespace CsPmx.Data
     public class PmxMorphGroupData : IPmxMorphTypeData
     {
         public int Index { get; set; }
-        public float rate;
+        public float Rate { get; set; }
 
         public void Export(PmxExporter exporter)
         {
                 exporter.WritePmxId(PmxExporter.SIZE_MORPH, this.Index);
-                exporter.Write(this.rate);
+                exporter.Write(this.Rate);
         }
 
         public void Parse(PmxParser parser)
         {
             this.Index = parser.ReadPmxId(parser.SizeMorph);
-            this.rate = parser.ReadSingle();
+            this.Rate = parser.ReadSingle();
         }
 
         public byte GetMorphType()

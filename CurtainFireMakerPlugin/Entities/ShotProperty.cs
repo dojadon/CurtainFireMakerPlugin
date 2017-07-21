@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotType Type { get; }
         public Vector3 Size { get; set; } = new Vector3(1, 1, 1);
-        
+
         public ShotProperty(string typeName, int color) : this(ShotTypeList.GetShotType(typeName), color)
         {
         }
@@ -26,6 +26,8 @@ namespace CurtainFireMakerPlugin.Entities
             this.Color = color;
             this.Type = type;
         }
+
+        public Vector3 Scale => new Vector3(Size.x * Type.Size.x, Size.y * Type.Size.y, Size.z * Type.Size.z);
 
         public override bool Equals(object obj)
         {

@@ -7,15 +7,15 @@ namespace CsVmd.Data
 {
     public class VmdMorphFrameData : IVmdData
     {
-        public string morphName;
-        public int keyFrameNo;
-        public float rate;
+        public string MorphName { get; set; }
+        public int KeyFrameNo { get; set; }
+        public float Rate { get; set; }
 
         public void Export(VmdExporter exporter)
         {
-            exporter.WriteVmdText(this.morphName, VmdExporter.MORPH_NAME_LENGTH);
-            exporter.Write(this.keyFrameNo);
-            exporter.Write(this.rate);
+            exporter.WriteVmdText(this.MorphName, VmdExporter.MORPH_NAME_LENGTH);
+            exporter.Write(this.KeyFrameNo);
+            exporter.Write(this.Rate);
         }
     }
 }

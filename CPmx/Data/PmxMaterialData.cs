@@ -12,7 +12,7 @@ namespace CsPmx.Data
         public String MaterialName { get; set; } = "";
         public String MaterialNameE { get; set; } = "";
 
-        public String script = "";
+        public String Script { get; set; } = "";
 
         /**
          * 描画フラグ(8bit)
@@ -81,7 +81,7 @@ namespace CsPmx.Data
                 exporter.Write((byte)this.ToonId);
             }
 
-            exporter.WritePmxText(this.script);
+            exporter.WritePmxText(this.Script);
 
             exporter.Write(this.FaceCount);
         }
@@ -115,7 +115,7 @@ namespace CsPmx.Data
                 this.ToonId = parser.ReadByte();
             }
 
-            this.script = parser.ReadPmxText();
+            this.Script = parser.ReadPmxText();
 
             this.FaceCount = parser.ReadInt32();
         }

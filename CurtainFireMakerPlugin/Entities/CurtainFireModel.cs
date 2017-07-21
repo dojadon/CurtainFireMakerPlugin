@@ -20,9 +20,9 @@ namespace CurtainFireMakerPlugin.Entities
         public CurtainFireModel()
         {
             PmxBoneData centerBone = new PmxBoneData();
-            centerBone.boneName = "センター";
-            centerBone.parentId = -1;
-            centerBone.flag = 0x0002 | 0x0004 | 0x0008 | 0x0010;
+            centerBone.BoneName = "センター";
+            centerBone.ParentId = -1;
+            centerBone.Flag = 0x0002 | 0x0004 | 0x0008 | 0x0010;
             this.BoneList.Add(centerBone);
         }
 
@@ -49,7 +49,7 @@ namespace CurtainFireMakerPlugin.Entities
             PmxVertexData[] vertices = data.Vertices;
             foreach (var vertex in vertices)
             {
-                vertex.boneId = Array.ConvertAll(vertex.boneId, i => i + this.BoneList.Count);
+                vertex.BoneId = Array.ConvertAll(vertex.BoneId, i => i + this.BoneList.Count);
                 this.VertexList.Add(vertex);
             }
 
@@ -91,38 +91,42 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 PmxBoneData bone = data[i];
 
-                bone.boneName = (this.BoneList.Count - 1).ToString();
-                bone.flag = 0x0001 | 0x0002 | 0x0004 | 0x0010;
-                bone.boneId = this.BoneList.Count + i;
+                bone.BoneName = (this.BoneList.Count - 1).ToString();
+                bone.Flag = 0x0001 | 0x0002 | 0x0004 | 0x0010;
+                bone.BoneId = this.BoneList.Count + i;
 
-                if (-1 < bone.parentId && bone.parentId < data.Length)
+                if (-1 < bone.ParentId && bone.ParentId < data.Length)
                 {
-                    bone.parentId = this.BoneList.IndexOf(data[bone.parentId]);
+                    bone.ParentId = this.BoneList.IndexOf(data[bone.ParentId]);
                 }
                 else
                 {
-                    bone.parentId = 0;
+                    bone.ParentId = 0;
                 }
                 this.BoneList.Add(bone);
             }
         }
 
-        public int GetBoneId(PmxBoneData bone) => this.BoneList.IndexOf(bone);
-
         public void GetData(PmxModelData data)
         {
-            var header = new PmxHeaderData();
-            header.version = 2.0F;
+            var header = new PmxHeaderData()
+            {
+                Version = 2.0F
+            };
 
-            var boneSlot = new PmxSlotData();
-            boneSlot.slotName = "弾ボーン";
-            boneSlot.type = PmxSlotData.SLOT_TYPE_BONE;
-            boneSlot.indices = Enumerable.Range(0, this.BoneList.Count).ToArray();
+            var boneSlot = new PmxSlotData()
+            {
+                SlotName = "弾ボーン",
+                Type = PmxSlotData.SLOT_TYPE_BONE,
+                Indices = Enumerable.Range(0, this.BoneList.Count).ToArray()
+            };
 
-            var morphSlot = new PmxSlotData();
-            morphSlot.slotName = "弾モーフ";
-            morphSlot.type = PmxSlotData.SLOT_TYPE_MORPH;
-            morphSlot.indices = Enumerable.Range(0, this.MorphList.Count).ToArray();
+            var morphSlot = new PmxSlotData()
+            {
+                SlotName = "弾モーフ",
+                Type = PmxSlotData.SLOT_TYPE_MORPH,
+                Indices = Enumerable.Range(0, this.MorphList.Count).ToArray()
+            };
 
             data.Header = header;
             data.VertexIndices = this.IndexList.ToArray();

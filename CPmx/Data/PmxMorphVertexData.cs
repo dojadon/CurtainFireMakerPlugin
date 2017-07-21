@@ -10,7 +10,7 @@ namespace CsPmx.Data
     public class PmxMorphVertexData : IPmxMorphTypeData
     {
         public int Index { get; set; }
-        public Vector3 Position { get; set; } = new Vector3();
+        public Vector3 Position { get; set; } 
 
         public void Export(PmxExporter exporter)
         {

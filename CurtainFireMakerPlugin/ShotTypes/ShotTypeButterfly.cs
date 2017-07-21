@@ -20,17 +20,17 @@ namespace CurtainFireMakerPlugin.ShotTypes
             entity.AddTask(task =>
             {
                 var motion = this.GetMotionData();
-                motion.boneName = entity.Bones[1].boneName;
-                motion.keyFrameNo = entity.world.FrameCount;
+                motion.BoneName = entity.Bones[1].BoneName;
+                motion.KeyFrameNo = entity.world.FrameCount;
 
-                motion.rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, angle);
+                motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, angle);
                 entity.world.VmdMotion.AddVmdMotion(motion);
 
                 motion = this.GetMotionData();
-                motion.boneName = entity.Bones[2].boneName;
-                motion.keyFrameNo = entity.world.FrameCount;
+                motion.BoneName = entity.Bones[2].BoneName;
+                motion.KeyFrameNo = entity.world.FrameCount;
 
-                motion.rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, -angle);
+                motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, -angle);
                 entity.world.VmdMotion.AddVmdMotion(motion);
 
             }, 120, 0, 0);
@@ -38,17 +38,17 @@ namespace CurtainFireMakerPlugin.ShotTypes
             entity.AddTask(task =>
             {
                 var motion = this.GetMotionData();
-                motion.boneName = entity.Bones[1].boneName;
-                motion.keyFrameNo = entity.world.FrameCount;
+                motion.BoneName = entity.Bones[1].BoneName;
+                motion.KeyFrameNo = entity.world.FrameCount;
 
-                motion.rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, -angle);
+                motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, -angle);
                 entity.world.VmdMotion.AddVmdMotion(motion);
 
                 motion = this.GetMotionData();
-                motion.boneName = entity.Bones[2].boneName;
-                motion.keyFrameNo = entity.world.FrameCount;
+                motion.BoneName = entity.Bones[2].BoneName;
+                motion.KeyFrameNo = entity.world.FrameCount;
 
-                motion.rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, angle);
+                motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, angle);
                 entity.world.VmdMotion.AddVmdMotion(motion);
 
             }, 120, 0, 60);
@@ -64,7 +64,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             interpolation[2] = (byte)(127 * 0.2F);
             interpolation[3] = (byte)(127 * 0.9F);
 
-            motion.interpolatePointX = motion.interpolatePointY = motion.interpolatePointZ = motion.interpolatePointR = interpolation;
+            motion.InterpolatePointX = motion.InterpolatePointY = motion.InterpolatePointZ = motion.InterpolatePointR = interpolation;
             return motion;
         }
     }

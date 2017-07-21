@@ -10,23 +10,23 @@ namespace CsPmx.Data
     public class PmxMorphBoneData : IPmxMorphTypeData
     {
         public int Index { get; set; }
-        public Vector3 position = new Vector3();
-        public Quaternion rotation = new Quaternion();
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; }
 
         public void Export(PmxExporter exporter)
         {
             exporter.WritePmxId(PmxExporter.SIZE_BONE, this.Index);
 
-            exporter.Write(this.position);
-            exporter.Write(this.rotation);
+            exporter.Write(this.Position);
+            exporter.Write(this.Rotation);
         }
 
         public void Parse(PmxParser parser)
         {
             this.Index = parser.ReadPmxId(parser.SizeBone);
 
-            this.position = parser.ReadVector3();
-            this.rotation = parser.ReadQuaternion();
+            this.Position = parser.ReadVector3();
+            this.Rotation = parser.ReadQuaternion();
         }
 
         public byte GetMorphType()

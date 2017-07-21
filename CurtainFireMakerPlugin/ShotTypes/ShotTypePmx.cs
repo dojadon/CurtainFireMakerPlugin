@@ -11,13 +11,12 @@ namespace CurtainFireMakerPlugin.ShotTypes
     public class ShotTypePmx : ShotType
     {
         private PmxModelData data = new PmxModelData();
-        private Vector3 scale;
 
-        public ShotTypePmx(string name, string path, double scale) : this(name, path, new Vector3(scale, scale, scale))
+        public ShotTypePmx(string name, string path, double size) : this(name, path, new Vector3(size, size, size))
         {
         }
 
-        public ShotTypePmx(string name, string path, Vector3 scale) : base(name)
+        public ShotTypePmx(string name, string path, Vector3 size) : base(name, size)
         {
             var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
@@ -26,8 +25,6 @@ namespace CurtainFireMakerPlugin.ShotTypes
                 PmxParser parser = new PmxParser(inStream);
                 parser.Parse(this.data);
             }
-
-            this.scale = scale;
         }
 
         override public PmxVertexData[] GetVertices(ShotProperty property)
@@ -36,9 +33,9 @@ namespace CurtainFireMakerPlugin.ShotTypes
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = DeepCopy(this.data.VertexArray[i]);
-                result[i].pos.X *= (float)(this.scale.x * property.Size.x);
-                result[i].pos.Y *= (float)(this.scale.y * property.Size.y);
-                result[i].pos.Z *= (float)(this.scale.z * property.Size.z);
+                result[i].Pos.X *= (float)(this.Size.x * property.Size.x);
+                result[i].Pos.Y *= (float)(this.Size.y * property.Size.y);
+                result[i].Pos.Z *= (float)(this.Size.z * property.Size.z);
             }
             return result;
         }

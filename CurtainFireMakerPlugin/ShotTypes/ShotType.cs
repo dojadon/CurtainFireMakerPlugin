@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Entities;
+using CurtainFireMakerPlugin.Mathematics;
 using CsPmx.Data;
 
 namespace CurtainFireMakerPlugin.ShotTypes
@@ -10,10 +11,12 @@ namespace CurtainFireMakerPlugin.ShotTypes
     public abstract class ShotType
     {
         public String Name { get; }
+        public virtual Vector3 Size { get;  }
 
-        public ShotType(String name)
+        public ShotType(String name, Vector3 size)
         {
             this.Name = name;
+            this.Size = size;
         }
 
         public virtual bool HasMmdData()

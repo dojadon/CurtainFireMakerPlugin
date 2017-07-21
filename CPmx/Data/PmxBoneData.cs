@@ -9,65 +9,65 @@ namespace CsPmx.Data
     [Serializable]
     public class PmxBoneData : IPmxData
     {
-        public String boneName = "";
-        public String boneNameE = "";
+        public String BoneName { get; set; } = "";
+        public String BoneNameE { get; set; } = "";
         /** 座標 */
-        public Vector3 pos = new Vector3();
+        public Vector3 Pos { get; set; }
         /** ボーンID */
-        public int boneId;
+        public int BoneId { get; set; }
         /** 親(前)ボーンID. 無い場合は0xffff(-1). */
-        public int parentId;
+        public int ParentId { get; set; }
         /** 子(次)ボーンID. 末端の場合は0. */
-        public int arrowId;
+        public int ArrowId { get; set; }
         /** flags フラグが収められてる16 bit. {@link jp.sfjp.mikutoga.pmx.BoneFlags BoneFlags} 参照. */
-        public short flag;
+        public short Flag { get; set; }
         /** 外部親のID. */
-        public int extraParentId;
+        public int ExtraParentId { get; set; }
         /** 変形階層 */
-        public int depth;
+        public int Depth { get; set; }
         /** 矢先相対座標 */
-        public Vector3 posOffset = new Vector3();
+        public Vector3 PosOffset { get; set; }
         /** 連動親ボーンID. */
-        public int linkParent;
+        public int LinkParent { get; set; }
         /** 連動比. 負を指定することも可能. */
-        public float rate;
+        public float Rate { get; set; }
         /** 軸の絶対座標 */
-        public Vector3 axisVec = new Vector3();
+        public Vector3 AxisVec { get; set; }
         /** ローカルx軸 */
-        public Vector3 localAxisVecX = new Vector3();
+        public Vector3 LocalAxisVecX { get; set; }
         /** ローカルz軸 */
-        public Vector3 localAxisVecZ = new Vector3();
+        public Vector3 LocalAxisVecZ { get; set; }
         /** IKボーンが接近しようとするIK接続先ボーンID */
-        public int ikTargetId;
+        public int IkTargetId { get; set; }
         /** 再帰演算の深さ */
-        public int ikDepth;
+        public int IkDepth { get; set; }
         /** 制限角度強度 */
-        public float angleLimit;
+        public float AngleLimit { get; set; }
         /** IK影響下ボーンID */
-        public int[] ikChilds = { };
+        public int[] IkChilds { get; set; } = { };
         /** 回転角制御 */
-        public Vector3[] ikAngleMin = { };
+        public Vector3[] IkAngleMin { get; set; } = { };
         /** 回転角制御 */
-        public Vector3[] ikAngleMax = { };
+        public Vector3[] IkAngleMax { get; set; } = { };
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(this.boneName);
-            exporter.WritePmxText(this.boneNameE);
+            exporter.WritePmxText(this.BoneName);
+            exporter.WritePmxText(this.BoneNameE);
 
-            exporter.Write(this.pos);
-            exporter.WritePmxId(PmxExporter.SIZE_BONE, this.parentId);
+            exporter.Write(this.Pos);
+            exporter.WritePmxId(PmxExporter.SIZE_BONE, this.ParentId);
 
-            exporter.Write(this.depth);
-            exporter.Write(this.flag);
+            exporter.Write(this.Depth);
+            exporter.Write(this.Flag);
 
-            if (!BoneFlags.OFFSET.check(this.flag))
+            if (!BoneFlags.OFFSET.check(this.Flag))
             {
-                exporter.Write(this.posOffset);
+                exporter.Write(this.PosOffset);
             }
             else
             {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.arrowId);
+                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.ArrowId);
             }
 
             //if (BoneFlags.ROTATE_LINK.check(this.flag) || BoneFlags.MOVE_LINK.check(this.flag))
@@ -122,68 +122,68 @@ namespace CsPmx.Data
 
         public void Parse(PmxParser parser)
         {
-            this.boneName = parser.ReadPmxText();
-            this.boneNameE = parser.ReadPmxText();
+            this.BoneName = parser.ReadPmxText();
+            this.BoneNameE = parser.ReadPmxText();
 
-            this.pos = parser.ReadVector3();
-            this.parentId = parser.ReadPmxId(parser.SizeBone);
+            this.Pos = parser.ReadVector3();
+            this.ParentId = parser.ReadPmxId(parser.SizeBone);
 
-            this.depth = parser.ReadInt32();
-            this.flag = parser.ReadInt16();
+            this.Depth = parser.ReadInt32();
+            this.Flag = parser.ReadInt16();
 
-            if (!BoneFlags.OFFSET.check(this.flag))
+            if (!BoneFlags.OFFSET.check(this.Flag))
             {
-                this.posOffset = parser.ReadVector3();
+                this.PosOffset = parser.ReadVector3();
             }
             else
             {
-                this.arrowId = parser.ReadPmxId(parser.SizeBone);
+                this.ArrowId = parser.ReadPmxId(parser.SizeBone);
             }
 
-            if (BoneFlags.ROTATE_LINK.check(this.flag) || BoneFlags.MOVE_LINK.check(this.flag))
+            if (BoneFlags.ROTATE_LINK.check(this.Flag) || BoneFlags.MOVE_LINK.check(this.Flag))
             {
-                this.linkParent = parser.ReadPmxId(parser.SizeBone);
-                this.rate = parser.ReadSingle();
+                this.LinkParent = parser.ReadPmxId(parser.SizeBone);
+                this.Rate = parser.ReadSingle();
             }
 
-            if (BoneFlags.AXIS_ROTATE.check(this.flag))
+            if (BoneFlags.AXIS_ROTATE.check(this.Flag))
             {
-                this.axisVec = parser.ReadVector3();
+                this.AxisVec = parser.ReadVector3();
             }
 
-            if (BoneFlags.LOCAL_AXIS.check(this.flag))
+            if (BoneFlags.LOCAL_AXIS.check(this.Flag))
             {
-                this.localAxisVecX = parser.ReadVector3();
-                this.localAxisVecZ = parser.ReadVector3();
+                this.LocalAxisVecX = parser.ReadVector3();
+                this.LocalAxisVecZ = parser.ReadVector3();
             }
 
-            if (BoneFlags.EXTRA.check(this.flag))
+            if (BoneFlags.EXTRA.check(this.Flag))
             {
-                this.extraParentId = parser.ReadInt32();
+                this.ExtraParentId = parser.ReadInt32();
             }
 
-            if (BoneFlags.IK.check(this.flag))
+            if (BoneFlags.IK.check(this.Flag))
             {
-                this.ikTargetId = parser.ReadPmxId(parser.SizeBone);
+                this.IkTargetId = parser.ReadPmxId(parser.SizeBone);
 
-                this.ikDepth = parser.ReadInt32();
-                this.angleLimit = parser.ReadSingle();
+                this.IkDepth = parser.ReadInt32();
+                this.AngleLimit = parser.ReadSingle();
 
                 int boneNum = parser.ReadInt32();
-                this.ikChilds = new int[boneNum];
-                this.ikAngleMin = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
-                this.ikAngleMax = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
+                this.IkChilds = new int[boneNum];
+                this.IkAngleMin = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
+                this.IkAngleMax = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
 
                 for (int i = 0; i < boneNum; i++)
                 {
-                    this.ikChilds[i] = parser.ReadPmxId(parser.SizeBone);
+                    this.IkChilds[i] = parser.ReadPmxId(parser.SizeBone);
 
                     int limit = parser.ReadByte();
 
                     if (limit > 0)
                     {
-                        ikAngleMin[i] = parser.ReadVector3();
-                        ikAngleMax[i] = parser.ReadVector3();
+                        IkAngleMin[i] = parser.ReadVector3();
+                        IkAngleMax[i] = parser.ReadVector3();
                     }
                 }
             }

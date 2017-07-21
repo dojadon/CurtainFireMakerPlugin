@@ -8,12 +8,12 @@ namespace CsVmd.Data
     public class VmdHeaderData : IVmdData
     {
         public const string HEADER = "Vocaloid Motion Data 0002";
-        public string modelName;
+        public string ModelName { get; set; }
 
         public void Export(VmdExporter exporter)
         {
             exporter.WriteVmdText(HEADER, VmdExporter.HEADER_LENGTH);
-            exporter.WriteVmdText(this.modelName, VmdExporter.MODEL_NAME_LENGTH);
+            exporter.WriteVmdText(this.ModelName, VmdExporter.MODEL_NAME_LENGTH);
         }
     }
 }

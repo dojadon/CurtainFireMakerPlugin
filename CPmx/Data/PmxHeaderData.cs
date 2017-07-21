@@ -11,33 +11,33 @@ namespace CsPmx.Data
         protected const String LF = "\n"; // 0x0a
         protected const String CRLF = CR + LF; // 0x0d, 0x0a
 
-        public byte[] size;
+        public byte[] Size { get; set; }
 
-        public float version;
-        public String modelName = "";
-        public String modelNameE = "";
-        public String description = "";
-        public String descriptionE = "";
-        public int uv;
+        public float Version { get; set; }
+        public String ModelName { get; set; } = "";
+        public String ModelNameE { get; set; } = "";
+        public String Description { get; set; } = "";
+        public String DescriptionE { get; set; } = "";
+        public int Uv { get; set; }
 
-        public int encode;
+        public int Encode { get; set; }
 
         public void Export(PmxExporter exporter)
         {
             exporter.Write(MAGIC_BYTES);
 
-            exporter.Write(this.version);
+            exporter.Write(this.Version);
 
             exporter.Write((byte)PmxExporter.SIZE.Length);
             exporter.Write(PmxExporter.SIZE);
 
-            exporter.WritePmxText(this.modelName);
-            exporter.WritePmxText(this.modelNameE);
+            exporter.WritePmxText(this.ModelName);
+            exporter.WritePmxText(this.ModelNameE);
 
-            String description = this.description.Replace(LF, CRLF);
+            String description = this.Description.Replace(LF, CRLF);
             exporter.WritePmxText(description);
 
-            String descriptionE = this.descriptionE.Replace(LF, CRLF);
+            String descriptionE = this.DescriptionE.Replace(LF, CRLF);
             exporter.WritePmxText(descriptionE);
         }
 
@@ -45,16 +45,16 @@ namespace CsPmx.Data
         {
             byte[] magic = parser.ReadBytes(MAGIC_BYTES.Length);
 
-            this.version = parser.ReadSingle();
+            this.Version = parser.ReadSingle();
             byte sizeLen = parser.ReadByte();
-            this.size = parser.ReadBytes(sizeLen);
-            parser.Size = this.size;
+            this.Size = parser.ReadBytes(sizeLen);
+            parser.Size = this.Size;
 
-            this.modelName = parser.ReadPmxText();
-            this.modelNameE = parser.ReadPmxText();
+            this.ModelName = parser.ReadPmxText();
+            this.ModelNameE = parser.ReadPmxText();
 
-            this.description = parser.ReadPmxText();
-            this.descriptionE = parser.ReadPmxText();
+            this.Description = parser.ReadPmxText();
+            this.DescriptionE = parser.ReadPmxText();
         }
     }
 }

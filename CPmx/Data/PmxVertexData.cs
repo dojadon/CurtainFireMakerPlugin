@@ -14,10 +14,10 @@ namespace CsPmx.Data
         public const byte WEIGHT_TYPE_BDEF4 = 2;
         public const byte WEIGHT_TYPE_SDEF = 3;
 
-        public Vector3 pos = new Vector3();
-        public Vector3 normal = new Vector3();
-        public Vector2 uv = new Vector2();
-        public float edge;
+        public Vector3 Pos { get; set; }
+        public Vector3 Normal { get; set; }
+        public Vector2 Uv { get; set; }
+        public float Edge { get; set; }
 
         /**
          * <ul>
@@ -28,94 +28,94 @@ namespace CsPmx.Data
          * <li>4:QDEF(※2.1拡張)
          * </ul>
          */
-        public byte weightType;
-        public int[] boneId;
-        public float[] weight;
-        public Vector3 sdef_c = new Vector3();
-        public Vector3 sdef_r0 = new Vector3();
-        public Vector3 sdef_r1 = new Vector3();
+        public byte WeightType { get; set; }
+        public int[] BoneId { get; set; }
+        public float[] Weight { get; set; }
+        public Vector3 Sdef_c { get; set; }
+        public Vector3 Sdef_r0 { get; set; }
+        public Vector3 Sdef_r1 { get; set; }
 
         public void Export(PmxExporter exporter)
         {
-            exporter.Write(this.pos);
-            exporter.Write(this.normal);
-            exporter.Write(this.uv);
+            exporter.Write(this.Pos);
+            exporter.Write(this.Normal);
+            exporter.Write(this.Uv);
 
             // for (byte i = 0; i < num_uv; i++)
             // {
             // exporter.dumpLeFloat(uvEX.x).dumpLeFloat(uvEX.y).dumpLeFloat(uvEX.z).dumpLeFloat(uvEX.w);
             // }
 
-            exporter.Write(this.weightType);
+            exporter.Write(this.WeightType);
 
-            for (byte i = 0; i < this.boneId.Length; i++)
+            for (byte i = 0; i < this.BoneId.Length; i++)
             {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.boneId[i]);
+                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.BoneId[i]);
             }
 
-            switch (this.weightType)
+            switch (this.WeightType)
             {
                 case WEIGHT_TYPE_BDEF1:
                     break;
 
                 case WEIGHT_TYPE_BDEF2:
                 case WEIGHT_TYPE_SDEF:
-                    exporter.Write(this.weight[0]);
+                    exporter.Write(this.Weight[0]);
                     break;
 
                 case WEIGHT_TYPE_BDEF4:
                     for (byte i = 0; i < 4; i++)
                     {
-                        exporter.Write(this.weight[i]);
+                        exporter.Write(this.Weight[i]);
                     }
                     break;
             }
 
-            if (this.weightType == WEIGHT_TYPE_SDEF)
+            if (this.WeightType == WEIGHT_TYPE_SDEF)
             {
-                exporter.Write(this.sdef_c);
-                exporter.Write(this.sdef_r0);
-                exporter.Write(this.sdef_r1);
+                exporter.Write(this.Sdef_c);
+                exporter.Write(this.Sdef_r0);
+                exporter.Write(this.Sdef_r1);
             }
-            exporter.Write(this.edge);
+            exporter.Write(this.Edge);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.pos = parser.ReadVector3();
-            this.normal = parser.ReadVector3();
-            this.uv = parser.ReadVector2();
+            this.Pos = parser.ReadVector3();
+            this.Normal = parser.ReadVector3();
+            this.Uv = parser.ReadVector2();
 
-            this.weightType = parser.ReadByte();
+            this.WeightType = parser.ReadByte();
 
-            switch (this.weightType)
+            switch (this.WeightType)
             {
                 case WEIGHT_TYPE_BDEF1:
-                    this.boneId = new int[1];
+                    this.BoneId = new int[1];
                     break;
 
                 case WEIGHT_TYPE_BDEF2:
                 case WEIGHT_TYPE_SDEF:
-                    this.boneId = new int[2];
+                    this.BoneId = new int[2];
                     break;
 
                 case WEIGHT_TYPE_BDEF4:
-                    this.boneId = new int[4];
+                    this.BoneId = new int[4];
                     break;
             }
 
-            for (int i = 0; i < this.boneId.Length; i++)
+            for (int i = 0; i < this.BoneId.Length; i++)
             {
-                this.boneId[i] = parser.ReadPmxId(parser.SizeBone);
+                this.BoneId[i] = parser.ReadPmxId(parser.SizeBone);
             }
 
-            if (this.weightType == WEIGHT_TYPE_SDEF)
+            if (this.WeightType == WEIGHT_TYPE_SDEF)
             {
-                this.sdef_c = parser.ReadVector3();
-                this.sdef_r0 = parser.ReadVector3();
-                this.sdef_r1 = parser.ReadVector3();
+                this.Sdef_c = parser.ReadVector3();
+                this.Sdef_r0 = parser.ReadVector3();
+                this.Sdef_r1 = parser.ReadVector3();
             }
-            this.edge = parser.ReadSingle();
+            this.Edge = parser.ReadSingle();
         }
     }
 }

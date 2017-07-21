@@ -183,8 +183,8 @@ namespace CurtainFireMakerPlugin
                 var data = new PmxModelData();
                 world.PmxModel.GetData(data);
 
-                data.Header.modelName = this.ModelName;
-                data.Header.description += this.ModelDescription;
+                data.Header.ModelName = this.ModelName;
+                data.Header.Description += this.ModelDescription;
 
                 exporter.Export(data);
 
@@ -210,7 +210,7 @@ namespace CurtainFireMakerPlugin
                 var data = new VmdMotionData();
                 world.VmdMotion.GetData(data);
 
-                data.Header.modelName = this.ModelName;
+                data.Header.ModelName = this.ModelName;
 
                 exporter.Export(data);
             }
