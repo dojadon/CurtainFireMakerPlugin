@@ -80,14 +80,14 @@ namespace CurtainFireMakerPlugin
 
             if (IsPlugin)
             {
-                var form = new ExportSettingForm();
-
-                form.ScriptPath = this.ScriptPath;
-                form.ExportDirPath = this.ExportDirPath;
-                form.ModelName = this.ModelName;
-                form.ModelDescription = this.ModelDescription;
-                form.KeepLogOpen = this.KeepLogOpen;
-
+                var form = new ExportSettingForm()
+                {
+                    ScriptPath = this.ScriptPath,
+                    ExportDirPath = this.ExportDirPath,
+                    ModelName = this.ModelName,
+                    ModelDescription = this.ModelDescription,
+                    KeepLogOpen = this.KeepLogOpen
+                };
                 form.ShowDialog(this.ApplicationForm);
 
                 if (form.DialogResult == DialogResult.OK)
@@ -125,8 +125,7 @@ namespace CurtainFireMakerPlugin
                             sw.Dispose();
                             this.running = false;
 
-                            StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput());
-                            standardOutput.AutoFlush = true;
+                            StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                             Console.SetOut(standardOutput);
 
                             progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");

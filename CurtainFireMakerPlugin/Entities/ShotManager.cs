@@ -122,9 +122,13 @@ namespace CurtainFireMakerPlugin.Entities
                 if (removeList.Count > 1)
                 {
                     PmxMorphData addMoroh = this.Compress(removeList);
+                    removeList.Remove(addMoroh);
 
-                    removeList.ForEach(m => this.World.PmxModel.MorphList.Remove(m));
-                    this.World.PmxModel.MorphList.Add(addMoroh);
+                    foreach (var morph in removeList)
+                    {
+                        World.PmxModel.MorphList.Remove(morph);
+                        World.VmdMotion.MorphDict[morph].ForEach(v => this.World.VmdMotion.MorphDict.Remove(morph, v));
+                    }
                 }
             }
         }

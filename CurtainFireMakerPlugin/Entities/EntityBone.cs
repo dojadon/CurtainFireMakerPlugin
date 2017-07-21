@@ -45,7 +45,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (var layer in bone.Layers)
             {
-                MotionFrameData data = layer.Frames.GetFrame(this.world.FrameCount);
+                MotionFrameData data = layer.Frames.GetFrame(this.World.FrameCount);
                 pos += data.Position;
                 rot *= data.Quaternion;
             }

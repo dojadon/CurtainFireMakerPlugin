@@ -50,6 +50,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        public Func<EntityShot, EntityShot, bool> CollisionPredicate { get; set; } = (e1, e2) => (e1.Pos - e2.Pos).Length < 1.0;
+ 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color))
         {
         }
@@ -60,7 +62,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             this.Property.Type.Init(this);
 
-            ModelData = this.world.AddShot(this);
+            ModelData = this.World.AddShot(this);
             Bones = ModelData.Bones;
             RootBone = Bones[0];
             MaterialMorph = ModelData.MaterialMorph;
@@ -89,7 +91,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnSpawn();
 
-            this.AddVmdMorph(-this.world.FrameCount, 1.0F, this.MaterialMorph);
+            this.AddVmdMorph(-this.World.FrameCount, 1.0F, this.MaterialMorph);
             this.AddVmdMorph(0, 1.0F, this.MaterialMorph);
             this.AddVmdMorph(1, 0.0F, this.MaterialMorph);
 
@@ -132,38 +134,38 @@ namespace CurtainFireMakerPlugin.Entities
             var motion = new VmdMotionFrameData()
             {
                 BoneName = this.RootBone.BoneName,
-                KeyFrameNo = this.world.FrameCount,
+                KeyFrameNo = this.World.FrameCount,
                 Pos = (DxMath.Vector3)this.Pos,
                 Rot = (DxMath.Quaternion)this.Rot
             };
 
-            if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.world.FrameCount)
+            if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.World.FrameCount)
             {
                 replace = true;
 
                 var interpolation = new byte[4];
-                interpolation[0] = (byte)(127 * this.motionInterpolation.curve.p1.x);
-                interpolation[1] = (byte)(127 * this.motionInterpolation.curve.p1.y);
-                interpolation[2] = (byte)(127 * this.motionInterpolation.curve.p2.x);
-                interpolation[3] = (byte)(127 * this.motionInterpolation.curve.p2.y);
+                interpolation[0] = (byte)(127 * this.motionInterpolation.curve.P1.x);
+                interpolation[1] = (byte)(127 * this.motionInterpolation.curve.P1.y);
+                interpolation[2] = (byte)(127 * this.motionInterpolation.curve.P2.x);
+                interpolation[3] = (byte)(127 * this.motionInterpolation.curve.P2.y);
 
                 motion.InterpolatePointX = motion.InterpolatePointY = motion.InterpolatePointZ = motion.InterpolatePointR = interpolation;
             }
 
-            this.world.VmdMotion.AddVmdMotion(motion, replace);
+            this.World.VmdMotion.AddVmdMotion(motion, replace);
         }
 
-        public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph)
+        public void AddVmdMorph(int frameOffset, double rate, PmxMorphData morph)
         {
             if (this.Property.Type.HasMmdData())
             {
                 var frameData = new VmdMorphFrameData()
                 {
                     MorphName = morph.MorphName,
-                    KeyFrameNo = this.world.FrameCount + frameOffset,
-                    Rate = rate
+                    KeyFrameNo = this.World.FrameCount + frameOffset,
+                    Rate = (float)rate
                 };
-                this.world.VmdMotion.AddVmdMorph(frameData, morph);
+                this.World.VmdMotion.AddVmdMorph(frameData, morph);
             }
         }
 
@@ -181,27 +183,20 @@ namespace CurtainFireMakerPlugin.Entities
             for (int i = 0; i < morph.MorphArray.Length; i++)
             {
                 var vertex = vertices[i];
-                var pos = new Vector3()
-                {
-                    x = vertex.Pos.X * Property.Scale.x,
-                    y = vertex.Pos.Y * Property.Scale.y,
-                    z = vertex.Pos.Z * Property.Scale.z
-                };
-
                 var vertexMorph = new PmxMorphVertexData()
                 {
-                    Index = this.world.PmxModel.VertexList.IndexOf(vertex),
-                    Position = (DxMath.Vector3)func(pos)
+                    Index = this.World.PmxModel.VertexList.IndexOf(vertex),
+                    Position = (DxMath.Vector3)func(vertex.Pos)
                 };
                 morph.MorphArray[i] = vertexMorph;
             }
-            this.world.PmxModel.MorphList.Add(morph);
+            this.World.PmxModel.MorphList.Add(morph);
             return morph;
         }
 
-        public void CreateVertexMorph(PythonFunction func)
+        public PmxMorphData CreateVertexMorph(PythonFunction func)
         {
-            this.CreateVertexMorph(v => (Vector3)PythonCalls.Call(func, v));
+            return this.CreateVertexMorph(v => (Vector3)PythonCalls.Call(func, v));
         }
     }
 }

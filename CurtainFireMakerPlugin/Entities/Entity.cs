@@ -44,11 +44,15 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected MotionInterpolation motionInterpolation;
         private TaskManager taskManager = new TaskManager();
-        public readonly World world;
+        public World World { get; }
+
+        public int EntityId { get; }
+        private static int nextEntityId;
 
         public Entity(World world)
         {
-            this.world = world;
+            this.World = world;
+            this.EntityId = nextEntityId++;
         }
 
         internal virtual void Frame()
@@ -77,7 +81,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (this.motionInterpolation != null)
             {
-                if (this.motionInterpolation.Within(this.world.FrameCount))
+                if (this.motionInterpolation.Within(this.World.FrameCount))
                 {
                     //double changeAmount = this.motionInterpolation.GetChangeAmount(this.world.FrameCount);
                     //interpolatedVelocity *= (float)changeAmount;
@@ -117,20 +121,20 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void OnSpawn()
         {
-            this.SpawnFrameNo = this.world.AddEntity(this);
+            this.SpawnFrameNo = this.World.AddEntity(this);
             this.spawnPos = this.Pos;
         }
 
         public virtual void OnDeath()
         {
-            this.DeathFrameNo = this.world.RemoveEntity(this);
+            this.DeathFrameNo = this.World.RemoveEntity(this);
             this.IsDeath = true;
         }
 
         public virtual void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
         {
             Vector3 endPos = this.Velocity * length + this.Pos;
-            int frame = this.world.FrameCount;
+            int frame = this.World.FrameCount;
             this.motionInterpolation = new MotionInterpolation(frame, frame + length, pos1, pos2, this.Pos, endPos);
         }
 
@@ -160,5 +164,18 @@ namespace CurtainFireMakerPlugin.Entities
                 this.AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Entity e && EntityId == e.EntityId;
+        }
+
+        public override int GetHashCode()
+        {
+            return EntityId;
+        }
+
+        public static bool operator ==(Entity e1, Entity e2) => e1.EntityId == e2.EntityId;
+        public static bool operator !=(Entity e1, Entity e2) => e1.EntityId != e2.EntityId;
     }
 }

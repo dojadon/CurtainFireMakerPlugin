@@ -14,9 +14,9 @@ namespace CsPmx.Data
         public const byte WEIGHT_TYPE_BDEF4 = 2;
         public const byte WEIGHT_TYPE_SDEF = 3;
 
-        public Vector3 Pos { get; set; }
-        public Vector3 Normal { get; set; }
-        public Vector2 Uv { get; set; }
+        public Vector3 Pos;
+        public Vector3 Normal;
+        public Vector2 Uv;
         public float Edge { get; set; }
 
         /**
@@ -31,9 +31,9 @@ namespace CsPmx.Data
         public byte WeightType { get; set; }
         public int[] BoneId { get; set; }
         public float[] Weight { get; set; }
-        public Vector3 Sdef_c { get; set; }
-        public Vector3 Sdef_r0 { get; set; }
-        public Vector3 Sdef_r1 { get; set; }
+        public Vector3 Sdef_c;
+        public Vector3 Sdef_r0;
+        public Vector3 Sdef_r1;
 
         public void Export(PmxExporter exporter)
         {

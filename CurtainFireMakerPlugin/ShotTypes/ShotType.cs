@@ -11,7 +11,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
     public abstract class ShotType
     {
         public String Name { get; }
-        public virtual Vector3 Size { get;  }
+        public virtual Vector3 Size { get; }
 
         public ShotType(String name, Vector3 size)
         {
@@ -50,7 +50,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
         private readonly bool hasMmd;
         private readonly bool recordMotion;
 
-        public ShotTypeNone(string name, bool hasMmd, bool recordMotion) : base(name)
+        public ShotTypeNone(string name, bool hasMmd, bool recordMotion) : base(name, new Vector3(1, 1, 1))
         {
             this.hasMmd = hasMmd;
             this.recordMotion = recordMotion;

@@ -12,7 +12,6 @@ namespace CurtainFireMakerPlugin.Entities
     internal class CurtainFireMotion
     {
         private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
-        private List<VmdMorphFrameData> morphList = new List<VmdMorphFrameData>();
         public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphDict { get; } = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
 
         public void AddVmdMotion(VmdMotionFrameData motion, bool replace = false)
@@ -33,18 +32,20 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddVmdMorph(VmdMorphFrameData frameData, PmxMorphData morph)
         {
-            morphList.RemoveAll(m => m.MorphName.Equals(frameData.MorphName) && m.KeyFrameNo == frameData.KeyFrameNo);
-            morphList.Add(frameData);
-
-            MorphDict.Add(morph, frameData);
+            MorphDict[morph].RemoveAll(m => m.MorphName.Equals(frameData.MorphName) && m.KeyFrameNo == frameData.KeyFrameNo);
+            MorphDict[morph].Add(frameData);
         }
 
         public void GetData(VmdMotionData data)
         {
-            data.Header.ModelName = "弾幕";
-
             data.MotionArray = this.motionList.ToArray();
-            data.MorphArray = this.morphList.ToArray();
+
+            var list = new List<VmdMorphFrameData>();
+            foreach(var value in MorphDict.Values)
+            {
+                list.AddRange(value);
+            }
+            data.MorphArray = list.ToArray();
         }
     }
 }

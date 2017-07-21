@@ -21,17 +21,17 @@ namespace CurtainFireMakerPlugin.ShotTypes
             {
                 var motion = this.GetMotionData();
                 motion.BoneName = entity.Bones[1].BoneName;
-                motion.KeyFrameNo = entity.world.FrameCount;
+                motion.KeyFrameNo = entity.World.FrameCount;
 
                 motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, angle);
-                entity.world.VmdMotion.AddVmdMotion(motion);
+                entity.World.VmdMotion.AddVmdMotion(motion);
 
                 motion = this.GetMotionData();
                 motion.BoneName = entity.Bones[2].BoneName;
-                motion.KeyFrameNo = entity.world.FrameCount;
+                motion.KeyFrameNo = entity.World.FrameCount;
 
                 motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, -angle);
-                entity.world.VmdMotion.AddVmdMotion(motion);
+                entity.World.VmdMotion.AddVmdMotion(motion);
 
             }, 120, 0, 0);
 
@@ -39,17 +39,17 @@ namespace CurtainFireMakerPlugin.ShotTypes
             {
                 var motion = this.GetMotionData();
                 motion.BoneName = entity.Bones[1].BoneName;
-                motion.KeyFrameNo = entity.world.FrameCount;
+                motion.KeyFrameNo = entity.World.FrameCount;
 
                 motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, -angle);
-                entity.world.VmdMotion.AddVmdMotion(motion);
+                entity.World.VmdMotion.AddVmdMotion(motion);
 
                 motion = this.GetMotionData();
                 motion.BoneName = entity.Bones[2].BoneName;
-                motion.KeyFrameNo = entity.world.FrameCount;
+                motion.KeyFrameNo = entity.World.FrameCount;
 
                 motion.Rot = (DxMath.Quaternion)Quaternion.RotationAxisAngle(Vector3.UnitZ, angle);
-                entity.world.VmdMotion.AddVmdMotion(motion);
+                entity.World.VmdMotion.AddVmdMotion(motion);
 
             }, 120, 0, 60);
         }
