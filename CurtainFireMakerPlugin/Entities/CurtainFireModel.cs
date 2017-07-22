@@ -36,7 +36,7 @@ namespace CurtainFireMakerPlugin.Entities
                 }
                 else
                 {
-                    this.SetupBone(data.Bones[0]);
+                    this.SetupBone(data, data.Bones[0]);
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             PmxMaterialData[] materials = data.Materials;
             PmxMorphData morph = data.MaterialMorph;
-            morph.MorphName = this.MorphList.Count.ToString();
+            morph.MorphName = data.Property.Type.Name + this.MorphList.Count.ToString();
             morph.Type = 4;
             morph.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
 
@@ -76,28 +76,28 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = this.MaterialList.Count.ToString();
+                material.MaterialName = data.Property.Type.Name + this.MaterialList.Count.ToString();
                 material.Diffuse = new DxMath.Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
                 material.Ambient = new DxMath.Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
                 material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? this.TextureList.IndexOf(textures[material.TextureId]) : -1;
                 this.MaterialList.Add(material);
             }
-            this.SetupBone(data.Bones);
+            this.SetupBone(data, data.Bones);
         }
 
-        private void SetupBone(params PmxBoneData[] data)
+        private void SetupBone(ShotModelData data, params PmxBoneData[] bones)
         {
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < bones.Length; i++)
             {
-                PmxBoneData bone = data[i];
+                PmxBoneData bone = bones[i];
 
-                bone.BoneName = (this.BoneList.Count - 1).ToString();
+                bone.BoneName = data.Property.Type.Name + (this.BoneList.Count - 1).ToString();
                 bone.Flag = 0x0001 | 0x0002 | 0x0004 | 0x0010;
                 bone.BoneId = this.BoneList.Count + i;
 
-                if (-1 < bone.ParentId && bone.ParentId < data.Length)
+                if (-1 < bone.ParentId && bone.ParentId < bones.Length)
                 {
-                    bone.ParentId = this.BoneList.IndexOf(data[bone.ParentId]);
+                    bone.ParentId = this.BoneList.IndexOf(bones[bone.ParentId]);
                 }
                 else
                 {
