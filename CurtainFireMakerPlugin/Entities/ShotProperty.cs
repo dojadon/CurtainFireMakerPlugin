@@ -27,8 +27,6 @@ namespace CurtainFireMakerPlugin.Entities
             this.Type = type;
         }
 
-        public Vector3 Scale => new Vector3(Size.x * Type.Size.x, Size.y * Type.Size.y, Size.z * Type.Size.z);
-
         public override bool Equals(object obj)
         {
             if (obj == null)

@@ -5,6 +5,8 @@ using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Mathematics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
@@ -12,11 +14,15 @@ namespace CurtainFireMakerPlugin.ShotTypes
     {
         private PmxModelData data = new PmxModelData();
 
-        public ShotTypePmx(string name, string path, double size) : this(name, path, new Vector3(size, size, size))
+        public ShotTypePmx(string name, string path, double size, PythonFunction func) : this(name, path, size, e => PythonCalls.Call(func, e))
         {
         }
 
-        public ShotTypePmx(string name, string path, Vector3 size) : base(name, size)
+        public ShotTypePmx(string name, string path, double size) : this(name, path, size, e => { })
+        {
+        }
+
+        public ShotTypePmx(string name, string path, double size, Action<EntityShot> action) : base(name, size, action)
         {
             var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
@@ -33,9 +39,9 @@ namespace CurtainFireMakerPlugin.ShotTypes
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = DeepCopy(this.data.VertexArray[i]);
-                result[i].Pos.X *= (float)(this.Size.x * property.Size.x);
-                result[i].Pos.Y *= (float)(this.Size.y * property.Size.y);
-                result[i].Pos.Z *= (float)(this.Size.z * property.Size.z);
+                result[i].Pos.X *= (float)(this.Size * property.Size.x);
+                result[i].Pos.Y *= (float)(this.Size * property.Size.y);
+                result[i].Pos.Z *= (float)(this.Size * property.Size.z);
             }
             return result;
         }

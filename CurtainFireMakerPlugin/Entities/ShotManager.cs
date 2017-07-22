@@ -86,7 +86,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void Compress()
         {
-            if (!this.Type.HasMmdData())
+            if (!this.Type.HasMmdData)
             {
                 return;
             }

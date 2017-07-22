@@ -5,33 +5,33 @@ using System.Text;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Mathematics;
 using CsPmx.Data;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
     public abstract class ShotType
     {
         public String Name { get; }
-        public virtual Vector3 Size { get; }
+        public double Size { get; }
+        public Action<EntityShot> InitAction { get; set; }
 
-        public ShotType(String name, Vector3 size)
+        public ShotType(String name, double size) : this(name, size, e => { }) { }
+        public ShotType(String name, double size, PythonFunction func) : this(name, size, e => PythonCalls.Call(func, e)) { }
+
+        public ShotType(String name, double size, Action<EntityShot> initAction)
         {
             this.Name = name;
             this.Size = size;
+            this.InitAction = initAction;
         }
 
-        public virtual bool HasMmdData()
-        {
-            return true;
-        }
-
-        public virtual bool RecordMotion()
-        {
-            return true;
-        }
+        public virtual bool HasMmdData => true;
+        public virtual bool RecordMotion => true;
 
         public virtual void Init(EntityShot entity)
         {
-
+            InitAction(entity);
         }
 
         public abstract PmxVertexData[] GetVertices(ShotProperty property);
@@ -50,21 +50,15 @@ namespace CurtainFireMakerPlugin.ShotTypes
         private readonly bool hasMmd;
         private readonly bool recordMotion;
 
-        public ShotTypeNone(string name, bool hasMmd, bool recordMotion) : base(name, new Vector3(1, 1, 1))
+        public ShotTypeNone(string name, bool hasMmd, bool recordMotion) : base(name, 1)
         {
             this.hasMmd = hasMmd;
             this.recordMotion = recordMotion;
         }
 
-        public override bool HasMmdData()
-        {
-            return this.hasMmd;
-        }
+        public override bool HasMmdData => this.hasMmd;
 
-        public override bool RecordMotion()
-        {
-            return this.recordMotion;
-        }
+        public override bool RecordMotion => this.recordMotion;
 
         public override PmxBoneData[] GetBones(ShotProperty property)
         {

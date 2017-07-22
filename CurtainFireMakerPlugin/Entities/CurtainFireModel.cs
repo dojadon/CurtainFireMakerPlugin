@@ -28,9 +28,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void InitShotModelData(ShotModelData data)
         {
-            if (data.Property.Type.RecordMotion())
+            if (data.Property.Type.RecordMotion)
             {
-                if (data.Property.Type.HasMmdData())
+                if (data.Property.Type.HasMmdData)
                 {
                     this.SetupShotModelData(data);
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Mathematics;
+using CurtainFireMakerPlugin.BezierCurve;
 using CsPmx.Data;
 using CsVmd.Data;
 using IronPython.Runtime;
@@ -22,7 +23,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 this.parentEntity = value;
 
-                if (value is EntityShot entity && entity.Property.Type.RecordMotion())
+                if (value is EntityShot entity && entity.Property.Type.RecordMotion)
                 {
                     this.RootBone.ParentId = entity.RootBone.BoneId;
                 }
@@ -49,8 +50,6 @@ namespace CurtainFireMakerPlugin.Entities
                 this.RotateAccodingToVelocity = value;
             }
         }
-
-        public Func<EntityShot, EntityShot, bool> CollisionPredicate { get; set; } = (e1, e2) => (e1.Pos - e2.Pos).Length < 1.0;
 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color))
         {
@@ -131,33 +130,42 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.UpdateRot();
 
-            var motion = new VmdMotionFrameData()
-            {
-                BoneName = this.RootBone.BoneName,
-                KeyFrameNo = this.World.FrameCount,
-                Pos = (DxMath.Vector3)this.Pos,
-                Rot = (DxMath.Quaternion)this.Rot
-            };
-
             if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.World.FrameCount)
             {
-                replace = true;
-
-                var interpolation = new byte[4];
-                interpolation[0] = (byte)(127 * this.motionInterpolation.curve.P1.x);
-                interpolation[1] = (byte)(127 * this.motionInterpolation.curve.P1.y);
-                interpolation[2] = (byte)(127 * this.motionInterpolation.curve.P2.x);
-                interpolation[3] = (byte)(127 * this.motionInterpolation.curve.P2.y);
-
-                motion.InterpolatePointX = motion.InterpolatePointY = motion.InterpolatePointZ = motion.InterpolatePointR = interpolation;
+                this.AddVmdMotion(RootBone, Pos, Rot, this.motionInterpolation.curve, true);
             }
+            else
+            {
+                this.AddVmdMotion(RootBone, Pos, Rot, VmdBezierCurve.Line, false);
+            }
+        }
+
+        public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, VmdBezierCurve bezier, bool replace = true)
+        {
+            var interpolation = new byte[4];
+            interpolation[0] = (byte)(127 * bezier.P1.x);
+            interpolation[1] = (byte)(127 * bezier.P1.y);
+            interpolation[2] = (byte)(127 * bezier.P2.x);
+            interpolation[3] = (byte)(127 * bezier.P2.y);
+
+            var motion = new VmdMotionFrameData()
+            {
+                BoneName = bone.BoneName,
+                KeyFrameNo = this.World.FrameCount,
+                Pos = (DxMath.Vector3)pos,
+                Rot = (DxMath.Quaternion)rot,
+                InterpolatePointX = interpolation,
+                InterpolatePointY = interpolation,
+                InterpolatePointZ = interpolation,
+                InterpolatePointR = interpolation
+            };
 
             this.World.VmdMotion.AddVmdMotion(motion, replace);
         }
 
         public void AddVmdMorph(int frameOffset, double rate, PmxMorphData morph)
         {
-            if (this.Property.Type.HasMmdData())
+            if (this.Property.Type.HasMmdData)
             {
                 var frameData = new VmdMorphFrameData()
                 {
@@ -174,7 +182,7 @@ namespace CurtainFireMakerPlugin.Entities
             string vertexMorphName = "v" + this.MaterialMorph.MorphName;
             PmxMorphData morph = this.World.PmxModel.MorphList.Find(v => v.MorphName == vertexMorphName);
 
-            if(morph == null)
+            if (morph == null)
             {
                 var vertices = ModelData.Vertices;
 
@@ -198,7 +206,7 @@ namespace CurtainFireMakerPlugin.Entities
 
                 this.World.PmxModel.MorphList.Add(morph);
             }
-            
+
             return morph;
         }
 
