@@ -36,12 +36,30 @@ namespace CurtainFireMakerPlugin.Entities
             MorphDict[morph].Add(frameData);
         }
 
+        public void Finish(CurtainFireModel pmxModel)
+        {
+            var removeList = new List<PmxMorphData>();
+
+            foreach (var morph in MorphDict.Keys)
+            {
+                if (!pmxModel.MorphList.Contains(morph))
+                {
+                    removeList.Add(morph);
+                }
+            }
+
+            foreach (var key in removeList)
+            {
+                MorphDict.Remove(key);
+            }
+        }
+
         public void GetData(VmdMotionData data)
         {
             data.MotionArray = this.motionList.ToArray();
 
             var list = new List<VmdMorphFrameData>();
-            foreach(var value in MorphDict.Values)
+            foreach (var value in MorphDict.Values)
             {
                 list.AddRange(value);
             }

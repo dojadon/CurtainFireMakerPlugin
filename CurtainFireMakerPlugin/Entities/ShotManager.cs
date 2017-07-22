@@ -127,7 +127,6 @@ namespace CurtainFireMakerPlugin.Entities
                     foreach (var morph in removeList)
                     {
                         World.PmxModel.MorphList.Remove(morph);
-                        World.VmdMotion.MorphDict[morph].ForEach(v => this.World.VmdMotion.MorphDict.Remove(morph, v));
                     }
                 }
             }

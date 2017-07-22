@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin.Forms
@@ -18,6 +18,7 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 this.scriptText.Text = value;
                 this.scriptFileDialog.FileName = value;
+                this.scriptFileDialog.InitialDirectory = Path.GetDirectoryName(value);
             }
         }
         public string ModelName { get { return this.modelNameText.Text; } set { this.modelNameText.Text = value; } }

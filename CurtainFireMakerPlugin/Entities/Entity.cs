@@ -174,8 +174,5 @@ namespace CurtainFireMakerPlugin.Entities
         {
             return EntityId;
         }
-
-        public static bool operator ==(Entity e1, Entity e2) => e1.EntityId == e2.EntityId;
-        public static bool operator !=(Entity e1, Entity e2) => e1.EntityId != e2.EntityId;
     }
 }

@@ -73,6 +73,7 @@ namespace CurtainFireMakerPlugin
         internal void Finish()
         {
             this.ShotManager.CompressMorph();
+            this.VmdMotion.Finish(PmxModel);
         }
 
         public void AddTask(Task task)

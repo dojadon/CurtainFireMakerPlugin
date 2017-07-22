@@ -51,7 +51,7 @@ namespace CurtainFireMakerPlugin.Entities
         }
 
         public Func<EntityShot, EntityShot, bool> CollisionPredicate { get; set; } = (e1, e2) => (e1.Pos - e2.Pos).Length < 1.0;
- 
+
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color))
         {
         }
@@ -171,26 +171,34 @@ namespace CurtainFireMakerPlugin.Entities
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
-            var vertices = ModelData.Vertices;
+            string vertexMorphName = "v" + this.MaterialMorph.MorphName;
+            PmxMorphData morph = this.World.PmxModel.MorphList.Find(v => v.MorphName == vertexMorphName);
 
-            var morph = new PmxMorphData()
+            if(morph == null)
             {
-                MorphName = "v" + this.MaterialMorph.MorphName,
-                Type = PmxMorphData.MORPHTYPE_VERTEX,
-                MorphArray = new PmxMorphVertexData[vertices.Length]
-            };
+                var vertices = ModelData.Vertices;
 
-            for (int i = 0; i < morph.MorphArray.Length; i++)
-            {
-                var vertex = vertices[i];
-                var vertexMorph = new PmxMorphVertexData()
+                morph = new PmxMorphData()
                 {
-                    Index = this.World.PmxModel.VertexList.IndexOf(vertex),
-                    Position = (DxMath.Vector3)func(vertex.Pos)
+                    MorphName = vertexMorphName,
+                    Type = PmxMorphData.MORPHTYPE_VERTEX,
+                    MorphArray = new PmxMorphVertexData[vertices.Length]
                 };
-                morph.MorphArray[i] = vertexMorph;
+
+                for (int i = 0; i < morph.MorphArray.Length; i++)
+                {
+                    var vertex = vertices[i];
+                    var vertexMorph = new PmxMorphVertexData()
+                    {
+                        Index = this.World.PmxModel.VertexList.IndexOf(vertex),
+                        Position = (DxMath.Vector3)func(vertex.Pos)
+                    };
+                    morph.MorphArray[i] = vertexMorph;
+                }
+
+                this.World.PmxModel.MorphList.Add(morph);
             }
-            this.World.PmxModel.MorphList.Add(morph);
+            
             return morph;
         }
 

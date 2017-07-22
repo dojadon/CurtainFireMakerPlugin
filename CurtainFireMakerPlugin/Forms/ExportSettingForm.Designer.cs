@@ -178,6 +178,7 @@
             // scriptFileDialog
             // 
             this.scriptFileDialog.FileName = "openFileDialog1";
+            this.scriptFileDialog.Filter = "|*.py";
             // 
             // checkBox1
             // 
