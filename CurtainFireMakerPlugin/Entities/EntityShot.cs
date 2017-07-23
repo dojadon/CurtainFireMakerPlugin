@@ -35,14 +35,75 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData[] Bones { get; }
         public PmxMorphData MaterialMorph { get; }
 
-        private bool ShouldRecord { get; set; }
-
-        public bool RotateAccodingToVelocity { get; set; } = true;
-        public bool RecordWhenVelocityChanges
+        private bool ShouldRecord
         {
+            get
+            {
+                return this.RecordWhenVelocityChanges ? UpdatedVelocity : UpdatedPos;
+            }
             set
             {
-                this.RotateAccodingToVelocity = value;
+                this.UpdatedVelocity = this.UpdatedPos = value;
+            }
+        }
+        private bool UpdatedVelocity { get; set; }
+        private bool UpdatedPos { get; set; }
+
+        public override Vector3 Velocity
+        {
+            get => base.Velocity;
+            set
+            {
+                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & base.Velocity != value;
+                base.Velocity = value;
+            }
+        }
+
+        public override Vector3 Upward
+        {
+            get => base.Upward;
+            set
+            {
+                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & base.Upward != value;
+                base.Upward = value;
+            }
+        }
+
+        public override Vector3 Pos
+        {
+            get => base.Pos;
+            set
+            {
+                this.UpdatedPos |= !this.RecordWhenVelocityChanges & base.Pos != value;
+                base.Pos = value;
+            }
+        }
+
+        public override Quaternion Rot
+        {
+            get => base.Rot;
+            set
+            {
+                this.UpdatedPos |= !this.RecordWhenVelocityChanges & base.Rot != value;
+                base.Rot = value;
+            }
+        }
+
+        private bool recordWhenVelocityChanges = true;
+        public bool RecordWhenVelocityChanges
+        {
+            get => recordWhenVelocityChanges;
+            set
+            {
+                recordWhenVelocityChanges = value;
+                if (recordWhenVelocityChanges)
+                {
+                    this.UpdatedVelocity |= this.UpdatedPos;
+                }
+                else
+                {
+                    this.UpdatedPos |= this.UpdatedVelocity;
+                }
             }
         }
 
@@ -54,34 +115,28 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.Property = property;
 
-            try
-            {
-                this.Property.Type.Init(this);
+            this.Property.Type.Init(this);
 
-                ModelData = this.World.AddShot(this);
-                Bones = ModelData.Bones;
-                RootBone = Bones[0];
-                MaterialMorph = ModelData.MaterialMorph;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            ModelData = this.World.AddShot(this);
+            Bones = ModelData.Bones;
+            RootBone = Bones[0];
+            MaterialMorph = ModelData.MaterialMorph;
         }
 
         internal override void Frame()
         {
-            base.Frame();
-
             if (this.FrameCount == 1 || this.ShouldRecord)
             {
                 this.AddVmdMotion();
             }
+            this.ShouldRecord = false;
+
+            base.Frame();
         }
 
         protected override void UpdateRot()
         {
-            if (this.RotateAccodingToVelocity)
+            if (this.RecordWhenVelocityChanges)
             {
                 this.Rot = Matrix.LookAt(+this.Velocity, +this.Upward);
             }

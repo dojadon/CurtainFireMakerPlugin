@@ -20,16 +20,11 @@ namespace CurtainFireMakerPlugin.Entities
         private Vector3 spawnPos = new Vector3();
         public Vector3 SpawnPos => this.spawnPos;
 
-        public Vector3 Pos { get; set; }
-        public Vector3 PrevPos { get; set; }
-        public Quaternion Rot { get; set; } = new Quaternion(0, 0, 0, 1);
-        public Quaternion PrevRot { get; set; } = new Quaternion(0, 0, 0, 1);
+        public virtual Vector3 Pos { get; set; }
+        public virtual Quaternion Rot { get; set; } = new Quaternion(0, 0, 0, 1);
 
-        public Vector3 Velocity { get; set; }
-        public Vector3 PrevVelocity { get; set; }
-
-        public Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
-        public Vector3 PrevUpward { get; set; } = new Vector3(0, 1, 0);
+        public virtual Vector3 Velocity { get; set; }
+        public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
 
         public virtual Entity ParentEntity { get; set; }
 
@@ -37,10 +32,11 @@ namespace CurtainFireMakerPlugin.Entities
         public int LivingLimit { get; set; }
         public int SpawnFrameNo { get; set; }
         public int DeathFrameNo { get; set; }
-        
+
         public Func<Entity, bool> CheckWorldOut { get; set; } = entity => (entity.Pos - entity.SpawnPos).Length > 400.0;
 
         public bool IsDeath { get; set; }
+        public bool IsSpawned { get; set; }
 
         protected MotionInterpolation motionInterpolation;
         private TaskManager taskManager = new TaskManager();
@@ -57,11 +53,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         internal virtual void Frame()
         {
-            this.PrevPos = this.Pos;
-            this.PrevRot = this.Rot;
-            this.PrevUpward = this.Upward;
-            this.PrevVelocity = this.Velocity;
-
             this.taskManager.Frame();
 
             this.UpdatePos();
@@ -123,6 +114,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.SpawnFrameNo = this.World.AddEntity(this);
             this.spawnPos = this.Pos;
+            this.IsSpawned = true;
         }
 
         public virtual void OnDeath()
