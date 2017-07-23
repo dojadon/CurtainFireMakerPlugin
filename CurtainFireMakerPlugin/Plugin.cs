@@ -51,23 +51,17 @@ namespace CurtainFireMakerPlugin
 
             Configuration.Load();
 
-            StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
-            Console.SetOut(sw);
-
             try
             {
                 PythonRunner.Init(this.SettingScriptPath, this.ModullesDirPath);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Console.WriteLine(e);
+                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
+                {
+                    sw.WriteLine(e);
+                }
             }
-            finally
-            {
-                sw.Close();
-            }
-
-            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
         }
 
         public Guid GUID => new Guid();

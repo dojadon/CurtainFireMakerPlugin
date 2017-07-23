@@ -92,9 +92,9 @@
     <Compile Include="PythonRunner.cs" />
     <Compile Include="ShotTypes\ShotType.cs" />
     <Compile Include="ShotTypes\ShotTypeList.cs" />
+    <Compile Include="ShotTypes\ShotTypePmx.cs" />
     <Compile Include="Tasks\TaskManager.cs" />
     <Compile Include="Tasks\Task.cs" />
-    <Compile Include="Utils\CopyUtils.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

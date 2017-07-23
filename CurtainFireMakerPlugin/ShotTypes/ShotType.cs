@@ -22,9 +22,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public virtual bool HasMmdData => true;
         public virtual bool RecordMotion => true;
 
-        public virtual void Init(EntityShot entity)
-        {
-        }
+        public Action<Entity> Init { get; set; } = e => { };
 
         public abstract PmxVertexData[] GetVertices(ShotProperty property);
 
