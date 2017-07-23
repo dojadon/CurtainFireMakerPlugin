@@ -20,13 +20,13 @@ namespace CurtainFireMakerPlugin.Entities
         private Vector3 spawnPos = new Vector3();
         public Vector3 SpawnPos => this.spawnPos;
 
-        public Vector3 Pos { get; set; } = new Vector3();
-        public Vector3 PrevPos { get; set; } = new Vector3();
+        public Vector3 Pos { get; set; }
+        public Vector3 PrevPos { get; set; }
         public Quaternion Rot { get; set; } = new Quaternion(0, 0, 0, 1);
         public Quaternion PrevRot { get; set; } = new Quaternion(0, 0, 0, 1);
 
-        public Vector3 Velocity { get; set; } = new Vector3();
-        public Vector3 PrevVelocity { get; set; } = new Vector3();
+        public Vector3 Velocity { get; set; }
+        public Vector3 PrevVelocity { get; set; }
 
         public Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
         public Vector3 PrevUpward { get; set; } = new Vector3(0, 1, 0);
@@ -37,7 +37,7 @@ namespace CurtainFireMakerPlugin.Entities
         public int LivingLimit { get; set; }
         public int SpawnFrameNo { get; set; }
         public int DeathFrameNo { get; set; }
-
+        
         public Func<Entity, bool> CheckWorldOut { get; set; } = entity => (entity.Pos - entity.SpawnPos).Length > 400.0;
 
         public bool IsDeath { get; set; }

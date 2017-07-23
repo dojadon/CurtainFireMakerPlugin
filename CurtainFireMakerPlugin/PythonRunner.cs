@@ -28,6 +28,7 @@ namespace CurtainFireMakerPlugin
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
             "clr.AddReference(\"CsPmx\")\n" +
             "clr.AddReference(\"CsVmd\")\n" +
+            "clr.AddReference(\"DxMath\")\n" +
             "clr.AddReference(\"MikuMikuPlugin\")\n", rootScope);
 
             ScriptScope scope = engine.CreateScope(rootScope);

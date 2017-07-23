@@ -95,7 +95,7 @@ namespace CurtainFireMakerPlugin.Entities
                 PmxBoneData bone = bones[i];
 
                 bone.BoneName = data.Property.Type.Name + (this.BoneList.Count - 1).ToString();
-                bone.Flag = 0x0001 | 0x0002 | 0x0004 | 0x0010;
+                bone.Flag = 0x0002 | 0x0004 | 0x0010;
                 bone.BoneId = this.BoneList.Count + i;
 
                 if (-1 < bone.ParentId && bone.ParentId < bones.Length)

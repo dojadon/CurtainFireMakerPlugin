@@ -35,11 +35,11 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData[] Bones { get; }
         public PmxMorphData MaterialMorph { get; }
 
-        private delegate bool RecordMotion(EntityShot entity);
-        private static RecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
-        private static RecordMotion WhenPosChanges = e => !e.Pos.Equals(e.PrevPos) || !e.Rot.Equals(e.PrevRot);
+        public delegate bool RecordMotion(EntityShot entity);
+        public static RecordMotion WhenVelocityChanges = e => e.Velocity != e.PrevVelocity || e.Upward != e.PrevUpward;
+        public static RecordMotion WhenPosChanges = e => e.Pos != e.PrevPos || e.Rot != e.PrevRot;
 
-        private RecordMotion ShouldRecord = WhenVelocityChanges;
+        public RecordMotion ShouldRecord = WhenVelocityChanges;
 
         public bool RotateAccodingToVelocity { get; set; } = true;
         public bool RecordWhenVelocityChanges
@@ -119,11 +119,6 @@ namespace CurtainFireMakerPlugin.Entities
             this.AddVmdMotion(true);
 
             base.RemoveMotionBezier();
-        }
-
-        public void AddVertexMorph(Func<Vector3, Vector3> func)
-        {
-            var morph = new PmxMorphData();
         }
 
         public void AddVmdMotion(bool replace = false)
