@@ -35,18 +35,13 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData[] Bones { get; }
         public PmxMorphData MaterialMorph { get; }
 
-        private delegate bool RecordMotion(EntityShot entity);
-        private static RecordMotion WhenVelocityChanges = e => !e.Velocity.Equals(e.PrevVelocity) || !e.Upward.Equals(e.PrevUpward);
-        private static RecordMotion WhenPosChanges = e => !e.Pos.Equals(e.PrevPos) || !e.Rot.Equals(e.PrevRot);
-
-        private RecordMotion ShouldRecord = WhenVelocityChanges;
+        private bool ShouldRecord { get; set; }
 
         public bool RotateAccodingToVelocity { get; set; } = true;
         public bool RecordWhenVelocityChanges
         {
             set
             {
-                this.ShouldRecord = value ? WhenVelocityChanges : WhenPosChanges;
                 this.RotateAccodingToVelocity = value;
             }
         }
@@ -59,19 +54,26 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.Property = property;
 
-            this.Property.Type.Init(this);
+            try
+            {
+                this.Property.Type.Init(this);
 
-            ModelData = this.World.AddShot(this);
-            Bones = ModelData.Bones;
-            RootBone = Bones[0];
-            MaterialMorph = ModelData.MaterialMorph;
+                ModelData = this.World.AddShot(this);
+                Bones = ModelData.Bones;
+                RootBone = Bones[0];
+                MaterialMorph = ModelData.MaterialMorph;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         internal override void Frame()
         {
             base.Frame();
 
-            if (this.FrameCount == 1 || this.ShouldRecord(this))
+            if (this.FrameCount == 1 || this.ShouldRecord)
             {
                 this.AddVmdMotion();
             }
@@ -121,23 +123,18 @@ namespace CurtainFireMakerPlugin.Entities
             base.RemoveMotionBezier();
         }
 
-        public void AddVertexMorph(Func<Vector3, Vector3> func)
-        {
-            var morph = new PmxMorphData();
-        }
-
-        public void AddVmdMotion(bool replace = false)
+        public void AddVmdMotion(bool replace = true)
         {
             this.UpdateRot();
 
+            var bezier = VmdBezierCurve.Line;
+
             if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.World.FrameCount)
             {
-                this.AddVmdMotion(RootBone, Pos, Rot, this.motionInterpolation.curve, true);
+                bezier = this.motionInterpolation.curve;
             }
-            else
-            {
-                this.AddVmdMotion(RootBone, Pos, Rot, VmdBezierCurve.Line, false);
-            }
+
+            this.AddVmdMotion(RootBone, Pos, Rot, bezier, replace);
         }
 
         public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, VmdBezierCurve bezier, bool replace = true)

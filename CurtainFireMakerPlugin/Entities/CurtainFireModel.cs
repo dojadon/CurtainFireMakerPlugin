@@ -82,8 +82,6 @@ namespace CurtainFireMakerPlugin.Entities
             foreach (PmxMaterialData material in materials)
             {
                 material.MaterialName = data.Property.Type.Name + this.MaterialList.Count.ToString();
-                material.Diffuse = new DxMath.Vector4(data.Property.Red, data.Property.Green, data.Property.Blue, 1.0F);
-                material.Ambient = new DxMath.Vector3(data.Property.Red, data.Property.Green, data.Property.Blue);
                 material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? this.TextureList.IndexOf(textures[material.TextureId]) : -1;
                 this.MaterialList.Add(material);
             }
