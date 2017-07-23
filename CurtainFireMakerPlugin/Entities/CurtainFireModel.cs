@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using CsPmx.Data;
 using CsPmx;
-using CurtainFireMakerPlugin.Mathematics;
+using CsVmd.Data;
+using CurtainFireMakerPlugin.Collections;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -17,8 +18,12 @@ namespace CurtainFireMakerPlugin.Entities
         public List<PmxBoneData> BoneList { get; } = new List<PmxBoneData>();
         public List<string> TextureList { get; } = new List<string>();
 
-        public CurtainFireModel()
+        private World World { get; }
+
+        public CurtainFireModel(World world)
         {
+            World = world;
+
             PmxBoneData centerBone = new PmxBoneData();
             centerBone.BoneName = "センター";
             centerBone.ParentId = -1;
@@ -105,6 +110,62 @@ namespace CurtainFireMakerPlugin.Entities
                 }
                 this.BoneList.Add(bone);
             }
+        }
+
+        public void CompressMorph()
+        {
+            CurtainFireMotion vmdMotion = World.VmdMotion;
+
+            var typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
+            foreach (var morph in vmdMotion.MorphDict.Keys)
+            {
+                typeMorphDict.Add(morph.Type, morph);
+            }
+
+            foreach (var morphList in typeMorphDict.Values)
+            {
+                this.Compress(morphList, vmdMotion.MorphDict);
+            }
+        }
+
+        private void Compress(List<PmxMorphData> morphList, MultiDictionary<PmxMorphData, VmdMorphFrameData> frameDataDict)
+        {
+            var dict = new MultiDictionary<int[], PmxMorphData>(new IntegerArrayComparer());
+
+            foreach (var morph in morphList)
+            {
+                dict.Add(Array.ConvertAll(frameDataDict[morph].ToArray(), m => m.KeyFrameNo), morph);
+            }
+
+            foreach (var key in dict.Keys)
+            {
+                var removeList = dict[key];
+
+                if (removeList.Count > 1)
+                {
+                    PmxMorphData addMoroh = this.Compress(removeList);
+                    removeList.Remove(addMoroh);
+
+                    foreach (var morph in removeList)
+                    {
+                        this.MorphList.Remove(morph);
+                        World.VmdMotion.MorphDict.Remove(morph);
+                    }
+                }
+            }
+        }
+
+        private PmxMorphData Compress(List<PmxMorphData> morphList)
+        {
+            var morphTypeDataList = new List<IPmxMorphTypeData>();
+            foreach (var morph in morphList)
+            {
+                morphTypeDataList.AddRange(morph.MorphArray);
+            }
+
+            morphList[0].MorphArray = morphTypeDataList.ToArray();
+
+            return morphList[0];
         }
 
         public void GetData(PmxModelData data)

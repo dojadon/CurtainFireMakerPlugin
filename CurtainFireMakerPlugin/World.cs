@@ -31,7 +31,7 @@ namespace CurtainFireMakerPlugin
             WorldList.Add(this);
 
             ShotManager = new ShotManager(this);
-            PmxModel = new CurtainFireModel();
+            PmxModel = new CurtainFireModel(this);
             VmdMotion = new CurtainFireMotion();
         }
 
@@ -72,7 +72,7 @@ namespace CurtainFireMakerPlugin
 
         internal void Finish()
         {
-            this.ShotManager.CompressMorph();
+            this.PmxModel.CompressMorph();
             this.VmdMotion.Finish(PmxModel);
         }
 

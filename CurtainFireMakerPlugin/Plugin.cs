@@ -31,8 +31,7 @@ namespace CurtainFireMakerPlugin
         }
         public string ScriptPath { get; set; }
         public string SettingScriptPath { get; set; }
-        public string ExportPmxPath { get; set; }
-        public string ExportVmdPath { get; set; }
+        public string ModullesDirPath { get; set; }
         public string ExportDirPath { get; set; }
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
@@ -52,7 +51,23 @@ namespace CurtainFireMakerPlugin
 
             Configuration.Load();
 
-            PythonRunner.Init(this.SettingScriptPath);
+            StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
+            Console.SetOut(sw);
+
+            try
+            {
+                PythonRunner.Init(this.SettingScriptPath, this.ModullesDirPath);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                sw.Close();
+            }
+
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
         }
 
         public Guid GUID => new Guid();
