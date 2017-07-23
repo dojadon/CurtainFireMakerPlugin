@@ -67,6 +67,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             {
                 result[i] = DeepCopy(this.data.MaterialArray[i]);
             }
+            InitMaterials(property, result);
             return result;
         }
 
