@@ -15,6 +15,15 @@ namespace CurtainFireMakerPlugin.ShotTypes
         private PmxModelData data = new PmxModelData();
         private double Size { get; }
 
+        public Action<ShotProperty, PmxMaterialData[]> InitMaterials { get; set; } = (prop, materials) =>
+        {
+            foreach (var material in materials)
+            {
+                material.Diffuse = new DxMath.Vector4(prop.Red, prop.Green, prop.Blue, 1.0F);
+                material.Ambient = new DxMath.Vector3(prop.Red, prop.Green, prop.Blue);
+            }
+        };
+
         public ShotTypePmx(string name, string path, double size) : base(name)
         {
             var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -56,6 +65,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             {
                 result[i] = DeepCopy(this.data.MaterialArray[i]);
             }
+            InitMaterials(property, result);
             return result;
         }
 
