@@ -111,7 +111,19 @@ namespace CurtainFireMakerPlugin.Mathematics
             return this.Equals((Vector3)obj);
         }
 
-        public bool Equals(Vector3 v1) => v1.x == this.x && v1.y == this.y && v1.z == this.z;
+        public bool Equals(Vector3 v1) => this == v1;
+
+        public static bool EpsilonEquals(Vector3 v1, Vector3 v2, double epsilon)
+        {
+            double diff;
+            diff = v1.x - v2.x;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            diff = v1.y - v2.y;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            diff = v1.z - v2.z;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            return true;
+        }
 
         public override string ToString()
         {

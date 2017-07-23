@@ -54,7 +54,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Velocity;
             set
             {
-                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & base.Velocity != value;
+                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Velocity, value, 0.000001);
                 base.Velocity = value;
             }
         }
@@ -64,7 +64,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Upward;
             set
             {
-                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & base.Upward != value;
+                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Upward, value, 0.000001);
                 base.Upward = value;
             }
         }
@@ -74,7 +74,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Pos;
             set
             {
-                this.UpdatedPos |= !this.RecordWhenVelocityChanges & base.Pos != value;
+                this.UpdatedPos |= !this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Pos, value, 0.000001);
                 base.Pos = value;
             }
         }
@@ -84,7 +84,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Rot;
             set
             {
-                this.UpdatedPos |= !this.RecordWhenVelocityChanges & base.Rot != value;
+                this.UpdatedPos |= !this.RecordWhenVelocityChanges & Quaternion.EpsilonEquals(base.Rot, value, 0.000001);
                 base.Rot = value;
             }
         }

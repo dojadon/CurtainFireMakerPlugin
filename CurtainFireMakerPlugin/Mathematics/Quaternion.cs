@@ -257,7 +257,21 @@ namespace CurtainFireMakerPlugin.Mathematics
             return this.Equals((Quaternion)obj);
         }
 
-        public bool Equals(Quaternion q1) => q1.x == this.x && q1.y == this.y && q1.z == this.z && q1.w == this.w;
+        public bool Equals(Quaternion q1) => this == q1;
+
+        public static bool EpsilonEquals(Quaternion q1, Quaternion q2, double epsilon)
+        {
+            double diff;
+            diff = q1.x - q2.x;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            diff = q1.y - q2.y;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            diff = q1.z - q2.z;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            diff = q1.w - q2.w;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            return true;
+        }
 
         public override int GetHashCode()
         {
@@ -278,7 +292,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static bool operator ==(Quaternion q1, Quaternion q2) => q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w;
 
-        public static bool operator !=(Quaternion q1, Quaternion q2) => !(q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w);
+        public static bool operator !=(Quaternion q1, Quaternion q2) => (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w);
 
         public static Quaternion operator +(Quaternion q1) => Normalize(q1);
 
