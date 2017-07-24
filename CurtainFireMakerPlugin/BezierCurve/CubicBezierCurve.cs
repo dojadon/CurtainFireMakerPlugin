@@ -21,15 +21,15 @@ namespace CurtainFireMakerPlugin.BezierCurve
             this.P3 = p3;
         }
 
-        public double X(double t)
+        public float X(float t)
         {
-            double inv = 1 - t;
+            float inv = 1 - t;
             return inv * inv * inv * P0.x + 3 * inv * inv * t * P1.x + 3 * inv * t * t * P2.x + t * t * t * P3.x;
         }
 
-        public double Y(double t)
+        public float Y(float t)
         {
-            double inv = 1 - t;
+            float inv = 1 - t;
             return inv * inv * inv * P0.y + 3 * inv * inv * t * P1.y + 3 * inv * t * t * P2.y + t * t * t * P3.y;
         }
     }

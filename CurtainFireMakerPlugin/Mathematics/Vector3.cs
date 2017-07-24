@@ -12,13 +12,13 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static readonly Vector3 UnitY = new Vector3(0, 1, 0);
         public static readonly Vector3 UnitZ = new Vector3(0, 0, 1);
 
-        public double x;
-        public double y;
-        public double z;
+        public float x;
+        public float y;
+        public float z;
 
-        public double Length => Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        public float Length => (float)Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 
-        public Vector3(double x, double y, double z)
+        public Vector3(float x, float y, float z)
         {
             this.x = x;
             this.y = y;
@@ -52,7 +52,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
-        public static Vector3 Scale(Vector3 v1, double d1)
+        public static Vector3 Scale(Vector3 v1, float d1)
         {
             var v3 = new Vector3();
 
@@ -63,7 +63,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
-        public static double Dot(Vector3 v1, Vector3 v2)
+        public static float Dot(Vector3 v1, Vector3 v2)
         {
             return v2.x * v1.x + v2.y * v1.y + v2.z * v1.z;
         }
@@ -83,7 +83,7 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var v2 = new Vector3(v1);
 
-            double len = v1.Length;
+            float len = v1.Length;
 
             if (len != 1.0 && len != 0.0)
             {
@@ -113,9 +113,9 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public bool Equals(Vector3 v1) => this == v1;
 
-        public static bool EpsilonEquals(Vector3 v1, Vector3 v2, double epsilon)
+        public static bool EpsilonEquals(Vector3 v1, Vector3 v2, float epsilon)
         {
-            double diff;
+            float diff;
             diff = v1.x - v2.x;
             if ((diff < 0 ? -diff : diff) > epsilon) return false;
             diff = v1.y - v2.y;
@@ -147,13 +147,13 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 operator -(Vector3 v1, Vector3 v2) => Sub(v1, v2);
 
-        public static Vector3 operator *(Vector3 v1, double d1) => Scale(v1, d1);
+        public static Vector3 operator *(Vector3 v1, double d1) => Scale(v1, (float)d1);
 
-        public static Vector3 operator *(double d1, Vector3 v1) => Scale(v1, d1);
+        public static Vector3 operator *(float d1, Vector3 v1) => Scale(v1, d1);
 
-        public static double operator *(Vector3 v1, Vector3 v2) => Dot(v1, v2);
+        public static float operator *(Vector3 v1, Vector3 v2) => Dot(v1, v2);
 
-        public static Vector3 operator /(Vector3 v1, double d1) => Scale(v1, 1.0 / d1);
+        public static Vector3 operator /(Vector3 v1, double d1) => Scale(v1, 1.0F / (float)d1);
 
         public static Vector3 operator ^(Vector3 v1, Vector3 v2) => Cross(v1, v2);
 
@@ -161,7 +161,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static implicit operator Vector3(Vector4 v1) => new Vector3(v1.x, v1.y, v1.z);
 
-        public static explicit operator DxMath.Vector3(Vector3 v1) => new DxMath.Vector3((float)v1.x, (float)v1.y, (float)v1.z);
+        public static explicit operator DxMath.Vector3(Vector3 v1) => new DxMath.Vector3(v1.x, v1.y, v1.z);
 
         public static implicit operator Vector3(DxMath.Vector3 v1) => new Vector3(v1.X, v1.Y, v1.Z);
     }

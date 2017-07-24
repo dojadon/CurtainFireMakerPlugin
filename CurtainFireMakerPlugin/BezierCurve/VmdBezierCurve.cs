@@ -8,18 +8,18 @@ namespace CurtainFireMakerPlugin.BezierCurve
 {
     public class VmdBezierCurve : CubicBezierCurve
     {
-        public static readonly VmdBezierCurve Line = new VmdBezierCurve(new Vector2(0.5, 0.5), new Vector2(0.5, 0.5));
+        public static readonly VmdBezierCurve Line = new VmdBezierCurve(new Vector2(0.5F, 0.5F), new Vector2(0.5F, 0.5F));
 
         public VmdBezierCurve(Vector2 p1, Vector2 p2) : base(new Vector2(0, 0), p1, p2, new Vector2(1, 1))
         {
         }
 
-        public double GetT(double x)
+        public float GetT(float x)
         {
-            double a0 = -x;
-            double a1 = 3 * this.P1.x;
-            double a2 = -3 * (2 * this.P1.x - this.P2.x);
-            double a3 = 3 * (this.P1.x - this.P2.x) + 1;
+            float a0 = -x;
+            float a1 = 3 * this.P1.x;
+            float a2 = -3 * (2 * this.P1.x - this.P2.x);
+            float a3 = 3 * (this.P1.x - this.P2.x) + 1;
 
             double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
             double t = solution[0];
@@ -32,10 +32,10 @@ namespace CurtainFireMakerPlugin.BezierCurve
             {
                 t = solution[2];
             }
-            return t;
+            return (float) t;
         }
 
-        public double FuncY(double x)
+        public float FuncY(float x)
         {
             return this.Y(this.GetT(x));
         }

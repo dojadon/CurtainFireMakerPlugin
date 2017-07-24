@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             }
         };
 
-        public ShotTypePmx(string name, string path, double size) : this(name, path, new Vector3(size, size, size)) { }
+        public ShotTypePmx(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
 
         public ShotTypePmx(string name, string path, Vector3 size) : base(name)
         {

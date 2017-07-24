@@ -15,16 +15,15 @@ namespace CurtainFireMakerPlugin.Entities
         public float Blue => (Color >> 0 & 0x000000FF) / 255.0F;
 
         public ShotType Type { get; }
-        public Vector3 Size { get; set; } = new Vector3(1, 1, 1);
+        public Vector3 Size { get; }
 
-        public ShotProperty(string typeName, int color) : this(ShotTypeList.GetShotType(typeName), color)
-        {
-        }
+        public ShotProperty(string typeName, int color) : this(typeName, color, new Vector3(1, 1, 1)) { }
 
-        public ShotProperty(ShotType type, int color)
+        public ShotProperty(string typeName, int color, Vector3 size)
         {
             this.Color = color;
-            this.Type = type;
+            this.Type = ShotTypeList.GetShotType(typeName);
+            this.Size = size;
         }
 
         public override bool Equals(object obj)

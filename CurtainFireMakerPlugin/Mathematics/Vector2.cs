@@ -7,10 +7,10 @@ namespace CurtainFireMakerPlugin.Mathematics
 {
     public struct Vector2
     {
-        public double x;
-        public double y;
+        public float x;
+        public float y;
 
-        public Vector2(double x, double y)
+        public Vector2(float x, float y)
         {
             this.x = x;
             this.y = y;
@@ -41,7 +41,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
-        public static Vector2 Scale(Vector2 v1, double d1)
+        public static Vector2 Scale(Vector2 v1, float d1)
         {
             var v3 = new Vector2();
 
@@ -51,16 +51,16 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
-        public static double Dot(Vector2 v1, Vector2 v2)
+        public static float Dot(Vector2 v1, Vector2 v2)
         {
-            return v2.x * v1.x + v2.y * v1.y ;
+            return v2.x * v1.x + v2.y * v1.y;
         }
 
         public static Vector2 Normalize(Vector2 v1)
         {
             var v2 = new Vector2();
 
-            double len = Length(v1);
+            float len = Length(v1);
 
             if (len != 1.0 && len != 0.0)
             {
@@ -71,12 +71,12 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v2;
         }
 
-        public static double Length(Vector2 v1)
+        public static float Length(Vector2 v1)
         {
-            return Math.Sqrt(v1.x * v1.x + v1.y * v1.y);
+            return (float)Math.Sqrt(v1.x * v1.x + v1.y * v1.y);
         }
 
-        public double Length()
+        public float Length()
         {
             return Length(this);
         }
@@ -116,9 +116,9 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector2 operator -(Vector2 v1, Vector2 v2) => Sub(v1, v2);
 
-        public static Vector2 operator *(Vector2 v1, double d1) => Scale(v1, d1);
+        public static Vector2 operator *(Vector2 v1, float d1) => Scale(v1, d1);
 
-        public static double operator *(Vector2 v1, Vector2 v2) => Dot(v1, v2);
+        public static float operator *(Vector2 v1, Vector2 v2) => Dot(v1, v2);
 
         public static explicit operator DxMath.Vector2(Vector2 v1) => new DxMath.Vector2((float)v1.x, (float)v1.y);
 

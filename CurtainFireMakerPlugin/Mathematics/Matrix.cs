@@ -9,25 +9,25 @@ namespace CurtainFireMakerPlugin.Mathematics
     {
         public static readonly Matrix Identity = new Matrix(Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, Vector3.Zero);
 
-        public double m00;
-        public double m01;
-        public double m02;
-        public double m03;
-        public double m10;
-        public double m11;
-        public double m12;
-        public double m13;
-        public double m20;
-        public double m21;
-        public double m22;
-        public double m23;
-        public double m30;
-        public double m31;
-        public double m32;
-        public double m33;
+        public float m00;
+        public float m01;
+        public float m02;
+        public float m03;
+        public float m10;
+        public float m11;
+        public float m12;
+        public float m13;
+        public float m20;
+        public float m21;
+        public float m22;
+        public float m23;
+        public float m30;
+        public float m31;
+        public float m32;
+        public float m33;
 
-        public Matrix(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21,
-            double m22, double m23, double m30, double m31, double m32, double m33)
+        public Matrix(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21,
+            float m22, float m23, float m30, float m31, float m32, float m33)
         {
             this.m00 = m00;
             this.m01 = m01;
@@ -85,9 +85,9 @@ namespace CurtainFireMakerPlugin.Mathematics
             {
                 return m1;
             }
-            double xx = q.x * q.x;
-            double yy = q.y * q.y;
-            double zz = q.z * q.z;
+            float xx = q.x * q.x;
+            float yy = q.y * q.y;
+            float zz = q.z * q.z;
 
             m1.m00 = 1 - 2 * (yy + zz);
             m1.m10 = 2 * (q.x * q.y + q.w * q.z);
@@ -104,12 +104,12 @@ namespace CurtainFireMakerPlugin.Mathematics
             return m1;
         }
 
-        public static Matrix RotationAxisAngle(Vector3 axis, double angle)
+        public static Matrix RotationAxisAngle(Vector3 axis, float angle)
         {
             var m1 = Identity;
 
-            double cos = Math.Cos(angle);
-            double sin = Math.Sin(angle);
+            float cos = (float)Math.Cos(angle);
+            float sin = (float)Math.Sin(angle);
 
             Vector3 x = Vector3.UnitX;
             Vector3 n = axis.x * axis;
@@ -128,10 +128,11 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix LookAt(Vector3 forward, Vector3 upward)
         {
-            var side = +(upward ^ forward);
-            upward = +(forward ^ side);
+            var z = -forward;
+            var x = +(upward ^ z);
+            var y = +(z ^ x);
 
-            return new Matrix(side, upward, forward);
+            return new Matrix(x, y, z);
         }
 
         public static Matrix Mul(Matrix m1, Matrix m2)
@@ -161,7 +162,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return m3;
         }
 
-        public static Matrix Pow(Matrix m1, double exponent)
+        public static Matrix Pow(Matrix m1, float exponent)
         {
             return ((Quaternion)m1) ^ exponent;
         }
@@ -170,9 +171,9 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             Matrix m2 = Identity;
 
-            double[,] mat = (double[,])m1;
-            double[,] inv = (double[,])Identity;
-            double buf = 0;
+            float[,] mat = (float[,])m1;
+            float[,] inv = (float[,])Identity;
+            float buf = 0;
 
             for (int i = 0; i < 4; i++)
             {
@@ -316,15 +317,15 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 operator *(Matrix m1, Vector3 v1) => Transform(m1, v1);
 
-        public static Matrix operator ^(Matrix m1, double d1) => Pow(m1, d1);
+        public static Matrix operator ^(Matrix m1, float d1) => Pow(m1, d1);
 
         public static implicit operator Matrix(Quaternion q1) => RotationQuaternion(q1);
 
         public static explicit operator Vector3(Matrix m1) => new Vector3(m1.m03, m1.m13, m1.m23);
 
-        public static explicit operator double[] (Matrix m)
+        public static explicit operator float[] (Matrix m)
         {
-            var result = new double[16];
+            var result = new float[16];
 
             int index = 0;
             result[index++] = m.m00;
@@ -350,7 +351,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return result;
         }
 
-        public static implicit operator Matrix(double[,] d)
+        public static implicit operator Matrix(float[,] d)
         {
             var m = new Matrix();
 
@@ -382,9 +383,9 @@ namespace CurtainFireMakerPlugin.Mathematics
             return m;
         }
 
-        public static explicit operator double[,] (Matrix m)
+        public static explicit operator float[,] (Matrix m)
         {
-            double[,] result = new double[4, 4];
+            float[,] result = new float[4, 4];
 
             int index1 = 0;
             int index2 = 0;
@@ -414,7 +415,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return result;
         }
 
-        public static implicit operator Matrix(double[] src)
+        public static implicit operator Matrix(float[] src)
         {
             var m = new Matrix();
 

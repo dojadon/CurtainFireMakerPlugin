@@ -46,7 +46,7 @@ namespace CurtainFireMakerPlugin.Tasks
 
         private static Action<Task> WAITING = (task) =>
         {
-            if (++task.WaitCount > task.WaitTime)
+            if (++task.WaitCount >= task.WaitTime)
             {
                 task.state = ACTIVE;
             }

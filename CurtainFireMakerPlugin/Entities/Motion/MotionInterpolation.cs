@@ -31,24 +31,24 @@ namespace CurtainFireMakerPlugin.Entities.Motion
             return this.startFrame <= frame && frame < this.endFrame;
         }
 
-        public double GetChangeAmount(int frame)
+        public float GetChangeAmount(int frame)
         {
             if (this.Within(frame))
             {
-                double x1 = (float)(frame - this.startFrame) / (float)(this.endFrame - this.startFrame);
-                double x2 = x1 + 1.0 / (this.endFrame - this.startFrame);
+                float x1 = (float)(frame - this.startFrame) / (float)(this.endFrame - this.startFrame);
+                float x2 = x1 + 1.0F / (this.endFrame - this.startFrame);
 
-                double y1 = this.curve.FuncY(x1);
-                double y2 = this.curve.FuncY(x2);
+                float y1 = this.curve.FuncY(x1);
+                float y2 = this.curve.FuncY(x2);
 
-                double changeY = y2 - y1;
-                double defaultChangeY = 1.0 / (this.endFrame - this.startFrame);
+                float changeY = y2 - y1;
+                float defaultChangeY = 1.0F / (this.endFrame - this.startFrame);
 
                 return changeY / defaultChangeY;
             }
             else
             {
-                return 1.0 / (this.endFrame - this.startFrame);
+                return 1.0F / (this.endFrame - this.startFrame);
             }
         }
 

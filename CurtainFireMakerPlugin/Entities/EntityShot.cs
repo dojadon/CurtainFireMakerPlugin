@@ -37,24 +37,20 @@ namespace CurtainFireMakerPlugin.Entities
 
         private bool ShouldRecord
         {
-            get
-            {
-                return this.RecordWhenVelocityChanges ? UpdatedVelocity : UpdatedPos;
-            }
-            set
-            {
-                this.UpdatedVelocity = this.UpdatedPos = value;
-            }
+            get => this.RecordWhenVelocityChanges ? UpdatedVelocity : UpdatedPos;
+            set => this.UpdatedVelocity = this.UpdatedPos = value;
         }
         private bool UpdatedVelocity { get; set; }
         private bool UpdatedPos { get; set; }
+
+        private static float Epsilon { get; set; } = 0.000001F;
 
         public override Vector3 Velocity
         {
             get => base.Velocity;
             set
             {
-                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Velocity, value, 0.000001);
+                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Velocity, value, Epsilon);
                 base.Velocity = value;
             }
         }
@@ -64,7 +60,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Upward;
             set
             {
-                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Upward, value, 0.000001);
+                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Upward, value, Epsilon);
                 base.Upward = value;
             }
         }
@@ -74,7 +70,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Pos;
             set
             {
-                this.UpdatedPos |= !this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Pos, value, 0.000001);
+                this.UpdatedPos |= !this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Pos, value, Epsilon);
                 base.Pos = value;
             }
         }
@@ -84,7 +80,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Rot;
             set
             {
-                this.UpdatedPos |= !this.RecordWhenVelocityChanges & Quaternion.EpsilonEquals(base.Rot, value, 0.000001);
+                this.UpdatedPos |= !this.RecordWhenVelocityChanges & !Quaternion.EpsilonEquals(base.Rot, value, Epsilon);
                 base.Rot = value;
             }
         }
@@ -107,9 +103,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color))
-        {
-        }
+        public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
+        public EntityShot(World world, string typeName, int color, Vector3 size) : this(world, new ShotProperty(typeName, color, size)) { }
 
         public EntityShot(World world, ShotProperty property) : base(world)
         {
@@ -215,7 +210,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.World.VmdMotion.AddVmdMotion(motion, replace);
         }
 
-        public void AddVmdMorph(int frameOffset, double rate, PmxMorphData morph)
+        public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph)
         {
             if (this.Property.Type.HasMmdData)
             {

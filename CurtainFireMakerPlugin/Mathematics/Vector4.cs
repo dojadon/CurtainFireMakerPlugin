@@ -7,12 +7,12 @@ namespace CurtainFireMakerPlugin.Mathematics
 {
     public struct Vector4
     {
-        public double x;
-        public double y;
-        public double z;
-        public double w;
+        public float x;
+        public float y;
+        public float z;
+        public float w;
 
-        public Vector4(double x, double y, double z, double w)
+        public Vector4(float x, float y, float z, float w)
         {
             this.x = x;
             this.y = y;
@@ -49,7 +49,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
-        public static Vector4 Scale(Vector4 v1, double d1)
+        public static Vector4 Scale(Vector4 v1, float d1)
         {
             var v3 = new Vector4();
 
@@ -61,7 +61,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v3;
         }
 
-        public static double Dot(Vector4 v1, Vector4 v2)
+        public static float Dot(Vector4 v1, Vector4 v2)
         {
             return v2.x * v1.x + v2.y * v1.y + v2.z * v1.z + v1.w * v2.w;
         }
@@ -81,7 +81,7 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             var v2 = new Vector4();
 
-            double len = Length(v1);
+            float len = Length(v1);
 
             if (len != 1.0 && len != 0.0)
             {
@@ -94,12 +94,12 @@ namespace CurtainFireMakerPlugin.Mathematics
             return v2;
         }
 
-        public static double Length(Vector4 v1)
+        public static float Length(Vector4 v1)
         {
-            return Math.Sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z + v1.w * v1.w);
+            return (float)Math.Sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z + v1.w * v1.w);
         }
 
-        public double Length()
+        public float Length()
         {
             return Length(this);
         }
@@ -146,13 +146,13 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector4 operator -(Vector4 v1, Vector4 v2) => Sub(v1, v2);
 
-        public static Vector4 operator *(Vector4 v1, double d1) => Scale(v1, d1);
+        public static Vector4 operator *(Vector4 v1, float d1) => Scale(v1, d1);
 
-        public static double operator *(Vector4 v1, Vector4 v2) => Dot(v1, v2);
+        public static float operator *(Vector4 v1, Vector4 v2) => Dot(v1, v2);
 
         public static Vector4 operator *(Matrix m1, Vector4 v1) => Transform(m1, v1);
 
-        public static Vector4 operator /(Vector4 v1, double d1) => Scale(v1, 1.0 / d1);
+        public static Vector4 operator /(Vector4 v1, float d1) => Scale(v1, 1.0F / d1);
 
         public static explicit operator DxMath.Vector4(Vector4 v1) => new DxMath.Vector4((float)v1.x, (float)v1.y, (float)v1.z, (float)v1.w);
 
