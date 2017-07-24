@@ -30,69 +30,34 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         }
 
-        public static Vector3 Add(Vector3 v1, Vector3 v2)
+        public static Vector3 Add(Vector3 v1, Vector3 v2) => new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+
+        public static Vector3 Sub(Vector3 v1, Vector3 v2) => new Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+
+        public static Vector3 Scale(Vector3 v1, float d1) => new Vector3(v1.x * d1, v1.y * d1, v1.z * d1);
+
+        public static float Dot(Vector3 v1, Vector3 v2) => v2.x * v1.x + v2.y * v1.y + v2.z * v1.z;
+
+        public static Vector3 Cross(Vector3 v1, Vector3 v2) => new Vector3()
         {
-            var v3 = new Vector3();
-
-            v3.x = v1.x + v2.x;
-            v3.y = v1.y + v2.y;
-            v3.z = v1.z + v2.z;
-
-            return v3;
-        }
-
-        public static Vector3 Sub(Vector3 v1, Vector3 v2)
-        {
-            var v3 = new Vector3();
-
-            v3.x = v1.x - v2.x;
-            v3.y = v1.y - v2.y;
-            v3.z = v1.z - v2.z;
-
-            return v3;
-        }
-
-        public static Vector3 Scale(Vector3 v1, float d1)
-        {
-            var v3 = new Vector3();
-
-            v3.x = v1.x * d1;
-            v3.y = v1.y * d1;
-            v3.z = v1.z * d1;
-
-            return v3;
-        }
-
-        public static float Dot(Vector3 v1, Vector3 v2)
-        {
-            return v2.x * v1.x + v2.y * v1.y + v2.z * v1.z;
-        }
-
-        public static Vector3 Cross(Vector3 v1, Vector3 v2)
-        {
-            var v3 = new Vector3();
-
-            v3.x = v1.y * v2.z - v1.z * v2.y;
-            v3.y = v1.z * v2.x - v1.x * v2.z;
-            v3.z = v1.x * v2.y - v1.y * v2.x;
-
-            return v3;
-        }
+            x = v1.y * v2.z - v1.z * v2.y,
+            y = v1.z * v2.x - v1.x * v2.z,
+            z = v1.x * v2.y - v1.y * v2.x
+        };
 
         public static Vector3 Normalize(Vector3 v1)
         {
-            var v2 = new Vector3(v1);
-
             float len = v1.Length;
 
-            if (len != 1.0 && len != 0.0)
-            {
-                v2.x = v1.x / len;
-                v2.y = v1.y / len;
-                v2.z = v1.z / len;
-            }
+            if (len == 1) { return v1; }
+            if (len == 0) { return Zero; }
 
-            return v2;
+            return new Vector3()
+            {
+                x = v1.x / len,
+                y = v1.y / len,
+                z = v1.z / len
+            };
         }
 
         public override bool Equals(object obj)
@@ -149,11 +114,9 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Vector3 operator *(Vector3 v1, double d1) => Scale(v1, (float)d1);
 
-        public static Vector3 operator *(float d1, Vector3 v1) => Scale(v1, d1);
+        public static Vector3 operator *(double d1, Vector3 v1) => Scale(v1, (float)d1);
 
         public static float operator *(Vector3 v1, Vector3 v2) => Dot(v1, v2);
-
-        public static Vector3 operator /(Vector3 v1, double d1) => Scale(v1, 1.0F / (float)d1);
 
         public static Vector3 operator ^(Vector3 v1, Vector3 v2) => Cross(v1, v2);
 

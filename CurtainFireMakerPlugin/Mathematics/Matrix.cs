@@ -26,6 +26,17 @@ namespace CurtainFireMakerPlugin.Mathematics
         public float m32;
         public float m33;
 
+        public Vector3 TransformVec
+        {
+            get => new Vector3(m03, m13, m23);
+            set
+            {
+                m03 = value.x;
+                m13 = value.y;
+                m23 = value.z;
+            }
+        }
+
         public Matrix(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21,
             float m22, float m23, float m30, float m31, float m32, float m33)
         {
@@ -79,29 +90,28 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix RotationQuaternion(Quaternion q)
         {
-            var m1 = Identity;
-
             if (q == Quaternion.Identity)
             {
-                return m1;
+                return Identity;
             }
             float xx = q.x * q.x;
             float yy = q.y * q.y;
             float zz = q.z * q.z;
 
-            m1.m00 = 1 - 2 * (yy + zz);
-            m1.m10 = 2 * (q.x * q.y + q.w * q.z);
-            m1.m20 = 2 * (q.x * q.z - q.w * q.y);
+            return new Matrix()
+            {
+                m00 = 1 - 2 * (yy + zz),
+                m10 = 2 * (q.x * q.y + q.w * q.z),
+                m20 = 2 * (q.x * q.z - q.w * q.y),
 
-            m1.m01 = 2 * (q.x * q.y - q.w * q.z);
-            m1.m11 = 1 - 2 * (zz + xx);
-            m1.m21 = 2 * (q.y * q.z + q.w * q.x);
+                m01 = 2 * (q.x * q.y - q.w * q.z),
+                m11 = 1 - 2 * (zz + xx),
+                m21 = 2 * (q.y * q.z + q.w * q.x),
 
-            m1.m02 = 2 * (q.x * q.z + q.w * q.y);
-            m1.m12 = 2 * (q.y * q.z - q.w * q.x);
-            m1.m22 = 1 - 2 * (xx + yy);
-
-            return m1;
+                m02 = 2 * (q.x * q.z + q.w * q.y),
+                m12 = 2 * (q.y * q.z - q.w * q.x),
+                m22 = 1 - 2 * (xx + yy)
+            };
         }
 
         public static Matrix RotationAxisAngle(Vector3 axis, float angle)
@@ -135,32 +145,28 @@ namespace CurtainFireMakerPlugin.Mathematics
             return new Matrix(x, y, z);
         }
 
-        public static Matrix Mul(Matrix m1, Matrix m2)
+        public static Matrix Mul(Matrix m1, Matrix m2) => new Matrix()
         {
-            var m3 = new Matrix();
+            m00 = m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20 + m1.m03 * m2.m30,
+            m01 = m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21 + m1.m03 * m2.m31,
+            m02 = m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22 + m1.m03 * m2.m32,
+            m03 = m1.m00 * m2.m03 + m1.m01 * m2.m13 + m1.m02 * m2.m23 + m1.m03 * m2.m33,
 
-            m3.m00 = m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20 + m1.m03 * m2.m30;
-            m3.m01 = m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21 + m1.m03 * m2.m31;
-            m3.m02 = m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22 + m1.m03 * m2.m32;
-            m3.m03 = m1.m00 * m2.m03 + m1.m01 * m2.m13 + m1.m02 * m2.m23 + m1.m03 * m2.m33;
+            m10 = m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20 + m1.m13 * m2.m30,
+            m11 = m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21 + m1.m13 * m2.m31,
+            m12 = m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22 + m1.m13 * m2.m32,
+            m13 = m1.m10 * m2.m03 + m1.m11 * m2.m13 + m1.m12 * m2.m23 + m1.m13 * m2.m33,
 
-            m3.m10 = m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20 + m1.m13 * m2.m30;
-            m3.m11 = m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21 + m1.m13 * m2.m31;
-            m3.m12 = m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22 + m1.m13 * m2.m32;
-            m3.m13 = m1.m10 * m2.m03 + m1.m11 * m2.m13 + m1.m12 * m2.m23 + m1.m13 * m2.m33;
+            m20 = m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20 + m1.m23 * m2.m30,
+            m21 = m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21 + m1.m23 * m2.m31,
+            m22 = m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22 + m1.m23 * m2.m32,
+            m23 = m1.m20 * m2.m03 + m1.m21 * m2.m13 + m1.m22 * m2.m23 + m1.m23 * m2.m33,
 
-            m3.m20 = m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20 + m1.m23 * m2.m30;
-            m3.m21 = m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21 + m1.m23 * m2.m31;
-            m3.m22 = m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22 + m1.m23 * m2.m32;
-            m3.m23 = m1.m20 * m2.m03 + m1.m21 * m2.m13 + m1.m22 * m2.m23 + m1.m23 * m2.m33;
-
-            m3.m30 = m1.m30 * m2.m00 + m1.m31 * m2.m10 + m1.m32 * m2.m20 + m1.m33 * m2.m30;
-            m3.m31 = m1.m30 * m2.m01 + m1.m31 * m2.m11 + m1.m32 * m2.m21 + m1.m33 * m2.m31;
-            m3.m32 = m1.m30 * m2.m02 + m1.m31 * m2.m12 + m1.m32 * m2.m22 + m1.m33 * m2.m32;
-            m3.m33 = m1.m30 * m2.m03 + m1.m31 * m2.m13 + m1.m32 * m2.m23 + m1.m33 * m2.m33;
-
-            return m3;
-        }
+            m30 = m1.m30 * m2.m00 + m1.m31 * m2.m10 + m1.m32 * m2.m20 + m1.m33 * m2.m30,
+            m31 = m1.m30 * m2.m01 + m1.m31 * m2.m11 + m1.m32 * m2.m21 + m1.m33 * m2.m31,
+            m32 = m1.m30 * m2.m02 + m1.m31 * m2.m12 + m1.m32 * m2.m22 + m1.m33 * m2.m32,
+            m33 = m1.m30 * m2.m03 + m1.m31 * m2.m13 + m1.m32 * m2.m23 + m1.m33 * m2.m33
+        };
 
         public static Matrix Pow(Matrix m1, float exponent)
         {
@@ -220,55 +226,43 @@ namespace CurtainFireMakerPlugin.Mathematics
             return inv;
         }
 
-        public static Matrix Transpose(Matrix m1)
+        public static Matrix Transpose(Matrix m1) => new Matrix()
         {
-            var m2 = new Matrix();
+            m00 = m1.m00,
+            m01 = m1.m10,
+            m02 = m1.m20,
+            m03 = m1.m30,
 
-            m2.m00 = m1.m00;
-            m2.m01 = m1.m10;
-            m2.m02 = m1.m20;
-            m2.m03 = m1.m30;
+            m10 = m1.m01,
+            m11 = m1.m11,
+            m12 = m1.m21,
+            m13 = m1.m31,
 
-            m2.m10 = m1.m01;
-            m2.m11 = m1.m11;
-            m2.m12 = m1.m21;
-            m2.m13 = m1.m31;
+            m20 = m1.m02,
+            m21 = m1.m12,
+            m22 = m1.m22,
+            m23 = m1.m32,
 
-            m2.m20 = m1.m02;
-            m2.m21 = m1.m12;
-            m2.m22 = m1.m22;
-            m2.m23 = m1.m32;
+            m30 = m1.m03,
+            m31 = m1.m13,
+            m32 = m1.m23,
+            m33 = m1.m33
+        };
 
-            m2.m30 = m1.m03;
-            m2.m31 = m1.m13;
-            m2.m32 = m1.m23;
-            m2.m33 = m1.m33;
-
-            return m2;
-        }
-
-        public static Vector4 Transform(Matrix m1, Vector4 v1)
+        public static Vector4 Transform(Matrix m1, Vector4 v1) => new Vector4()
         {
-            var v2 = new Vector4();
+            x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02 + v1.w * m1.m03,
+            y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12 + v1.w * m1.m13,
+            z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22 + v1.w * m1.m23,
+            w = v1.x * m1.m30 + v1.y * m1.m31 + v1.z * m1.m32 + v1.w * m1.m33
+        };
 
-            v2.x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02 + v1.w * m1.m03;
-            v2.y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12 + v1.w * m1.m13;
-            v2.z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22 + v1.w * m1.m23;
-            v2.w = v1.x * m1.m30 + v1.y * m1.m31 + v1.z * m1.m32 + v1.w * m1.m33;
-
-            return v2;
-        }
-
-        public static Vector3 Transform(Matrix m1, Vector3 v1)
+        public static Vector3 Transform(Matrix m1, Vector3 v1) => new Vector3()
         {
-            var v2 = new Vector3();
-
-            v2.x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02;
-            v2.y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12;
-            v2.z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22;
-
-            return v2;
-        }
+            x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02,
+            y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12,
+            z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22
+        };
 
         public override string ToString()
         {
@@ -289,28 +283,6 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix operator ~(Matrix m1) => Inverse(m1);
 
-        public static Matrix operator +(Matrix m1, Vector3 v1)
-        {
-            var m2 = m1;
-
-            m2.m03 += v1.x;
-            m2.m13 += v1.y;
-            m2.m23 += v1.z;
-
-            return m2;
-        }
-
-        public static Matrix operator -(Matrix m1, Vector3 v1)
-        {
-            var m2 = m1;
-
-            m2.m03 -= v1.x;
-            m2.m13 -= v1.y;
-            m2.m23 -= v1.z;
-
-            return m2;
-        }
-
         public static Matrix operator *(Matrix m1, Matrix m2) => Mul(m1, m2);
 
         public static Vector4 operator *(Matrix m1, Vector4 v1) => Transform(m1, v1);
@@ -320,8 +292,6 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static Matrix operator ^(Matrix m1, float d1) => Pow(m1, d1);
 
         public static implicit operator Matrix(Quaternion q1) => RotationQuaternion(q1);
-
-        public static explicit operator Vector3(Matrix m1) => new Vector3(m1.m03, m1.m13, m1.m23);
 
         public static explicit operator float[] (Matrix m)
         {
@@ -349,6 +319,33 @@ namespace CurtainFireMakerPlugin.Mathematics
             result[index++] = m.m33;
 
             return result;
+        }
+
+        public static implicit operator Matrix(float[] src)
+        {
+            int index = 0;
+            return new Matrix()
+            {
+                m00 = src[index++],
+                m01 = src[index++],
+                m02 = src[index++],
+                m03 = src[index++],
+
+                m10 = src[index++],
+                m11 = src[index++],
+                m12 = src[index++],
+                m13 = src[index++],
+
+                m20 = src[index++],
+                m21 = src[index++],
+                m22 = src[index++],
+                m23 = src[index++],
+
+                m30 = src[index++],
+                m31 = src[index++],
+                m32 = src[index++],
+                m33 = src[index++]
+            };
         }
 
         public static implicit operator Matrix(float[,] d)
@@ -413,34 +410,6 @@ namespace CurtainFireMakerPlugin.Mathematics
             result[index2++, index1++] = m.m33;
 
             return result;
-        }
-
-        public static implicit operator Matrix(float[] src)
-        {
-            var m = new Matrix();
-
-            int index = 0;
-            m.m00 = src[index++];
-            m.m01 = src[index++];
-            m.m02 = src[index++];
-            m.m03 = src[index++];
-
-            m.m10 = src[index++];
-            m.m11 = src[index++];
-            m.m12 = src[index++];
-            m.m13 = src[index++];
-
-            m.m20 = src[index++];
-            m.m21 = src[index++];
-            m.m22 = src[index++];
-            m.m23 = src[index++];
-
-            m.m30 = src[index++];
-            m.m31 = src[index++];
-            m.m32 = src[index++];
-            m.m33 = src[index++];
-
-            return m;
         }
     }
 }

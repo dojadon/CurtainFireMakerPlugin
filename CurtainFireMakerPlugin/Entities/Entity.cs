@@ -14,7 +14,7 @@ namespace CurtainFireMakerPlugin.Entities
     {
         private Matrix worldMat = Matrix.Identity;
         public Matrix WorldMat => worldMat;
-        public Vector3 WorldPos => (Vector3)WorldMat;
+        public Vector3 WorldPos => WorldMat.TransformVec;
         public Quaternion WorldRot => WorldMat;
 
         private Vector3 spawnPos = new Vector3();
@@ -92,7 +92,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected void UpdateWorldMat()
         {
-            this.worldMat = (Matrix)this.Rot + this.Pos;
+            this.worldMat = (Matrix)this.Rot;
+            this.worldMat.TransformVec = this.Pos;
 
             if (this.ParentEntity != null)
             {

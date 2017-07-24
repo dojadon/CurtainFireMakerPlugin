@@ -100,27 +100,25 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Quaternion RotationAxisAngle(Vector3 a, float angle)
         {
-            var q1 = new Quaternion();
-
             float amag = (float)Math.Sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 
             if (amag < EPS)
             {
-                q1.w = 0;
-                q1.x = 0;
-                q1.y = 0;
-                q1.z = 0;
+                return Identity;
             }
             else
             {
                 amag = 1.0F / amag;
                 float mag = (float)Math.Sin(angle / 2.0);
-                q1.w = (float)Math.Cos(angle / 2.0);
-                q1.x = a.x * amag * mag;
-                q1.y = a.y * amag * mag;
-                q1.z = a.z * amag * mag;
+
+                return new Quaternion()
+                {
+                    w = (float)Math.Cos(angle / 2.0),
+                    x = a.x * amag * mag,
+                    y = a.y * amag * mag,
+                    z = a.z * amag * mag
+                };
             }
-            return q1;
         }
 
         public static Quaternion RotationMatrix(Matrix m1)
@@ -193,18 +191,22 @@ namespace CurtainFireMakerPlugin.Mathematics
             return Identity;
         }
 
-        public static Quaternion Scale(Quaternion q1, float scale)
-        {
-            return new Quaternion(q1.x * scale, q1.y * scale, q1.z * scale, q1.w * scale);
-        }
-
         public static Quaternion Pow(Quaternion q1, float exponent)
         {
-            var q2 = new Quaternion();
+            if (Math.Abs(q1.w) < 0.999999) { return Identity; }
 
+            float angle1 = (float)Math.Acos(q1.w);
+            float angle2 = angle1 * exponent;
 
+            float mult = (float)(Math.Sin(angle2) / Math.Sin(angle1));
 
-            return q2;
+            return new Quaternion()
+            {
+                w = (float)Math.Cos(angle2),
+                x = q1.x * mult,
+                y = q1.y * mult,
+                z = q1.z * mult
+            };
         }
 
         public static Quaternion Interpolate(Quaternion q1, Quaternion q2, float alpha)
@@ -304,14 +306,12 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Quaternion operator *(Quaternion q1, Quaternion q2) => Mul(q1, q2);
 
-        public static Quaternion operator *(Quaternion q1, float d1) => Scale(q1, d1);
-
-        public static Quaternion operator ^(Quaternion q1, float d1) => Pow(q1, d1);
+        public static Quaternion operator ^(Quaternion q1, double d1) => Pow(q1, (float)d1);
 
         public static implicit operator Quaternion(Matrix m1) => RotationMatrix(m1);
 
         public static implicit operator Quaternion(DxMath.Quaternion q1) => new Quaternion(q1.X, q1.Y, q1.Z, q1.W);
 
-        public static explicit operator DxMath.Quaternion(Quaternion q1) => new DxMath.Quaternion((float)q1.x, (float)q1.y, (float)q1.z, (float)q1.w);
+        public static explicit operator DxMath.Quaternion(Quaternion q1) => new DxMath.Quaternion(q1.x, q1.y, q1.z, q1.w);
     }
 }
