@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CurtainFireMakerPlugin.Mathematics;
 using CurtainFireMakerPlugin.BezierCurve;
 using CsPmx.Data;
 using CsVmd.Data;
-using IronPython.Runtime;
-using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -43,46 +38,30 @@ namespace CurtainFireMakerPlugin.Entities
         private bool UpdatedVelocity { get; set; }
         private bool UpdatedPos { get; set; }
 
-        private static float Epsilon { get; set; } = 0.000001F;
+        private static float Epsilon { get; set; } = 0.00001F;
 
         public override Vector3 Velocity
         {
             get => base.Velocity;
-            set
-            {
-                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Velocity, value, Epsilon);
-                base.Velocity = value;
-            }
+            set => this.UpdatedVelocity |= !Vector3.EpsilonEquals(base.Velocity, (base.Velocity = value), Epsilon);
         }
 
         public override Vector3 Upward
         {
             get => base.Upward;
-            set
-            {
-                this.UpdatedVelocity |= this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Upward, value, Epsilon);
-                base.Upward = value;
-            }
+            set => this.UpdatedVelocity |= !Vector3.EpsilonEquals(base.Upward, (base.Upward = value), Epsilon);
         }
 
         public override Vector3 Pos
         {
             get => base.Pos;
-            set
-            {
-                this.UpdatedPos |= !this.RecordWhenVelocityChanges & !Vector3.EpsilonEquals(base.Pos, value, Epsilon);
-                base.Pos = value;
-            }
+            set => this.UpdatedPos |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
         }
 
         public override Quaternion Rot
         {
             get => base.Rot;
-            set
-            {
-                this.UpdatedPos |= !this.RecordWhenVelocityChanges & !Quaternion.EpsilonEquals(base.Rot, value, Epsilon);
-                base.Rot = value;
-            }
+            set => this.UpdatedPos |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
         private bool recordWhenVelocityChanges = true;
@@ -255,11 +234,6 @@ namespace CurtainFireMakerPlugin.Entities
             }
 
             return morph;
-        }
-
-        public PmxMorphData CreateVertexMorph(PythonFunction func)
-        {
-            return this.CreateVertexMorph(v => (Vector3)PythonCalls.Call(func, v));
         }
     }
 }

@@ -29,6 +29,7 @@ namespace CsPmx.Data
             this.ExportPmxData(this.SlotArray, exporter);
             exporter.Write(0);//Number of Rigid
             exporter.Write(0);//Number of Joint
+            // exporter.Write(0);//Number of SoftBody
         }
 
         public void Parse(PmxParser parser)
