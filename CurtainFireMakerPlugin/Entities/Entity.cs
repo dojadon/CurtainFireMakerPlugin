@@ -97,7 +97,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (this.ParentEntity != null)
             {
-                this.worldMat = this.ParentEntity.WorldMat * this.worldMat;
+                this.worldMat = this.WorldMat *  this.ParentEntity.WorldMat;
             }
         }
 

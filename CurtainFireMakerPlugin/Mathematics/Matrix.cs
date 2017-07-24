@@ -28,12 +28,12 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public Vector3 TransformVec
         {
-            get => new Vector3(m03, m13, m23);
+            get => new Vector3(m30, m31, m32);
             set
             {
-                m03 = value.x;
-                m13 = value.y;
-                m23 = value.z;
+                m30 = value.x;
+                m31 = value.y;
+                m32 = value.z;
             }
         }
 
@@ -64,23 +64,23 @@ namespace CurtainFireMakerPlugin.Mathematics
         public Matrix(Vector3 x, Vector3 y, Vector3 z, Vector3 trans)
         {
             this.m00 = x.x;
-            this.m01 = x.y;
-            this.m02 = x.z;
-            this.m03 = trans.x;
+            this.m10 = x.y;
+            this.m20 = x.z;
+            this.m30 = trans.x;
 
-            this.m10 = y.x;
+            this.m01 = y.x;
             this.m11 = y.y;
-            this.m12 = y.z;
-            this.m13 = trans.y;
+            this.m21 = y.z;
+            this.m31 = trans.y;
 
-            this.m20 = z.x;
-            this.m21 = z.y;
+            this.m02 = z.x;
+            this.m12 = z.y;
             this.m22 = z.z;
-            this.m23 = trans.z;
+            this.m32 = trans.z;
 
-            this.m30 = 0;
-            this.m31 = 0;
-            this.m32 = 0;
+            this.m03 = 0;
+            this.m13 = 0;
+            this.m23 = 0;
             this.m33 = 1;
         }
 
@@ -101,16 +101,18 @@ namespace CurtainFireMakerPlugin.Mathematics
             return new Matrix()
             {
                 m00 = 1 - 2 * (yy + zz),
-                m10 = 2 * (q.x * q.y + q.w * q.z),
-                m20 = 2 * (q.x * q.z - q.w * q.y),
+                m01 = 2 * (q.x * q.y + q.w * q.z),
+                m02 = 2 * (q.x * q.z - q.w * q.y),
 
-                m01 = 2 * (q.x * q.y - q.w * q.z),
+                m10 = 2 * (q.x * q.y - q.w * q.z),
                 m11 = 1 - 2 * (zz + xx),
-                m21 = 2 * (q.y * q.z + q.w * q.x),
+                m12 = 2 * (q.y * q.z + q.w * q.x),
 
-                m02 = 2 * (q.x * q.z + q.w * q.y),
-                m12 = 2 * (q.y * q.z - q.w * q.x),
-                m22 = 1 - 2 * (xx + yy)
+                m20 = 2 * (q.x * q.z + q.w * q.y),
+                m21 = 2 * (q.y * q.z - q.w * q.x),
+                m22 = 1 - 2 * (xx + yy),
+
+                m33 = 1
             };
         }
 
@@ -249,19 +251,19 @@ namespace CurtainFireMakerPlugin.Mathematics
             m33 = m1.m33
         };
 
-        public static Vector4 Transform(Matrix m1, Vector4 v1) => new Vector4()
+        public static Vector4 Transform(Vector4 v1, Matrix m1) => new Vector4()
         {
-            x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02 + v1.w * m1.m03,
-            y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12 + v1.w * m1.m13,
-            z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22 + v1.w * m1.m23,
-            w = v1.x * m1.m30 + v1.y * m1.m31 + v1.z * m1.m32 + v1.w * m1.m33
+            x = v1.x * m1.m00 + v1.y * m1.m10 + v1.z * m1.m20 + v1.w * m1.m30,
+            y = v1.x * m1.m01 + v1.y * m1.m11 + v1.z * m1.m21 + v1.w * m1.m31,
+            z = v1.x * m1.m02 + v1.y * m1.m12 + v1.z * m1.m22 + v1.w * m1.m32,
+            w = v1.x * m1.m03 + v1.y * m1.m13 + v1.z * m1.m23 + v1.w * m1.m33
         };
 
-        public static Vector3 Transform(Matrix m1, Vector3 v1) => new Vector3()
+        public static Vector3 Transform(Vector3 v1, Matrix m1) => new Vector3()
         {
-            x = v1.x * m1.m00 + v1.y * m1.m01 + v1.z * m1.m02,
-            y = v1.x * m1.m10 + v1.y * m1.m11 + v1.z * m1.m12,
-            z = v1.x * m1.m20 + v1.y * m1.m21 + v1.z * m1.m22
+            x = v1.x * m1.m00 + v1.y * m1.m10 + v1.z * m1.m20,
+            y = v1.x * m1.m01 + v1.y * m1.m11 + v1.z * m1.m21,
+            z = v1.x * m1.m02 + v1.y * m1.m12 + v1.z * m1.m22
         };
 
         public override string ToString()
@@ -285,9 +287,9 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix operator *(Matrix m1, Matrix m2) => Mul(m1, m2);
 
-        public static Vector4 operator *(Matrix m1, Vector4 v1) => Transform(m1, v1);
+        public static Vector4 operator *(Vector4 v1, Matrix m1) => Transform(v1, m1);
 
-        public static Vector3 operator *(Matrix m1, Vector3 v1) => Transform(m1, v1);
+        public static Vector3 operator *(Vector3 v1, Matrix m1) => Transform(v1, m1);
 
         public static Matrix operator ^(Matrix m1, float d1) => Pow(m1, d1);
 

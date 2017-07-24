@@ -78,9 +78,9 @@ namespace CurtainFireMakerPlugin.Mathematics
             return new Quaternion()
             {
                 w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
-                x = q1.w * q2.x + q2.w * q1.x + q1.y * q2.z - q1.z * q2.y,
-                y = q1.w * q2.y + q2.w * q1.y - q1.x * q2.z + q1.z * q2.x,
-                z = q1.w * q2.z + q2.w * q1.z + q1.x * q2.y - q1.y * q2.x
+                x = q1.w * q2.x + q2.w * q1.x - q1.y * q2.z + q1.z * q2.y,
+                y = q1.w * q2.y + q2.w * q1.y + q1.x * q2.z - q1.z * q2.x,
+                z = q1.w * q2.z + q2.w * q1.z - q1.x * q2.y + q1.y * q2.x
             };
         }
 
@@ -156,35 +156,35 @@ namespace CurtainFireMakerPlugin.Mathematics
                     return new Quaternion()
                     {
                         x = val,
-                        y = (m01 + m10) * mult,
-                        z = (m20 + m02) * mult,
-                        w = (m12 - m21) * mult
+                        y = (m10 + m01) * mult,
+                        z = (m02 + m20) * mult,
+                        w = (m21 - m12) * mult
                     };
 
                 case 1:
                     return new Quaternion()
                     {
-                        x = (m01 + m10) * mult,
+                        x = (m10 + m01) * mult,
                         y = val,
-                        z = (m12 + m21) * mult,
-                        w = (m20 - m02) * mult
+                        z = (m21 + m12) * mult,
+                        w = (m02 - m20) * mult
                     };
 
                 case 2:
                     return new Quaternion()
                     {
-                        x = (m20 + m02) * mult,
-                        y = (m12 + m21) * mult,
+                        x = (m02 + m20) * mult,
+                        y = (m21 + m12) * mult,
                         z = val,
-                        w = (m01 - m10) * mult
+                        w = (m10 - m01) * mult
                     };
 
                 case 3:
                     return new Quaternion()
                     {
-                        x = (m12 - m21) * mult,
-                        y = (m20 - m02) * mult,
-                        z = (m01 - m10) * mult,
+                        x = (m21 - m12) * mult,
+                        y = (m02 - m20) * mult,
+                        z = (m10 - m01) * mult,
                         w = val
                     };
             }
@@ -193,7 +193,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Quaternion Pow(Quaternion q1, float exponent)
         {
-            if (Math.Abs(q1.w) < 0.999999) { return Identity; }
+            if (Math.Abs(q1.w) > 0.999999) { return Identity; }
 
             float angle1 = (float)Math.Acos(q1.w);
             float angle2 = angle1 * exponent;
