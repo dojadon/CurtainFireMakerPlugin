@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BezierCurve\CubicBezierCurve.cs" />
-    <Compile Include="BezierCurve\EquationUtil.cs" />
     <Compile Include="BezierCurve\VmdBezierCurve.cs" />
     <Compile Include="Collections\MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />
@@ -78,6 +77,7 @@
     <Compile Include="Forms\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mathematics\EquationUtil.cs" />
     <Compile Include="Mathematics\Icosahedron.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entities\Entity.cs" />

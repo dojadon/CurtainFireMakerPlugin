@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CurtainFireMakerPlugin.BezierCurve
+namespace CurtainFireMakerPlugin.Mathematics
 {
     public static class EquationUtil
     {
