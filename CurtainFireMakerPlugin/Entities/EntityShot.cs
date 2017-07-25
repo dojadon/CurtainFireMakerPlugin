@@ -81,7 +81,6 @@ namespace CurtainFireMakerPlugin.Entities
         }
 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
-        public EntityShot(World world, string typeName, int color, Vector3 size) : this(world, new ShotProperty(typeName, color, size)) { }
 
         public EntityShot(World world, ShotProperty property) : base(world)
         {

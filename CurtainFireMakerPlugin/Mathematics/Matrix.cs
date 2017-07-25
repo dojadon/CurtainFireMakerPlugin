@@ -116,22 +116,20 @@ namespace CurtainFireMakerPlugin.Mathematics
             };
         }
 
-        public static Matrix RotationAxisAngle(Vector3 axis, float angle)
+        public static Matrix RotationAxis(Vector3 axis, float angle)
         {
-            var m1 = Identity;
-
             float cos = (float)Math.Cos(angle);
             float sin = (float)Math.Sin(angle);
 
-            Vector3 x = Vector3.UnitX;
-            Vector3 n = axis.x * axis;
+            var x = Vector3.UnitX;
+            var n = axis.x * axis;
             x = cos * (x - n) + sin * (axis ^ x) + n;
 
-            Vector3 y = Vector3.UnitY;
+            var y = Vector3.UnitY;
             n = axis.y * axis;
             y = cos * (y - n) + sin * (axis ^ y) + n;
 
-            Vector3 z = Vector3.UnitZ;
+            var z = Vector3.UnitZ;
             n = axis.z * axis;
             z = cos * (z - n) + sin * (axis ^ z) + n;
 
@@ -177,8 +175,6 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Matrix Inverse(Matrix m1)
         {
-            Matrix m2 = Identity;
-
             float[,] mat = (float[,])m1;
             float[,] inv = (float[,])Identity;
             float buf = 0;

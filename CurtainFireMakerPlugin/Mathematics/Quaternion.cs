@@ -73,7 +73,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             };
         }
 
-        public static Quaternion RotationAxisAngle(Vector3 a, float angle)
+        public static Quaternion RotationAxis(Vector3 a, float angle)
         {
             float amag = (float)Math.Sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 
