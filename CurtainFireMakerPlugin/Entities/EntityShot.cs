@@ -30,36 +30,36 @@ namespace CurtainFireMakerPlugin.Entities
 
         private bool ShouldRecord
         {
-            get => this.RecordWhenVelocityChanges ? UpdatedVelocity : UpdatedPos;
-            set => this.UpdatedVelocity = this.UpdatedPos = value;
+            get => this.RecordWhenVelocityChanges ? IsUpdatedVelocity : IsUpdatedPos;
+            set => this.IsUpdatedVelocity = this.IsUpdatedPos = value;
         }
-        private bool UpdatedVelocity { get; set; }
-        private bool UpdatedPos { get; set; }
+        private bool IsUpdatedVelocity { get; set; }
+        private bool IsUpdatedPos { get; set; }
 
         private static float Epsilon { get; set; } = 0.00001F;
 
         public override Vector3 Velocity
         {
             get => base.Velocity;
-            set => this.UpdatedVelocity |= !Vector3.EpsilonEquals(base.Velocity, (base.Velocity = value), Epsilon);
+            set => this.IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Velocity, (base.Velocity = value), Epsilon);
         }
 
         public override Vector3 Upward
         {
             get => base.Upward;
-            set => this.UpdatedVelocity |= !Vector3.EpsilonEquals(base.Upward, (base.Upward = value), Epsilon);
+            set => this.IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Upward, (base.Upward = value), Epsilon);
         }
 
         public override Vector3 Pos
         {
             get => base.Pos;
-            set => this.UpdatedPos |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
+            set => this.IsUpdatedPos |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
         }
 
         public override Quaternion Rot
         {
             get => base.Rot;
-            set => this.UpdatedPos |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
+            set => this.IsUpdatedPos |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
         private bool recordWhenVelocityChanges = true;
@@ -71,11 +71,11 @@ namespace CurtainFireMakerPlugin.Entities
                 recordWhenVelocityChanges = value;
                 if (recordWhenVelocityChanges)
                 {
-                    this.UpdatedVelocity |= this.UpdatedPos;
+                    this.IsUpdatedVelocity |= this.IsUpdatedPos;
                 }
                 else
                 {
-                    this.UpdatedPos |= this.UpdatedVelocity;
+                    this.IsUpdatedPos |= this.IsUpdatedVelocity;
                 }
             }
         }

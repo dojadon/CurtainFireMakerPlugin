@@ -10,7 +10,6 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static readonly Quaternion Identity = new Quaternion(0, 0, 0, 1);
         private const float EPS = 1.0e-12F;
         private const float EPS2 = 1.0e-30F;
-        private const float PIO2 = 1.57079632679F;
 
         public float x;
         public float y;
