@@ -92,12 +92,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected void UpdateWorldMat()
         {
-            this.worldMat = (Matrix)this.Rot;
+            this.worldMat = this.Rot;
             this.worldMat.TransformVec = this.Pos;
 
             if (this.ParentEntity != null)
             {
-                this.worldMat = this.WorldMat *  this.ParentEntity.WorldMat;
+                this.worldMat = this.WorldMat * this.ParentEntity.WorldMat;
             }
         }
 
@@ -158,14 +158,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is Entity e && EntityId == e.EntityId;
-        }
+        public override bool Equals(object obj) => obj is Entity e && EntityId == e.EntityId;
 
-        public override int GetHashCode()
-        {
-            return EntityId;
-        }
+        public override int GetHashCode() => EntityId;
     }
 }

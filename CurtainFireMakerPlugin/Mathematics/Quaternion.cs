@@ -19,17 +19,6 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public float Length => (float)Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 
-        public Vector3 Vec
-        {
-            get { return new Vector3(x, y, z); }
-            set
-            {
-                this.x = value.x;
-                this.y = value.y;
-                this.z = value.z;
-            }
-        }
-
         public Quaternion(float x, float y, float z, float w)
         {
             float mag;
@@ -40,15 +29,9 @@ namespace CurtainFireMakerPlugin.Mathematics
             this.w = w * mag;
         }
 
-        public Quaternion(Quaternion q1) : this(q1.x, q1.y, q1.z, q1.w)
-        {
+        public Quaternion(Quaternion q1) : this(q1.x, q1.y, q1.z, q1.w) { }
 
-        }
-
-        public Quaternion(Vector3 v1, float w) : this(v1.x, v1.y, v1.z, w)
-        {
-
-        }
+        public Quaternion(Vector3 v1, float w) : this(v1.x, v1.y, v1.z, w) { }
 
         public static Quaternion Conjugate(Quaternion q1) => new Quaternion()
         {
@@ -80,8 +63,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public static Quaternion Normalize(Quaternion q1)
         {
-            float norm = q1.x * q1.x + q1.y * q1.y + q1.z * q1.z + q1.w * q1.w;
-            norm = 1.0F / (float)Math.Sqrt(norm);
+            float norm = 1.0F / (float)Math.Sqrt(q1.x * q1.x + q1.y * q1.y + q1.z * q1.z + q1.w * q1.w);
 
             return new Quaternion()
             {

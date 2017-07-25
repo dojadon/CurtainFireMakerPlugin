@@ -16,9 +16,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => parentEntity;
             set
             {
-                this.parentEntity = value;
-
-                if (value is EntityShot entity && entity.Property.Type.RecordMotion)
+                if ((this.parentEntity = value) is EntityShot entity && entity.Property.Type.RecordMotion)
                 {
                     this.RootBone.ParentId = entity.RootBone.BoneId;
                 }
