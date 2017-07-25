@@ -1,5 +1,5 @@
 ﻿using System;
-using CurtainFireMakerPlugin.Mathematics;
+using VecMath;
 using CurtainFireMakerPlugin.BezierCurve;
 using CsPmx.Data;
 using CsVmd.Data;
@@ -23,10 +23,9 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        internal ShotModelData ModelData { get; }
-        public PmxBoneData RootBone { get; }
-        public PmxBoneData[] Bones { get; }
-        public PmxMorphData MaterialMorph { get; }
+        public ShotModelData ModelData { get; }
+        public PmxBoneData RootBone => ModelData.Bones[0];
+        public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
         private bool ShouldRecord
         {
@@ -89,9 +88,6 @@ namespace CurtainFireMakerPlugin.Entities
             this.Property.Type.Init(this);
 
             ModelData = this.World.AddShot(this);
-            Bones = ModelData.Bones;
-            RootBone = Bones[0];
-            MaterialMorph = ModelData.MaterialMorph;
         }
 
         internal override void Frame()

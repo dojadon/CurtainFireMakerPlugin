@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using DxMath;
+using VecMath;
 using CsVmd.Data;
 
 namespace CsVmd
@@ -30,31 +30,31 @@ namespace CsVmd
 
         public void Write(Vector2 vec)
         {
-            this.Write(vec.X );
-            this.Write(vec.Y);
+            this.Write(vec.x);
+            this.Write(vec.y);
         }
 
         public void Write(Vector3 vec)
         {
-            this.Write(vec.X);
-            this.Write(vec.Y);
-            this.Write(vec.Z);
+            this.Write(vec.x);
+            this.Write(vec.y);
+            this.Write(vec.z);
         }
 
         public void Write(Vector4 vec)
         {
-            this.Write(vec.X);
-            this.Write(vec.Y);
-            this.Write(vec.Z);
-            this.Write(vec.W);
+            this.Write(vec.x);
+            this.Write(vec.y);
+            this.Write(vec.z);
+            this.Write(vec.w);
         }
 
         public void Write(Quaternion vec)
         {
-            this.Write(vec.X);
-            this.Write(vec.Y);
-            this.Write(vec.Z);
-            this.Write(vec.W);
+            this.Write(vec.x);
+            this.Write(vec.y);
+            this.Write(vec.z);
+            this.Write(vec.w);
         }
 
         private void WriteFiller(byte[] filler, int fillerLength)

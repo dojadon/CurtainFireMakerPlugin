@@ -6,7 +6,7 @@ using CurtainFireMakerPlugin.Collections;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 
-namespace CurtainFireMakerPlugin.Mathematics
+namespace VecMath
 {
     struct Face
     {

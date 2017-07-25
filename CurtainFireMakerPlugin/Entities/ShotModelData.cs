@@ -6,7 +6,7 @@ using CsPmx.Data;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    internal class ShotModelData
+    public class ShotModelData
     {
         public PmxMorphData MaterialMorph { get; } = new PmxMorphData();
 
@@ -22,11 +22,11 @@ namespace CurtainFireMakerPlugin.Entities
         {
             this.Property = property;
 
-            this.Bones = this.Property.Type.GetBones(this.Property);
-            this.Vertices = this.Property.Type.GetVertices(this.Property);
-            this.Indices = this.Property.Type.GetVertexIndices(this.Property);
-            this.Materials = this.Property.Type.GetMaterials(this.Property);
-            this.Textures = this.Property.Type.GetTextures(this.Property);
+            this.Bones = this.Property.Type.CreateBones(this.Property);
+            this.Vertices = this.Property.Type.CreateVertices(this.Property);
+            this.Indices = this.Property.Type.CreateVertexIndices(this.Property);
+            this.Materials = this.Property.Type.CreateMaterials(this.Property);
+            this.Textures = this.Property.Type.CreateTextures(this.Property);
         }
     }
 }

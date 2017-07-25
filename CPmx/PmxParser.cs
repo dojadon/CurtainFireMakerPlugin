@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CsPmx.Data;
-using DxMath;
+using VecMath;
 
 namespace CsPmx
 {

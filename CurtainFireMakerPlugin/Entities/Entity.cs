@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CurtainFireMakerPlugin.Mathematics;
+using VecMath;
 using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.Entities.Motion;
 using IronPython.Runtime;

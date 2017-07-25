@@ -2,11 +2,9 @@
 using CsPmx;
 using CsPmx.Data;
 using CurtainFireMakerPlugin.Entities;
-using CurtainFireMakerPlugin.Mathematics;
+using VecMath;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using IronPython.Runtime;
-using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
@@ -39,20 +37,20 @@ namespace CurtainFireMakerPlugin.ShotTypes
             VertexScale = size;
         }
 
-        public override PmxVertexData[] GetVertices(ShotProperty property)
+        public override PmxVertexData[] CreateVertices(ShotProperty property)
         {
             PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = DeepCopy(Data.VertexArray[i]);
-                result[i].Pos.X = result[i].Pos.X * VertexScale.x * property.VertexScale.x + property.VertexOffset.x;
-                result[i].Pos.Y = result[i].Pos.Y * VertexScale.y * property.VertexScale.y + property.VertexOffset.y;
-                result[i].Pos.Z = result[i].Pos.Z * VertexScale.z * property.VertexScale.z + property.VertexOffset.z;
+                result[i].Pos.x *= VertexScale.x;
+                result[i].Pos.y *= VertexScale.y;
+                result[i].Pos.z *= VertexScale.z;
             }
             return result;
         }
 
-        public override int[] GetVertexIndices(ShotProperty property)
+        public override int[] CreateVertexIndices(ShotProperty property)
         {
             var result = new int[this.Data.VertexIndices.Length];
             Array.Copy(this.Data.VertexIndices, result, this.Data.VertexIndices.Length);
@@ -60,7 +58,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        public override PmxMaterialData[] GetMaterials(ShotProperty property)
+        public override PmxMaterialData[] CreateMaterials(ShotProperty property)
         {
             PmxMaterialData[] result = new PmxMaterialData[this.Data.MaterialArray.Length];
             for (int i = 0; i < result.Length; i++)
@@ -71,7 +69,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        public override String[] GetTextures(ShotProperty property)
+        public override String[] CreateTextures(ShotProperty property)
         {
             String[] result = new String[this.Data.TextureFiles.Length];
             Array.Copy(this.Data.TextureFiles, result, this.Data.TextureFiles.Length);
@@ -79,7 +77,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        public override PmxBoneData[] GetBones(ShotProperty property)
+        public override PmxBoneData[] CreateBones(ShotProperty property)
         {
             PmxBoneData[] result = new PmxBoneData[this.Data.BoneArray.Length];
             for (int i = 0; i < result.Length; i++)

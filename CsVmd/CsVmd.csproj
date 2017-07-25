@@ -50,6 +50,11 @@
     <Compile Include="VmdExporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\VecMath\VecMath.csproj">
+      <Project>{454be0aa-4fab-4df4-842a-da450652c5ec}</Project>
+      <Name>VecMath</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
