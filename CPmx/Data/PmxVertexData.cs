@@ -14,9 +14,9 @@ namespace CsPmx.Data
         public const byte WEIGHT_TYPE_BDEF4 = 2;
         public const byte WEIGHT_TYPE_SDEF = 3;
 
-        public Vector3 Pos;
-        public Vector3 Normal;
-        public Vector2 Uv;
+        public Vector3 Pos { get; set; }
+        public Vector3 Normal { get; set; }
+        public Vector2 Uv { get; set; }
         public float Edge { get; set; }
 
         /**
