@@ -50,16 +50,13 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         }
 
-        public static Quaternion Conjugate(Quaternion q1)
+        public static Quaternion Conjugate(Quaternion q1) => new Quaternion()
         {
-            return new Quaternion()
-            {
-                w = q1.w,
-                x = -q1.x,
-                y = -q1.y,
-                z = -q1.z
-            };
-        }
+            w = q1.w,
+            x = -q1.x,
+            y = -q1.y,
+            z = -q1.z
+        };
 
         public static Quaternion Inverse(Quaternion q1)
         {
@@ -73,16 +70,13 @@ namespace CurtainFireMakerPlugin.Mathematics
             };
         }
 
-        public static Quaternion Mul(Quaternion q1, Quaternion q2)
+        public static Quaternion Mul(Quaternion q1, Quaternion q2) => new Quaternion()
         {
-            return new Quaternion()
-            {
-                w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
-                x = q1.w * q2.x + q2.w * q1.x - q1.y * q2.z + q1.z * q2.y,
-                y = q1.w * q2.y + q2.w * q1.y + q1.x * q2.z - q1.z * q2.x,
-                z = q1.w * q2.z + q2.w * q1.z - q1.x * q2.y + q1.y * q2.x
-            };
-        }
+            w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
+            x = q1.w * q2.x + q2.w * q1.x - q1.y * q2.z + q1.z * q2.y,
+            y = q1.w * q2.y + q2.w * q1.y + q1.x * q2.z - q1.z * q2.x,
+            z = q1.w * q2.z + q2.w * q1.z - q1.x * q2.y + q1.y * q2.x
+        };
 
         public static Quaternion Normalize(Quaternion q1)
         {
@@ -245,6 +239,13 @@ namespace CurtainFireMakerPlugin.Mathematics
             };
         }
 
+        public static Vector3 RotateVector(Vector3 v1, Quaternion q1)
+        {
+            var q2 = ~q1 * new Quaternion(v1.x, v1.y, v1.z, 0) * q1;
+
+            return new Vector3(q2.x, q2.y, q2.z);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -305,6 +306,8 @@ namespace CurtainFireMakerPlugin.Mathematics
         public static Quaternion operator ~(Quaternion q1) => Inverse(q1);
 
         public static Quaternion operator *(Quaternion q1, Quaternion q2) => Mul(q1, q2);
+
+        public static Vector3 operator *(Vector3 v1, Quaternion q1) => RotateVector(v1, q1);
 
         public static Quaternion operator ^(Quaternion q1, double d1) => Pow(q1, (float)d1);
 
