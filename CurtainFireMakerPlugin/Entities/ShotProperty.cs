@@ -40,7 +40,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public bool Equals(ShotProperty p)
         {
-            return p.Color == Color && Type.Name == p.Type.Name && VertexScale == p.VertexScale;
+            return p.Color == Color && Type.Name == p.Type.Name;
         }
 
         public override int GetHashCode()

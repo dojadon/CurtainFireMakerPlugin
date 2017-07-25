@@ -5,6 +5,7 @@ using System.Text;
 
 namespace VecMath
 {
+    [Serializable]
     public struct Matrix
     {
         public static readonly Matrix Identity = new Matrix(Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, Vector3.Zero);

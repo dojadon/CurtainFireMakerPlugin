@@ -5,6 +5,7 @@ using System.Text;
 
 namespace VecMath
 {
+    [Serializable]
     public struct Vector3
     {
         public static readonly Vector3 Zero = new Vector3();

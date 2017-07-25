@@ -5,6 +5,7 @@ using System.Text;
 
 namespace VecMath
 {
+    [Serializable]
     public struct Quaternion
     {
         public static readonly Quaternion Identity = new Quaternion(0, 0, 0, 1);

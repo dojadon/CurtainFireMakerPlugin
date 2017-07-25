@@ -5,6 +5,7 @@ using System.Text;
 
 namespace VecMath
 {
+    [Serializable]
     public struct Vector4
     {
         public float x;
