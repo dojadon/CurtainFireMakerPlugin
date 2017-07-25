@@ -68,7 +68,7 @@ namespace CurtainFireMakerPlugin
         public IWin32Window ApplicationForm { get; set; }
         public Scene Scene { get; set; }
 
-        public string Description => "Curtain Fire Maker Plugin";
+        public string Description => "Curtain Fire Maker Plugin by zyando";
         public string Text => "弾幕生成";
         public string EnglishText => "Generate Curtain Fire";
 

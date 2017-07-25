@@ -34,9 +34,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = DeepCopy(Data.VertexArray[i]);
-                result[i].Pos.x *= VertexScale.x;
-                result[i].Pos.y *= VertexScale.y;
-                result[i].Pos.z *= VertexScale.z;
+                result[i].Pos = Vector3.Scale(result[i].Pos, VertexScale);
             }
             return result;
         }
@@ -81,17 +79,12 @@ namespace CurtainFireMakerPlugin.ShotTypes
         {
             T result;
             BinaryFormatter b = new BinaryFormatter();
-            MemoryStream mem = new MemoryStream();
 
-            try
+            using (MemoryStream mem = new MemoryStream())
             {
                 b.Serialize(mem, target);
                 mem.Position = 0;
                 result = (T)b.Deserialize(mem);
-            }
-            finally
-            {
-                mem.Close();
             }
 
             return result;
