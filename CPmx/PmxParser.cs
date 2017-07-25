@@ -81,11 +81,5 @@ namespace CsPmx
         {
             return new Quaternion(this.ReadSingle(), this.ReadSingle(), this.ReadSingle(), this.ReadSingle());
         }
-
-        public void ReadVector(Vector2 vec)
-        {
-            vec.X = this.ReadSingle();
-            vec.Y = this.ReadSingle();
-        }
     }
 }

@@ -19,3 +19,5 @@ C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\Cur
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMaker\obj\Debug\CurtainFireMaker.pdb
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMaker\bin\Debug\CsPmx.dll
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMaker\bin\Debug\CsPmx.pdb
+C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMaker\bin\Debug\VecMath.dll
+C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CurtainFireMaker\bin\Debug\VecMath.pdb

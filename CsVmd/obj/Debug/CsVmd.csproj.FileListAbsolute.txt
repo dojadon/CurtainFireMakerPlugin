@@ -4,3 +4,5 @@ C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CsV
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CsVmd\obj\Debug\CsVmd.csprojResolveAssemblyReference.cache
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CsVmd\obj\Debug\CsVmd.dll
 C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CsVmd\obj\Debug\CsVmd.pdb
+C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CsVmd\bin\Debug\VecMath.dll
+C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\CsVmd\bin\Debug\VecMath.pdb

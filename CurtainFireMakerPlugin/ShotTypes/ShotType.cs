@@ -23,16 +23,24 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public virtual bool RecordMotion => true;
 
         public Action<Entity> Init { get; set; } = e => { };
+        public Action<ShotProperty, PmxMaterialData[]> InitMaterials { get; set; } = (prop, materials) =>
+        {
+            foreach (var material in materials)
+            {
+                material.Diffuse = new Vector4(prop.Red, prop.Green, prop.Blue, 1);
+                material.Ambient = new Vector3(prop.Red, prop.Green, prop.Blue);
+            }
+        };
 
-        public abstract PmxVertexData[] CreateVertices(ShotProperty property);
+        public abstract PmxVertexData[] CreateVertices();
 
-        public abstract int[] CreateVertexIndices(ShotProperty property);
+        public abstract int[] CreateVertexIndices();
 
-        public abstract PmxMaterialData[] CreateMaterials(ShotProperty property);
+        public abstract PmxMaterialData[] CreateMaterials();
 
-        public abstract String[] CreateTextures(ShotProperty property);
+        public abstract String[] CreateTextures();
 
-        public abstract PmxBoneData[] CreateBones(ShotProperty property);
+        public abstract PmxBoneData[] CreateBones();
     }
 
     public class ShotTypeNone : ShotType
@@ -50,27 +58,27 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override bool RecordMotion => this.recordMotion;
 
-        public override PmxBoneData[] CreateBones(ShotProperty property)
+        public override PmxBoneData[] CreateBones()
         {
             return new PmxBoneData[] { new PmxBoneData() };
         }
 
-        public override PmxMaterialData[] CreateMaterials(ShotProperty property)
+        public override PmxMaterialData[] CreateMaterials()
         {
             return null;
         }
 
-        public override string[] CreateTextures(ShotProperty property)
+        public override string[] CreateTextures()
         {
             return null;
         }
 
-        public override int[] CreateVertexIndices(ShotProperty property)
+        public override int[] CreateVertexIndices()
         {
             return null;
         }
 
-        public override PmxVertexData[] CreateVertices(ShotProperty property)
+        public override PmxVertexData[] CreateVertices()
         {
             return null;
         }

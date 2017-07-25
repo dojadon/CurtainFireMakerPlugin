@@ -15,8 +15,6 @@ namespace CurtainFireMakerPlugin.Entities
         public float Blue => (Color >> 0 & 0x000000FF) / 255.0F;
 
         public ShotType Type { get; }
-        public Vector3 VertexScale { get; set; }
-        public Vector3 VertexOffset { get; set; }
 
         public ShotProperty(string typeName, int color)
         {

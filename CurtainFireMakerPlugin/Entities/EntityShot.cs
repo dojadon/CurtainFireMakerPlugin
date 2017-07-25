@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 if ((this.parentEntity = value) is EntityShot entity && entity.Property.Type.RecordMotion)
                 {
-                    this.RootBone.ParentId = entity.RootBone.BoneId;
+                    RootBone.ParentId = entity.RootBone.BoneId;
                 }
             }
         }
@@ -29,8 +29,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         private bool ShouldRecord
         {
-            get => this.RecordWhenVelocityChanges ? IsUpdatedVelocity : IsUpdatedPos;
-            set => this.IsUpdatedVelocity = this.IsUpdatedPos = value;
+            get => RecordWhenVelocityChanges ? IsUpdatedVelocity : IsUpdatedPos;
+            set => IsUpdatedVelocity = IsUpdatedPos = value;
         }
         private bool IsUpdatedVelocity { get; set; }
         private bool IsUpdatedPos { get; set; }
@@ -40,25 +40,25 @@ namespace CurtainFireMakerPlugin.Entities
         public override Vector3 Velocity
         {
             get => base.Velocity;
-            set => this.IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Velocity, (base.Velocity = value), Epsilon);
+            set => IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Velocity, (base.Velocity = value), Epsilon);
         }
 
         public override Vector3 Upward
         {
             get => base.Upward;
-            set => this.IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Upward, (base.Upward = value), Epsilon);
+            set => IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Upward, (base.Upward = value), Epsilon);
         }
 
         public override Vector3 Pos
         {
             get => base.Pos;
-            set => this.IsUpdatedPos |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
+            set => IsUpdatedPos |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
         }
 
         public override Quaternion Rot
         {
             get => base.Rot;
-            set => this.IsUpdatedPos |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
+            set => IsUpdatedPos |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
         private bool recordWhenVelocityChanges = true;
@@ -70,11 +70,11 @@ namespace CurtainFireMakerPlugin.Entities
                 recordWhenVelocityChanges = value;
                 if (recordWhenVelocityChanges)
                 {
-                    this.IsUpdatedVelocity |= this.IsUpdatedPos;
+                    IsUpdatedVelocity |= IsUpdatedPos;
                 }
                 else
                 {
-                    this.IsUpdatedPos |= this.IsUpdatedVelocity;
+                    IsUpdatedPos |= IsUpdatedVelocity;
                 }
             }
         }
@@ -83,29 +83,30 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property) : base(world)
         {
-            this.Property = property;
+            Property = property;
 
-            this.Property.Type.Init(this);
+            ModelData = World.AddShot(this);
 
-            ModelData = this.World.AddShot(this);
+            Property.Type.Init(this);
+            Property.Type.InitMaterials(Property, ModelData.Materials);
         }
 
         internal override void Frame()
         {
-            if (this.FrameCount == 1 || this.ShouldRecord)
+            if (FrameCount == 1 || ShouldRecord)
             {
-                this.AddVmdMotion();
+                AddVmdMotion();
             }
-            this.ShouldRecord = false;
+            ShouldRecord = false;
 
             base.Frame();
         }
 
         protected override void UpdateRot()
         {
-            if (this.RecordWhenVelocityChanges)
+            if (RecordWhenVelocityChanges)
             {
-                this.Rot = Matrix.LookAt(+this.Velocity, +this.Upward);
+                Rot = Matrix.LookAt(+Velocity, +Upward);
             }
             base.UpdateRot();
         }
@@ -114,40 +115,40 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnSpawn();
 
-            this.AddVmdMorph(-this.World.FrameCount, 1.0F, this.MaterialMorph);
-            this.AddVmdMorph(0, 1.0F, this.MaterialMorph);
-            this.AddVmdMorph(1, 0.0F, this.MaterialMorph);
+            AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
+            AddVmdMorph(0, 1.0F, MaterialMorph);
+            AddVmdMorph(1, 0.0F, MaterialMorph);
 
-            this.AddVmdMotion();
+            AddVmdMotion();
         }
 
         public override void OnDeath()
         {
             base.OnDeath();
 
-            this.AddVmdMorph(-1, 0.0F, this.MaterialMorph);
-            this.AddVmdMorph(0, 1.0F, this.MaterialMorph);
+            AddVmdMorph(-1, 0.0F, MaterialMorph);
+            AddVmdMorph(0, 1.0F, MaterialMorph);
 
-            this.AddVmdMotion();
+            AddVmdMotion();
         }
 
         public override void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
         {
-            this.AddVmdMotion();
+            AddVmdMotion();
 
             base.SetMotionBezier(pos1, pos2, length);
         }
 
         internal override void RemoveMotionBezier()
         {
-            this.AddVmdMotion(true);
+            AddVmdMotion(true);
 
             base.RemoveMotionBezier();
         }
 
         public void AddVmdMotion(bool replace = true)
         {
-            this.UpdateRot();
+            UpdateRot();
 
             var bezier = VmdBezierCurve.Line;
 
