@@ -8,9 +8,15 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityShot : Entity
     {
+        /// <summary>  
+        ///  プロパティ
+        /// </summary>  
         public ShotProperty Property { get; }
 
         private Entity parentEntity;
+        /// <summary>  
+        ///  親エンティティ、EntityShotを代入すると親ボーンの設定を行う。
+        /// </summary>  
         public override Entity ParentEntity
         {
             get => parentEntity;
@@ -23,8 +29,17 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        /// <summary>  
+        ///  Pmxモデルデータ。
+        /// </summary>  
         public ShotModelData ModelData { get; }
+        /// <summary>  
+        ///  ルートボーン
+        /// </summary>  
         public PmxBoneData RootBone => ModelData.Bones[0];
+        /// <summary>  
+        ///  材質モーフ
+        /// </summary>  
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
         private bool ShouldRecord
@@ -62,6 +77,10 @@ namespace CurtainFireMakerPlugin.Entities
         }
 
         private bool recordWhenVelocityChanges = true;
+        /// <summary>  
+        ///  Velocity又はUpwardが変化したフレームにモーションキーフレームを登録するか否か。
+        ///  Falseを代入するとPos又はRotが変化したフレームに登録を行う
+        /// </summary>  
         public bool RecordWhenVelocityChanges
         {
             get => recordWhenVelocityChanges;
@@ -76,19 +95,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property) : base(world)
         {
-            try
-            {
-                Property = property;
+            Property = property;
 
-                ModelData = World.AddShot(this);
+            ModelData = World.AddShot(this);
 
-                Property.Type.Init(this);
-                Property.Type.InitMaterials(Property, ModelData.Materials);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            Property.Type.Init(this);
+            Property.Type.InitMaterials(Property, ModelData.Materials);
         }
 
         internal override void Frame()
