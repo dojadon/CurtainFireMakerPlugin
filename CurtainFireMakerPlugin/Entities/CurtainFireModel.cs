@@ -18,16 +18,20 @@ namespace CurtainFireMakerPlugin.Entities
         public List<PmxBoneData> BoneList { get; } = new List<PmxBoneData>();
         public List<string> TextureList { get; } = new List<string>();
 
+        public List<ShotModelData> ModelDataList { get; } = new List<ShotModelData>();
+
         private World World { get; }
 
         public CurtainFireModel(World world)
         {
             World = world;
 
-            PmxBoneData centerBone = new PmxBoneData();
-            centerBone.BoneName = "センター";
-            centerBone.ParentId = -1;
-            centerBone.Flag = 0x0002 | 0x0004 | 0x0008 | 0x0010;
+            PmxBoneData centerBone = new PmxBoneData()
+            {
+                BoneName = "センター",
+                ParentId = -1,
+                Flag = 0x0002 | 0x0004 | 0x0008 | 0x0010
+            };
             this.BoneList.Add(centerBone);
         }
 
@@ -81,11 +85,13 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = data.Property.Type.Name + this.MaterialList.Count.ToString();
-                material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? this.TextureList.IndexOf(textures[material.TextureId]) : -1;
-                this.MaterialList.Add(material);
+                material.MaterialName = data.Property.Type.Name + MaterialList.Count.ToString();
+                material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? TextureList.IndexOf(textures[material.TextureId]) : -1;
+                MaterialList.Add(material);
             }
-            this.SetupBone(data, data.Bones);
+            SetupBone(data, data.Bones);
+
+            ModelDataList.Add(data);
         }
 
         private void SetupBone(ShotModelData data, params PmxBoneData[] bones)
@@ -141,7 +147,7 @@ namespace CurtainFireMakerPlugin.Entities
 
                 if (removeList.Count > 1)
                 {
-                    PmxMorphData addMoroh = this.Compress(removeList);
+                    PmxMorphData addMoroh = Compress(removeList);
                     removeList.Remove(addMoroh);
 
                     foreach (var morph in removeList)
@@ -151,19 +157,19 @@ namespace CurtainFireMakerPlugin.Entities
                     }
                 }
             }
-        }
 
-        private PmxMorphData Compress(List<PmxMorphData> morphList)
-        {
-            var morphTypeDataList = new List<IPmxMorphTypeData>();
-            foreach (var morph in morphList)
+            PmxMorphData Compress(List<PmxMorphData> list)
             {
-                morphTypeDataList.AddRange(morph.MorphArray);
+                var morphTypeDataList = new List<IPmxMorphTypeData>();
+                foreach (var morph in list)
+                {
+                    morphTypeDataList.AddRange(morph.MorphArray);
+                }
+
+                morphList[0].MorphArray = morphTypeDataList.ToArray();
+
+                return morphList[0];
             }
-
-            morphList[0].MorphArray = morphTypeDataList.ToArray();
-
-            return morphList[0];
         }
 
         public void GetData(PmxModelData data)

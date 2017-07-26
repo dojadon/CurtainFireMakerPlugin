@@ -43,5 +43,10 @@ namespace CurtainFireMakerPlugin
 
             engine.ExecuteFile(path, scope);
         }
+
+        public static void SetOut(Stream stream)
+        {
+            engine.Runtime.IO.SetOutput(stream, Encoding.ASCII);
+        }
     }
 }

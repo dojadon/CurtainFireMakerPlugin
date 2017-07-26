@@ -25,10 +25,13 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public Action<Entity> Init { get; set; } = e => { };
         public Action<ShotProperty, PmxMaterialData[]> InitMaterials { get; set; } = (prop, materials) =>
         {
-            foreach (var material in materials)
+            if (materials != null)
             {
-                material.Diffuse = new Vector4(prop.Red, prop.Green, prop.Blue, 1);
-                material.Ambient = new Vector3(prop.Red, prop.Green, prop.Blue);
+                foreach (var material in materials)
+                {
+                    material.Diffuse = new Vector4(prop.Red, prop.Green, prop.Blue, 1);
+                    material.Ambient = new Vector3(prop.Red, prop.Green, prop.Blue);
+                }
             }
         };
 

@@ -68,14 +68,7 @@ namespace CurtainFireMakerPlugin.Entities
             set
             {
                 recordWhenVelocityChanges = value;
-                if (recordWhenVelocityChanges)
-                {
-                    IsUpdatedVelocity |= IsUpdatedPos;
-                }
-                else
-                {
-                    IsUpdatedPos |= IsUpdatedVelocity;
-                }
+                IsUpdatedVelocity = IsUpdatedPos = IsUpdatedVelocity | IsUpdatedPos;
             }
         }
 
@@ -83,12 +76,19 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property) : base(world)
         {
-            Property = property;
+            try
+            {
+                Property = property;
 
-            ModelData = World.AddShot(this);
+                ModelData = World.AddShot(this);
 
-            Property.Type.Init(this);
-            Property.Type.InitMaterials(Property, ModelData.Materials);
+                Property.Type.Init(this);
+                Property.Type.InitMaterials(Property, ModelData.Materials);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         internal override void Frame()

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.IO;
 using MikuMikuPlugin;
 using CsPmx;
 using CsPmx.Data;
 using CsVmd;
 using CsVmd.Data;
-using System.IO;
 using CurtainFireMakerPlugin.Forms;
-using System.Threading.Tasks;
 
 namespace CurtainFireMakerPlugin
 {
@@ -113,9 +113,10 @@ namespace CurtainFireMakerPlugin
                     {
                         StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
                         Console.SetOut(sw);
+                        PythonRunner.SetOut(sw.BaseStream);
 
                         this.running = true;
-
+                        
                         try
                         {
                             this.RunScript(this.ScriptPath, progressForm);
@@ -136,6 +137,7 @@ namespace CurtainFireMakerPlugin
 
                             StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                             Console.SetOut(standardOutput);
+                            PythonRunner.SetOut(standardOutput.BaseStream);
 
                             progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
                         }
