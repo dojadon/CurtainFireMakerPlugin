@@ -147,18 +147,19 @@ namespace CurtainFireMakerPlugin.Entities
 
                 if (removeList.Count > 1)
                 {
-                    PmxMorphData addMoroh = Compress(removeList);
-                    removeList.Remove(addMoroh);
+                    removeList[0].MorphArray = Compress(removeList);
 
-                    foreach (var morph in removeList)
+                    for (int i = 1; i < removeList.Count; i++)
                     {
+                        var morph = removeList[i];
+
                         this.MorphList.Remove(morph);
                         World.VmdMotion.MorphDict.Remove(morph);
                     }
                 }
             }
 
-            PmxMorphData Compress(List<PmxMorphData> list)
+            IPmxMorphTypeData[] Compress(List<PmxMorphData> list)
             {
                 var morphTypeDataList = new List<IPmxMorphTypeData>();
                 foreach (var morph in list)
@@ -166,9 +167,7 @@ namespace CurtainFireMakerPlugin.Entities
                     morphTypeDataList.AddRange(morph.MorphArray);
                 }
 
-                morphList[0].MorphArray = morphTypeDataList.ToArray();
-
-                return morphList[0];
+                return morphTypeDataList.ToArray();
             }
         }
 
@@ -201,6 +200,38 @@ namespace CurtainFireMakerPlugin.Entities
             data.BoneArray = this.BoneList.ToArray();
             data.MorphArray = this.MorphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
+        }
+
+        private class IntegerArrayComparer : IEqualityComparer<int[]>
+        {
+            public bool Equals(int[] x, int[] y)
+            {
+                if (x.Length != y.Length)
+                {
+                    return false;
+                }
+                for (int i = 0; i < x.Length; i++)
+                {
+                    if (x[i] != y[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            public int GetHashCode(int[] obj)
+            {
+                int result = 17;
+                for (int i = 0; i < obj.Length; i++)
+                {
+                    unchecked
+                    {
+                        result = result * 23 + obj[i];
+                    }
+                }
+                return result;
+            }
         }
     }
 }

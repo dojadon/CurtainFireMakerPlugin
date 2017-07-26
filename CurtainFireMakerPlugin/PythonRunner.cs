@@ -48,5 +48,7 @@ namespace CurtainFireMakerPlugin
         {
             engine.Runtime.IO.SetOutput(stream, Encoding.ASCII);
         }
+
+        public static string FormatException(Exception e) => engine.GetService<ExceptionOperations>().FormatException(e);
     }
 }

@@ -72,8 +72,8 @@ namespace CurtainFireMakerPlugin
 
         internal void Finish()
         {
+            EntityList.ForEach(e => e.OnDeath());
             this.PmxModel.CompressMorph();
-            this.VmdMotion.Finish(PmxModel);
         }
 
         public void AddTask(Task task)
