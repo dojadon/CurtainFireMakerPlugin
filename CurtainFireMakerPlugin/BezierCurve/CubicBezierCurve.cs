@@ -8,6 +8,8 @@ namespace CurtainFireMakerPlugin.BezierCurve
 {
     public class CubicBezierCurve
     {
+        public static CubicBezierCurve Line = new CubicBezierCurve(new Vector2(0, 0), new Vector2(0.5F, 0.5F), new Vector2(0.5F, 0.5F), new Vector2(1, 1));
+
         public Vector2 P0 { get; }
         public Vector2 P1 { get; }
         public Vector2 P2 { get; }

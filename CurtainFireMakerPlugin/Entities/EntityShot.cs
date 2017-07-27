@@ -95,12 +95,20 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property) : base(world)
         {
-            Property = property;
+            try
+            {
+                Property = property;
 
-            ModelData = World.AddShot(this);
+                ModelData = World.AddShot(this);
 
-            Property.Type.Init(this);
-            Property.Type.InitMaterials(Property, ModelData.Materials);
+                Property.Type.Init(this);
+                Property.Type.InitMaterials(Property, ModelData.Materials);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(PythonRunner.FormatException(e));
+                Console.WriteLine(e);
+            }
         }
 
         internal override void Frame()
@@ -162,17 +170,17 @@ namespace CurtainFireMakerPlugin.Entities
         {
             UpdateRot();
 
-            var bezier = VmdBezierCurve.Line;
+            var bezier = CubicBezierCurve.Line;
 
-            if (this.motionInterpolation != null && this.motionInterpolation.startFrame < this.World.FrameCount)
+            if (motionInterpolation != null && motionInterpolation.startFrame < World.FrameCount)
             {
-                bezier = this.motionInterpolation.curve;
+                bezier = motionInterpolation.curve;
             }
 
             this.AddVmdMotion(RootBone, Pos, Rot, bezier, replace);
         }
 
-        public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, VmdBezierCurve bezier, bool replace = true)
+        public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier, bool replace = true)
         {
             var interpolation = new byte[4];
             interpolation[0] = (byte)(127 * bezier.P1.x);
@@ -182,37 +190,42 @@ namespace CurtainFireMakerPlugin.Entities
 
             var motion = new VmdMotionFrameData()
             {
-                BoneName = bone.BoneName,
-                KeyFrameNo = this.World.FrameCount,
-                Pos = (DxMath.Vector3)pos,
-                Rot = (DxMath.Quaternion)rot,
+                BoneName = RootBone.BoneName,
+                KeyFrameNo = World.FrameCount,
+                Pos = Pos,
+                Rot = Rot,
                 InterpolatePointX = interpolation,
                 InterpolatePointY = interpolation,
                 InterpolatePointZ = interpolation,
                 InterpolatePointR = interpolation
             };
 
-            this.World.VmdMotion.AddVmdMotion(motion, replace);
+            World.VmdMotion.AddVmdMotion(motion, replace);
+        }
+
+        public void AddVmdMotion(VmdMotionFrameData motion, bool replace = true)
+        {
+            World.VmdMotion.AddVmdMotion(motion, replace);
         }
 
         public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph)
         {
-            if (this.Property.Type.HasMmdData)
+            if (Property.Type.HasMmdData)
             {
                 var frameData = new VmdMorphFrameData()
                 {
                     MorphName = morph.MorphName,
-                    KeyFrameNo = this.World.FrameCount + frameOffset,
-                    Rate = (float)rate
+                    KeyFrameNo = World.FrameCount + frameOffset,
+                    Rate = rate
                 };
-                this.World.VmdMotion.AddVmdMorph(frameData, morph);
+                World.VmdMotion.AddVmdMorph(frameData, morph);
             }
         }
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
-            string vertexMorphName = "v" + this.MaterialMorph.MorphName;
-            PmxMorphData morph = this.World.PmxModel.MorphList.Find(v => v.MorphName == vertexMorphName);
+            string vertexMorphName = "v" + MaterialMorph.MorphName;
+            PmxMorphData morph = World.PmxModel.MorphList.Find(v => v.MorphName == vertexMorphName);
 
             if (morph == null)
             {
@@ -230,15 +243,14 @@ namespace CurtainFireMakerPlugin.Entities
                     var vertex = vertices[i];
                     var vertexMorph = new PmxMorphVertexData()
                     {
-                        Index = this.World.PmxModel.VertexList.IndexOf(vertex),
+                        Index = World.PmxModel.VertexList.IndexOf(vertex),
                         Position = (DxMath.Vector3)func(vertex.Pos)
                     };
                     morph.MorphArray[i] = vertexMorph;
                 }
 
-                this.World.PmxModel.MorphList.Add(morph);
+                World.PmxModel.MorphList.Add(morph);
             }
-
             return morph;
         }
     }
