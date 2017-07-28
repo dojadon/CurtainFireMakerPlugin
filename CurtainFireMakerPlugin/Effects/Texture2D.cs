@@ -27,7 +27,7 @@ namespace CurtainFireMakerPlugin.Effects
 
         public string Build()
         {
-            return Script.Replace(TextureNameDummy, TextureName).Replace(TexturePathDummy, TexturePath);
+            return Script.Replace(TextureNameDummy, TextureName).Replace(TexturePathDummy, TexturePath.Replace("\\","\\\\"));
         }
     }
 }

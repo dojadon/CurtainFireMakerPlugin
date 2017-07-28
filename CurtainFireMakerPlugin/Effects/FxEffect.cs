@@ -6,7 +6,7 @@ using CurtainFireMakerPlugin.Collections;
 
 namespace CurtainFireMakerPlugin.Effects
 {
-    internal class FxEffect 
+    internal class FxEffect
     {
         public const string ModelNameDummy = "{MODEL_NAME}";
 
@@ -36,8 +36,7 @@ namespace CurtainFireMakerPlugin.Effects
             string materialIndices = string.Join(", ", MaterialIndices);
             result = result.Replace("{MATERIAL_INDICES}", materialIndices);
 
-            result.Replace(ModelNameDummy, modelName);
-            result.Replace("\\", "\\\\");
+            result = result.Replace(ModelNameDummy, modelName);
 
             return result;
         }

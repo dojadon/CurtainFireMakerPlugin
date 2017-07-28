@@ -22,7 +22,6 @@ namespace CurtainFireMakerPlugin.Effects
         public string SamplerName { get; }
 
         public int Color { get; }
-        private float Alpha => (Color >> 24 & 0x000000FF) / 255.0F;
         private float Red => (Color >> 16 & 0x000000FF) / 255.0F;
         private float Green => (Color >> 8 & 0x000000FF) / 255.0F;
         private float Blue => (Color >> 0 & 0x000000FF) / 255.0F;
@@ -31,6 +30,7 @@ namespace CurtainFireMakerPlugin.Effects
         {
             BoneName = boneName;
             SamplerName = samplerName;
+            Color = color;
         }
 
         public string Build()
