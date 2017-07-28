@@ -36,52 +36,6 @@ namespace CurtainFireMakerPlugin.Entities
             this.BoneList.Add(centerBone);
         }
 
-        private bool initedMaterialForBillborad = false;
-
-        public int InitMaterialForBillboard()
-        {
-            if (!initedMaterialForBillborad)
-            {
-                MaterialList.Add(new PmxMaterialData()
-                {
-                    MaterialName = "Billboard",
-                    FaceCount = 1
-                });
-
-                IndexList.Add(VertexList.Count);
-                VertexList.Add(new PmxVertexData()
-                {
-                    Pos = new Vector3(0.1F, 0, 0),
-                    Normal = new Vector3(0, 0, 1),
-                    BoneId = new int[] { 0 },
-                    Weight = new float[] { 1 }
-                });
-
-                IndexList.Add(VertexList.Count);
-                VertexList.Add(new PmxVertexData()
-                {
-                    Pos = new Vector3(0.1F, 0.1F, 0),
-                    Normal = new Vector3(0, 0, 1),
-                    BoneId = new int[] { 0 },
-                    Weight = new float[] { 1 }
-                });
-
-                IndexList.Add(VertexList.Count);
-                VertexList.Add(new PmxVertexData()
-                {
-                    Pos = new Vector3(0F, 0.1F, 0),
-                    Normal = new Vector3(0, 0, 1),
-                    BoneId = new int[] { 0 },
-                    Weight = new float[] { 1 }
-                });
-
-                initedMaterialForBillborad = true;
-                return MaterialList.Count - 1;
-            }
-
-            return -1;
-        }
-
         public void InitShotModelData(ShotModelData data)
         {
             if (data.Property.Type.RecordMotion)
