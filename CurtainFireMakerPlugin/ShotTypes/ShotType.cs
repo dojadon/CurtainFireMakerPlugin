@@ -22,7 +22,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public virtual bool HasMmdData => true;
         public virtual bool RecordMotion => true;
 
-        public Action<Entity> Init { get; set; } = e => { };
+        public virtual Action<EntityShot> Init { get; set; } = e => { };
         public Action<ShotProperty, PmxMaterialData[]> InitMaterials { get; set; } = (prop, materials) =>
         {
             if (materials != null)

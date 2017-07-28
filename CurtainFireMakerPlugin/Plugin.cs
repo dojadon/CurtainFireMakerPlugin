@@ -174,15 +174,31 @@ namespace CurtainFireMakerPlugin
                 var world = worldList[i];
                 world.Finish();
 
-                this.ExportPmx(world, worldList.Count > 1 ? (i + 1).ToString() : "");
-                this.ExportVmd(world, worldList.Count > 1 ? (i + 1).ToString() : "");
+                this.ExportPmx(world);
+                this.ExportVmd(world);
+                this.ExportFx(world);
             }
         }
 
-        private void ExportPmx(World world, string text)
+        private void ExportFx(World world)
         {
-            string fileName = ScriptFileName.Replace(".py", "");
-            string exportPath = this.ExportDirPath + "\\" + fileName + text + ".pmx";
+            if (world.FxEffect.ShouldBuild())
+            {
+                string fileName = ScriptFileName.Replace(".py", "");
+                string exportPath = ExportDirPath + "\\" + world.ExportFileName + ".fx";
+                File.Delete(exportPath);
+
+                File.AppendAllText(exportPath, world.FxEffect.Build(world.ExportFileName + ".pmx"), Encoding.UTF8);
+
+                exportPath =ExportDirPath + "\\" + world.ExportFileName + ".x";
+                File.Delete(exportPath);
+                File.Copy(world.FxEffect.XFilePath, exportPath);
+            }
+        }
+
+        private void ExportPmx(World world)
+        {
+            string exportPath = this.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
@@ -197,7 +213,7 @@ namespace CurtainFireMakerPlugin
 
                 exporter.Export(data);
 
-                Console.WriteLine("出力完了 : " + fileName);
+                Console.WriteLine("出力完了 : " + world.ExportFileName);
                 Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
                 Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
                 Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
@@ -206,10 +222,10 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        private void ExportVmd(World world, string text)
+        private void ExportVmd(World world)
         {
             string fileName = ScriptFileName.Replace(".py", "");
-            string exportPath = this.ExportDirPath + "\\" + fileName + text + ".vmd";
+            string exportPath = this.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))

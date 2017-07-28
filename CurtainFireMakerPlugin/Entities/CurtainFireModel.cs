@@ -6,6 +6,7 @@ using CsPmx.Data;
 using CsPmx;
 using CsVmd.Data;
 using CurtainFireMakerPlugin.Collections;
+using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -33,6 +34,52 @@ namespace CurtainFireMakerPlugin.Entities
                 Flag = 0x0002 | 0x0004 | 0x0008 | 0x0010
             };
             this.BoneList.Add(centerBone);
+        }
+
+        private bool initedMaterialForBillborad = false;
+
+        public int InitMaterialForBillboard()
+        {
+            if (!initedMaterialForBillborad)
+            {
+                MaterialList.Add(new PmxMaterialData()
+                {
+                    MaterialName = "Billboard",
+                    FaceCount = 1
+                });
+
+                IndexList.Add(VertexList.Count);
+                VertexList.Add(new PmxVertexData()
+                {
+                    Pos = new Vector3(0.1F, 0, 0),
+                    Normal = new Vector3(0, 0, 1),
+                    BoneId = new int[] { 0 },
+                    Weight = new float[] { 1 }
+                });
+
+                IndexList.Add(VertexList.Count);
+                VertexList.Add(new PmxVertexData()
+                {
+                    Pos = new Vector3(0.1F, 0.1F, 0),
+                    Normal = new Vector3(0, 0, 1),
+                    BoneId = new int[] { 0 },
+                    Weight = new float[] { 1 }
+                });
+
+                IndexList.Add(VertexList.Count);
+                VertexList.Add(new PmxVertexData()
+                {
+                    Pos = new Vector3(0F, 0.1F, 0),
+                    Normal = new Vector3(0, 0, 1),
+                    BoneId = new int[] { 0 },
+                    Weight = new float[] { 1 }
+                });
+
+                initedMaterialForBillborad = true;
+                return MaterialList.Count - 1;
+            }
+
+            return -1;
         }
 
         public void InitShotModelData(ShotModelData data)
