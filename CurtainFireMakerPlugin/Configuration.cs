@@ -12,9 +12,12 @@ namespace CurtainFireMakerPlugin
         public string SettingScriptPath { get; set; }
         public string ModullesDirPath { get; set; }
         public string ExportDirPath { get; set; }
+
         public string ModelName { get; set; }
         public string ModelDescription { get; set; }
         public bool KeepLogOpen { get; set; }
+
+        public string ResourceDirPath => Plugin.Instance.CurtainFireMakerPath + "\\Resource";
 
         public Configuration(string path)
         {

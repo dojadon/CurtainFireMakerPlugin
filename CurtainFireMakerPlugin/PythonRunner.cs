@@ -27,6 +27,7 @@ namespace CurtainFireMakerPlugin
             "# -*- coding: utf-8 -*-\n" +
             "import sys\n" +
             "sys.path.append(r\"" + Application.StartupPath + "\\Plugins\")\n" +
+            "sys.path.append(r\"" + Application.StartupPath + "\\System\\x64\")\n" +
             "import clr\n" +
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
             "clr.AddReference(\"CsPmx\")\n" +
