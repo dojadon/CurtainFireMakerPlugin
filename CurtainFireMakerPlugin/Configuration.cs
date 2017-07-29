@@ -36,7 +36,7 @@ namespace CurtainFireMakerPlugin
             KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("keep_log_open").InnerText);
         }
 
-        public static void Save()
+        public void Save()
         {
             var doc = new XmlDocument();
 
@@ -47,31 +47,31 @@ namespace CurtainFireMakerPlugin
             doc.AppendChild(root);
 
             XmlElement element = doc.CreateElement("script");
-            element.InnerText = Plugin.Instance.ScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = ScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("setting");
-            element.InnerText = Plugin.Instance.SettingScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = SettingScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("scripts");
-            element.InnerText = Plugin.Instance.ModullesDirPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = ModullesDirPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("export");
-            element.InnerText = Plugin.Instance.ExportDirPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = ExportDirPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("model_name");
-            element.InnerText = Plugin.Instance.ModelName;
+            element.InnerText = ModelName;
             root.AppendChild(element);
 
             element = doc.CreateElement("model_description");
-            element.InnerText = Plugin.Instance.ModelDescription;
+            element.InnerText = ModelDescription;
             root.AppendChild(element);
 
             element = doc.CreateElement("keep_log_open");
-            element.InnerText = Plugin.Instance.KeepLogOpen.ToString();
+            element.InnerText = KeepLogOpen.ToString();
             root.AppendChild(element);
 
             doc.Save(CondigPath);

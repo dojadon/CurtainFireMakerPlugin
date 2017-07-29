@@ -11,16 +11,19 @@ namespace CurtainFireMakerPlugin
 {
     internal class PythonRunner
     {
-        private static ScriptEngine engine = Python.CreateEngine();
-        private static ScriptScope rootScope = engine.CreateScope();
+        private ScriptEngine Engine { get; }
+        private ScriptScope RootScope { get; }
 
-        public static void Init(string settingScriptPath, string modullesDirPath)
+        public PythonRunner(string settingScriptPath, string modullesDirPath)
         {
-            ICollection<string> paths = engine.GetSearchPaths();
-            paths.Add(modullesDirPath);
-            engine.SetSearchPaths(paths);
+            Engine = Python.CreateEngine();
+            RootScope = Engine.CreateScope();
 
-            engine.Execute(
+            ICollection<string> paths = Engine.GetSearchPaths();
+            paths.Add(modullesDirPath);
+            Engine.SetSearchPaths(paths);
+
+            Engine.Execute(
             "# -*- coding: utf-8 -*-\n" +
             "import sys\n" +
             "sys.path.append(r\"" + Application.StartupPath + "\\Plugins\")\n" +
@@ -30,25 +33,25 @@ namespace CurtainFireMakerPlugin
             "clr.AddReference(\"CsVmd\")\n" +
             "clr.AddReference(\"DxMath\")\n" +
             "clr.AddReference(\"VecMath\")\n" +
-            "clr.AddReference(\"MikuMikuPlugin\")\n", rootScope);
+            "clr.AddReference(\"MikuMikuPlugin\")\n", RootScope);
 
-            ScriptScope scope = engine.CreateScope(rootScope);
+            ScriptScope scope = Engine.CreateScope(RootScope);
 
-            engine.ExecuteFile(settingScriptPath, scope);
+            Engine.ExecuteFile(settingScriptPath, scope);
         }
 
-        public static void RunSpellScript(string path)
+        public void RunSpellScript(string path)
         {
-            ScriptScope scope = engine.CreateScope(rootScope);
+            ScriptScope scope = Engine.CreateScope(RootScope);
 
-            engine.ExecuteFile(path, scope);
+            Engine.ExecuteFile(path, scope);
         }
 
-        public static void SetOut(Stream stream)
+        public void SetOut(Stream stream)
         {
-            engine.Runtime.IO.SetOutput(stream, Encoding.ASCII);
+            Engine.Runtime.IO.SetOutput(stream, Encoding.ASCII);
         }
 
-        public static string FormatException(Exception e) => engine.GetService<ExceptionOperations>().FormatException(e);
+        public string FormatException(Exception e) => Engine.GetService<ExceptionOperations>().FormatException(e);
     }
 }

@@ -19,6 +19,7 @@ namespace CurtainFireMakerPlugin
         public static Plugin Instance { get; set; }
 
         internal Configuration Config { get; }
+        internal PythonRunner PythonRunner { get; }
 
         public bool IsPlugin { get; }
         public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
@@ -31,9 +32,6 @@ namespace CurtainFireMakerPlugin
                 return split[split.Length - 1];
             }
         }
-
-        private bool running;
-        public bool Running { get; }
 
         public Plugin() : this(true)
         {
@@ -49,12 +47,13 @@ namespace CurtainFireMakerPlugin
 
             try
             {
-                PythonRunner.Init(Config.SettingScriptPath, Config.ModullesDirPath);
+                PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPath);
             }
             catch (Exception e)
             {
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
+                    sw.WriteLine(PythonRunner.FormatException(e));
                     sw.WriteLine(e);
                 }
             }
@@ -73,16 +72,11 @@ namespace CurtainFireMakerPlugin
 
         public void Dispose()
         {
-            Configuration.Save();
+            Config.Save();
         }
 
         public void Run(CommandArgs args)
         {
-            if (this.running)
-            {
-                return;
-            }
-
             if (IsPlugin)
             {
                 var form = new ExportSettingForm()
@@ -109,8 +103,7 @@ namespace CurtainFireMakerPlugin
                     {
                         StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
                         Console.SetOut(sw);
-
-                        this.running = true;
+                        PythonRunner.SetOut(sw.BaseStream);
 
                         try
                         {
@@ -129,10 +122,10 @@ namespace CurtainFireMakerPlugin
                         finally
                         {
                             sw.Dispose();
-                            this.running = false;
 
                             StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                             Console.SetOut(standardOutput);
+                            PythonRunner.SetOut(standardOutput.BaseStream);
 
                             progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
                         }
