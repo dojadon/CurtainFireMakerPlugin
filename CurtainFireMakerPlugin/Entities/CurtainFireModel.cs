@@ -74,7 +74,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             PmxMaterialData[] materials = data.Materials;
             PmxMorphData morph = data.MaterialMorph;
-            morph.MorphName = data.Property.Type.Name + this.MorphList.Count.ToString();
+            morph.MorphName = data.Property.Type.Name + "_MOR" + this.MorphList.Count.ToString();
             morph.Type = 4;
             morph.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
 
@@ -86,7 +86,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = data.Property.Type.Name + MaterialList.Count.ToString();
+                material.MaterialName = data.Property.Type.Name + "_MAT" + MaterialList.Count.ToString();
                 material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? TextureList.IndexOf(textures[material.TextureId]) : -1;
                 MaterialList.Add(material);
             }
@@ -154,8 +154,14 @@ namespace CurtainFireMakerPlugin.Entities
                     {
                         var morph = removeList[i];
 
-                        this.MorphList.Remove(morph);
+                        MorphList.Remove(morph);
                         World.VmdMotion.MorphDict.Remove(morph);
+                        World.FxEffect.Effect.MorphControlObjectList.RemoveAll(m => m.MorphName == morph.MorphName);
+
+                        foreach (var pass in World.FxEffect.Effect.DrawObjectPassList.FindAll(p => p.MorphName == morph.MorphName))
+                        {
+                            pass.MorphName = removeList[0].MorphName;
+                        }
                     }
                 }
             }

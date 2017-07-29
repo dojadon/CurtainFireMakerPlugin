@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CurtainFireMakerPlugin.Effects
 {
-    internal class ControlObject : IFxElement
+    internal class BoneControlObject : IFxElement
     {
         private const string BoneNameDummy = "{BONE_NAME}";
         private const string Script
@@ -13,7 +13,7 @@ namespace CurtainFireMakerPlugin.Effects
 
         public string BoneName { get; }
 
-        public ControlObject(string boneName)
+        public BoneControlObject(string boneName)
         {
             BoneName = boneName;
         }
@@ -21,6 +21,25 @@ namespace CurtainFireMakerPlugin.Effects
         public string Build()
         {
             return Script.Replace(BoneNameDummy, BoneName);
+        }
+    }
+
+    internal class MorphControlObject : IFxElement
+    {
+        private const string MorphNameDummy = "{BONE_NAME}";
+        private const string Script
+        = "float " + MorphNameDummy + " : CONTROLOBJECT < string name = \"" + FxEffect.ModelNameDummy + "\"; string item = \"" + MorphNameDummy + "\"; >;\n";
+
+        public string MorphName { get; }
+
+        public MorphControlObject(string morphName)
+        {
+            MorphName = morphName;
+        }
+
+        public string Build()
+        {
+            return Script.Replace(MorphNameDummy, MorphName);
         }
     }
 }

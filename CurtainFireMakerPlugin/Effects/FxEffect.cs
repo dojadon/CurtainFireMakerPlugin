@@ -10,7 +10,8 @@ namespace CurtainFireMakerPlugin.Effects
     {
         public const string ModelNameDummy = "{MODEL_NAME}";
 
-        public List<ControlObject> ControlObjectList { get; } = new List<ControlObject>();
+        public List<BoneControlObject> BoneControlObjectList { get; } = new List<BoneControlObject>();
+        public List<MorphControlObject> MorphControlObjectList { get; } = new List<MorphControlObject>();
         public List<Texture2D> TextureList { get; } = new List<Texture2D>();
         public List<Sampler> SamplerList { get; } = new List<Sampler>();
         public List<DrawObjectPass> DrawObjectPassList { get; } = new List<DrawObjectPass>();
@@ -28,7 +29,8 @@ namespace CurtainFireMakerPlugin.Effects
         {
             string result = Script;
 
-            result = result.Replace("{BONE_CONTROL_LIST}", BuildElementList(ControlObjectList));
+            result = result.Replace("{BONE_CONTROL_LIST}", BuildElementList(BoneControlObjectList));
+            result = result.Replace("{MORPH_CONTROL_LIST}", BuildElementList(MorphControlObjectList));
             result = result.Replace("{TEXTURE_LIST}", BuildElementList(TextureList));
             result = result.Replace("{SAMPLER_LIST}", BuildElementList(SamplerList));
             result = result.Replace("{DRAW_OBJECT_PASS_LIST}", BuildElementList(DrawObjectPassList));

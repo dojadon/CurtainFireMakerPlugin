@@ -19,7 +19,12 @@ namespace CurtainFireMakerPlugin.ShotTypes
             Init = e =>
             {
                 e.World.FxEffect.InitEntityShot(e, TexturePath);
-                e.World.FxEffect.AddMaterialIndices(e.World.PmxModel.MaterialList.IndexOf(e.ModelData.Materials[0]));
+
+                int[] indices = Array.ConvertAll(e.ModelData.Materials, m => e.World.PmxModel.MaterialList.IndexOf(m));
+                foreach (int index in indices)
+                {
+                    e.World.FxEffect.Effect.MaterialIndices.Add(index);
+                }
             };
         }
 
@@ -28,6 +33,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public override PmxMaterialData[] CreateMaterials() => new PmxMaterialData[]{new PmxMaterialData()
         {
             Diffuse = new Vector4(1, 1, 1, 1),
+            Ambient = new Vector3(0, 0, 0),
             FaceCount = 3
         }};
 
@@ -39,7 +45,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
         {
             var v1 = new PmxVertexData()
             {
-                Pos = new Vector3(0.001F, 0, 0),
+                Pos = new Vector3(0.1F, 0, 0),
                 Normal = new Vector3(0, 0, 1),
                 BoneId = new int[] { 0 },
                 Weight = new float[] { 1 }
@@ -47,7 +53,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
             var v2 = new PmxVertexData()
             {
-                Pos = new Vector3(0.001F, 0.001F, 0),
+                Pos = new Vector3(0.1F, 0.1F, 0),
                 Normal = new Vector3(0, 0, 1),
                 BoneId = new int[] { 0 },
                 Weight = new float[] { 1 }
@@ -55,7 +61,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
             var v3 = new PmxVertexData()
             {
-                Pos = new Vector3(0F, 0.001F, 0),
+                Pos = new Vector3(0F, 0.1F, 0),
                 Normal = new Vector3(0, 0, 1),
                 BoneId = new int[] { 0 },
                 Weight = new float[] { 1 }

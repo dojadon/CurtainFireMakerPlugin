@@ -9,7 +9,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireEffect
     {
-        private FxEffect Effect { get; }
+        public FxEffect Effect { get; }
         public string XFilePath => Plugin.Instance.CurtainFireMakerPath + "\\Resource\\Template.x";
 
         public CurtainFireEffect()
@@ -30,16 +30,9 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (!Effect.DrawObjectPassList.Exists(p => p.BoneName == entity.RootBone.BoneName))
             {
-                Effect.ControlObjectList.Add(new ControlObject(entity.RootBone.BoneName));
-                Effect.DrawObjectPassList.Add(new DrawObjectPass(entity.RootBone.BoneName, samplerName, entity.Property.Color));
-            }
-        }
-
-        public void AddMaterialIndices(params int[] indices)
-        {
-            foreach (int index in indices)
-            {
-                Effect.MaterialIndices.Add(index);
+                Effect.MorphControlObjectList.Add(new MorphControlObject(entity.MaterialMorph.MorphName));
+                Effect.BoneControlObjectList.Add(new BoneControlObject(entity.RootBone.BoneName));
+                Effect.DrawObjectPassList.Add(new DrawObjectPass(entity.RootBone.BoneName, entity.MaterialMorph.MorphName, samplerName, entity.Property.Color));
             }
         }
 
