@@ -14,26 +14,20 @@ namespace CurtainFireMakerPlugin.Entities
         private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
         public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphDict { get; } = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
 
-        public void AddVmdMotion(VmdMotionFrameData motion, bool replace = false)
+        public void AddVmdMotion(VmdMotionFrameData motion)
         {
-            if (replace)
+            if (!motionList.Exists(m => m == null || m.BoneName.Equals(motion.BoneName) && m.KeyFrameNo == motion.KeyFrameNo))
             {
-                motionList.RemoveAll(m => m == null || m.BoneName.Equals(motion.BoneName) && m.KeyFrameNo == motion.KeyFrameNo);
                 motionList.Add(motion);
-            }
-            else
-            {
-                if (!motionList.Exists(m => m == null || m.BoneName.Equals(motion.BoneName) && m.KeyFrameNo == motion.KeyFrameNo))
-                {
-                    motionList.Add(motion);
-                }
             }
         }
 
         public void AddVmdMorph(VmdMorphFrameData frameData, PmxMorphData morph)
         {
-            MorphDict[morph].RemoveAll(m => m.MorphName.Equals(frameData.MorphName) && m.KeyFrameNo == frameData.KeyFrameNo);
-            MorphDict[morph].Add(frameData);
+            if (!MorphDict[morph].Exists(m => m.MorphName == frameData.MorphName && m.KeyFrameNo == frameData.KeyFrameNo))
+            {
+                MorphDict[morph].Add(frameData);
+            }
         }
 
         public void Finish(CurtainFireModel pmxModel)

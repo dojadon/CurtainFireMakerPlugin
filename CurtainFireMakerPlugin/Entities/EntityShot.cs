@@ -161,12 +161,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         internal override void RemoveMotionBezier()
         {
-            AddVmdMotion(true);
+            AddVmdMotion();
 
             base.RemoveMotionBezier();
         }
 
-        public void AddVmdMotion(bool replace = true)
+        public void AddVmdMotion()
         {
             UpdateRot();
 
@@ -177,10 +177,10 @@ namespace CurtainFireMakerPlugin.Entities
                 bezier = motionInterpolation.curve;
             }
 
-            this.AddVmdMotion(RootBone, Pos, Rot, bezier, replace);
+            this.AddVmdMotion(RootBone, Pos, Rot, bezier);
         }
 
-        public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier, bool replace = true)
+        public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
         {
             var interpolation = new byte[4];
             interpolation[0] = (byte)(127 * bezier.P1.x);
@@ -190,25 +190,25 @@ namespace CurtainFireMakerPlugin.Entities
 
             var motion = new VmdMotionFrameData()
             {
-                BoneName = RootBone.BoneName,
+                BoneName = bone.BoneName,
                 KeyFrameNo = World.FrameCount,
-                Pos = Pos,
-                Rot = Rot,
+                Pos = pos,
+                Rot = rot,
                 InterpolatePointX = interpolation,
                 InterpolatePointY = interpolation,
                 InterpolatePointZ = interpolation,
                 InterpolatePointR = interpolation
             };
 
-            World.VmdMotion.AddVmdMotion(motion, replace);
+            World.VmdMotion.AddVmdMotion(motion);
         }
 
-        public void AddVmdMotion(VmdMotionFrameData motion, bool replace = true)
+        public void AddVmdMotion(VmdMotionFrameData motion)
         {
-            World.VmdMotion.AddVmdMotion(motion, replace);
+            World.VmdMotion.AddVmdMotion(motion);
         }
 
-        public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph)
+        public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph, bool replace = false)
         {
             if (Property.Type.HasMmdData)
             {

@@ -13,9 +13,11 @@ namespace CsVmd.Data
 
         public void Export(VmdExporter exporter)
         {
-            exporter.WriteVmdText(this.MorphName, VmdExporter.MORPH_NAME_LENGTH);
-            exporter.Write(this.KeyFrameNo);
-            exporter.Write(this.Rate);
+            exporter.WriteVmdText(MorphName, VmdExporter.MORPH_NAME_LENGTH);
+            exporter.Write(KeyFrameNo);
+            exporter.Write(Rate);
+
+            Console.WriteLine(MorphName + ", " + KeyFrameNo + ", " + Rate);
         }
     }
 }
