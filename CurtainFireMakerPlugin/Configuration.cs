@@ -6,21 +6,34 @@ namespace CurtainFireMakerPlugin
 {
     internal class Configuration
     {
-        private static string CondigPath => Plugin.Instance.CurtainFireMakerPath + "\\config.xml";
+        private string CondigPath { get; }
 
-        public static void Load()
+        public string ScriptPath { get; set; }
+        public string SettingScriptPath { get; set; }
+        public string ModullesDirPath { get; set; }
+        public string ExportDirPath { get; set; }
+        public string ModelName { get; set; }
+        public string ModelDescription { get; set; }
+        public bool KeepLogOpen { get; set; }
+
+        public Configuration(string path)
+        {
+            CondigPath = path;
+        }
+
+        public void Load()
         {
             var doc = new XmlDocument();
             doc.Load(CondigPath);
 
             XmlNode rootNode = doc.SelectSingleNode(@"//configuration");
-            Plugin.Instance.ScriptPath = GetPath(rootNode.SelectSingleNode("script").InnerText);
-            Plugin.Instance.SettingScriptPath = GetPath(rootNode.SelectSingleNode("setting").InnerText);
-            Plugin.Instance.ModullesDirPath = GetPath(rootNode.SelectSingleNode("scripts").InnerText);
-            Plugin.Instance.ExportDirPath = GetPath(rootNode.SelectSingleNode("export").InnerText);
-            Plugin.Instance.ModelName = rootNode.SelectSingleNode("model_name").InnerText;
-            Plugin.Instance.ModelDescription = rootNode.SelectSingleNode("model_description").InnerText;
-            Plugin.Instance.KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("keep_log_open").InnerText);
+            ScriptPath = GetPath(rootNode.SelectSingleNode("script").InnerText);
+            SettingScriptPath = GetPath(rootNode.SelectSingleNode("setting").InnerText);
+            ModullesDirPath = GetPath(rootNode.SelectSingleNode("scripts").InnerText);
+            ExportDirPath = GetPath(rootNode.SelectSingleNode("export").InnerText);
+            ModelName = rootNode.SelectSingleNode("model_name").InnerText;
+            ModelDescription = rootNode.SelectSingleNode("model_description").InnerText;
+            KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("keep_log_open").InnerText);
         }
 
         public static void Save()

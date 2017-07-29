@@ -18,6 +18,8 @@ namespace CurtainFireMakerPlugin
     {
         public static Plugin Instance { get; set; }
 
+        internal Configuration Config { get; }
+
         public bool IsPlugin { get; }
         public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
 
@@ -25,17 +27,10 @@ namespace CurtainFireMakerPlugin
         {
             get
             {
-                string[] split = ScriptPath.Split('\\');
+                string[] split = Config.ScriptPath.Split('\\');
                 return split[split.Length - 1];
             }
         }
-        public string ScriptPath { get; set; }
-        public string SettingScriptPath { get; set; }
-        public string ModullesDirPath { get; set; }
-        public string ExportDirPath { get; set; }
-        public string ModelName { get; set; }
-        public string ModelDescription { get; set; }
-        public bool KeepLogOpen { get; set; }
 
         private bool running;
         public bool Running { get; }
@@ -49,11 +44,12 @@ namespace CurtainFireMakerPlugin
             Instance = this;
             IsPlugin = isPlugin;
 
-            Configuration.Load();
+            Config = new Configuration(CurtainFireMakerPath + "\\config.xml");
+            Config.Load();
 
             try
             {
-                PythonRunner.Init(this.SettingScriptPath, this.ModullesDirPath);
+                PythonRunner.Init(Config.SettingScriptPath, Config.ModullesDirPath);
             }
             catch (Exception e)
             {
@@ -91,21 +87,21 @@ namespace CurtainFireMakerPlugin
             {
                 var form = new ExportSettingForm()
                 {
-                    ScriptPath = this.ScriptPath,
-                    ExportDirPath = this.ExportDirPath,
-                    ModelName = this.ModelName,
-                    ModelDescription = this.ModelDescription,
-                    KeepLogOpen = this.KeepLogOpen
+                    ScriptPath = Config.ScriptPath,
+                    ExportDirPath = Config.ExportDirPath,
+                    ModelName = Config.ModelName,
+                    ModelDescription = Config.ModelDescription,
+                    KeepLogOpen = Config.KeepLogOpen
                 };
                 form.ShowDialog(this.ApplicationForm);
 
                 if (form.DialogResult == DialogResult.OK)
                 {
-                    this.ScriptPath = form.ScriptPath;
-                    this.ExportDirPath = form.ExportDirPath;
-                    this.ModelName = form.ModelName;
-                    this.ModelDescription = form.ModelDescription;
-                    this.KeepLogOpen = form.KeepLogOpen;
+                    Config.ScriptPath = form.ScriptPath;
+                    Config.ExportDirPath = form.ExportDirPath;
+                    Config.ModelName = form.ModelName;
+                    Config.ModelDescription = form.ModelDescription;
+                    Config.KeepLogOpen = form.KeepLogOpen;
 
                     var progressForm = new ProgressForm();
 
@@ -118,9 +114,9 @@ namespace CurtainFireMakerPlugin
 
                         try
                         {
-                            this.RunScript(this.ScriptPath, progressForm);
+                            this.RunScript(Config.ScriptPath, progressForm);
 
-                            if (!this.KeepLogOpen)
+                            if (!Config.KeepLogOpen)
                             {
                                 progressForm.Close();
                             }
@@ -185,12 +181,12 @@ namespace CurtainFireMakerPlugin
             if (world.FxEffect.ShouldBuild())
             {
                 string fileName = ScriptFileName.Replace(".py", "");
-                string exportPath = ExportDirPath + "\\" + world.ExportFileName + ".fx";
+                string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".fx";
                 File.Delete(exportPath);
 
                 File.AppendAllText(exportPath, world.FxEffect.Build(world.ExportFileName + ".pmx"), Encoding.UTF8);
 
-                exportPath =ExportDirPath + "\\" + world.ExportFileName + ".x";
+                exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".x";
                 File.Delete(exportPath);
                 File.Copy(world.FxEffect.XFilePath, exportPath);
             }
@@ -198,7 +194,7 @@ namespace CurtainFireMakerPlugin
 
         private void ExportPmx(World world)
         {
-            string exportPath = this.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
+            string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
@@ -208,8 +204,8 @@ namespace CurtainFireMakerPlugin
                 var data = new PmxModelData();
                 world.PmxModel.GetData(data);
 
-                data.Header.ModelName = this.ModelName;
-                data.Header.Description += this.ModelDescription;
+                data.Header.ModelName = Config.ModelName;
+                data.Header.Description += Config.ModelDescription;
 
                 exporter.Export(data);
 
@@ -225,7 +221,7 @@ namespace CurtainFireMakerPlugin
         private void ExportVmd(World world)
         {
             string fileName = ScriptFileName.Replace(".py", "");
-            string exportPath = this.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
+            string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
@@ -235,7 +231,7 @@ namespace CurtainFireMakerPlugin
                 var data = new VmdMotionData();
                 world.VmdMotion.GetData(data);
 
-                data.Header.ModelName = this.ModelName;
+                data.Header.ModelName = Config.ModelName;
 
                 exporter.Export(data);
             }
