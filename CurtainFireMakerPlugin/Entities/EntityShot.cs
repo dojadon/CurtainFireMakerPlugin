@@ -91,6 +91,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        public Action<EntityShot> ModelInit = e => { };
+
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
 
         public EntityShot(World world, ShotProperty property) : base(world)
@@ -134,6 +136,12 @@ namespace CurtainFireMakerPlugin.Entities
         public override void OnSpawn()
         {
             base.OnSpawn();
+
+            ModelData.EntityList.Add(this);
+            if (ModelData.EntityList.Count == 1)
+            {
+                ModelInit(this);
+            }
 
             AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
             AddVmdMorph(0, 1.0F, MaterialMorph);

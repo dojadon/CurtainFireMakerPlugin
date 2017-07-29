@@ -16,8 +16,6 @@ namespace CsVmd.Data
             exporter.WriteVmdText(MorphName, VmdExporter.MORPH_NAME_LENGTH);
             exporter.Write(KeyFrameNo);
             exporter.Write(Rate);
-
-            Console.WriteLine(MorphName + ", " + KeyFrameNo + ", " + Rate);
         }
     }
 }

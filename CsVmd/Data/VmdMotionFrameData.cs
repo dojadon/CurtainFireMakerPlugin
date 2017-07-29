@@ -25,8 +25,6 @@ namespace CsVmd.Data
             exporter.Write(this.Pos);
             exporter.Write(this.Rot);
             this.ExportInterpolateData(exporter);
-
-            Console.WriteLine(BoneName + ", " + KeyFrameNo);
         }
 
         private void ExportInterpolateData(VmdExporter exporter)
