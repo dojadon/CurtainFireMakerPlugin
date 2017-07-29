@@ -12,6 +12,7 @@ namespace CsPmx.Data
         public String MaterialName { get; set; } = "";
         public String MaterialNameE { get; set; } = "";
 
+        public int MaterialId { get; set; }
         public String Script { get; set; } = "";
 
         /**

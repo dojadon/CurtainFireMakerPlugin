@@ -17,6 +17,7 @@ namespace CsPmx.Data
 
         public String MorphName { get; set; } = "";
         public String MorphNameE { get; set; } = "";
+        public int MorphId { get; set; }
         public byte Type { get; set; }
 
         public IPmxMorphTypeData[] MorphArray { get; set; }

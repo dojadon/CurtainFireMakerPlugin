@@ -53,41 +53,44 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void SetupShotModelData(ShotModelData data)
         {
-            int[] indices = Array.ConvertAll(data.Indices, i => i + this.VertexList.Count);
-            this.IndexList.AddRange(indices);
+            int[] indices = Array.ConvertAll(data.Indices, i => i + VertexList.Count);
+            IndexList.AddRange(indices);
 
             PmxVertexData[] vertices = data.Vertices;
             foreach (var vertex in vertices)
             {
-                vertex.BoneId = Array.ConvertAll(vertex.BoneId, i => i + this.BoneList.Count);
-                this.VertexList.Add(vertex);
+                vertex.VertexId = VertexList.Count;
+                vertex.BoneId = Array.ConvertAll(vertex.BoneId, i => i + BoneList.Count);
+                VertexList.Add(vertex);
             }
 
             string[] textures = data.Textures;
             foreach (var texture in textures)
             {
-                if (!this.TextureList.Contains(texture))
+                if (!TextureList.Contains(texture))
                 {
-                    this.TextureList.Add(texture);
+                    TextureList.Add(texture);
                 }
             }
 
             PmxMaterialData[] materials = data.Materials;
             PmxMorphData morph = data.MaterialMorph;
-            morph.MorphName = data.Property.Type.Name + "_MOR" + this.MorphList.Count.ToString();
+            morph.MorphName = data.Property.Type.Name + "_MO" + MorphList.Count.ToString();
             morph.Type = 4;
             morph.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
 
             for (int i = 0; i < materials.Length; i++)
             {
-                morph.MorphArray[i].Index = this.MaterialList.Count + i;
+                morph.MorphArray[i].Index = MaterialList.Count + i;
+                morph.MorphId = MorphList.Count + i;
             }
             this.MorphList.Add(morph);
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = data.Property.Type.Name + "_MAT" + MaterialList.Count.ToString();
+                material.MaterialName = data.Property.Type.Name + "_MA" + MaterialList.Count.ToString();
                 material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? TextureList.IndexOf(textures[material.TextureId]) : -1;
+                material.MaterialId = MaterialList.Count;
                 MaterialList.Add(material);
             }
             SetupBone(data, data.Bones);

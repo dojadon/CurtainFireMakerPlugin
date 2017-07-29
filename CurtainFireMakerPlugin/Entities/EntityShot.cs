@@ -184,7 +184,6 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 bezier = motionInterpolation.curve;
             }
-
             this.AddVmdMotion(RootBone, Pos, Rot, bezier);
         }
 
@@ -248,7 +247,7 @@ namespace CurtainFireMakerPlugin.Entities
                     var vertex = vertices[i];
                     var vertexMorph = new PmxMorphVertexData()
                     {
-                        Index = World.PmxModel.VertexList.IndexOf(vertex),
+                        Index = vertex.VertexId,
                         Position = (DxMath.Vector3)func(vertex.Pos)
                     };
                     morph.MorphArray[i] = vertexMorph;
