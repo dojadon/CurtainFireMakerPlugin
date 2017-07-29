@@ -102,6 +102,7 @@ namespace CurtainFireMakerPlugin.Entities
                 Property = property;
 
                 ModelData = World.AddShot(this);
+                ModelData.EntityList.Add(this);
 
                 Property.Type.Init(this);
                 Property.Type.InitMaterials(Property, ModelData.Materials);
@@ -137,7 +138,6 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnSpawn();
 
-            ModelData.EntityList.Add(this);
             if (ModelData.EntityList.Count == 1)
             {
                 ModelInit(this);
@@ -230,18 +230,15 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
+        public PmxMorphData CreateVertexMorph(string morphName, Func<Vector3, Vector3> func)
         {
-            string vertexMorphName = "v" + MaterialMorph.MorphName;
-            PmxMorphData morph = World.PmxModel.MorphList.Find(v => v.MorphName == vertexMorphName);
-
-            if (morph == null)
+            if (!ModelData.MorphDict.ContainsKey(morphName))
             {
                 var vertices = ModelData.Vertices;
 
-                morph = new PmxMorphData()
+                var morph = new PmxMorphData()
                 {
-                    MorphName = vertexMorphName,
+                    MorphName = morphName,
                     Type = PmxMorphData.MORPHTYPE_VERTEX,
                     MorphArray = new PmxMorphVertexData[vertices.Length]
                 };
@@ -256,10 +253,9 @@ namespace CurtainFireMakerPlugin.Entities
                     };
                     morph.MorphArray[i] = vertexMorph;
                 }
-
-                World.PmxModel.MorphList.Add(morph);
+                ModelData.AddMorph(morph);
             }
-            return morph;
+            return ModelData.MorphDict[morphName];
         }
     }
 }

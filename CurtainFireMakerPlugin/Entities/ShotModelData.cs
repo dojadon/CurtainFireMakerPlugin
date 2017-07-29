@@ -12,6 +12,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         public PmxMorphData MaterialMorph { get; } = new PmxMorphData();
 
+        public Dictionary<string, PmxMorphData> MorphDict { get; } = new Dictionary<string, PmxMorphData>();
+
         public PmxBoneData[] Bones { get; }
         public PmxVertexData[] Vertices { get; }
         public int[] Indices { get; }
@@ -19,16 +21,24 @@ namespace CurtainFireMakerPlugin.Entities
         public String[] Textures { get; }
 
         public ShotProperty Property { get; }
+        public World World { get; }
 
-        public ShotModelData(ShotProperty property)
+        public ShotModelData(ShotProperty property, World world)
         {
-            this.Property = property;
+            Property = property;
+            World = world;
 
-            this.Bones = this.Property.Type.CreateBones();
-            this.Vertices = this.Property.Type.CreateVertices();
-            this.Indices = this.Property.Type.CreateVertexIndices();
-            this.Materials = this.Property.Type.CreateMaterials();
-            this.Textures = this.Property.Type.CreateTextures();
+            Bones = Property.Type.CreateBones();
+            Vertices = Property.Type.CreateVertices();
+            Indices = Property.Type.CreateVertexIndices();
+            Materials = Property.Type.CreateMaterials();
+            Textures = Property.Type.CreateTextures();
+        }
+
+        public void AddMorph(PmxMorphData morph)
+        {
+            MorphDict.Add(morph.MorphName, morph);
+            World.PmxModel.MorphList.Add(morph);
         }
     }
 }
