@@ -45,12 +45,12 @@ namespace CurtainFireMakerPlugin.Effects
 
         private string BuildElementList<T>(List<T> elementList) where T : IFxElement
         {
-            string result = "";
+            var sb = new StringBuilder();
             foreach (var element in elementList)
             {
-                result += element.Build();
+                sb.Append(element.Build());
             }
-            return result;
+            return sb.ToString();
         }
     }
 }

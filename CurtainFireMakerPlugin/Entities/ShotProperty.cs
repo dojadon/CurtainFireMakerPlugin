@@ -45,7 +45,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Type.Name.GetHashCode() << 24 | Color;
         }
     }
 }
