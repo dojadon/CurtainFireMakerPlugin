@@ -159,12 +159,6 @@ namespace CurtainFireMakerPlugin.Entities
 
                         MorphList.Remove(morph);
                         World.VmdMotion.MorphDict.Remove(morph);
-                        World.FxEffect.Effect.MorphControlObjectList.RemoveAll(m => m.MorphName == morph.MorphName);
-
-                        foreach (var pass in World.FxEffect.Effect.DrawObjectPassList.FindAll(p => p.MorphName == morph.MorphName))
-                        {
-                            pass.MorphName = removeList[0].MorphName;
-                        }
                     }
                 }
             }

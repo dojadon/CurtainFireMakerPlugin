@@ -53,7 +53,7 @@ namespace CurtainFireMakerPlugin
             {
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
-                    sw.WriteLine(PythonRunner.FormatException(e));
+                    try { sw.WriteLine(PythonRunner.FormatException(e)); } catch { }
                     sw.WriteLine(e);
                 }
             }
@@ -165,23 +165,6 @@ namespace CurtainFireMakerPlugin
 
                 this.ExportPmx(world);
                 this.ExportVmd(world);
-                this.ExportFx(world);
-            }
-        }
-
-        private void ExportFx(World world)
-        {
-            if (world.FxEffect.ShouldBuild())
-            {
-                string fileName = ScriptFileName.Replace(".py", "");
-                string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".fx";
-                File.Delete(exportPath);
-
-                File.AppendAllText(exportPath, world.FxEffect.Build(world.ExportFileName + ".pmx"), Encoding.UTF8);
-
-                exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".x";
-                File.Delete(exportPath);
-                File.Copy(world.FxEffect.XFilePath, exportPath);
             }
         }
 

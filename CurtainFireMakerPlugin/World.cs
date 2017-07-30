@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Tasks;
-using CurtainFireMakerPlugin.Effects;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 
@@ -24,7 +23,6 @@ namespace CurtainFireMakerPlugin
         internal ShotManager ShotManager { get; }
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion VmdMotion { get; }
-        internal CurtainFireEffect FxEffect { get; }
 
         private readonly TaskManager taskManager = new TaskManager();
 
@@ -37,7 +35,6 @@ namespace CurtainFireMakerPlugin
             ShotManager = new ShotManager(this);
             PmxModel = new CurtainFireModel(this);
             VmdMotion = new CurtainFireMotion();
-            FxEffect = new CurtainFireEffect();
 
             ExportFileName = Plugin.Instance.ScriptFileName.Replace(".py", "") + (WorldList.Count > 1 ? (WorldList.Count + 1).ToString() : "");
             if (WorldList.Count == 2)

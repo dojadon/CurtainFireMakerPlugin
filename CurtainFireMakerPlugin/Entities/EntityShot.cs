@@ -91,7 +91,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public Action<EntityShot> ModelInit = e => { };
+        public Action<EntityShot> InitModelData = e => { };
 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
 
@@ -105,7 +105,7 @@ namespace CurtainFireMakerPlugin.Entities
                 ModelData.EntityList.Add(this);
 
                 Property.Type.Init(this);
-                Property.Type.InitMaterials(Property, ModelData.Materials);
+                Property.Type.InitModelData(ModelData);
             }
             catch (Exception e)
             {
@@ -140,7 +140,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (ModelData.EntityList.Count == 1)
             {
-                ModelInit(this);
+                InitModelData(this);
             }
 
             AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);

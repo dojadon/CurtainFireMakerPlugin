@@ -23,17 +23,18 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public virtual bool RecordMotion => true;
 
         public virtual Action<EntityShot> Init { get; set; } = e => { };
-        public Action<ShotProperty, PmxMaterialData[]> InitMaterials { get; set; } = (prop, materials) =>
-        {
-            if (materials != null)
-            {
-                foreach (var material in materials)
-                {
-                    material.Diffuse = new Vector4(prop.Red, prop.Green, prop.Blue, 1);
-                    material.Ambient = new Vector3(prop.Red, prop.Green, prop.Blue);
-                }
-            }
-        };
+        public Action<ShotModelData> InitModelData { get; set; } = data =>
+         {
+             if (data.Materials != null)
+             {
+                 var prop = data.Property;
+                 foreach (var material in data.Materials)
+                 {
+                     material.Diffuse = new Vector4(prop.Red, prop.Green, prop.Blue, 1);
+                     material.Ambient = new Vector3(prop.Red, prop.Green, prop.Blue);
+                 }
+             }
+         };
 
         public abstract PmxVertexData[] CreateVertices();
 

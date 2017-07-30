@@ -58,13 +58,6 @@
     <Compile Include="BezierCurve\CubicBezierCurve.cs" />
     <Compile Include="Collections\MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Effects\ControlObject.cs" />
-    <Compile Include="Effects\DrawObjectPass.cs" />
-    <Compile Include="Effects\FxEffect.cs" />
-    <Compile Include="Effects\IFxElement.cs" />
-    <Compile Include="Effects\Sampler.cs" />
-    <Compile Include="Effects\Texture2D.cs" />
-    <Compile Include="Entities\CurtainFireEffect.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
     <Compile Include="Entities\EntityBone.cs" />
@@ -92,7 +85,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonRunner.cs" />
     <Compile Include="ShotTypes\ShotType.cs" />
-    <Compile Include="ShotTypes\ShotTypeBillboard.cs" />
     <Compile Include="ShotTypes\ShotTypeList.cs" />
     <Compile Include="ShotTypes\ShotTypePmx.cs" />
     <Compile Include="Tasks\TaskManager.cs" />
