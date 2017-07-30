@@ -153,54 +153,6 @@ namespace CurtainFireMakerPlugin
             {
                 var world = worldList[i];
                 world.Finish();
-
-                // ExportPmx(world);
-                //  ExportVmd(world);
-            }
-        }
-
-        private void ExportPmx(World world)
-        {
-            string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
-            File.Delete(exportPath);
-
-            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
-            {
-                var exporter = new PmxExporter(stream);
-
-                var data = new PmxModelData();
-                world.PmxModel.GetData(data);
-
-                data.Header.ModelName = Config.ModelName;
-                data.Header.Description += Config.ModelDescription;
-
-                exporter.Export(data);
-
-                Console.WriteLine("出力完了 : " + world.ExportFileName);
-                Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
-                Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
-                Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
-                Console.WriteLine("ボーン数 : " + String.Format("{0:#,0}", data.BoneArray.Length));
-                Console.WriteLine("モーフ数 : " + String.Format("{0:#,0}", data.MorphArray.Length));
-            }
-        }
-
-        private void ExportVmd(World world)
-        {
-            string fileName = Config.ScriptFileName.Replace(".py", "");
-            string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
-            File.Delete(exportPath);
-
-            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
-            {
-                var exporter = new VmdExporter(stream);
-
-                var data = new VmdMotionData();
-                world.VmdMotion.GetData(data);
-
-                data.Header.ModelName = Config.ModelName;
-
-                exporter.Export(data);
             }
         }
     }

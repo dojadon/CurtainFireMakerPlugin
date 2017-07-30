@@ -90,7 +90,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 material.MaterialName = data.Property.Type.Name + "_MA" + MaterialList.Count.ToString();
 
-                if (0 < material.TextureId && material.TextureId < textures.Length)
+                if (0 <= material.TextureId && material.TextureId < textures.Length)
                 {
                     material.TextureId = TextureList.IndexOf(textures[material.TextureId]);
                 }
@@ -99,7 +99,7 @@ namespace CurtainFireMakerPlugin.Entities
                     material.TextureId = -1;
                 }
 
-                if (0 < material.SphereId && material.SphereId < textures.Length)
+                if (0 <= material.SphereId && material.SphereId < textures.Length)
                 {
                     material.SphereId = TextureList.IndexOf(textures[material.SphereId]);
                 }
