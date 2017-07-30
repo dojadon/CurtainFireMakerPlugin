@@ -93,11 +93,11 @@ namespace CurtainFireMakerPlugin
                     var task = new Task(() =>
                     {
                         StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
-                        Console.SetOut(sw);
-                        PythonRunner.SetOut(sw.BaseStream);
-
                         try
                         {
+                            Console.SetOut(sw);
+                            PythonRunner.SetOut(sw.BaseStream);
+
                             this.RunScript(Config.ScriptPath, progressForm);
 
                             if (!Config.KeepLogOpen)
