@@ -17,7 +17,7 @@ namespace CurtainFireMakerPlugin
         public string ModelDescription { get; set; }
         public bool KeepLogOpen { get; set; }
 
-        public string ResourceDirPath => Plugin.Instance.CurtainFireMakerPath + "\\Resource";
+        public string ResourceDirPath => Plugin.Instance.PluginRootPath + "\\Resource";
 
         public Configuration(string path)
         {
@@ -50,19 +50,19 @@ namespace CurtainFireMakerPlugin
             doc.AppendChild(root);
 
             XmlElement element = doc.CreateElement("script");
-            element.InnerText = ScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = ScriptPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("setting");
-            element.InnerText = SettingScriptPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = SettingScriptPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("scripts");
-            element.InnerText = ModullesDirPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = ModullesDirPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("export");
-            element.InnerText = ExportDirPath.Replace(Plugin.Instance.CurtainFireMakerPath + "\\", "");
+            element.InnerText = ExportDirPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
             root.AppendChild(element);
 
             element = doc.CreateElement("model_name");
@@ -82,7 +82,7 @@ namespace CurtainFireMakerPlugin
 
         private static string GetPath(string path)
         {
-            return Path.IsPathRooted(path) ? path : Plugin.Instance.CurtainFireMakerPath + "\\" + path;
+            return Path.IsPathRooted(path) ? path : Plugin.Instance.PluginRootPath + "\\" + path;
         }
     }
 }

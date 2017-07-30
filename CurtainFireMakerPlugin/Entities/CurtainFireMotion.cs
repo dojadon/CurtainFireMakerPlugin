@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.IO;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Collections;
 using CsVmd.Data;
+using CsVmd;
 using CsPmx.Data;
 
 namespace CurtainFireMakerPlugin.Entities
@@ -13,6 +14,15 @@ namespace CurtainFireMakerPlugin.Entities
     {
         private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
         public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphDict { get; } = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
+
+        private World World { get; }
+
+        public CurtainFireMotion(World world)
+        {
+            World = world;
+
+            World.Export += (w, e) => Export();
+        }
 
         public void AddVmdMotion(VmdMotionFrameData motion)
         {
@@ -58,6 +68,26 @@ namespace CurtainFireMakerPlugin.Entities
                 list.AddRange(value);
             }
             data.MorphArray = list.ToArray();
+        }
+
+        private void Export()
+        {
+            var config = Plugin.Instance.Config;
+
+            string exportPath = config.ExportDirPath + "\\" + World.ExportFileName + ".pmx";
+            File.Delete(exportPath);
+
+            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
+            {
+                var exporter = new VmdExporter(stream);
+
+                var data = new VmdMotionData();
+                World.VmdMotion.GetData(data);
+
+                data.Header.ModelName = config.ModelName;
+
+                exporter.Export(data);
+            }
         }
     }
 }

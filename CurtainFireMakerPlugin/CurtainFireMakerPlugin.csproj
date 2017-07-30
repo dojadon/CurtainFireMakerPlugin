@@ -93,6 +93,7 @@
     <Compile Include="PythonRunner.cs" />
     <Compile Include="ShotTypes\ShotType.cs" />
     <Compile Include="ShotTypes\ShotTypeBillboard.cs" />
+    <Compile Include="ShotTypes\ShotTypePmxL.cs" />
     <Compile Include="ShotTypes\ShotTypeList.cs" />
     <Compile Include="ShotTypes\ShotTypePmx.cs" />
     <Compile Include="Tasks\TaskManager.cs" />

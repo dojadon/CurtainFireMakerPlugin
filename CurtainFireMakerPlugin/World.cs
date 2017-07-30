@@ -30,13 +30,15 @@ namespace CurtainFireMakerPlugin
 
         public String ExportFileName { get; set; }
 
+        public event EventHandler Export;
+
         public World()
         {
             WorldList.Add(this);
 
             ShotManager = new ShotManager(this);
             PmxModel = new CurtainFireModel(this);
-            VmdMotion = new CurtainFireMotion();
+            VmdMotion = new CurtainFireMotion(this);
             FxEffect = new CurtainFireEffect();
 
             ExportFileName = Plugin.Instance.ScriptFileName.Replace(".py", "") + (WorldList.Count > 1 ? (WorldList.Count + 1).ToString() : "");
@@ -44,6 +46,11 @@ namespace CurtainFireMakerPlugin
             {
                 WorldList[0].ExportFileName += "1";
             }
+        }
+
+        public virtual void OnExport(EventArgs e)
+        {
+            Export?.Invoke(this, e);
         }
 
         internal ShotModelData AddShot(EntityShot entity)

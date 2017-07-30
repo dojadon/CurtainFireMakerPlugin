@@ -105,7 +105,7 @@ namespace CurtainFireMakerPlugin.Entities
                 ModelData.EntityList.Add(this);
 
                 Property.Type.Init(this);
-                Property.Type.InitMaterials(Property, ModelData.Materials);
+                Property.Type.InitModelData(ModelData);
             }
             catch (Exception e)
             {

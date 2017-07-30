@@ -22,7 +22,7 @@ namespace CurtainFireMakerPlugin
         internal PythonRunner PythonRunner { get; }
 
         public bool IsPlugin { get; }
-        public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
+        public string PluginRootPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
 
         public string ScriptFileName
         {
@@ -39,22 +39,22 @@ namespace CurtainFireMakerPlugin
 
         public Plugin(bool isPlugin = true)
         {
-            Instance = this;
-            IsPlugin = isPlugin;
-
-            Config = new Configuration(CurtainFireMakerPath + "\\config.xml");
-            Config.Load();
-
             try
             {
+                Instance = this;
+                IsPlugin = isPlugin;
+
+                Config = new Configuration(PluginRootPath + "\\config.xml");
+                Config.Load();
+
                 PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPath);
             }
             catch (Exception e)
             {
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
-                    sw.WriteLine(PythonRunner.FormatException(e));
                     sw.WriteLine(e);
+                    sw.WriteLine(PythonRunner.FormatException(e));
                 }
             }
         }
@@ -163,70 +163,7 @@ namespace CurtainFireMakerPlugin
                 var world = worldList[i];
                 world.Finish();
 
-                this.ExportPmx(world);
-                this.ExportVmd(world);
-                this.ExportFx(world);
-            }
-        }
-
-        private void ExportFx(World world)
-        {
-            if (world.FxEffect.ShouldBuild())
-            {
-                string fileName = ScriptFileName.Replace(".py", "");
-                string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".fx";
-                File.Delete(exportPath);
-
-                File.AppendAllText(exportPath, world.FxEffect.Build(world.ExportFileName + ".pmx"), Encoding.UTF8);
-
-                exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".x";
-                File.Delete(exportPath);
-                File.Copy(world.FxEffect.XFilePath, exportPath);
-            }
-        }
-
-        private void ExportPmx(World world)
-        {
-            string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
-            File.Delete(exportPath);
-
-            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
-            {
-                var exporter = new PmxExporter(stream);
-
-                var data = new PmxModelData();
-                world.PmxModel.GetData(data);
-
-                data.Header.ModelName = Config.ModelName;
-                data.Header.Description += Config.ModelDescription;
-
-                exporter.Export(data);
-
-                Console.WriteLine("出力完了 : " + world.ExportFileName);
-                Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
-                Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
-                Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
-                Console.WriteLine("ボーン数 : " + String.Format("{0:#,0}", data.BoneArray.Length));
-                Console.WriteLine("モーフ数 : " + String.Format("{0:#,0}", data.MorphArray.Length));
-            }
-        }
-
-        private void ExportVmd(World world)
-        {
-            string fileName = ScriptFileName.Replace(".py", "");
-            string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
-            File.Delete(exportPath);
-
-            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
-            {
-                var exporter = new VmdExporter(stream);
-
-                var data = new VmdMotionData();
-                world.VmdMotion.GetData(data);
-
-                data.Header.ModelName = Config.ModelName;
-
-                exporter.Export(data);
+                world.OnExport(EventArgs.Empty);
             }
         }
     }

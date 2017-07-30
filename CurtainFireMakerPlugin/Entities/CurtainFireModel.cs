@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.IO;
 using CsPmx.Data;
 using CsPmx;
 using CsVmd.Data;
@@ -34,6 +34,8 @@ namespace CurtainFireMakerPlugin.Entities
                 Flag = 0x0002 | 0x0004 | 0x0008 | 0x0010
             };
             this.BoneList.Add(centerBone);
+
+            world.Export += (w, e) => Export();
         }
 
         public void InitShotModelData(ShotModelData data)
@@ -210,6 +212,34 @@ namespace CurtainFireMakerPlugin.Entities
             data.BoneArray = this.BoneList.ToArray();
             data.MorphArray = this.MorphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
+        }
+
+        private void Export()
+        {
+            var config = Plugin.Instance.Config;
+
+            string exportPath = config.ExportDirPath + "\\" + World.ExportFileName + ".pmx";
+            File.Delete(exportPath);
+
+            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
+            {
+                var exporter = new PmxExporter(stream);
+
+                var data = new PmxModelData();
+                World.PmxModel.GetData(data);
+
+                data.Header.ModelName = config.ModelName;
+                data.Header.Description += config.ModelDescription;
+
+                exporter.Export(data);
+
+                Console.WriteLine("出力完了 : " + World.ExportFileName);
+                Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
+                Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
+                Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
+                Console.WriteLine("ボーン数 : " + String.Format("{0:#,0}", data.BoneArray.Length));
+                Console.WriteLine("モーフ数 : " + String.Format("{0:#,0}", data.MorphArray.Length));
+            }
         }
 
         private class IntegerArrayComparer : IEqualityComparer<int[]>

@@ -10,11 +10,11 @@ namespace CurtainFireMakerPlugin.Entities
     internal class CurtainFireEffect
     {
         public FxEffect Effect { get; }
-        public string XFilePath => Plugin.Instance.CurtainFireMakerPath + "\\Resource\\Template.x";
+        public string XFilePath => Plugin.Instance.PluginRootPath + "\\Resource\\Template.x";
 
         public CurtainFireEffect()
         {
-            Effect = new FxEffect(Plugin.Instance.CurtainFireMakerPath + "\\Resource\\Template.fx");
+            Effect = new FxEffect(Plugin.Instance.PluginRootPath + "\\Resource\\Template.fx");
         }
 
         public void InitEntityShot(EntityShot entity, string texturePath)
