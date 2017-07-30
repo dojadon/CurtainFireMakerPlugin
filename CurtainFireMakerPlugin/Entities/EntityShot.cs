@@ -109,7 +109,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
             catch (Exception e)
             {
-                Console.WriteLine(Plugin.Instance.PythonRunner.FormatException(e));
+                try { Console.WriteLine(Plugin.Instance.PythonRunner.FormatException(e)); } catch { }
                 Console.WriteLine(e);
             }
         }

@@ -66,15 +66,6 @@ namespace CurtainFireMakerPlugin.Entities
                 VertexList.Add(vertex);
             }
 
-            string[] textures = data.Textures;
-            foreach (var texture in textures)
-            {
-                if (!TextureList.Contains(texture))
-                {
-                    TextureList.Add(texture);
-                }
-            }
-
             PmxMaterialData[] materials = data.Materials;
             PmxMorphData morph = data.MaterialMorph;
             morph.MorphName = data.Property.Type.Name + "_MO" + MorphList.Count.ToString();
@@ -88,10 +79,36 @@ namespace CurtainFireMakerPlugin.Entities
             }
             this.MorphList.Add(morph);
 
+            string[] textures = data.Textures;
+            foreach (var texture in textures)
+            {
+                if (!TextureList.Contains(texture))
+                {
+                    TextureList.Add(texture);
+                }
+            }
+
             foreach (PmxMaterialData material in materials)
             {
                 material.MaterialName = data.Property.Type.Name + "_MA" + MaterialList.Count.ToString();
-                material.TextureId = textures.Length > 0 && material.TextureId >= 0 ? TextureList.IndexOf(textures[material.TextureId]) : -1;
+
+                if (0 < material.TextureId && material.TextureId < textures.Length)
+                {
+                    material.TextureId = TextureList.IndexOf(textures[material.TextureId]);
+                }
+                else
+                {
+                    material.TextureId = -1;
+                }
+
+                if (0 < material.SphereId && material.SphereId < textures.Length)
+                {
+                    material.SphereId = TextureList.IndexOf(textures[material.SphereId]);
+                }
+                else
+                {
+                    material.SphereId = -1;
+                }
                 material.MaterialId = MaterialList.Count;
                 MaterialList.Add(material);
             }
@@ -161,12 +178,6 @@ namespace CurtainFireMakerPlugin.Entities
 
                         MorphList.Remove(morph);
                         World.VmdMotion.MorphDict.Remove(morph);
-                        World.FxEffect.Effect.MorphControlObjectList.RemoveAll(m => m.MorphName == morph.MorphName);
-
-                        foreach (var pass in World.FxEffect.Effect.DrawObjectPassList.FindAll(p => p.MorphName == morph.MorphName))
-                        {
-                            pass.MorphName = removeList[0].MorphName;
-                        }
                     }
                 }
             }
@@ -226,7 +237,7 @@ namespace CurtainFireMakerPlugin.Entities
                 var exporter = new PmxExporter(stream);
 
                 var data = new PmxModelData();
-                World.PmxModel.GetData(data);
+                GetData(data);
 
                 data.Header.ModelName = config.ModelName;
                 data.Header.Description += config.ModelDescription;

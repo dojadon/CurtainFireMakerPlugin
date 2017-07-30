@@ -54,7 +54,7 @@ namespace CurtainFireMakerPlugin
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
                     sw.WriteLine(e);
-                    sw.WriteLine(PythonRunner.FormatException(e));
+                    try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace CurtainFireMakerPlugin
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(PythonRunner.FormatException(e));
+                            try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
                             Console.WriteLine(e);
                         }
                         finally
@@ -162,7 +162,6 @@ namespace CurtainFireMakerPlugin
             {
                 var world = worldList[i];
                 world.Finish();
-
                 world.OnExport(EventArgs.Empty);
             }
         }
