@@ -24,9 +24,11 @@ namespace CurtainFireMakerPlugin
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion VmdMotion { get; }
 
-        private readonly TaskManager taskManager = new TaskManager();
+        private TaskManager TaskManager { get; } = new TaskManager();
 
         public String ExportFileName { get; set; }
+
+        public event EventHandler Export;
 
         public World()
         {
@@ -34,13 +36,24 @@ namespace CurtainFireMakerPlugin
 
             ShotManager = new ShotManager(this);
             PmxModel = new CurtainFireModel(this);
-            VmdMotion = new CurtainFireMotion();
+            VmdMotion = new CurtainFireMotion(this);
 
-            ExportFileName = Plugin.Instance.ScriptFileName.Replace(".py", "") + (WorldList.Count > 1 ? (WorldList.Count + 1).ToString() : "");
+            ExportFileName = Plugin.Instance.Config.ScriptFileName.Replace(".py", "") + (WorldList.Count > 1 ? (WorldList.Count + 1).ToString() : "");
             if (WorldList.Count == 2)
             {
                 WorldList[0].ExportFileName += "1";
             }
+
+            Export += (obj, e) =>
+            {
+                PmxModel.Export(this);
+                VmdMotion.Export(this);
+            };
+        }
+
+        protected virtual void OnExport(EventArgs e)
+        {
+            Export?.Invoke(this, e);
         }
 
         internal ShotModelData AddShot(EntityShot entity)
@@ -64,7 +77,7 @@ namespace CurtainFireMakerPlugin
 
         internal void Frame()
         {
-            this.taskManager.Frame();
+            this.TaskManager.Frame();
 
             this.EntityList.AddRange(this.addEntityList);
             this.removeEntityList.ForEach(e => this.EntityList.Remove(e));
@@ -81,17 +94,19 @@ namespace CurtainFireMakerPlugin
         internal void Finish()
         {
             EntityList.ForEach(e => e.OnDeath());
-            this.PmxModel.CompressMorph();
+            PmxModel.CompressMorph();
+
+            OnExport(EventArgs.Empty);
         }
 
         public void AddTask(Task task)
         {
-            this.taskManager.AddTask(task);
+            TaskManager.AddTask(task);
         }
 
         public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
         {
-            this.AddTask(new Task(task, interval, executeTimes, waitTime));
+            AddTask(new Task(task, interval, executeTimes, waitTime));
         }
 
         public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)

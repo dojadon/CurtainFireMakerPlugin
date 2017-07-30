@@ -20,8 +20,6 @@ namespace CurtainFireMakerPlugin.Entities
         public CurtainFireMotion(World world)
         {
             World = world;
-
-            World.Export += (w, e) => Export();
         }
 
         public void AddVmdMotion(VmdMotionFrameData motion)
@@ -70,11 +68,12 @@ namespace CurtainFireMakerPlugin.Entities
             data.MorphArray = list.ToArray();
         }
 
-        private void Export()
+        public void Export(World world)
         {
             var config = Plugin.Instance.Config;
 
-            string exportPath = config.ExportDirPath + "\\" + World.ExportFileName + ".pmx";
+            string fileName = config.ScriptFileName.Replace(".py", "");
+            string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
@@ -82,7 +81,7 @@ namespace CurtainFireMakerPlugin.Entities
                 var exporter = new VmdExporter(stream);
 
                 var data = new VmdMotionData();
-                World.VmdMotion.GetData(data);
+                GetData(data);
 
                 data.Header.ModelName = config.ModelName;
 

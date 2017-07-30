@@ -19,6 +19,15 @@ namespace CurtainFireMakerPlugin
 
         public string ResourceDirPath => Plugin.Instance.PluginRootPath + "\\Resource";
 
+        public string ScriptFileName
+        {
+            get
+            {
+                string[] split = ScriptPath.Split('\\');
+                return split[split.Length - 1];
+            }
+        }
+
         public Configuration(string path)
         {
             CondigPath = path;

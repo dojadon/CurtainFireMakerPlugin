@@ -22,16 +22,7 @@ namespace CurtainFireMakerPlugin
         internal PythonRunner PythonRunner { get; }
 
         public bool IsPlugin { get; }
-        public string CurtainFireMakerPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
-
-        public string ScriptFileName
-        {
-            get
-            {
-                string[] split = Config.ScriptPath.Split('\\');
-                return split[split.Length - 1];
-            }
-        }
+        public string PluginRootPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
 
         public Plugin() : this(true)
         {
@@ -42,7 +33,7 @@ namespace CurtainFireMakerPlugin
             Instance = this;
             IsPlugin = isPlugin;
 
-            Config = new Configuration(CurtainFireMakerPath + "\\config.xml");
+            Config = new Configuration(PluginRootPath + "\\config.xml");
             Config.Load();
 
             try
@@ -163,8 +154,8 @@ namespace CurtainFireMakerPlugin
                 var world = worldList[i];
                 world.Finish();
 
-                this.ExportPmx(world);
-                this.ExportVmd(world);
+                // ExportPmx(world);
+                //  ExportVmd(world);
             }
         }
 
@@ -196,7 +187,7 @@ namespace CurtainFireMakerPlugin
 
         private void ExportVmd(World world)
         {
-            string fileName = ScriptFileName.Replace(".py", "");
+            string fileName = Config.ScriptFileName.Replace(".py", "");
             string exportPath = Config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
             File.Delete(exportPath);
 
