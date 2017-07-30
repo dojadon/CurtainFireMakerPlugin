@@ -39,7 +39,13 @@ namespace CurtainFireMakerPlugin.ShotTypes
                    };
                }
 
+               if (!data.World.PmxModel.TextureList.Contains(texPath))
+               {
+                   data.World.PmxModel.TextureList.Add(texPath);
+               }
                data.Textures[0] = texPath;
+               data.Materials[0].SphereId = data.World.PmxModel.TextureList.IndexOf(texPath);
+               data.Materials[0].Mode = 1;
            };
         }
 
@@ -54,6 +60,10 @@ namespace CurtainFireMakerPlugin.ShotTypes
             var color = new Vector3(r, g, b);
             var sub = new Vector3(1, 1, 1) - color;
 
+            float boder1 = 0.7F;
+            float boder2 = 0.9F;
+            float boderMult = 1 / (boder2 - boder1);
+
             for (int x = 0; x < image.Width; x++)
             {
                 for (int y = 0; y < image.Height; y++)
@@ -61,17 +71,17 @@ namespace CurtainFireMakerPlugin.ShotTypes
                     Color src = image.GetPixel(x, y);
                     float subScale = 1;
 
-                    var pos = new Vector2((float)x / image.Width - 0.5F, (float)y / image.Width - 0.5F);
+                    var pos = new Vector2((float)x / image.Width - 0.5F, (float)y / image.Width - 0.5F) * 2;
 
                     float dis = pos.Length();
 
-                    if (dis < 0.8)
+                    if (dis < boder1)
                     {
                         subScale = 0;
                     }
-                    else if (0.8 < dis && dis < 0.9)
+                    else if (boder1 <= dis && dis < boder2)
                     {
-                        subScale = (dis - 0.8F) * 10;
+                        subScale = (dis - boder1) * boderMult;
                     }
 
                     image.SetPixel(x, y, ColorScale(image.GetPixel(x, y), color + sub * subScale));
