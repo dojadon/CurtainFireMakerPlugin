@@ -90,7 +90,7 @@ namespace CurtainFireMakerPlugin.Entities
             this.Property = property;
             World = world;
 
-            this.Data = new ShotModelData(this.Property, World);
+            this.Data = new ShotModelData(World, this.Property);
         }
 
         public bool IsAddable(EntityShot entity)

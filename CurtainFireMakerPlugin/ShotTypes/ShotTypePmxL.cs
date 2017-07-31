@@ -4,55 +4,51 @@ using System.IO;
 using System.Text;
 using System.Drawing;
 using VecMath;
+using CurtainFireMakerPlugin.Entities;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
     public class ShotTypePmxL : ShotTypePmx
     {
-        private static Dictionary<int, Image> ImageDict { get; } = new Dictionary<int, Image>();
+        private Dictionary<int, Image> ImageDict { get; } = new Dictionary<int, Image>();
 
         public ShotTypePmxL(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
 
         public ShotTypePmxL(string name, string path, Vector3 size) : base(name, path, size)
         {
-            InitModelData = data =>
-           {
-               var prop = data.Property;
+            InitModelData = data => { };
+        }
 
-               var texPath = AppendFileName(data.Textures[0], Convert.ToString(prop.Color, 16));
+        public override string[] CreateTextures(World wolrd, ShotProperty prop)
+        {
+            var texture = base.CreateTextures(wolrd, prop)[0];
+            var colorTexture  = AppendFileName(texture, Convert.ToString(prop.Color, 16));
 
-               if (!ImageDict.ContainsKey(prop.Color))
-               {
-                   var image = new Bitmap(Plugin.Instance.Config.ResourceDirPath + "\\" + data.Textures[0]);
-                   this.SetPxcelColor(image, prop.Red, prop.Green, prop.Blue);
-                   ImageDict.Add(prop.Color, image);
+            if (!ImageDict.ContainsKey(prop.Color))
+            {
+                var image = new Bitmap(Plugin.Instance.Config.ResourceDirPath + "\\" + texture.Replace('/', '\\'));
+                this.SetPxcelColor(image, prop.Red, prop.Green, prop.Blue);
+                ImageDict.Add(prop.Color, image);
 
-                   data.World.Export += (w, e) =>
-                   {
-                       var config = Plugin.Instance.Config;
+                wolrd.Export += (w, e) =>
+                 {
+                     var config = Plugin.Instance.Config;
 
-                       string exportPath = config.ExportDirPath + "\\" + texPath;
-                       File.Delete(exportPath);
+                     string exportPath = config.ExportDirPath + "\\" + colorTexture.Replace('/', '\\');
+                     File.Delete(exportPath);
 
-                       image.Save(exportPath);
-                       image.Dispose();
-                   };
-               }
+                     image.Save(exportPath);
+                     image.Dispose();
+                 };
+            }
 
-               if (!data.World.PmxModel.TextureList.Contains(texPath))
-               {
-                   data.World.PmxModel.TextureList.Add(texPath);
-               }
-               data.Textures[0] = texPath;
-               data.Materials[0].SphereId = data.World.PmxModel.TextureList.IndexOf(texPath);
-               data.Materials[0].Mode = 1;
-           };
+            return new string[] { colorTexture };
         }
 
         private string AppendFileName(string path, string str)
         {
             string ext = Path.GetExtension(path);
-            return path.Substring(0, path.Length - ext.Length - 1) + str + ext;
+            return path.Substring(0, path.Length - ext.Length) + str + ext;
         }
 
         private void SetPxcelColor(Bitmap image, float r, float g, float b)

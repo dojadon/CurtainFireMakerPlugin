@@ -23,16 +23,16 @@ namespace CurtainFireMakerPlugin.Entities
         public ShotProperty Property { get; }
         public World World { get; }
 
-        public ShotModelData(ShotProperty property, World world)
+        public ShotModelData(World world, ShotProperty property)
         {
             Property = property;
             World = world;
 
-            Bones = Property.Type.CreateBones();
-            Vertices = Property.Type.CreateVertices();
-            Indices = Property.Type.CreateVertexIndices();
-            Materials = Property.Type.CreateMaterials();
-            Textures = Property.Type.CreateTextures();
+            Bones = Property.Type.GetCreateBones(world, property);
+            Vertices = Property.Type.CreateVertices(world, property);
+            Indices = Property.Type.CreateVertexIndices(world, property);
+            Materials = Property.Type.CreateMaterials(world, property);
+            Textures = Property.Type.CreateTextures(world, property);
         }
 
         public void AddMorph(PmxMorphData morph)

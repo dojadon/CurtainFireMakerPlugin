@@ -29,7 +29,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             VertexScale = size;
         }
 
-        public override PmxVertexData[] CreateVertices()
+        public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
         {
             PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
             for (int i = 0; i < result.Length; i++)
@@ -40,7 +40,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        public override int[] CreateVertexIndices()
+        public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
         {
             var result = new int[this.Data.VertexIndices.Length];
             Array.Copy(this.Data.VertexIndices, result, this.Data.VertexIndices.Length);
@@ -48,7 +48,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        public override PmxMaterialData[] CreateMaterials()
+        public override PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop)
         {
             PmxMaterialData[] result = new PmxMaterialData[this.Data.MaterialArray.Length];
             for (int i = 0; i < result.Length; i++)
@@ -58,15 +58,18 @@ namespace CurtainFireMakerPlugin.ShotTypes
             return result;
         }
 
-        public override String[] CreateTextures()
+        public override String[] CreateTextures(World wolrd, ShotProperty prop)
         {
             String[] result = new String[this.Data.TextureFiles.Length];
-            Array.Copy(this.Data.TextureFiles, result, this.Data.TextureFiles.Length);
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = DeepCopy(this.Data.TextureFiles[i]);
+            }
 
             return result;
         }
 
-        public override PmxBoneData[] CreateBones()
+        public override PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop)
         {
             PmxBoneData[] result = new PmxBoneData[this.Data.BoneArray.Length];
             for (int i = 0; i < result.Length; i++)

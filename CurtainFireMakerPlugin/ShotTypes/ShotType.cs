@@ -36,15 +36,15 @@ namespace CurtainFireMakerPlugin.ShotTypes
              }
          };
 
-        public abstract PmxVertexData[] CreateVertices();
+        public abstract PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop);
 
-        public abstract int[] CreateVertexIndices();
+        public abstract int[] CreateVertexIndices(World wolrd, ShotProperty prop);
 
-        public abstract PmxMaterialData[] CreateMaterials();
+        public abstract PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop);
 
-        public abstract String[] CreateTextures();
+        public abstract String[] CreateTextures(World wolrd, ShotProperty prop);
 
-        public abstract PmxBoneData[] CreateBones();
+        public abstract PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop);
     }
 
     public class ShotTypeNone : ShotType
@@ -62,27 +62,24 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override bool RecordMotion => this.recordMotion;
 
-        public override PmxBoneData[] CreateBones()
-        {
-            return new PmxBoneData[] { new PmxBoneData() };
-        }
+        public override PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
 
-        public override PmxMaterialData[] CreateMaterials()
+        public override PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop)
         {
             return null;
         }
 
-        public override string[] CreateTextures()
+        public override string[] CreateTextures(World wolrd, ShotProperty prop)
         {
             return null;
         }
 
-        public override int[] CreateVertexIndices()
+        public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
         {
             return null;
         }
 
-        public override PmxVertexData[] CreateVertices()
+        public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
         {
             return null;
         }
