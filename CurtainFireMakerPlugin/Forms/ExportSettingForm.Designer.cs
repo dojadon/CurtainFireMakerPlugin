@@ -202,7 +202,10 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ExportSettingForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "出力設定";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
