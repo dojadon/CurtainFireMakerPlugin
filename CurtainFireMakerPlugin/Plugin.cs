@@ -88,42 +88,38 @@ namespace CurtainFireMakerPlugin
                     Config.ModelDescription = form.ModelDescription;
                     Config.KeepLogOpen = form.KeepLogOpen;
 
-                    var progressForm = new ProgressForm();
+                    ProgressForm progressForm = new ProgressForm();
 
-                    var task = new Task(() =>
+                    Task.Factory.StartNew(progressForm.ShowDialog);
+
+                    StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
+                    try
                     {
-                        StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
-                        try
+                        Console.SetOut(sw);
+                        PythonRunner.SetOut(sw.BaseStream);
+
+                        this.RunScript(Config.ScriptPath, progressForm);
+
+                        if (!Config.KeepLogOpen)
                         {
-                            Console.SetOut(sw);
-                            PythonRunner.SetOut(sw.BaseStream);
-
-                            this.RunScript(Config.ScriptPath, progressForm);
-
-                            if (!Config.KeepLogOpen)
-                            {
-                                progressForm.Close();
-                            }
+                            progressForm.Close();
                         }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(PythonRunner.FormatException(e));
-                            Console.WriteLine(e);
-                        }
-                        finally
-                        {
-                            sw.Dispose();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(PythonRunner.FormatException(e));
+                        Console.WriteLine(e);
+                    }
+                    finally
+                    {
+                        sw.Dispose();
 
-                            StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
-                            Console.SetOut(standardOutput);
-                            PythonRunner.SetOut(standardOutput.BaseStream);
+                        StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+                        Console.SetOut(standardOutput);
+                        PythonRunner.SetOut(standardOutput.BaseStream);
 
-                            progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
-                        }
-                    });
-                    task.Start();
-
-                    progressForm.ShowDialog();
+                        progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
+                    }
                 }
             }
             else
