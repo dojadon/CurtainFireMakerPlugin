@@ -1,5 +1,0 @@
-C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\VecMath\bin\Debug\VecMath.dll
-C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\VecMath\bin\Debug\VecMath.pdb
-C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\VecMath\bin\Debug\DxMath.dll
-C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\VecMath\obj\Debug\VecMath.dll
-C:\Users\minako\Documents\Visual Studio 2017\Projects\CurtainFireMakerPlugin\VecMath\obj\Debug\VecMath.pdb
