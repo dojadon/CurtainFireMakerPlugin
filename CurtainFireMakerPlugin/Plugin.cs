@@ -133,7 +133,7 @@ namespace CurtainFireMakerPlugin
 
         public void RunScript(string path, ProgressForm form)
         {
-            var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptFileName));
+            var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptPath));
 
             PythonRunner.RunScript(path, world);
 
