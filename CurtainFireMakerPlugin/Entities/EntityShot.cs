@@ -62,10 +62,6 @@ namespace CurtainFireMakerPlugin.Entities
         }
 
         private bool recordWhenVelocityChanges = true;
-        /// <summary>  
-        ///  Velocity又はUpwardが変化したフレームにモーションキーフレームを登録するか否か。
-        ///  Falseを代入するとPos又はRotが変化したフレームに登録を行う
-        /// </summary>  
         public bool RecordWhenVelocityChanges
         {
             get => recordWhenVelocityChanges;
@@ -76,8 +72,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent = (sender, e) => sender.AddVmdMotion();
-        public EntityEventHandler<EntityShot, InitModelDataEventArgs> InitModelDataEvent = (sender, e) => { };
+        public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent = (sender, e) => sender.AddVmdMotion();
+        public event EntityEventHandler<EntityShot, InitModelDataEventArgs> InitModelDataEvent = (sender, e) => { };
 
         protected virtual void OnReocrd() => RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
         protected virtual void OnInitModelData() => InitModelDataEvent?.Invoke(this, new InitModelDataEventArgs(ModelData));

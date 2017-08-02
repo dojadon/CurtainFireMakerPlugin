@@ -72,7 +72,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             var config = Plugin.Instance.Config;
 
-            string fileName = config.ScriptFileName.Replace(".py", "");
+            string fileName = Path.GetFileNameWithoutExtension(config.ScriptPath);
             string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
             File.Delete(exportPath);
 

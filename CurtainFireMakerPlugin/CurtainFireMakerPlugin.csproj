@@ -93,7 +93,7 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CPmx\CsPmx.csproj">
+    <ProjectReference Include="..\CsPmx\CsPmx.csproj">
       <Project>{92cad24b-572d-430d-8157-b9cb8e56d9e5}</Project>
       <Name>CsPmx</Name>
     </ProjectReference>

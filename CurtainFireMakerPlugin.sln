@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurtainFireMakerPlugin", "CurtainFireMakerPlugin\CurtainFireMakerPlugin.csproj", "{CC28360B-AB53-4D9F-BED6-74E652C9CED0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsPmx", "CPmx\CsPmx.csproj", "{92CAD24B-572D-430D-8157-B9CB8E56D9E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsPmx", "CsPmx\CsPmx.csproj", "{92CAD24B-572D-430D-8157-B9CB8E56D9E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsVmd", "CsVmd\CsVmd.csproj", "{1A7FF11C-E657-44FD-8A31-12117A755AE9}"
 EndProject
