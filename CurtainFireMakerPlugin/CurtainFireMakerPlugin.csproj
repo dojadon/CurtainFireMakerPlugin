@@ -55,13 +55,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BezierCurve\CubicBezierCurve.cs" />
+    <Compile Include="Mathematics\CubicBezierCurve.cs" />
     <Compile Include="Collections\MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
     <Compile Include="Entities\EntityBone.cs" />
-    <Compile Include="Entities\Motion\MotionInterpolation.cs" />
+    <Compile Include="Mathematics\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
     <Compile Include="Forms\ExportSettingForm.cs">

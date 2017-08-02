@@ -1,8 +1,8 @@
 ﻿using System;
 using VecMath;
-using CurtainFireMakerPlugin.BezierCurve;
 using CsPmx.Data;
 using CsVmd.Data;
+using CurtainFireMakerPlugin.Mathematics;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -257,11 +257,11 @@ namespace CurtainFireMakerPlugin.Entities
 
     public class InitModelDataEventArgs : EventArgs
     {
-        public ShotModelData Data { get; }
+        public ShotModelData ModelData { get; }
 
         public InitModelDataEventArgs(ShotModelData data)
         {
-            Data = data;
+            ModelData = data;
         }
     }
 }

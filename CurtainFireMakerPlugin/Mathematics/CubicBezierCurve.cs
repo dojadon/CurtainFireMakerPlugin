@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using VecMath;
 
-namespace CurtainFireMakerPlugin.BezierCurve
+namespace CurtainFireMakerPlugin.Mathematics
 {
     public class CubicBezierCurve
     {

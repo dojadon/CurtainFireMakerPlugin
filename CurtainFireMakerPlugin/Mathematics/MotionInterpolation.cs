@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CurtainFireMakerPlugin.BezierCurve;
-using CurtainFireMakerPlugin.Mathematics;
 using VecMath;
 
-namespace CurtainFireMakerPlugin.Entities.Motion
+namespace CurtainFireMakerPlugin.Mathematics
 {
     public class MotionInterpolation
     {
