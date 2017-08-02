@@ -13,92 +13,40 @@ namespace CurtainFireMakerPlugin.Entities
     public class Entity
     {
         private Matrix worldMat = Matrix.Identity;
-        /// <summary>  
-        ///  ワールド座標系の座標変換行列
-        /// </summary>  
         public Matrix WorldMat => worldMat;
-        /// <summary>  
-        ///  ワールド座標系の座標
-        /// </summary>  
         public Vector3 WorldPos => WorldMat.TransformVec;
-        /// <summary>  
-        ///  ワールド座標系の姿勢
-        /// </summary>  
         public Quaternion WorldRot => WorldMat;
 
         private Vector3 spawnPos = new Vector3();
-        /// <summary>  
-        ///  OnSpawnが呼ばれた時の座標
-        /// </summary>  
         public Vector3 SpawnPos => this.spawnPos;
 
-        /// <summary>  
-        ///  ローカル座標系の座標
-        /// </summary>  
         public virtual Vector3 Pos { get; set; }
-        /// <summary>  
-        ///  ローカル座標系の姿勢
-        /// </summary>  
         public virtual Quaternion Rot { get; set; } = new Quaternion(0, 0, 0, 1);
 
-        /// <summary>  
-        ///  1フレーム単位の移動量
-        /// </summary>  
         public virtual Vector3 Velocity { get; set; }
-        /// <summary>  
-        ///  上方向を表すベクトル
-        /// </summary>  
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
 
-        /// <summary>  
-        ///  親エンティティ
-        /// </summary>  
         public virtual Entity ParentEntity { get; set; }
 
-        /// <summary>  
-        ///  OnSpawnが呼ばれてから経過したフレーム数
-        /// </summary>  
         public int FrameCount { get; set; }
-        /// <summary>  
-        ///  寿命
-        /// </summary>  
         public int LivingLimit { get; set; }
-        /// <summary>  
-        ///  OnSpawnが呼ばれた時のフレーム番号
-        /// </summary>  
         public int SpawnFrameNo { get; set; }
-        /// <summary>  
-        ///  OnDeathが呼ばれた時のフレーム番号
-        /// </summary>  
         public int DeathFrameNo { get; set; }
 
-        /// <summary>  
-        ///  死亡判定
-        /// </summary>  
         public Func<Entity, bool> CheckWorldOut { get; set; } = entity => (entity.Pos - entity.SpawnPos).Length > 400.0;
 
-        /// <summary>  
-        ///  OnDeathが呼ばれたか
-        /// </summary>  
         public bool IsDeath { get; set; }
-        /// <summary>  
-        ///  OnSpawnが呼ばれたか
-        /// </summary>  
         public bool IsSpawned { get; set; }
 
         protected MotionInterpolation motionInterpolation;
         private TaskManager taskManager = new TaskManager();
 
-        /// <summary>  
-        ///  所属しているワールド
-        /// </summary>  
         public World World { get; }
 
-        /// <summary>  
-        ///  単一のID
-        /// </summary>  
         public int EntityId { get; }
         private static int nextEntityId;
+
+        public delegate void EntityEventHandler<T, R>(T sender, R e) where T : Entity where R : EventArgs;
 
         public Entity(World world)
         {

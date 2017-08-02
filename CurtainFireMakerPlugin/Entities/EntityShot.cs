@@ -8,15 +8,9 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityShot : Entity
     {
-        /// <summary>  
-        ///  プロパティ
-        /// </summary>  
         public ShotProperty Property { get; }
 
         private Entity parentEntity;
-        /// <summary>  
-        ///  親エンティティ、EntityShotを代入すると親ボーンの設定を行う。
-        /// </summary>  
         public override Entity ParentEntity
         {
             get => parentEntity;
@@ -29,17 +23,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        /// <summary>  
-        ///  Pmxモデルデータ。
-        /// </summary>  
         public ShotModelData ModelData { get; }
-        /// <summary>  
-        ///  ルートボーン
-        /// </summary>  
         public PmxBoneData RootBone => ModelData.Bones[0];
-        /// <summary>  
-        ///  材質モーフ
-        /// </summary>  
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
         private bool ShouldRecord
@@ -91,7 +76,11 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public Action<EntityShot> InitModelData = e => { };
+        public EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent = (sender, e) => sender.AddVmdMotion();
+        public EntityEventHandler<EntityShot, InitModelDataEventArgs> InitModelDataEvent = (sender, e) => { };
+
+        protected virtual void OnReocrd() => RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
+        protected virtual void OnInitModelData() => InitModelDataEvent?.Invoke(this, new InitModelDataEventArgs(ModelData));
 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
 
@@ -118,7 +107,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (FrameCount == 1 || ShouldRecord)
             {
-                AddVmdMotion();
+                OnReocrd();
             }
             ShouldRecord = false;
 
@@ -140,7 +129,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (ModelData.EntityList.Count == 1)
             {
-                InitModelData(this);
+                OnInitModelData();
             }
 
             AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
@@ -255,6 +244,28 @@ namespace CurtainFireMakerPlugin.Entities
                 ModelData.AddMorph(morph);
             }
             return ModelData.MorphDict[morphName];
+        }
+    }
+
+    public class RecordEventArgs : EventArgs
+    {
+        public bool IsUpdatedVelocity { get; }
+        public bool IsUpdatedPos { get; }
+
+        public RecordEventArgs(bool isUpdatedVelocity, bool isUpdatedPos)
+        {
+            IsUpdatedVelocity = isUpdatedVelocity;
+            IsUpdatedPos = isUpdatedPos;
+        }
+    }
+
+    public class InitModelDataEventArgs : EventArgs
+    {
+        public ShotModelData Data { get; }
+
+        public InitModelDataEventArgs(ShotModelData data)
+        {
+            Data = data;
         }
     }
 }
