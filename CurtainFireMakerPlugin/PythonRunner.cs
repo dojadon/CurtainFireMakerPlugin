@@ -41,9 +41,11 @@ namespace CurtainFireMakerPlugin
             Engine.ExecuteFile(settingScriptPath, scope);
         }
 
-        public void RunSpellScript(string path)
+        public void RunScript(string path, World world)
         {
             ScriptScope scope = Engine.CreateScope(RootScope);
+
+            scope.SetVariable("world", world);
 
             Engine.ExecuteFile(path, scope);
         }

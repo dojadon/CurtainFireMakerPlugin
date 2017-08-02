@@ -11,9 +11,7 @@ namespace CurtainFireMakerPlugin
 {
     public class World
     {
-        public static List<World> WorldList { get; } = new List<World>();
-
-        public static int MaxFrame { get; set; } = 1000;
+        public int MaxFrame { get; set; } = 1000;
 
         private List<Entity> addEntityList = new List<Entity>();
         private List<Entity> removeEntityList = new List<Entity>();
@@ -30,19 +28,13 @@ namespace CurtainFireMakerPlugin
 
         public event EventHandler Export;
 
-        public World()
+        public World(string fileName)
         {
-            WorldList.Add(this);
-
             ShotManager = new ShotManager(this);
             PmxModel = new CurtainFireModel(this);
             VmdMotion = new CurtainFireMotion(this);
 
-            ExportFileName = Plugin.Instance.Config.ScriptFileName.Replace(".py", "") + (WorldList.Count > 1 ? (WorldList.Count + 1).ToString() : "");
-            if (WorldList.Count == 2)
-            {
-                WorldList[0].ExportFileName += "1";
-            }
+            ExportFileName = fileName;
 
             Export += (obj, e) =>
             {

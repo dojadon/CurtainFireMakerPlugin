@@ -133,27 +133,21 @@ namespace CurtainFireMakerPlugin
 
         public void RunScript(string path, ProgressForm form)
         {
-            World.WorldList.Clear();
+            var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptFileName));
 
-            PythonRunner.RunSpellScript(path);
+            PythonRunner.RunScript(path, world);
 
             form.Progress.Minimum = 0;
-            form.Progress.Maximum = World.MaxFrame;
+            form.Progress.Maximum = world.MaxFrame;
             form.Progress.Step = 1;
 
-            List<World> worldList = World.WorldList;
-
-            for (int i = 0; i < World.MaxFrame; i++)
+            for (int i = 0; i < world.MaxFrame; i++)
             {
-                worldList.ForEach(w => w.Frame());
+                world.Frame();
                 form.Progress.PerformStep();
             }
 
-            for (int i = 0; i < worldList.Count; i++)
-            {
-                var world = worldList[i];
-                world.Finish();
-            }
+            world.Finish();
         }
     }
 }
