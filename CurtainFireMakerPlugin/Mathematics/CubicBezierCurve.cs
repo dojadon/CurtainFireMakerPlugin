@@ -6,7 +6,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Mathematics
 {
-    public class CubicBezierCurve
+    public struct CubicBezierCurve
     {
         public static CubicBezierCurve Line = new CubicBezierCurve(new Vector2(0, 0), new Vector2(0.5F, 0.5F), new Vector2(0.5F, 0.5F), new Vector2(1, 1));
 
@@ -17,10 +17,10 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public CubicBezierCurve(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
         {
-            this.P0 = p0;
-            this.P1 = p1;
-            this.P2 = p2;
-            this.P3 = p3;
+            P0 = p0;
+            P1 = p1;
+            P2 = p2;
+            P3 = p3;
         }
 
         public float X(float t)

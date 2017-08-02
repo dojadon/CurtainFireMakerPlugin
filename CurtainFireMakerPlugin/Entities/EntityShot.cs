@@ -165,9 +165,9 @@ namespace CurtainFireMakerPlugin.Entities
 
             var bezier = CubicBezierCurve.Line;
 
-            if (motionInterpolation != null && motionInterpolation.startFrame < World.FrameCount)
+            if (MotionInterpolation != null && MotionInterpolation.StartFrame < World.FrameCount)
             {
-                bezier = motionInterpolation.curve;
+                bezier = MotionInterpolation.Curve;
             }
             this.AddVmdMotion(RootBone, Pos, Rot, bezier);
         }

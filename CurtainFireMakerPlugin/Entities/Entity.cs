@@ -38,7 +38,7 @@ namespace CurtainFireMakerPlugin.Entities
         public bool IsDeath { get; set; }
         public bool IsSpawned { get; set; }
 
-        protected MotionInterpolation motionInterpolation;
+        protected MotionInterpolation MotionInterpolation { get; set; }
         private TaskManager taskManager = new TaskManager();
 
         public World World { get; }
@@ -50,43 +50,42 @@ namespace CurtainFireMakerPlugin.Entities
 
         public Entity(World world)
         {
-            this.World = world;
-            this.EntityId = nextEntityId++;
+            World = world;
+            EntityId = nextEntityId++;
         }
 
         internal virtual void Frame()
         {
-            this.taskManager.Frame();
+            taskManager.Frame();
 
-            this.UpdatePos();
-            this.UpdateRot();
-            this.UpdateWorldMat();
+            UpdatePos();
+            UpdateRot();
+            UpdateWorldMat();
 
-            this.FrameCount++;
-            if (this.DeathCheck())
+            FrameCount++;
+            if (DeathCheck())
             {
-                this.OnDeath();
+                OnDeath();
             }
         }
 
         protected virtual void UpdatePos()
         {
-            Vector3 interpolatedVelocity = this.Velocity;
+            Vector3 interpolatedVelocity = Velocity;
 
-            if (this.motionInterpolation != null)
+            if (MotionInterpolation != null)
             {
-                if (this.motionInterpolation.Within(this.World.FrameCount))
+                if (MotionInterpolation.Within(World.FrameCount))
                 {
-                    //float changeAmount = this.motionInterpolation.GetChangeAmount(this.world.FrameCount);
-                    //interpolatedVelocity *= (float)changeAmount;
-                    //Console.WriteLine(changeAmount);
+                    float changeAmount = MotionInterpolation.GetChangeAmount(World.FrameCount);
+                    interpolatedVelocity *= changeAmount;
                 }
                 else
                 {
-                    this.RemoveMotionBezier();
+                    RemoveMotionBezier();
                 }
             }
-            this.Pos += interpolatedVelocity;
+            Pos += interpolatedVelocity;
         }
 
         protected virtual void UpdateRot()
@@ -95,90 +94,67 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected void UpdateWorldMat()
         {
-            this.worldMat = this.Rot;
-            this.worldMat.TransformVec = this.Pos;
+            worldMat = Rot;
+            worldMat.TransformVec = Pos;
 
-            if (this.ParentEntity != null)
+            if (ParentEntity != null)
             {
-                this.worldMat = this.WorldMat * this.ParentEntity.WorldMat;
+                worldMat = WorldMat * ParentEntity.WorldMat;
             }
         }
 
         protected virtual bool DeathCheck()
         {
-            return this.LivingLimit != 0 && this.FrameCount > this.LivingLimit || this.CheckWorldOut(this);
+            return LivingLimit != 0 && FrameCount > LivingLimit || CheckWorldOut(this);
         }
 
-        /// <summary>  
-        ///  Pythonの特殊メソッド。OnSpawnと同義
-        /// </summary>  
         public void __call__()
         {
-            this.OnSpawn();
+            OnSpawn();
         }
 
-        /// <summary>  
-        ///  EntityをWorldに追加する
-        /// </summary>  
         public virtual void OnSpawn()
         {
-            this.SpawnFrameNo = this.World.AddEntity(this);
-            this.spawnPos = this.Pos;
-            this.IsSpawned = true;
+            SpawnFrameNo = World.AddEntity(this);
+            spawnPos = Pos;
+            IsSpawned = true;
         }
 
-        /// <summary>  
-        ///  EntityをWorldから削除する
-        /// </summary>  
         public virtual void OnDeath()
         {
-            this.DeathFrameNo = this.World.RemoveEntity(this);
-            this.IsDeath = true;
+            DeathFrameNo = World.RemoveEntity(this);
+            IsDeath = true;
         }
 
-        /// <summary>  
-        ///  <paramref name="pos1"/> 制御点1
-        ///  <paramref name="pos2"/> 制御点2
-        ///  <paramref name="length"/> モーション補間曲線を適用するフレーム数
-        /// </summary>  
         public virtual void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
         {
-            Vector3 endPos = this.Velocity * length + this.Pos;
-            int frame = this.World.FrameCount;
-            this.motionInterpolation = new MotionInterpolation(frame, frame + length, pos1, pos2, this.Pos, endPos);
+            MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2);
         }
 
         internal virtual void RemoveMotionBezier()
         {
-            this.motionInterpolation = null;
+            MotionInterpolation = null;
         }
 
         public void AddTask(Task task)
         {
-            this.taskManager.AddTask(task);
+            taskManager.AddTask(task);
         }
 
         public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
         {
-            this.AddTask(new Task(task, interval, executeTimes, waitTime));
+            AddTask(new Task(task, interval, executeTimes, waitTime));
         }
 
-        /// <summary>  
-        /// <paramref name="func"/>実行する関数
-        /// <paramref name="func"/>実行する間隔
-        /// <paramref name="executeTimes"/>実行する回数
-        /// <paramref name="waitTime"/>実行するまでの待機フレーム数
-        /// <paramref name="withArg"/>Taskを引数に与えて実行するか
-        /// </summary>  
         public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
         {
             if (withArg)
             {
-                this.AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
+                AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
             }
             else
             {
-                this.AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
+                AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
             }
         }
 

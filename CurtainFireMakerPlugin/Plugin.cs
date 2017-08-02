@@ -98,7 +98,7 @@ namespace CurtainFireMakerPlugin
                         Console.SetOut(sw);
                         PythonRunner.SetOut(sw.BaseStream);
 
-                        this.RunScript(Config.ScriptPath, progressForm);
+                        RunScript(Config.ScriptPath, progressForm);
 
                         if (!Config.KeepLogOpen)
                         {
@@ -116,7 +116,6 @@ namespace CurtainFireMakerPlugin
 
                         StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                         Console.SetOut(standardOutput);
-                        PythonRunner.SetOut(standardOutput.BaseStream);
 
                         progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
                     }

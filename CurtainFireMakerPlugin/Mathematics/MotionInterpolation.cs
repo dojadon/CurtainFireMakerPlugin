@@ -8,55 +8,53 @@ namespace CurtainFireMakerPlugin.Mathematics
 {
     public class MotionInterpolation
     {
-        public CubicBezierCurve curve;
-        private Vector3 startPos;
-        private Vector3 endPos;
-        public int startFrame;
-        public int endFrame;
+        public CubicBezierCurve Curve { get; }
+        public int StartFrame { get; }
+        public int EndFrame { get; }
+        public int Length { get; }
 
-        public MotionInterpolation(int startFrame, int endFrame, Vector2 p1, Vector2 p2, Vector3 startPos, Vector3 endPos)
+        public MotionInterpolation(int startFrame, int length, Vector2 p1, Vector2 p2)
         {
-            this.curve = new CubicBezierCurve(new Vector2(0, 0), p1, p2, new Vector2(1, 1));
+            Curve = new CubicBezierCurve(new Vector2(0, 0), p1, p2, new Vector2(1, 1));
 
-            this.startPos = startPos;
-            this.endPos = endPos;
-
-            this.startFrame = startFrame;
-            this.endFrame = endFrame;
+            StartFrame = startFrame;
+            Length = length;
+            EndFrame = StartFrame + Length;
         }
 
         public bool Within(int frame)
         {
-            return this.startFrame <= frame && frame < this.endFrame;
+            return StartFrame <= frame && frame < EndFrame;
         }
 
         public float GetChangeAmount(int frame)
         {
-            if (this.Within(frame))
+            if (Within(frame))
             {
-                float x1 = (float)(frame - this.startFrame) / (float)(this.endFrame - this.startFrame);
-                float x2 = x1 + 1.0F / (this.endFrame - this.startFrame);
+                float x1 = (frame - StartFrame) / (float)(Length);
+                float x2 = x1 + 1.0F / Length;
 
-                float y1 = this.FuncY(x1);
-                float y2 = this.FuncY(x2);
+                float y1 = FuncY(x1);
+                float y2 = FuncY(x2);
 
                 float changeY = y2 - y1;
-                float defaultChangeY = 1.0F / (this.endFrame - this.startFrame);
+                float defaultChangeY = 1.0F / Length;
 
                 return changeY / defaultChangeY;
             }
             else
             {
-                return 1.0F / (this.endFrame - this.startFrame);
+                return 1.0F;
             }
         }
 
         public float GetT(float x)
         {
+            if (x == 1) x = 0.999999F;
             float a0 = -x;
-            float a1 = 3 * this.curve.P1.x;
-            float a2 = -3 * (2 * this.curve.P1.x - this.curve.P2.x);
-            float a3 = 3 * (this.curve.P1.x - this.curve.P2.x) + 1;
+            float a1 = 3 * Curve.P1.x;
+            float a2 = -3 * (2 * Curve.P1.x - Curve.P2.x);
+            float a3 = 3 * (Curve.P1.x - Curve.P2.x) + 1;
 
             double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
             double t = solution[0];
@@ -74,12 +72,12 @@ namespace CurtainFireMakerPlugin.Mathematics
 
         public float FuncY(float x)
         {
-            return this.curve.Y(this.GetT(x));
+            return Curve.Y(GetT(x));
         }
 
         public bool ShouldRecord(int frame)
         {
-            return this.endFrame < frame;
+            return EndFrame < frame;
         }
     }
 }
