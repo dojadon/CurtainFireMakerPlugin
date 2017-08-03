@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin.Entities
         public Quaternion WorldRot => WorldMat;
 
         private Vector3 spawnPos = new Vector3();
-        public Vector3 SpawnPos => this.spawnPos;
+        public Vector3 SpawnPos => spawnPos;
 
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = new Quaternion(0, 0, 0, 1);
