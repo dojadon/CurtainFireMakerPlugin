@@ -116,7 +116,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (RecordWhenVelocityChanges)
             {
-                Rot = Matrix.LookAt(+Velocity, +Upward);
+                Rot = Matrix4.LookAt(+Velocity, +Upward);
             }
             base.UpdateRot();
         }

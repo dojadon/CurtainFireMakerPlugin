@@ -97,7 +97,7 @@ namespace VecMath
             }
         }
 
-        public static Quaternion RotationMatrix(Matrix m1)
+        public static Quaternion RotationMatrix(Matrix3 m1)
         {
             float m00 = m1.m00;
             float m01 = m1.m01;
@@ -293,7 +293,9 @@ namespace VecMath
 
         public static Quaternion operator ^(Quaternion q1, double d1) => Pow(q1, (float)d1);
 
-        public static implicit operator Quaternion(Matrix m1) => RotationMatrix(m1);
+        public static implicit operator Quaternion(Matrix4 m1) => RotationMatrix(m1);
+
+        public static implicit operator Quaternion(Matrix3 m1) => RotationMatrix(m1);
 
         public static implicit operator Quaternion(DxMath.Quaternion q1) => new Quaternion(q1.X, q1.Y, q1.Z, q1.W);
 

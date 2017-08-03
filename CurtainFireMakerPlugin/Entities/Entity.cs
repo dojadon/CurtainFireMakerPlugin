@@ -12,8 +12,8 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity
     {
-        private Matrix worldMat = Matrix.Identity;
-        public Matrix WorldMat => worldMat;
+        private Matrix4 worldMat = Matrix4.Identity;
+        public Matrix4 WorldMat => worldMat;
         public Vector3 WorldPos => WorldMat.TransformVec;
         public Quaternion WorldRot => WorldMat;
 

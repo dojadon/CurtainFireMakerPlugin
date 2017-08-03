@@ -50,37 +50,37 @@ namespace CurtainFireMakerPlugin
 
         internal ShotModelData AddShot(EntityShot entity)
         {
-            return this.ShotManager.AddEntity(entity);
+            return ShotManager.AddEntity(entity);
         }
 
         internal int AddEntity(Entity entity)
         {
-            this.addEntityList.Add(entity);
+            addEntityList.Add(entity);
 
-            return this.FrameCount;
+            return FrameCount;
         }
 
         internal int RemoveEntity(Entity entity)
         {
-            this.removeEntityList.Add(entity);
+            removeEntityList.Add(entity);
 
-            return this.FrameCount;
+            return FrameCount;
         }
 
         internal void Frame()
         {
-            this.TaskManager.Frame();
+            TaskManager.Frame();
 
-            this.EntityList.AddRange(this.addEntityList);
-            this.removeEntityList.ForEach(e => this.EntityList.Remove(e));
+            EntityList.AddRange(addEntityList);
+            removeEntityList.ForEach(e => EntityList.Remove(e));
 
-            this.addEntityList.Clear();
-            this.removeEntityList.Clear();
+            addEntityList.Clear();
+            removeEntityList.Clear();
 
-            this.EntityList.ForEach(e => e.Frame());
-            this.EntityList.RemoveAll(e => e.IsDeath);
+            EntityList.ForEach(e => e.Frame());
+            EntityList.RemoveAll(e => e.IsDeath);
 
-            this.FrameCount++;
+            FrameCount++;
         }
 
         internal void Finish()
@@ -105,11 +105,11 @@ namespace CurtainFireMakerPlugin
         {
             if (withArg)
             {
-                this.AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
+                AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
             }
             else
             {
-                this.AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
+                AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
             }
         }
     }

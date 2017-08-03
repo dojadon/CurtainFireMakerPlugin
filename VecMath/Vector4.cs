@@ -67,7 +67,7 @@ namespace VecMath
             return v2.x * v1.x + v2.y * v1.y + v2.z * v1.z + v1.w * v2.w;
         }
 
-        public static Vector4 Transform(Matrix m1, Vector4 v1)
+        public static Vector4 Transform(Matrix4 m1, Vector4 v1)
         {
             var v2 = new Vector4();
 
@@ -151,7 +151,7 @@ namespace VecMath
 
         public static float operator *(Vector4 v1, Vector4 v2) => Dot(v1, v2);
 
-        public static Vector4 operator *(Matrix m1, Vector4 v1) => Transform(m1, v1);
+        public static Vector4 operator *(Matrix4 m1, Vector4 v1) => Transform(m1, v1);
 
         public static Vector4 operator /(Vector4 v1, float d1) => Scale(v1, 1.0F / d1);
 
