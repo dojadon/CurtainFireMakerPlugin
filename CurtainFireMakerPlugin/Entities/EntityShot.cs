@@ -72,8 +72,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent = (sender, e) => sender.AddVmdMotion();
-        public event EntityEventHandler<EntityShot, InitModelDataEventArgs> InitModelDataEvent = (sender, e) => { };
+        public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent;
+        public event EntityEventHandler<EntityShot, InitModelDataEventArgs> InitModelDataEvent;
 
         protected virtual void OnReocrd() => RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
         protected virtual void OnInitModelData() => InitModelDataEvent?.Invoke(this, new InitModelDataEventArgs(ModelData));
@@ -91,6 +91,8 @@ namespace CurtainFireMakerPlugin.Entities
 
                 Property.Type.Init(this);
                 Property.Type.InitModelData(ModelData);
+
+                RecordEvent += (sender, e) => AddVmdMotion();
             }
             catch (Exception e)
             {
@@ -169,7 +171,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 bezier = MotionInterpolation.Curve;
             }
-            this.AddVmdMotion(RootBone, Pos, Rot, bezier);
+            AddVmdMotion(RootBone, Pos, Rot, bezier);
         }
 
         public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
@@ -192,11 +194,6 @@ namespace CurtainFireMakerPlugin.Entities
                 InterpolatePointR = interpolation
             };
 
-            World.VmdMotion.AddVmdMotion(motion);
-        }
-
-        public void AddVmdMotion(VmdMotionFrameData motion)
-        {
             World.VmdMotion.AddVmdMotion(motion);
         }
 
