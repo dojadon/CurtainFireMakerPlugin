@@ -17,7 +17,7 @@ namespace VecMath
         public float y;
         public float z;
 
-        public float Length => (float)Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z);
 
         public Vector3(float x, float y, float z)
         {
@@ -50,33 +50,28 @@ namespace VecMath
 
         public static Vector3 Normalize(Vector3 v1)
         {
-            float len = v1.Length;
+            float len = v1.Length();
 
             if (len == 1) { return v1; }
             if (len == 0) { return Zero; }
 
+            float mult = 1 / len;
+
             return new Vector3()
             {
-                x = v1.x / len,
-                y = v1.y / len,
-                z = v1.z / len
+                x = v1.x * mult,
+                y = v1.y * mult,
+                z = v1.z * mult
             };
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is Vector3 v)
             {
-                return false;
+                return Equals(v);
             }
-
-            var p = obj as Vector3?;
-            if ((System.Object)p == null)
-            {
-                return false;
-            }
-
-            return this.Equals((Vector3)obj);
+            return false;
         }
 
         public bool Equals(Vector3 v1) => this == v1;
@@ -93,15 +88,9 @@ namespace VecMath
             return true;
         }
 
-        public override string ToString()
-        {
-            return "[" + this.x + ", " + this.y + ", " + this.z + "]";
-        }
+        public override string ToString() => $"[{x}, {y}, {z}]";
 
-        public override int GetHashCode()
-        {
-            return x.GetHashCode() ^ y.GetHashCode() << 2 ^ z.GetHashCode() >> 2;
-        }
+        public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode() << 2 ^ z.GetHashCode() >> 2;
 
         public static Vector3 operator -(Vector3 v1) => v1 * -1;
 

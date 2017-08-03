@@ -17,7 +17,7 @@ namespace VecMath
         public float z;
         public float w;
 
-        public float Length => (float)Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z + w * w);
 
         public Quaternion(float x, float y, float z, float w)
         {
@@ -272,10 +272,7 @@ namespace VecMath
             }
         }
 
-        public override string ToString()
-        {
-            return "[" + x + ", " + y + ", " + z + ", " + w + "]";
-        }
+        public override string ToString() => $"[{x}, {y}, {z}, {w}]";
 
         public static bool operator ==(Quaternion q1, Quaternion q2) => q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w;
 

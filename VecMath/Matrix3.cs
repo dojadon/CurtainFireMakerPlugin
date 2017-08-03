@@ -119,20 +119,72 @@ namespace VecMath
             m22 = m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22,
         };
 
-        public static Matrix3 Pow(Matrix3 m1, float exponent) => ((Quaternion)m1) ^ exponent;
+        public static Matrix3 Mul(Matrix3 m, float f) => new Matrix3()
+        {
+            m00 = m.m00 * f,
+            m01 = m.m01 * f,
+            m02 = m.m02 * f,
+            m10 = m.m10 * f,
+            m11 = m.m11 * f,
+            m12 = m.m12 * f,
+            m20 = m.m20 * f,
+            m21 = m.m21 * f,
+            m22 = m.m22 * f,
+        };
 
-        public static Matrix3 Inverse(Matrix3 m1) => ~((Quaternion)m1);
+        public static Matrix3 Pow(Matrix3 m, float exponent)
+        {
+            //float[] eigen = m.Eigenvalues();
+
+            //float e1 = eigen[(eigen.Length - 1) % 1];
+            //float e2 = eigen[(eigen.Length - 1) % 2];
+            //float e3 = eigen[(eigen.Length - 1) % 3];
+
+            //var diagonal = new Matrix3()
+            //{
+            //    m00 = (float)Math.Pow(e1, exponent),
+            //    m11 = (float)Math.Pow(e2, exponent),
+            //    m22 = (float)Math.Pow(e3, exponent),
+            //};
+
+            //var regular = new Matrix3(m.Eigenvector(e1), m.Eigenvector(e2), m.Eigenvector(e3));
+
+            //return regular * diagonal * ~regular;
+
+            return ((Quaternion)m) ^ exponent;
+        }
+
+        public static Matrix3 Inverse(Matrix3 m)
+        {
+            float det = m.Det();
+
+            if (det == 0)
+            {
+                throw new ArgumentException("Determinant is 0");
+            }
+
+            return new Matrix3()
+            {
+                m00 = m.m11 * m.m22 - m.m12 * m.m21,
+                m01 = -m.m01 * m.m22 + m.m02 * m.m21,
+                m02 = m.m01 * m.m12 - m.m02 * m.m11,
+                m10 = -m.m10 * m.m22 + m.m12 * m.m20,
+                m11 = m.m00 * m.m22 - m.m02 * m.m20,
+                m12 = -m.m00 * m.m12 + -m.m02 * m.m10,
+                m20 = m.m10 * m.m21 - m.m11 * m.m20,
+                m21 = -m.m00 * m.m21 + m.m01 * m.m20,
+                m22 = m.m00 * m.m11 - m.m01 * m.m10,
+            } * (1.0F / det);
+        }
 
         public static Matrix3 Transpose(Matrix3 m1) => new Matrix4()
         {
             m00 = m1.m00,
             m01 = m1.m10,
             m02 = m1.m20,
-
             m10 = m1.m01,
             m11 = m1.m11,
             m12 = m1.m21,
-
             m20 = m1.m02,
             m21 = m1.m12,
             m22 = m1.m22,
@@ -145,24 +197,44 @@ namespace VecMath
             z = v1.x * m1.m02 + v1.y * m1.m12 + v1.z * m1.m22
         };
 
-        public override string ToString()
+        public float Det() => m00 * m11 * m22 + m01 * m12 * m21 + m02 * m10 * m21 - m02 * m11 * m21 - m01 * m10 * m22 - m00 * m12 * m21;
+
+        public float[] Eigenvalues()
         {
-            var sb = new StringBuilder();
+            float det = Det();
 
-            sb.Append("[");
-            sb.Append(this.m00).Append(", ").Append(this.m01).Append(", ").Append(this.m02).Append(", ");
-            sb.Append("]\n[");
-            sb.Append(this.m10).Append(", ").Append(this.m11).Append(", ").Append(this.m12).Append(", ");
-            sb.Append("]\n[");
-            sb.Append(this.m20).Append(", ").Append(this.m21).Append(", ").Append(this.m22).Append(", ");
-            sb.Append("]");
+            float a3 = 1;
+            float a2 = -m00 - m11 - m22;
+            float a1 = m00 * m11 + m11 * m22 + m22 * m00 - m10 * m01 - m12 * m21 - m20 * m02;
+            float a0 = -det;
 
-            return sb.ToString();
+            double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
+            return Array.ConvertAll(solution, d => (float)d);
         }
+
+        public Vector3 Eigenvector(float eigenvalue)
+        {
+            float M00 = m00 - eigenvalue;
+            float M11 = m11 - eigenvalue;
+            float M22 = m22 - eigenvalue;
+
+            float y = m01 * (m02 * (m10 * m21 - m20 * M11) - m01 * (m10 * M22 - m12 * m20) + M00 * (M11 * M22 - m12 * m21));
+            y = 1.0F / y;
+
+            float z = y * (m02 * M11 - m02 * m12) / (m02 * m21 - m01 * M22);
+
+            float x = (m10 * y + m20 * z) / M00;
+
+            return new Vector3(x, y, z);
+        }
+
+        public override string ToString() => $"[{m00}, {m01}, {m02}]\n[{m10}, {m11}, {m12}]\n[{m20}, {m21}, {m22}]";
 
         public static Matrix3 operator ~(Matrix3 m1) => Inverse(m1);
 
         public static Matrix3 operator *(Matrix3 m1, Matrix3 m2) => Mul(m1, m2);
+
+        public static Matrix3 operator *(Matrix3 m1, float f1) => Mul(m1, f1);
 
         public static Vector3 operator *(Vector3 v1, Matrix3 m1) => Transform(v1, m1);
 
