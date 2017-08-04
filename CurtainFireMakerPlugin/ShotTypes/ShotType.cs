@@ -10,17 +10,16 @@ using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
-    public abstract class ShotType
+    public class ShotType
     {
         public String Name { get; }
 
         public ShotType(String name)
         {
-            this.Name = name;
+            Name = name;
         }
 
-        public virtual bool HasMmdData => true;
-        public virtual bool RecordMotion => true;
+        public virtual bool HasMmdData { get; } = false;
 
         public virtual Action<EntityShot> Init { get; set; } = e => { };
         public Action<ShotModelData> InitModelData { get; set; } = data =>
@@ -36,52 +35,14 @@ namespace CurtainFireMakerPlugin.ShotTypes
              }
          };
 
-        public abstract PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop);
+        public virtual PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
 
-        public abstract int[] CreateVertexIndices(World wolrd, ShotProperty prop);
+        public virtual PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop) => null;
 
-        public abstract PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop);
+        public virtual string[] CreateTextures(World wolrd, ShotProperty prop) => null;
 
-        public abstract String[] CreateTextures(World wolrd, ShotProperty prop);
+        public virtual int[] CreateVertexIndices(World wolrd, ShotProperty prop) => null;
 
-        public abstract PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop);
-    }
-
-    public class ShotTypeNone : ShotType
-    {
-        private readonly bool hasMmd;
-        private readonly bool recordMotion;
-
-        public ShotTypeNone(string name, bool hasMmd, bool recordMotion) : base(name)
-        {
-            this.hasMmd = hasMmd;
-            this.recordMotion = recordMotion;
-        }
-
-        public override bool HasMmdData => this.hasMmd;
-
-        public override bool RecordMotion => this.recordMotion;
-
-        public override PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
-
-        public override PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop)
-        {
-            return null;
-        }
-
-        public override string[] CreateTextures(World wolrd, ShotProperty prop)
-        {
-            return null;
-        }
-
-        public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
-        {
-            return null;
-        }
-
-        public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
-        {
-            return null;
-        }
+        public virtual PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop) => null;
     }
 }

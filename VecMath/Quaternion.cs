@@ -9,8 +9,7 @@ namespace VecMath
     public struct Quaternion
     {
         public static readonly Quaternion Identity = new Quaternion(0, 0, 0, 1);
-        private const float EPS = 1.0e-12F;
-        private const float EPS2 = 1.0e-30F;
+        private const double EPS = 1.0e-7F;
 
         public float x;
         public float y;
@@ -169,7 +168,7 @@ namespace VecMath
 
         public static Quaternion Pow(Quaternion q1, float exponent)
         {
-            if (Math.Abs(q1.w) > 0.999999) { return Identity; }
+            if (Math.Abs(q1.w) > 1 - EPS) { return Identity; }
 
             float angle1 = (float)Math.Acos(q1.w);
             float angle2 = angle1 * exponent;
@@ -230,18 +229,11 @@ namespace VecMath
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is Quaternion q)
             {
-                return false;
+                return Equals(q);
             }
-
-            var p = obj as Quaternion?;
-            if (p == null)
-            {
-                return false;
-            }
-
-            return this.Equals((Quaternion)obj);
+            return false;
         }
 
         public bool Equals(Quaternion q1) => this == q1;

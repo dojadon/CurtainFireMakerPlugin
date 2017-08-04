@@ -134,23 +134,6 @@ namespace VecMath
 
         public static Matrix3 Pow(Matrix3 m, float exponent)
         {
-            //float[] eigen = m.Eigenvalues();
-
-            //float e1 = eigen[(eigen.Length - 1) % 1];
-            //float e2 = eigen[(eigen.Length - 1) % 2];
-            //float e3 = eigen[(eigen.Length - 1) % 3];
-
-            //var diagonal = new Matrix3()
-            //{
-            //    m00 = (float)Math.Pow(e1, exponent),
-            //    m11 = (float)Math.Pow(e2, exponent),
-            //    m22 = (float)Math.Pow(e3, exponent),
-            //};
-
-            //var regular = new Matrix3(m.Eigenvector(e1), m.Eigenvector(e2), m.Eigenvector(e3));
-
-            //return regular * diagonal * ~regular;
-
             return ((Quaternion)m) ^ exponent;
         }
 
@@ -198,35 +181,6 @@ namespace VecMath
         };
 
         public float Det() => m00 * m11 * m22 + m01 * m12 * m21 + m02 * m10 * m21 - m02 * m11 * m21 - m01 * m10 * m22 - m00 * m12 * m21;
-
-        public float[] Eigenvalues()
-        {
-            float det = Det();
-
-            float a3 = 1;
-            float a2 = -m00 - m11 - m22;
-            float a1 = m00 * m11 + m11 * m22 + m22 * m00 - m10 * m01 - m12 * m21 - m20 * m02;
-            float a0 = -det;
-
-            double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
-            return Array.ConvertAll(solution, d => (float)d);
-        }
-
-        public Vector3 Eigenvector(float eigenvalue)
-        {
-            float M00 = m00 - eigenvalue;
-            float M11 = m11 - eigenvalue;
-            float M22 = m22 - eigenvalue;
-
-            float y = m01 * (m02 * (m10 * m21 - m20 * M11) - m01 * (m10 * M22 - m12 * m20) + M00 * (M11 * M22 - m12 * m21));
-            y = 1.0F / y;
-
-            float z = y * (m02 * M11 - m02 * m12) / (m02 * m21 - m01 * M22);
-
-            float x = (m10 * y + m20 * z) / M00;
-
-            return new Vector3(x, y, z);
-        }
 
         public override string ToString() => $"[{m00}, {m01}, {m02}]\n[{m10}, {m11}, {m12}]\n[{m20}, {m21}, {m22}]";
 

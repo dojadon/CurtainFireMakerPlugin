@@ -33,21 +33,18 @@ namespace CurtainFireMakerPlugin.Entities
                 ParentId = -1,
                 Flag = 0x0002 | 0x0004 | 0x0008 | 0x0010
             };
-            this.BoneList.Add(centerBone);
+            BoneList.Add(centerBone);
         }
 
         public void InitShotModelData(ShotModelData data)
         {
-            if (data.Property.Type.RecordMotion)
+            if (data.Property.Type.HasMmdData)
             {
-                if (data.Property.Type.HasMmdData)
-                {
-                    this.SetupShotModelData(data);
-                }
-                else
-                {
-                    this.SetupBone(data, data.Bones[0]);
-                }
+                SetupShotModelData(data);
+            }
+            else
+            {
+                SetupBone(data, data.Bones[0]);
             }
         }
 
@@ -75,7 +72,7 @@ namespace CurtainFireMakerPlugin.Entities
                 morph.MorphArray[i].Index = MaterialList.Count + i;
                 morph.MorphId = MorphList.Count + i;
             }
-            this.MorphList.Add(morph);
+            MorphList.Add(morph);
 
             string[] textures = data.Textures;
             foreach (var texture in textures)
@@ -121,19 +118,19 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 PmxBoneData bone = bones[i];
 
-                bone.BoneName = data.Property.Type.Name + (this.BoneList.Count - 1).ToString();
+                bone.BoneName = data.Property.Type.Name + (BoneList.Count - 1).ToString();
                 bone.Flag = 0x0002 | 0x0004 | 0x0010;
-                bone.BoneId = this.BoneList.Count + i;
+                bone.BoneId = BoneList.Count + i;
 
                 if (-1 < bone.ParentId && bone.ParentId < bones.Length)
                 {
-                    bone.ParentId = this.BoneList.IndexOf(bones[bone.ParentId]);
+                    bone.ParentId = BoneList.IndexOf(bones[bone.ParentId]);
                 }
                 else
                 {
                     bone.ParentId = 0;
                 }
-                this.BoneList.Add(bone);
+                BoneList.Add(bone);
             }
         }
 
@@ -149,7 +146,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (var morphList in typeMorphDict.Values)
             {
-                this.Compress(morphList, vmdMotion.MorphDict);
+                Compress(morphList, vmdMotion.MorphDict);
             }
         }
 
@@ -203,23 +200,23 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 SlotName = "弾ボーン",
                 Type = PmxSlotData.SLOT_TYPE_BONE,
-                Indices = Enumerable.Range(0, this.BoneList.Count).ToArray()
+                Indices = Enumerable.Range(0, BoneList.Count).ToArray()
             };
 
             var morphSlot = new PmxSlotData()
             {
                 SlotName = "弾モーフ",
                 Type = PmxSlotData.SLOT_TYPE_MORPH,
-                Indices = Enumerable.Range(0, this.MorphList.Count).ToArray()
+                Indices = Enumerable.Range(0, MorphList.Count).ToArray()
             };
 
             data.Header = header;
-            data.VertexIndices = this.IndexList.ToArray();
-            data.TextureFiles = this.TextureList.ToArray();
-            data.VertexArray = this.VertexList.ToArray();
-            data.MaterialArray = this.MaterialList.ToArray();
-            data.BoneArray = this.BoneList.ToArray();
-            data.MorphArray = this.MorphList.ToArray();
+            data.VertexIndices = IndexList.ToArray();
+            data.TextureFiles = TextureList.ToArray();
+            data.VertexArray = VertexList.ToArray();
+            data.MaterialArray = MaterialList.ToArray();
+            data.BoneArray = BoneList.ToArray();
+            data.MorphArray = MorphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
         }
 

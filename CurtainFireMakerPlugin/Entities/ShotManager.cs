@@ -18,23 +18,23 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotManager(World world)
         {
-            this.World = world;
+            World = world;
         }
 
         public ShotModelData AddEntity(EntityShot entity)
         {
-            if (!this.TypeGroupDict.ContainsKey(entity.Property.Type))
+            if (!TypeGroupDict.ContainsKey(entity.Property.Type))
             {
-                this.TypeGroupDict[entity.Property.Type] = new ShotTypeGroup(entity.Property.Type, this.World);
+                TypeGroupDict[entity.Property.Type] = new ShotTypeGroup(entity.Property.Type, World);
             }
 
-            ShotTypeGroup typeGroup = this.TypeGroupDict[entity.Property.Type];
+            ShotTypeGroup typeGroup = TypeGroupDict[entity.Property.Type];
 
             ShotModelData data = typeGroup.AddEntityToGroup(entity);
             if (data == null)
             {
                 data = typeGroup.CreateGroup(entity);
-                this.World.PmxModel.InitShotModelData(data);
+                World.PmxModel.InitShotModelData(data);
             }
 
             return data;
@@ -50,13 +50,13 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotTypeGroup(ShotType type, World world)
         {
-            this.Type = type;
-            this.World = world;
+            Type = type;
+            World = world;
         }
 
         public ShotModelData AddEntityToGroup(EntityShot entity)
         {
-            foreach (ShotGroup group in this.GroupList)
+            foreach (ShotGroup group in GroupList)
             {
                 if (group.IsAddable(entity))
                 {
@@ -71,7 +71,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             ShotGroup group = new ShotGroup(entity.Property, World);
             group.AddEntity(entity);
-            this.GroupList.Add(group);
+            GroupList.Add(group);
 
             return group.Data;
         }
@@ -87,20 +87,20 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotGroup(ShotProperty property, World world)
         {
-            this.Property = property;
+            Property = property;
             World = world;
 
-            this.Data = new ShotModelData(World, this.Property);
+            Data = new ShotModelData(World, Property);
         }
 
         public bool IsAddable(EntityShot entity)
         {
-            return this.Property.Equals(entity.Property) && !this.ShotList.Exists(e => !e.IsDeath);
+            return Property.Equals(entity.Property) && !ShotList.Exists(e => !e.IsDeath);
         }
 
         public void AddEntity(EntityShot entity)
         {
-            this.ShotList.Add(entity);
+            ShotList.Add(entity);
         }
     }
 }

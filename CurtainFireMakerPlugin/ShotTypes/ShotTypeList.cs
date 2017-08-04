@@ -13,7 +13,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         private ShotTypeList()
         {
-            TYPE_LIST.Add(new ShotTypeNone("BONE", false, true));
+            TYPE_LIST.Add(new ShotType("BONE") { });
         }
 
         public static void AddShotType(ShotType type)

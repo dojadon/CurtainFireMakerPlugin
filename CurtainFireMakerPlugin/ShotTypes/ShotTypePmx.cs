@@ -29,6 +29,8 @@ namespace CurtainFireMakerPlugin.ShotTypes
             VertexScale = size;
         }
 
+        public override bool HasMmdData => true;
+
         public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
         {
             PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
