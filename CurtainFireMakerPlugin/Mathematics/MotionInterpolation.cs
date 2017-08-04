@@ -38,9 +38,8 @@ namespace CurtainFireMakerPlugin.Mathematics
                 float y2 = FuncY(x2);
 
                 float changeY = y2 - y1;
-                float defaultChangeY = 1.0F / Length;
 
-                return changeY / defaultChangeY;
+                return changeY * Length;
             }
             else
             {
@@ -51,6 +50,7 @@ namespace CurtainFireMakerPlugin.Mathematics
         public float GetT(float x)
         {
             if (x == 1) x = 0.999999F;
+
             float a0 = -x;
             float a1 = 3 * Curve.P1.x;
             float a2 = -3 * (2 * Curve.P1.x - Curve.P2.x);
@@ -73,11 +73,6 @@ namespace CurtainFireMakerPlugin.Mathematics
         public float FuncY(float x)
         {
             return Curve.Y(GetT(x));
-        }
-
-        public bool ShouldRecord(int frame)
-        {
-            return EndFrame < frame;
         }
     }
 }
