@@ -63,7 +63,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             PmxMaterialData[] materials = data.Materials;
             PmxMorphData morph = data.MaterialMorph;
-            morph.MorphName = data.Property.Type.Name + "_MO" + MorphList.Count.ToString();
+            morph.MorphName = data.Property.Type.Name + "_MO" + MorphList.Count;
             morph.Type = 4;
             morph.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[materials.Length], i => new PmxMorphMaterialData());
 
@@ -85,7 +85,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = data.Property.Type.Name + "_MA" + MaterialList.Count.ToString();
+                material.MaterialName = data.Property.Type.Name + "_MA" + MaterialList.Count;
 
                 if (0 <= material.TextureId && material.TextureId < textures.Length)
                 {
@@ -118,7 +118,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 PmxBoneData bone = bones[i];
 
-                bone.BoneName = data.Property.Type.Name + (BoneList.Count - 1).ToString();
+                bone.BoneName = data.Property.Type.Name + (BoneList.Count - 1);
                 bone.Flag = 0x0002 | 0x0004 | 0x0010;
                 bone.BoneId = BoneList.Count + i;
 
@@ -184,7 +184,6 @@ namespace CurtainFireMakerPlugin.Entities
                 {
                     morphTypeDataList.AddRange(morph.MorphArray);
                 }
-
                 return morphTypeDataList.ToArray();
             }
         }

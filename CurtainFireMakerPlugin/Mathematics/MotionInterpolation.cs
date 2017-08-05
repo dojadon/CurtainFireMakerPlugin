@@ -34,12 +34,7 @@ namespace CurtainFireMakerPlugin.Mathematics
                 float x1 = (frame - StartFrame) / (float)(Length);
                 float x2 = x1 + 1.0F / Length;
 
-                float y1 = FuncY(x1);
-                float y2 = FuncY(x2);
-
-                float changeY = y2 - y1;
-
-                return changeY * Length;
+                return (FuncY(x2) - FuncY(x1)) * Length;
             }
             else
             {

@@ -60,6 +60,7 @@ namespace VecMath
 
                 // Commence solution.
                 double a_over_3 = a3 / 3.0;
+
                 double Q = (3 * a2 - a3 * a3) / 9.0;
                 double Q_CUBE = Q * Q * Q;
                 double R = (9 * a3 * a2 - 27 * a1 - 2 * a3 * a3 * a3) / 54.0;
@@ -81,20 +82,29 @@ namespace VecMath
                     // One real root.
                     solution = new double[1];
                     double SQRT_D = Math.Sqrt(D);
-                    double S = Math.Pow(R + SQRT_D, 1 / 3);
-                    double T = Math.Pow(R - SQRT_D, 1 / 3);
+                    double S = Cqrt(R + SQRT_D);
+                    double T = Cqrt(R - SQRT_D);
                     solution[0] = S + T - a_over_3;
                 }
                 else
                 {
                     // Three real roots, at least two equal.
                     solution = new double[2];
-                    double CBRT_R = Math.Pow(R, 1 / 3);
+                    double CBRT_R = Cqrt(R);
                     solution[0] = 2 * CBRT_R - a_over_3;
                     solution[1] = CBRT_R - a_over_3;
                 }
             }
+
             return solution;
+        }
+
+        public static double Cqrt(double a, double xn = 1.0)
+        {
+            double e = (xn * xn * xn - a) / (3 * xn * xn);
+            if (Math.Abs(e) > 1.0e-13)
+                return Cqrt(a, xn - e);
+            return xn - e;
         }
 
         public static double[] SolveQuartic(double a4, double a3, double a2, double a1, double a0)
@@ -129,20 +139,8 @@ namespace VecMath
                     double q = A1 - 2 * A2 * B3 + 8 * B3_3;
                     double r = A0 - A1 * B3 + A2 * B3_2 - 3 * B3_4;
 
-                    // if (q == 0.0)
-                    // {
-                    // solution = QuadraticEquation.solve(1, p, r);
-                    //
-                    // for (int i = 0; i < solution.length; i++)
-                    // {
-                    // solution[i] = Math.sqrt(solution[i]);
-                    // }
-                    // }
-                    // else
-                    {
-                        double u = SolveU(p, q, r);
-                        solution = SolveY(p, q, u);
-                    }
+                    double u = SolveU(p, q, r);
+                    solution = SolveY(p, q, u);
 
                     for (int i = 0; i < solution.Length; i++)
                     {
