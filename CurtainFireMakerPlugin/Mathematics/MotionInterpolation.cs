@@ -31,8 +31,10 @@ namespace CurtainFireMakerPlugin.Mathematics
         {
             if (Within(frame))
             {
-                float x1 = (frame - StartFrame) / (float)(Length);
-                float x2 = x1 + 1.0F / Length;
+                float unit = 1.0F / Length;
+
+                float x1 = (frame - StartFrame) * unit;
+                float x2 = x1 + unit;
 
                 return (FuncY(x2) - FuncY(x1)) * Length;
             }
@@ -42,32 +44,14 @@ namespace CurtainFireMakerPlugin.Mathematics
             }
         }
 
-        public float GetT(float x)
-        {
-            if (x == 1) x = 0.999999F;
-
-            float a0 = -x;
-            float a1 = 3 * Curve.P1.x;
-            float a2 = -3 * (2 * Curve.P1.x - Curve.P2.x);
-            float a3 = 3 * (Curve.P1.x - Curve.P2.x) + 1;
-
-            double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
-            double t = solution[0];
-
-            if ((t < 0.0 || 1.0 < t) && solution.Length > 1)
-            {
-                t = solution[1];
-            }
-            if ((t < 0.0 || 1.0 < t) && solution.Length > 2)
-            {
-                t = solution[2];
-            }
-            return (float)t;
-        }
-
         public float FuncY(float x)
         {
-            return Curve.Y(GetT(x));
+            float[] t = Curve.SolveTimeFromX(x);
+            if (t.Length != 1)
+            {
+                throw new ArithmeticException("ベジエ曲線の解が一意に定まりません");
+            }
+            return Curve.Y(t[0]);
         }
     }
 }

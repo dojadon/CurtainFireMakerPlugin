@@ -23,6 +23,23 @@ namespace CurtainFireMakerPlugin.Mathematics
             P3 = p3;
         }
 
+        public float[] SolveTimeFromX(float x)
+        {
+            float a0 = P0.x - x;
+            float a1 = 3 * (-P0.x + P1.x);
+            float a2 = 3 * (P0.x - 2 * P1.x + P2.x);
+            float a3 = -P0.x + P3.x + 3 * (P1.x - P2.x);
+
+            double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
+
+            var set = new HashSet<float>();
+            foreach (double d in solution)
+            {
+                if (0.0 <= d && d <= 1.0) set.Add((float)d);
+            }
+            return set.ToArray();
+        }
+
         public float X(float t)
         {
             float inv = 1 - t;
