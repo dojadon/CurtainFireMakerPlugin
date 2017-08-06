@@ -72,11 +72,10 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent;
-        public event EntityEventHandler<EntityShot, InitModelDataEventArgs> InitModelDataEvent;
+        public bool IsInitializable => ModelData.EntityList.Count == 1;
 
+        public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent;
         protected virtual void OnReocrd() => RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
-        protected virtual void OnInitModelData() => InitModelDataEvent?.Invoke(this, new InitModelDataEventArgs(ModelData));
 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
 
@@ -124,11 +123,6 @@ namespace CurtainFireMakerPlugin.Entities
         public override void OnSpawn()
         {
             base.OnSpawn();
-
-            if (ModelData.EntityList.Count == 1)
-            {
-                OnInitModelData();
-            }
 
             AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
             AddVmdMorph(0, 1.0F, MaterialMorph);

@@ -23,7 +23,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             P3 = p3;
         }
 
-        public float[] SolveTimeFromX(float x)
+        public float[] SolveTimeFromX(float x, float eps = 1.0E-4F)
         {
             float a0 = P0.x - x;
             float a1 = 3 * (-P0.x + P1.x);
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.Mathematics
             var set = new HashSet<float>();
             foreach (double d in solution)
             {
-                if (0.0 <= d && d <= 1.0) set.Add((float)d);
+                if (0.0 - eps <= d && d <= 1.0 + eps) set.Add((float)d);
             }
             return set.ToArray();
         }

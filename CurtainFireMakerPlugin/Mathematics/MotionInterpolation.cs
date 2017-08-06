@@ -47,11 +47,22 @@ namespace CurtainFireMakerPlugin.Mathematics
         public float FuncY(float x)
         {
             float[] t = Curve.SolveTimeFromX(x);
-            if (t.Length != 1)
+
+            if (t.Length == 0)
             {
-                throw new ArithmeticException("ベジエ曲線の解が一意に定まりません");
+                throw new ArithmeticException($"ベジエ曲線の解が見つかりません : x[ {x} ]");
             }
-            return Curve.Y(t[0]);
+
+            float time = t[0];
+
+            if (t.Length > 1)
+            {
+                for (int i = 1; i < t.Length; i++)
+                {
+                    if (Math.Abs(x - time) > Math.Abs(x - t[i])) time = t[i];
+                }
+            }
+            return Curve.Y(time);
         }
     }
 }
