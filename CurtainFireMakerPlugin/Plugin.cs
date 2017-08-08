@@ -102,7 +102,7 @@ namespace CurtainFireMakerPlugin
 
                         if (!Config.KeepLogOpen)
                         {
-                            progressForm.Close();
+                            progressForm.Dispose();
                         }
                     }
                     catch (Exception e)
@@ -117,6 +117,7 @@ namespace CurtainFireMakerPlugin
                         StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                         Console.SetOut(standardOutput);
 
+                        if(!progressForm.IsDisposed)
                         progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
                     }
                 }
