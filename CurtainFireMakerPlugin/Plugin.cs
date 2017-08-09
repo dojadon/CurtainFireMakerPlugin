@@ -78,7 +78,7 @@ namespace CurtainFireMakerPlugin
                     ModelDescription = Config.ModelDescription,
                     KeepLogOpen = Config.KeepLogOpen
                 };
-                form.ShowDialog(this.ApplicationForm);
+                form.ShowDialog(ApplicationForm);
 
                 if (form.DialogResult == DialogResult.OK)
                 {
@@ -107,7 +107,7 @@ namespace CurtainFireMakerPlugin
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(PythonRunner.FormatException(e));
+                        try { Console.WriteLine(PythonRunner.FormatException(e)); }catch{ }
                         Console.WriteLine(e);
                     }
                     finally
@@ -116,6 +116,7 @@ namespace CurtainFireMakerPlugin
 
                         StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                         Console.SetOut(standardOutput);
+                        PythonRunner.SetOut(standardOutput.BaseStream);
 
                         if(!progressForm.IsDisposed)
                         progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");

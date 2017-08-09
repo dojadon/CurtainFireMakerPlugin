@@ -28,7 +28,7 @@ namespace CurtainFireMakerPlugin
 
         public event EventHandler Export;
 
-        public World(string fileName)
+        internal World(string fileName)
         {
             ShotManager = new ShotManager(this);
             PmxModel = new CurtainFireModel(this);
