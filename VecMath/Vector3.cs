@@ -17,8 +17,6 @@ namespace VecMath
         public float y;
         public float z;
 
-        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z);
-
         public Vector3(float x, float y, float z)
         {
             this.x = x;
@@ -87,6 +85,8 @@ namespace VecMath
             if ((diff < 0 ? -diff : diff) > epsilon) return false;
             return true;
         }
+
+        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z);
 
         public override string ToString() => $"[{x}, {y}, {z}]";
 

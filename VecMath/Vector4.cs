@@ -26,102 +26,55 @@ namespace VecMath
 
         }
 
-        public static Vector4 Add(Vector4 v1, Vector4 v2)
+        public static Vector4 Add(Vector4 v1, Vector4 v2) => new Vector4()
         {
-            var v3 = new Vector4();
+            x = v1.x + v2.x,
+            y = v1.y + v2.y,
+            z = v1.z + v2.z,
+            w = v1.w + v2.w
+        };
 
-            v3.x = v1.x + v2.x;
-            v3.y = v1.y + v2.y;
-            v3.z = v1.z + v2.z;
-            v3.w = v1.w + v2.w;
-
-            return v3;
-        }
-
-        public static Vector4 Sub(Vector4 v1, Vector4 v2)
+        public static Vector4 Sub(Vector4 v1, Vector4 v2) => new Vector4()
         {
-            var v3 = new Vector4();
+            x = v1.x - v2.x,
+            y = v1.y - v2.y,
+            z = v1.z - v2.z,
+            w = v1.w - v2.w
+        };
 
-            v3.x = v1.x - v2.x;
-            v3.y = v1.y - v2.y;
-            v3.z = v1.z - v2.z;
-            v3.w = v1.w - v2.w;
-
-            return v3;
-        }
-
-        public static Vector4 Scale(Vector4 v1, float d1)
+        public static Vector4 Scale(Vector4 v1, float d1) => new Vector4()
         {
-            var v3 = new Vector4();
-
-            v3.x = v1.x * d1;
-            v3.y = v1.y * d1;
-            v3.z = v1.z * d1;
-            v3.w = v1.w * d1;
-
-            return v3;
-        }
+            x = v1.x * d1,
+            y = v1.y * d1,
+            z = v1.z * d1,
+            w = v1.w * d1
+        };
 
         public static float Dot(Vector4 v1, Vector4 v2)
         {
             return v2.x * v1.x + v2.y * v1.y + v2.z * v1.z + v1.w * v2.w;
         }
 
-        public static Vector4 Transform(Matrix4 m1, Vector4 v1)
-        {
-            var v2 = new Vector4();
-
-            v2.x = m1.m00 * v1.x + m1.m01 * v1.y + m1.m02 * v1.z + m1.m03 * v1.w;
-            v2.y = m1.m10 * v1.x + m1.m11 * v1.y + m1.m12 * v1.z + m1.m13 * v1.w;
-            v2.z = m1.m20 * v1.x + m1.m21 * v1.y + m1.m22 * v1.z + m1.m23 * v1.w;
-
-            return v2;
-        }
-
         public static Vector4 Normalize(Vector4 v1)
         {
-            var v2 = new Vector4();
+            float len = v1.Length();
+            float mult = len != 1.0 && len != 0.0 ? 1.0F / len : 1.0F;
 
-            float len = Length(v1);
-
-            if (len != 1.0 && len != 0.0)
-            {
-                v2.x = v1.x / len;
-                v2.y = v1.y / len;
-                v2.z = v1.z / len;
-                v2.w = v1.w / len;
-            }
-
-            return v2;
+            return new Vector4(v1.x * mult, v1.y * mult, v1.z * mult, v1.w * mult);
         }
 
-        public static float Length(Vector4 v1)
-        {
-            return (float)Math.Sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z + v1.w * v1.w);
-        }
-
-        public float Length()
-        {
-            return Length(this);
-        }
+        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z + w * w);
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is Quaternion q)
             {
-                return false;
+                return Equals(q);
             }
-
-            var p = obj as Vector4?;
-            if ((System.Object)p == null)
-            {
-                return false;
-            }
-
-            return this.Equals((Vector4)obj);
+            return false;
         }
 
-        public bool Equals(Vector4 v1) => v1.x == this.x && v1.y == this.y && v1.z == this.z && v1.w == this.w;
+        public bool Equals(Vector4 v1) => v1.x == x && v1.y == y && v1.z == z && v1.w == w;
 
         public override int GetHashCode()
         {
@@ -149,13 +102,13 @@ namespace VecMath
 
         public static Vector4 operator *(Vector4 v1, float d1) => Scale(v1, d1);
 
-        public static float operator *(Vector4 v1, Vector4 v2) => Dot(v1, v2);
+        public static Vector4 operator *(float d1, Vector4 v1) => Scale(v1, d1);
 
-        public static Vector4 operator *(Matrix4 m1, Vector4 v1) => Transform(m1, v1);
+        public static float operator *(Vector4 v1, Vector4 v2) => Dot(v1, v2);
 
         public static Vector4 operator /(Vector4 v1, float d1) => Scale(v1, 1.0F / d1);
 
-        public static explicit operator DxMath.Vector4(Vector4 v1) => new DxMath.Vector4((float)v1.x, (float)v1.y, (float)v1.z, (float)v1.w);
+        public static explicit operator DxMath.Vector4(Vector4 v1) => new DxMath.Vector4(v1.x, v1.y, v1.z, v1.w);
 
         public static implicit operator Vector4(DxMath.Vector4 v1) => new Vector4(v1.X, v1.Y, v1.Z, v1.W);
     }
