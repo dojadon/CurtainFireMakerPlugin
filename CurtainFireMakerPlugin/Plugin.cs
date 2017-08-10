@@ -38,7 +38,7 @@ namespace CurtainFireMakerPlugin
 
             try
             {
-                PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPath);
+                PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPath.Split(';'));
             }
             catch (Exception e)
             {
@@ -107,7 +107,7 @@ namespace CurtainFireMakerPlugin
                     }
                     catch (Exception e)
                     {
-                        try { Console.WriteLine(PythonRunner.FormatException(e)); }catch{ }
+                        try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
                         Console.WriteLine(e);
                     }
                     finally
@@ -118,8 +118,8 @@ namespace CurtainFireMakerPlugin
                         Console.SetOut(standardOutput);
                         PythonRunner.SetOut(standardOutput.BaseStream);
 
-                        if(!progressForm.IsDisposed)
-                        progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
+                        if (!progressForm.IsDisposed)
+                            progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
                     }
                 }
             }

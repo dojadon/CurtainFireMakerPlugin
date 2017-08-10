@@ -14,13 +14,17 @@ namespace CurtainFireMakerPlugin
         private ScriptEngine Engine { get; }
         private ScriptScope RootScope { get; }
 
-        public PythonRunner(string settingScriptPath, string modullesDirPath)
+        public PythonRunner(string settingScriptPath, string[] modullesDirPaths)
         {
             Engine = Python.CreateEngine();
             RootScope = Engine.CreateScope();
 
             ICollection<string> paths = Engine.GetSearchPaths();
-            paths.Add(modullesDirPath);
+
+            foreach (var path in modullesDirPaths)
+            {
+                paths.Add(path.Trim(' '));
+            }
             Engine.SetSearchPaths(paths);
 
             Engine.Execute(
