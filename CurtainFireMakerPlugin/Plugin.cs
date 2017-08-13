@@ -6,10 +6,6 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.IO;
 using MikuMikuPlugin;
-using CsPmx;
-using CsPmx.Data;
-using CsVmd;
-using CsVmd.Data;
 using CurtainFireMakerPlugin.Forms;
 
 namespace CurtainFireMakerPlugin

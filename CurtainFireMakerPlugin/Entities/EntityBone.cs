@@ -19,17 +19,17 @@ namespace CurtainFireMakerPlugin.Entities
 
             try
             {
-                Bone bone = this.GetBone();
+                Bone bone = GetBone();
 
-                BoneCollection bones = this.GetBones();
+                BoneCollection bones = GetBones();
 
                 if (bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
                 {
                     var parentBone = new EntityBone(world, Modelname, bones[bone.ParentBoneID].Name);
-                    this.ParentEntity = parentBone;
+                    ParentEntity = parentBone;
                 }
 
-                this.OnSpawn();
+                OnSpawn();
             }
             catch (Exception e)
             {
@@ -39,24 +39,24 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override void UpdatePos()
         {
-            Bone bone = this.GetBone();
+            Bone bone = GetBone();
             var pos = new Vector3();
             var rot = new Quaternion();
 
             foreach (var layer in bone.Layers)
             {
-                MotionFrameData data = layer.Frames.GetFrame(this.World.FrameCount);
+                MotionFrameData data = layer.Frames.GetFrame(World.FrameCount);
                 pos += data.Position;
                 rot *= data.Quaternion;
             }
 
-            this.Pos = pos;
-            this.Rot = rot;
+            Pos = pos;
+            Rot = rot;
         }
 
         private BoneCollection GetBones()
         {
-            Model model = Plugin.Instance.Scene.Models.ToList().Find(m => m.Name.Equals(this.Modelname));
+            Model model = World.Scene.Models.ToList().Find(m => m.DisplayName.Equals(Modelname));
 
             if (model != null)
             {
@@ -64,13 +64,13 @@ namespace CurtainFireMakerPlugin.Entities
             }
             else
             {
-                throw new ApplicationException("Not found model name : " + this.Modelname);
+                throw new ApplicationException($"Not found model name : {Modelname}");
             }
         }
 
         private Bone GetBone()
         {
-            Bone bone = this.GetBones()[this.BoneName];
+            Bone bone = GetBones()[BoneName];
 
             if (bone != null)
             {
@@ -78,7 +78,8 @@ namespace CurtainFireMakerPlugin.Entities
             }
             else
             {
-                throw new ApplicationException("Not found bone name : " + this.Modelname + ":" + this.BoneName);
+
+                throw new ApplicationException($"Not found bone name : {Modelname} : {BoneName}");
             }
         }
     }
