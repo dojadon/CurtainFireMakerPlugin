@@ -11,37 +11,35 @@ namespace CurtainFireMakerPlugin.Entities
     {
         private string Modelname { get; }
         private string BoneName { get; }
+        private Vector3 InitializePos { get; }
 
         public EntityBone(World world, string modelName, string boneName) : base(world)
         {
             Modelname = modelName;
             BoneName = boneName;
 
-            try
+            Bone bone = GetBone();
+
+            BoneCollection bones = GetBones();
+
+            InitializePos = bone.InitialPosition;
+
+            if (bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
             {
-                Bone bone = GetBone();
-
-                BoneCollection bones = GetBones();
-
-                if (bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
-                {
-                    var parentBone = new EntityBone(world, Modelname, bones[bone.ParentBoneID].Name);
-                    ParentEntity = parentBone;
-                }
-
-                OnSpawn();
+                var parentBone = new EntityBone(world, Modelname, bones[bone.ParentBoneID].Name);
+                ParentEntity = parentBone;
+                InitializePos -= bones[bone.ParentBoneID].InitialPosition;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+
+            OnSpawn();
+            Frame();
         }
 
         protected override void UpdatePos()
         {
             Bone bone = GetBone();
-            var pos = new Vector3();
-            var rot = new Quaternion();
+            var pos = InitializePos;
+            var rot = Quaternion.Identity;
 
             foreach (var layer in bone.Layers)
             {

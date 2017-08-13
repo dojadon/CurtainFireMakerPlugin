@@ -10,16 +10,12 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public ShotProperty Property { get; }
 
-        private Entity parentEntity;
         public override Entity ParentEntity
         {
-            get => parentEntity;
+            get => base.ParentEntity;
             set
             {
-                if ((this.parentEntity = value) is EntityShot entity)
-                {
-                    RootBone.ParentId = entity.RootBone.BoneId;
-                }
+                if ((base.ParentEntity = value) is EntityShot entity) RootBone.ParentId = entity.RootBone.BoneId;
             }
         }
 
