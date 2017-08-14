@@ -15,13 +15,22 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.ParentEntity;
             set
             {
-                if ((base.ParentEntity = value) is EntityShot entity) RootBone.ParentId = entity.RootBone.BoneId;
+                if ((base.ParentEntity = value) is EntityShot entity)
+                {
+                    RootBone.ParentId = entity.RootBone.BoneId;
+                }
+                else
+                {
+                    WhetherToRecordWolrdPos = true;
+                }
             }
         }
 
         public ShotModelData ModelData { get; }
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
+
+        private bool WhetherToRecordWolrdPos { get; set; } = false;
 
         private bool ShouldRecord
         {
@@ -43,6 +52,17 @@ namespace CurtainFireMakerPlugin.Entities
         {
             get => base.Upward;
             set => IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Upward, (base.Upward = value), Epsilon);
+        }
+
+        public override Matrix4 WorldMat
+        {
+            get => base.WorldMat;
+            set
+            {
+
+                IsUpdatedPos |= WhetherToRecordWolrdPos && !Matrix4.EpsilonEquals(base.WorldMat, value, Epsilon);
+                base.WorldMat = value;
+            }
         }
 
         public override Vector3 Pos
@@ -161,7 +181,15 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 bezier = MotionInterpolation.Curve;
             }
-            AddVmdMotion(RootBone, Pos, Rot, bezier);
+
+            if (WhetherToRecordWolrdPos)
+            {
+                AddVmdMotion(RootBone, WorldPos, WorldRot, bezier);
+            }
+            else
+            {
+                AddVmdMotion(RootBone, Pos, Rot, bezier);
+            }
         }
 
         public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)

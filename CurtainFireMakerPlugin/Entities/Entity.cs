@@ -12,8 +12,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity
     {
-        private Matrix4 worldMat = Matrix4.Identity;
-        public Matrix4 WorldMat => worldMat;
+        public virtual Matrix4 WorldMat { get; set; }
         public Vector3 WorldPos => WorldMat.TransformVec;
         public Quaternion WorldRot => WorldMat;
 
@@ -103,12 +102,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdateWorldMat()
         {
-            worldMat = Rot;
-            worldMat.TransformVec = Pos;
+            WorldMat = Matrix4.Translation(Rot, Pos);
 
             if (ParentEntity != null)
             {
-                worldMat = WorldMat * ParentEntity.WorldMat;
+                WorldMat = WorldMat * ParentEntity.WorldMat;
             }
         }
 
