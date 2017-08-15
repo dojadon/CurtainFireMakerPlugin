@@ -29,9 +29,11 @@ namespace CurtainFireMakerPlugin
             Instance = this;
             IsPlugin = isPlugin;
 
+            Config = new Configuration(PluginRootPath + "\\config.xml");
+
             try
             {
-                Config = new Configuration(PluginRootPath + "\\config.xml");
+                Config.Load();
                 PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPaths);
             }
             catch (Exception e)
