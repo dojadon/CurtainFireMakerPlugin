@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Tasks;
 using IronPython.Runtime;
@@ -12,6 +13,7 @@ namespace CurtainFireMakerPlugin
     public class World
     {
         public int MaxFrame { get; set; } = 1000;
+        public Scene Scene => Plugin.Instance.Scene;
 
         private List<Entity> addEntityList = new List<Entity>();
         private List<Entity> removeEntityList = new List<Entity>();

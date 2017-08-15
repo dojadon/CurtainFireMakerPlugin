@@ -6,10 +6,6 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.IO;
 using MikuMikuPlugin;
-using CsPmx;
-using CsPmx.Data;
-using CsVmd;
-using CsVmd.Data;
 using CurtainFireMakerPlugin.Forms;
 
 namespace CurtainFireMakerPlugin
@@ -33,12 +29,10 @@ namespace CurtainFireMakerPlugin
             Instance = this;
             IsPlugin = isPlugin;
 
-            Config = new Configuration(PluginRootPath + "\\config.xml");
-            Config.Load();
-
             try
             {
-                PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPath);
+                Config = new Configuration(PluginRootPath + "\\config.xml");
+                PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPaths);
             }
             catch (Exception e)
             {
@@ -107,7 +101,7 @@ namespace CurtainFireMakerPlugin
                     }
                     catch (Exception e)
                     {
-                        try { Console.WriteLine(PythonRunner.FormatException(e)); }catch{ }
+                        try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
                         Console.WriteLine(e);
                     }
                     finally
@@ -118,8 +112,8 @@ namespace CurtainFireMakerPlugin
                         Console.SetOut(standardOutput);
                         PythonRunner.SetOut(standardOutput.BaseStream);
 
-                        if(!progressForm.IsDisposed)
-                        progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
+                        if (!progressForm.IsDisposed)
+                            progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
                     }
                 }
             }

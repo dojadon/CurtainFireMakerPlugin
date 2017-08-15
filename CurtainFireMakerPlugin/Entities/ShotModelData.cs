@@ -8,7 +8,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class ShotModelData
     {
-        public List<EntityShot> EntityList { get; } = new List<EntityShot>();
+        public HashSet<EntityShot> OwnerEntities { get; } = new HashSet<EntityShot>();
 
         public PmxMorphData MaterialMorph { get; } = new PmxMorphData();
 

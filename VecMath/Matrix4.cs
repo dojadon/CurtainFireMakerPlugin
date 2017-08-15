@@ -89,6 +89,13 @@ namespace VecMath
         {
         }
 
+        public static Matrix4 Translation(Matrix3 m1, Vector3 trans)
+        {
+            Matrix4 m2 = m1;
+            m2.TransformVec += trans;
+            return m2;
+        }
+
         public static Matrix4 RotationQuaternion(Quaternion q)
         {
             if (q == Quaternion.Identity)
@@ -174,56 +181,7 @@ namespace VecMath
             return ((Quaternion)m1) ^ exponent;
         }
 
-        public static Matrix4 Inverse(Matrix4 m1)
-        {
-            float[,] mat = (float[,])m1;
-            float[,] inv = (float[,])Identity;
-            float buf = 0;
-
-            for (int i = 0; i < 4; i++)
-            {
-                buf = 1 / mat[i, i];
-                for (int j = 0; j < 4; j++)
-                {
-                    mat[i, j] *= buf;
-                    inv[i, j] *= buf;
-                }
-                for (int j = 0; j < 4; j++)
-                {
-                    if (i != j)
-                    {
-                        buf = mat[j, i];
-                        for (int k = 0; k < 4; k++)
-                        {
-                            mat[j, k] -= mat[i, k] * buf;
-                            inv[j, k] -= inv[i, k] * buf;
-                        }
-                    }
-                }
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                buf = 1 / mat[i, i];
-                for (int j = 0; j < 4; j++)
-                {
-                    mat[i, j] *= buf; inv[i, j] *= buf;
-                }
-                for (int j = 0; j < 4; j++)
-                {
-                    if (i != j)
-                    {
-                        buf = mat[j, i];
-                        for (int k = 0; k < 4; k++)
-                        {
-                            mat[j, k] -= mat[i, k] * buf;
-                            inv[j, k] -= inv[i, k] * buf;
-                        }
-                    }
-                }
-            }
-            return inv;
-        }
+        public static Matrix4 Inverse(Matrix4 m1) => Translation(~(Matrix3)m1, m1.TransformVec);
 
         public static Matrix4 Transpose(Matrix4 m1) => new Matrix4()
         {
@@ -278,6 +236,20 @@ namespace VecMath
             sb.Append("]");
 
             return sb.ToString();
+        }
+
+        public static bool EpsilonEquals(Matrix4 m1, Matrix4 m2, float epsilon)
+        {
+            float diff;
+            float[] f1 = (float[])m1;
+            float[] f2 = (float[])m2;
+
+            for (int i = 0; i < 16; i++)
+            {
+                diff = f1[i] - f2[i];
+                if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            }
+            return true;
         }
 
         public static Matrix4 operator ~(Matrix4 m1) => Inverse(m1);

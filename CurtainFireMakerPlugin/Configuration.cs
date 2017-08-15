@@ -1,6 +1,6 @@
 ﻿using System.Xml;
-using System.Windows.Forms;
 using System.IO;
+using System.Collections.Generic;
 
 namespace CurtainFireMakerPlugin
 {
@@ -10,7 +10,7 @@ namespace CurtainFireMakerPlugin
 
         public string ScriptPath { get; set; }
         public string SettingScriptPath { get; set; }
-        public string ModullesDirPath { get; set; }
+        public string[] ModullesDirPaths { get; set; }
         public string ExportDirPath { get; set; }
 
         public string ModelName { get; set; }
@@ -22,21 +22,32 @@ namespace CurtainFireMakerPlugin
         public Configuration(string path)
         {
             CondigPath = path;
-        }
 
-        public void Load()
-        {
             var doc = new XmlDocument();
             doc.Load(CondigPath);
 
-            XmlNode rootNode = doc.SelectSingleNode(@"//configuration");
-            ScriptPath = GetPath(rootNode.SelectSingleNode("script").InnerText);
-            SettingScriptPath = GetPath(rootNode.SelectSingleNode("setting").InnerText);
-            ModullesDirPath = GetPath(rootNode.SelectSingleNode("scripts").InnerText);
-            ExportDirPath = GetPath(rootNode.SelectSingleNode("export").InnerText);
-            ModelName = rootNode.SelectSingleNode("model_name").InnerText;
-            ModelDescription = rootNode.SelectSingleNode("model_description").InnerText;
-            KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("keep_log_open").InnerText);
+            XmlNode rootNode = doc.SelectSingleNode(@"//Configuration");
+
+            XmlNode scriptNode = rootNode.SelectSingleNode("Scripts");
+
+            ScriptPath = GetPath(scriptNode.SelectSingleNode("Run").InnerText);
+            SettingScriptPath = GetPath(scriptNode.SelectSingleNode("Setting").InnerText);
+
+            XmlNode libNode = rootNode.SelectSingleNode("Libs");
+            var list = new List<string>();
+            foreach (var node in libNode.ChildNodes)
+            {
+                list.Add(((XmlNode)node).InnerText);
+            }
+            ModullesDirPaths = list.ToArray();
+
+            ExportDirPath = GetPath(rootNode.SelectSingleNode("Export").InnerText);
+
+            XmlNode modelNode = rootNode.SelectSingleNode("Model");
+
+            ModelName = modelNode.SelectSingleNode("Name").InnerText;
+            ModelDescription = modelNode.SelectSingleNode("Description").InnerText;
+            KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("KeepLogOpen").InnerText);
         }
 
         public void Save()
@@ -49,31 +60,44 @@ namespace CurtainFireMakerPlugin
             doc.AppendChild(declaration);
             doc.AppendChild(root);
 
-            XmlElement element = doc.CreateElement("script");
+            XmlElement element;
+            XmlElement scriptEle = doc.CreateElement("Scripts");
+            root.AppendChild(scriptEle);
+
+            element = doc.CreateElement("Run");
             element.InnerText = ScriptPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
-            root.AppendChild(element);
+            scriptEle.AppendChild(element);
 
-            element = doc.CreateElement("setting");
+            element = doc.CreateElement("Setting");
             element.InnerText = SettingScriptPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
-            root.AppendChild(element);
+            scriptEle.AppendChild(element);
 
-            element = doc.CreateElement("scripts");
-            element.InnerText = ModullesDirPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
-            root.AppendChild(element);
+            XmlElement libEle = doc.CreateElement("Libs");
+            root.AppendChild(libEle);
 
-            element = doc.CreateElement("export");
+            foreach (var path in ModullesDirPaths)
+            {
+                element = doc.CreateElement("Dir");
+                element.InnerText = path.Replace(Plugin.Instance.PluginRootPath + "\\", "");
+                libEle.AppendChild(element);
+            }
+
+            element = doc.CreateElement("Export");
             element.InnerText = ExportDirPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
             root.AppendChild(element);
 
-            element = doc.CreateElement("model_name");
+            XmlElement modelEle = doc.CreateElement("Model");
+            root.AppendChild(scriptEle);
+
+            element = doc.CreateElement("Name");
             element.InnerText = ModelName;
-            root.AppendChild(element);
+            modelEle.AppendChild(element);
 
-            element = doc.CreateElement("model_description");
+            element = doc.CreateElement("Description");
             element.InnerText = ModelDescription;
-            root.AppendChild(element);
+            modelEle.AppendChild(element);
 
-            element = doc.CreateElement("keep_log_open");
+            element = doc.CreateElement("KeepLogOpen");
             element.InnerText = KeepLogOpen.ToString();
             root.AppendChild(element);
 
