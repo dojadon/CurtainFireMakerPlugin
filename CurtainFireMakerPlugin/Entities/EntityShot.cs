@@ -37,8 +37,8 @@ namespace CurtainFireMakerPlugin.Entities
             get => RecordWhenVelocityChanges ? IsUpdatedVelocity : IsUpdatedPos;
             set => IsUpdatedVelocity = IsUpdatedPos = value;
         }
-        private bool IsUpdatedVelocity { get; set; }
-        private bool IsUpdatedPos { get; set; }
+        private bool IsUpdatedVelocity { get; set; } = true;
+        private bool IsUpdatedPos { get; set; } = true;
 
         private static float Epsilon { get; set; } = 0.00001F;
 
@@ -59,7 +59,6 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.WorldMat;
             set
             {
-
                 IsUpdatedPos |= WhetherToRecordWolrdPos && !Matrix4.EpsilonEquals(base.WorldMat, value, Epsilon);
                 base.WorldMat = value;
             }
@@ -88,7 +87,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public bool IsInitializable => ModelData.EntityList.Count == 1;
+        public bool ModelDataIsOperable => ModelData.OwnerEntities.Count == 1;
 
         public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent;
         protected virtual void OnReocrd() => RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
@@ -102,7 +101,7 @@ namespace CurtainFireMakerPlugin.Entities
                 Property = property;
 
                 ModelData = World.AddShot(this);
-                ModelData.EntityList.Add(this);
+                ModelData.OwnerEntities.Add(this);
 
                 Property.Type.Init(this);
                 Property.Type.InitModelData(ModelData);
@@ -115,10 +114,10 @@ namespace CurtainFireMakerPlugin.Entities
                 Console.WriteLine(e);
             }
         }
-
+        
         internal override void Frame()
         {
-            if (FrameCount == 1 || ShouldRecord)
+            if (ShouldRecord)
             {
                 OnReocrd();
             }
