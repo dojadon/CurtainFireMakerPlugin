@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using System.IO;
 using System.Collections.Generic;
 
@@ -8,14 +9,62 @@ namespace CurtainFireMakerPlugin
     {
         private string CondigPath { get; }
 
-        public string ScriptPath { get; set; }
-        public string SettingScriptPath { get; set; }
-        public string[] ModullesDirPaths { get; set; }
-        public string ExportDirPath { get; set; }
+        private XmlDocument XmlDoc { get; }
+        private XmlNode RootNode => XmlDoc.SelectSingleNode(@"//Configuration");
 
-        public string ModelName { get; set; }
-        public string ModelDescription { get; set; }
-        public bool KeepLogOpen { get; set; }
+        private XmlNode NodeScripts => RootNode.SelectSingleNode("Scripts");
+
+        private XmlNode NodeScript => NodeScripts.SelectSingleNode("Run");
+        public string ScriptPath
+        {
+            get => MightMakeAbsolute(NodeScript.InnerText);
+            set => NodeScript.InnerText = MightMakeRelative(value);
+        }
+
+        private XmlNode NodeSettingScript => NodeScripts.SelectSingleNode("Setting");
+        public string SettingScriptPath
+        {
+            get => MightMakeAbsolute(NodeSettingScript.InnerText);
+            set => NodeSettingScript.InnerText = MightMakeRelative(value);
+        }
+
+        private XmlNode NodeLibs => RootNode.SelectSingleNode("Libs");
+        public string[] ModullesDirPaths
+        {
+            get
+            {
+                var array = new string[NodeLibs.ChildNodes.Count];
+                for (int i = 0; i < NodeLibs.ChildNodes.Count; i++)
+                {
+                    array[i] = MightMakeAbsolute(NodeLibs.ChildNodes.Item(i).InnerText);
+                }
+                return array;
+            }
+            set
+            {
+                for (int i = 0; i < NodeLibs.ChildNodes.Count; i++)
+                {
+                    NodeLibs.ChildNodes.Item(i).InnerText = MightMakeRelative(value[i]);
+                }
+            }
+        }
+        private XmlNode NodeExport => RootNode.SelectSingleNode("Export");
+        public string ExportDirPath
+        {
+            get => MightMakeAbsolute(NodeExport.InnerText);
+            set => NodeExport.InnerText = MightMakeRelative(value);
+        }
+
+        private XmlNode NodeModel => RootNode.SelectSingleNode("Model");
+
+        private XmlNode NodeModelName => NodeModel.SelectSingleNode("Name");
+        public string ModelName { get => NodeModelName.InnerText; set => NodeModelName.InnerText = value; }
+
+        private XmlNode NodeModelDescription => NodeModel.SelectSingleNode("Description");
+        public string ModelDescription { get => NodeModelDescription.InnerText; set => NodeModelDescription.InnerText = value; }
+
+        private XmlNode NodeKeepLogOpen => RootNode.SelectSingleNode("KeepLogOpen");
+        public bool KeepLogOpen { get => bool.Parse(NodeKeepLogOpen.InnerText); set => NodeKeepLogOpen.InnerText = value.ToString(); }
 
         public string ResourceDirPath => Plugin.Instance.PluginRootPath + "\\Resource";
 
@@ -23,90 +72,15 @@ namespace CurtainFireMakerPlugin
         {
             CondigPath = path;
 
-            var doc = new XmlDocument();
-            doc.Load(CondigPath);
-
-            XmlNode rootNode = doc.SelectSingleNode(@"//Configuration");
-
-            XmlNode scriptNode = rootNode.SelectSingleNode("Scripts");
-
-            ScriptPath = GetPath(scriptNode.SelectSingleNode("Run").InnerText);
-            SettingScriptPath = GetPath(scriptNode.SelectSingleNode("Setting").InnerText);
-
-            XmlNode libNode = rootNode.SelectSingleNode("Libs");
-            var list = new List<string>();
-            foreach (var node in libNode.ChildNodes)
-            {
-                list.Add(((XmlNode)node).InnerText);
-            }
-            ModullesDirPaths = list.ToArray();
-
-            ExportDirPath = GetPath(rootNode.SelectSingleNode("Export").InnerText);
-
-            XmlNode modelNode = rootNode.SelectSingleNode("Model");
-
-            ModelName = modelNode.SelectSingleNode("Name").InnerText;
-            ModelDescription = modelNode.SelectSingleNode("Description").InnerText;
-            KeepLogOpen = bool.Parse(rootNode.SelectSingleNode("KeepLogOpen").InnerText);
+            XmlDoc = new XmlDocument();
         }
 
-        public void Save()
-        {
-            var doc = new XmlDocument();
+        public void Load() => XmlDoc.Load(CondigPath);
 
-            XmlDeclaration declaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-            XmlElement root = doc.CreateElement("configuration");
+        public void Save() => XmlDoc.Save(CondigPath);
 
-            doc.AppendChild(declaration);
-            doc.AppendChild(root);
+        private static string MightMakeAbsolute(string path) => Path.IsPathRooted(path) ? path : Plugin.Instance.PluginRootPath + "\\" + path;
 
-            XmlElement element;
-            XmlElement scriptEle = doc.CreateElement("Scripts");
-            root.AppendChild(scriptEle);
-
-            element = doc.CreateElement("Run");
-            element.InnerText = ScriptPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
-            scriptEle.AppendChild(element);
-
-            element = doc.CreateElement("Setting");
-            element.InnerText = SettingScriptPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
-            scriptEle.AppendChild(element);
-
-            XmlElement libEle = doc.CreateElement("Libs");
-            root.AppendChild(libEle);
-
-            foreach (var path in ModullesDirPaths)
-            {
-                element = doc.CreateElement("Dir");
-                element.InnerText = path.Replace(Plugin.Instance.PluginRootPath + "\\", "");
-                libEle.AppendChild(element);
-            }
-
-            element = doc.CreateElement("Export");
-            element.InnerText = ExportDirPath.Replace(Plugin.Instance.PluginRootPath + "\\", "");
-            root.AppendChild(element);
-
-            XmlElement modelEle = doc.CreateElement("Model");
-            root.AppendChild(scriptEle);
-
-            element = doc.CreateElement("Name");
-            element.InnerText = ModelName;
-            modelEle.AppendChild(element);
-
-            element = doc.CreateElement("Description");
-            element.InnerText = ModelDescription;
-            modelEle.AppendChild(element);
-
-            element = doc.CreateElement("KeepLogOpen");
-            element.InnerText = KeepLogOpen.ToString();
-            root.AppendChild(element);
-
-            doc.Save(CondigPath);
-        }
-
-        private static string GetPath(string path)
-        {
-            return Path.IsPathRooted(path) ? path : Plugin.Instance.PluginRootPath + "\\" + path;
-        }
+        private static string MightMakeRelative(string path) => path.Replace(Plugin.Instance.PluginRootPath + "\\", "");
     }
 }

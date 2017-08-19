@@ -90,7 +90,6 @@ namespace CurtainFireMakerPlugin.Entities
         public bool ModelDataIsOperable => ModelData.OwnerEntities.Count == 1;
 
         public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent;
-        protected virtual void OnReocrd() => RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
 
@@ -107,6 +106,27 @@ namespace CurtainFireMakerPlugin.Entities
                 Property.Type.InitModelData(ModelData);
 
                 RecordEvent += (sender, e) => AddVmdMotion();
+                SetMotionInterpolationCurveEvent += (sender, e) => AddVmdMotion();
+                RemoveMotionInterpolationCurveEvent += (sender, e) => AddVmdMotion();
+
+                SpawnEvent += (sender, e) =>
+                {
+                    AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
+                    AddVmdMorph(0, 1.0F, MaterialMorph);
+                    AddVmdMorph(1, 0.0F, MaterialMorph);
+
+                    AddVmdMotion();
+                };
+
+                DeathEvent += (sender, e) =>
+                {
+                    AddVmdMorph(-1, 0.0F, MaterialMorph);
+                    AddVmdMorph(0, 1.0F, MaterialMorph);
+
+                    AddVmdMotion();
+                };
+
+
             }
             catch (Exception e)
             {
@@ -114,12 +134,12 @@ namespace CurtainFireMakerPlugin.Entities
                 Console.WriteLine(e);
             }
         }
-        
+
         internal override void Frame()
         {
             if (ShouldRecord)
             {
-                OnReocrd();
+                RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
             }
             ShouldRecord = false;
 
@@ -133,41 +153,6 @@ namespace CurtainFireMakerPlugin.Entities
                 Rot = Matrix4.LookAt(+Velocity, +Upward);
             }
             base.UpdateRot();
-        }
-
-        public override void OnSpawn()
-        {
-            base.OnSpawn();
-
-            AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
-            AddVmdMorph(0, 1.0F, MaterialMorph);
-            AddVmdMorph(1, 0.0F, MaterialMorph);
-
-            AddVmdMotion();
-        }
-
-        public override void OnDeath()
-        {
-            base.OnDeath();
-
-            AddVmdMorph(-1, 0.0F, MaterialMorph);
-            AddVmdMorph(0, 1.0F, MaterialMorph);
-
-            AddVmdMotion();
-        }
-
-        public override void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
-        {
-            AddVmdMotion();
-
-            base.SetMotionBezier(pos1, pos2, length);
-        }
-
-        internal override void RemoveMotionBezier()
-        {
-            AddVmdMotion();
-
-            base.RemoveMotionBezier();
         }
 
         public void AddVmdMotion()

@@ -41,13 +41,16 @@ namespace CurtainFireMakerPlugin.Entities
         public int SpawnFrameNo { get; set; }
         public int DeathFrameNo { get; set; }
 
-        public Func<Entity, bool> CheckWorldOut { get; set; } = entity => (entity.Pos - entity.SpawnPos).Length() > 400.0;
+        public virtual Func<Entity, bool> DiedDecision { get; set; } = e =>
+        {
+            return e.LivingLimit != 0 && e.FrameCount > e.LivingLimit || (e.Pos - e.SpawnPos).Length() > 400.0;
+        };
 
         public bool IsDeath { get; set; }
         public bool IsSpawned { get; set; }
 
         protected MotionInterpolation MotionInterpolation { get; set; }
-        private TaskManager taskManager = new TaskManager();
+        private TaskManager TaskManager { get; } = new TaskManager();
 
         public World World { get; }
 
@@ -55,6 +58,12 @@ namespace CurtainFireMakerPlugin.Entities
         private static int nextEntityId;
 
         public delegate void EntityEventHandler<T, R>(T sender, R e) where T : Entity where R : EventArgs;
+
+        public event EntityEventHandler<Entity, EventArgs> SpawnEvent;
+        public event EntityEventHandler<Entity, EventArgs> DeathEvent;
+
+        public event EntityEventHandler<Entity, EventArgs> SetMotionInterpolationCurveEvent;
+        public event EntityEventHandler<Entity, EventArgs> RemoveMotionInterpolationCurveEvent;
 
         public Entity(World world)
         {
@@ -64,14 +73,14 @@ namespace CurtainFireMakerPlugin.Entities
 
         internal virtual void Frame()
         {
-            taskManager.Frame();
+            TaskManager.Frame();
 
             UpdatePos();
             UpdateRot();
             UpdateWorldMat();
 
             FrameCount++;
-            if (DeathCheck())
+            if (DiedDecision(this))
             {
                 OnDeath();
             }
@@ -90,7 +99,7 @@ namespace CurtainFireMakerPlugin.Entities
                 }
                 else
                 {
-                    RemoveMotionBezier();
+                    RemoveMotionInterpolationCurve();
                 }
             }
             Pos += interpolatedVelocity;
@@ -110,11 +119,6 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        protected virtual bool DeathCheck()
-        {
-            return LivingLimit != 0 && FrameCount > LivingLimit || CheckWorldOut(this);
-        }
-
         public void __call__()
         {
             OnSpawn();
@@ -125,27 +129,35 @@ namespace CurtainFireMakerPlugin.Entities
             SpawnFrameNo = World.AddEntity(this);
             spawnPos = Pos;
             IsSpawned = true;
+
+            SpawnEvent?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual void OnDeath()
         {
             DeathFrameNo = World.RemoveEntity(this);
             IsDeath = true;
+
+            DeathEvent?.Invoke(this, EventArgs.Empty);
         }
 
-        public virtual void SetMotionBezier(Vector2 pos1, Vector2 pos2, int length)
+        public virtual void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
         {
             MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2);
+
+            SetMotionInterpolationCurveEvent?.Invoke(this, EventArgs.Empty);
         }
 
-        internal virtual void RemoveMotionBezier()
+        internal virtual void RemoveMotionInterpolationCurve()
         {
+            RemoveMotionInterpolationCurveEvent?.Invoke(this, EventArgs.Empty);
+
             MotionInterpolation = null;
         }
 
         public void AddTask(Task task)
         {
-            taskManager.AddTask(task);
+            TaskManager.AddTask(task);
         }
 
         public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)

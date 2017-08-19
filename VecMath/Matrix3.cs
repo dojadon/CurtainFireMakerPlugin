@@ -5,6 +5,7 @@ using System.Text;
 
 namespace VecMath
 {
+    [Serializable]
     public struct Matrix3
     {
         public static readonly Matrix3 Identity = new Matrix3(Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ);
@@ -143,7 +144,7 @@ namespace VecMath
 
             if (det == 0)
             {
-                throw new ArgumentException("Determinant is 0");
+                throw new ArithmeticException("Determinant is 0");
             }
 
             return new Matrix3()
@@ -196,17 +197,6 @@ namespace VecMath
 
         public static implicit operator Matrix3(Quaternion q1) => RotationQuaternion(q1);
 
-        public static implicit operator Matrix3(Matrix4 m) => new Matrix3()
-        {
-            m00 = m.m00,
-            m01 = m.m01,
-            m02 = m.m02,
-            m10 = m.m10,
-            m11 = m.m11,
-            m12 = m.m12,
-            m20 = m.m20,
-            m21 = m.m21,
-            m22 = m.m22,
-        };
+        public static implicit operator Matrix3(Matrix4 m) => new Matrix3(m.m00, m.m01, m.m02, m.m10, m.m11, m.m12, m.m20, m.m21, m.m22);
     }
 }

@@ -22,46 +22,31 @@ namespace VecMath
 
         }
 
-        public static Vector2 Add(Vector2 v1, Vector2 v2)
+        public static Vector2 Add(Vector2 v1, Vector2 v2) => new Vector2()
         {
-            var v3 = new Vector2();
+            x = v1.x + v2.x,
+            y = v1.y + v2.y
+        };
 
-            v3.x = v1.x + v2.x;
-            v3.y = v1.y + v2.y;
-
-            return v3;
-        }
-
-        public static Vector2 Sub(Vector2 v1, Vector2 v2)
+        public static Vector2 Sub(Vector2 v1, Vector2 v2) => new Vector2()
         {
-            var v3 = new Vector2();
+            x = v1.x - v2.x,
+            y = v1.y - v2.y
+        };
 
-            v3.x = v1.x - v2.x;
-            v3.y = v1.y - v2.y;
-
-            return v3;
-        }
-
-        public static Vector2 Scale(Vector2 v1, float d1)
+        public static Vector2 Scale(Vector2 v1, float d1) => new Vector2()
         {
-            var v3 = new Vector2();
+            x = v1.x * d1,
+            y = v1.y * d1
+        };
 
-            v3.x = v1.x * d1;
-            v3.y = v1.y * d1;
-
-            return v3;
-        }
-
-        public static float Dot(Vector2 v1, Vector2 v2)
-        {
-            return v2.x * v1.x + v2.y * v1.y;
-        }
+        public static float Dot(Vector2 v1, Vector2 v2) => v2.x * v1.x + v2.y * v1.y;
 
         public static Vector2 Normalize(Vector2 v1)
         {
             var v2 = new Vector2();
 
-            float len = Length(v1);
+            float len = v1.Length();
 
             if (len != 1.0 && len != 0.0)
             {
@@ -72,38 +57,32 @@ namespace VecMath
             return v2;
         }
 
-        public static float Length(Vector2 v1)
-        {
-            return (float)Math.Sqrt(v1.x * v1.x + v1.y * v1.y);
-        }
+        public float Length() => (float)Math.Sqrt(x * x + y * y);
 
-        public float Length()
+        public static bool EpsilonEquals(Vector2 v1, Vector2 v2, float epsilon)
         {
-            return Length(this);
+            float diff;
+            diff = v1.x - v2.x;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            diff = v1.y - v2.y;
+            if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            return true;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is Vector2 v)
             {
-                return false;
+                return Equals(v);
             }
-
-            var p = obj as Vector2?;
-            if ((System.Object)p == null)
-            {
-                return false;
-            }
-
-            return this.Equals((Vector2)obj);
+            return false;
         }
 
-        public bool Equals(Vector2 v1) => v1.x == this.x && v1.y == this.y;
+        public bool Equals(Vector2 v1) => v1.x == x && v1.y == y;
 
-        public override int GetHashCode()
-        {
-            return x.GetHashCode() ^ y.GetHashCode() << 2;
-        }
+        public override string ToString() => $"[{x}, {y}]";
+
+        public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode() << 2;
 
         public static Vector2 operator -(Vector2 v1) => v1 * -1;
 
