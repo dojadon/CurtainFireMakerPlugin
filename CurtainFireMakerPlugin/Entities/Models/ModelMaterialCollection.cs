@@ -54,22 +54,26 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
         }
 
-        private List<int> CompressMaterial(PmxMorphData morph)
+        public List<int> CompressMaterial(PmxMorphData morph)
         {
             int[] indices = Array.ConvertAll(morph.MorphArray, m => m.Index);
             Array.Sort(indices);
 
-            var materialsList = new List<List<int>>();
+            var indicesList = new List<List<int>>();
             List<int> currentList = null;
 
             int lastIndex = indices[0];
             foreach (int index in indices)
             {
-                if (!(Math.Abs(index - lastIndex) == 1 && Equals(MaterialList[index], MaterialList[lastIndex])))
+                if (Math.Abs(index - lastIndex) == 1 && Equals(MaterialList[index], MaterialList[lastIndex]))
+                {
+                    ;
+                }
+                else
                 {
                     if (currentList != null)
                     {
-                        materialsList.Add(currentList);
+                        indicesList.Add(currentList);
                     }
                     currentList = new List<int>();
                 }
@@ -77,9 +81,14 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 lastIndex = index;
             }
 
+            if (currentList != null && currentList.Count > 0)
+            {
+                indicesList.Add(currentList);
+            }
+
             var removeList = new List<int>();
 
-            foreach (var list in materialsList)
+            foreach (var list in indicesList)
             {
                 if (list.Count > 1)
                 {

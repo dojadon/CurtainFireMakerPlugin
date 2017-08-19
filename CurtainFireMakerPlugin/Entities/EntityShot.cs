@@ -125,8 +125,6 @@ namespace CurtainFireMakerPlugin.Entities
 
                     AddVmdMotion();
                 };
-
-
             }
             catch (Exception e)
             {

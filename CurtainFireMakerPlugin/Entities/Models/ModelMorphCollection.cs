@@ -41,12 +41,26 @@ namespace CurtainFireMakerPlugin.Entities.Models
             var typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
             foreach (var morph in vmdMotion.MorphDict.Keys)
             {
-                typeMorphDict.Add(morph.Type, morph);
+                typeMorphDict.Add(morph.MorphArray[0].GetMorphType(), morph);
             }
 
             foreach (var morphList in typeMorphDict.Values)
             {
                 Compress(morphList, vmdMotion.MorphDict);
+            }
+
+            var removeMaterialIndices = new List<int>();
+            foreach (var morph in typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL])
+            {
+                removeMaterialIndices.AddRange(World.PmxModel.Materials.CompressMaterial(morph));
+            }
+
+            RemoveElements(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL], removeMaterialIndices);
+
+            removeMaterialIndices.Sort((a, b) => b - a);
+            foreach (int index in removeMaterialIndices)
+            {
+                World.PmxModel.Materials.MaterialList.RemoveAt(index);
             }
         }
 
@@ -86,6 +100,24 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 morphTypeDataList.AddRange(morph.MorphArray);
             }
             return morphTypeDataList.ToArray();
+        }
+
+        private void RemoveElements(List<PmxMorphData> morphList, List<int> removeIndices)
+        {
+            foreach (var morph in morphList)
+            {
+                var typeList = new List<IPmxMorphTypeData>();
+
+                foreach (var typeMorph in morph.MorphArray)
+                {
+                    if (!removeIndices.Contains(typeMorph.Index))
+                    {
+                        typeMorph.Index -= removeIndices.FindAll(i => i < typeMorph.Index).Count;
+                        typeList.Add(typeMorph);
+                    }
+                }
+                morph.MorphArray = typeList.ToArray();
+            }
         }
     }
 
