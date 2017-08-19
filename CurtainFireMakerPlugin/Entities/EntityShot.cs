@@ -216,7 +216,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph, bool replace = false)
         {
-            if (Property.Type.HasMmdData)
+            if (Property.Type.HasMesh)
             {
                 var frameData = new VmdMorphFrameData()
                 {

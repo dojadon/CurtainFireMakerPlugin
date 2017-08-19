@@ -58,8 +58,12 @@
     <Compile Include="Mathematics\CubicBezierCurve.cs" />
     <Compile Include="Collections\MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Entities\CurtainFireModel.cs" />
-    <Compile Include="Entities\CurtainFireMotion.cs" />
+    <Compile Include="Entities\Models\CurtainFireModel.cs" />
+    <Compile Include="Entities\Models\CurtainFireMotion.cs" />
+    <Compile Include="Entities\Models\ModelBoneCollection.cs" />
+    <Compile Include="Entities\Models\ModelMaterialCollection.cs" />
+    <Compile Include="Entities\Models\ModelMorphCollection.cs" />
+    <Compile Include="Entities\Models\ModelVertexCollection.cs" />
     <Compile Include="Entities\EntityBone.cs" />
     <Compile Include="Mathematics\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotManager.cs" />
@@ -113,6 +117,8 @@
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
+using CurtainFireMakerPlugin.Entities.Models;
 using CurtainFireMakerPlugin.Tasks;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
@@ -88,7 +89,7 @@ namespace CurtainFireMakerPlugin
         internal void Finish()
         {
             EntityList.ForEach(e => e.OnDeath());
-            PmxModel.CompressMorph();
+            PmxModel.Finish();
 
             OnExport(EventArgs.Empty);
         }

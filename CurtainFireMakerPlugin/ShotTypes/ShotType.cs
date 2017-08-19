@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             Name = name;
         }
 
-        public virtual bool HasMmdData { get; } = false;
+        public virtual bool HasMesh { get; } = false;
 
         public virtual Action<EntityShot> Init { get; set; } = e => { };
         public Action<ShotModelData> InitModelData { get; set; } = data =>

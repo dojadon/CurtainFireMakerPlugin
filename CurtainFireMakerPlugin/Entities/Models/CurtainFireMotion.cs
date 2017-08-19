@@ -8,7 +8,7 @@ using CsVmd.Data;
 using CsVmd;
 using CsPmx.Data;
 
-namespace CurtainFireMakerPlugin.Entities
+namespace CurtainFireMakerPlugin.Entities.Models
 {
     internal class CurtainFireMotion
     {
@@ -35,24 +35,6 @@ namespace CurtainFireMakerPlugin.Entities
             if (!MorphDict[morph].Exists(m => m.MorphName == frameData.MorphName && m.KeyFrameNo == frameData.KeyFrameNo))
             {
                 MorphDict[morph].Add(frameData);
-            }
-        }
-
-        public void Finish(CurtainFireModel pmxModel)
-        {
-            var removeList = new List<PmxMorphData>();
-
-            foreach (var morph in MorphDict.Keys)
-            {
-                if (!pmxModel.MorphList.Contains(morph))
-                {
-                    removeList.Add(morph);
-                }
-            }
-
-            foreach (var key in removeList)
-            {
-                MorphDict.Remove(key);
             }
         }
 

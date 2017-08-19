@@ -38,7 +38,7 @@ namespace CurtainFireMakerPlugin.Entities
         public void AddMorph(PmxMorphData morph)
         {
             MorphDict.Add(morph.MorphName, morph);
-            World.PmxModel.MorphList.Add(morph);
+            World.PmxModel.Morphs.MorphList.Add(morph);
         }
     }
 }
