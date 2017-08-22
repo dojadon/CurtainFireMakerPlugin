@@ -41,18 +41,18 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         private void SetupShotModelData(ShotModelData data)
         {
-            Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
+            Vertices.SetupVertices(data.Vertices, data.Indices, Array.ConvertAll(data.Materials, m => m.FaceCount), Bones.BoneList.Count);
 
             Morphs.SetupMaterialMorph(data.MaterialMorph, Materials.MaterialList.Count, data.Materials.Length);
 
-            Materials.SetupMaterialsAndTextures(data.Materials, data.Textures);
+            Materials.SetupMaterials(data.Materials, data.Textures);
 
             Bones.SetupBone(data, data.Bones);
         }
 
         public void Finish()
         {
-            Morphs.CompressMorph();
+            Morphs.CompressMorph(Materials);
         }
 
         public void GetData(PmxModelData data)

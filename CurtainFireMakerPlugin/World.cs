@@ -81,7 +81,6 @@ namespace CurtainFireMakerPlugin
             removeEntityList.Clear();
 
             EntityList.ForEach(e => e.Frame());
-            EntityList.RemoveAll(e => e.IsDeath);
 
             FrameCount++;
         }

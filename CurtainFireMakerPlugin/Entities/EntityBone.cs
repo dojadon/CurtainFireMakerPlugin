@@ -52,6 +52,10 @@ namespace CurtainFireMakerPlugin.Entities
             Rot = rot;
         }
 
+        public override void OnDeath()
+        {
+        }
+
         private BoneCollection GetBones()
         {
             Model model = World.Scene.Models.ToList().Find(m => m.DisplayName.Equals(Modelname));

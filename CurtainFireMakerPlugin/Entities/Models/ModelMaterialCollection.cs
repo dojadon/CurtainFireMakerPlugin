@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CurtainFireMakerPlugin.Collections;
 using CsPmx.Data;
+using VecMath;
+using System.Collections;
 
 namespace CurtainFireMakerPlugin.Entities.Models
 {
@@ -18,7 +21,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             World = world;
         }
 
-        public void SetupMaterialsAndTextures(PmxMaterialData[] materials, string[] textures)
+        public void SetupMaterials(PmxMaterialData[] materials, string[] textures)
         {
             foreach (var texture in textures)
             {
@@ -54,61 +57,88 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
         }
 
-        public List<int> CompressMaterial(PmxMorphData morph)
+        public List<int> CompressMaterial(List<PmxMorphData> morphList)
         {
-            int[] indices = Array.ConvertAll(morph.MorphArray, m => m.Index);
-            Array.Sort(indices);
+            var groupedMaterialIndices = new List<List<int>>();
 
-            var indicesList = new List<List<int>>();
-            List<int> currentList = null;
-
-            int lastIndex = indices[0];
-            foreach (int index in indices)
+            foreach (var morph in morphList)
             {
-                if (Math.Abs(index - lastIndex) == 1 && Equals(MaterialList[index], MaterialList[lastIndex]))
+                int[] indices = Array.ConvertAll(morph.MorphArray, m => m.Index);
+                Array.Sort(indices);
+
+                var materialDict = new MultiDictionary<int, int>();
+
+                foreach (int index in indices)
                 {
-                    ;
+                    materialDict.Add(GetHashCode(MaterialList[index]), index);
                 }
-                else
+
+                foreach (var materialIndices in materialDict.Values)
                 {
-                    if (currentList != null)
-                    {
-                        indicesList.Add(currentList);
-                    }
-                    currentList = new List<int>();
+                    groupedMaterialIndices.Add(materialIndices);
                 }
-                currentList.Add(index);
-                lastIndex = index;
             }
 
-            if (currentList != null && currentList.Count > 0)
+            return CompressGroupedMaterial(groupedMaterialIndices);
+
+            int GetHashCode(PmxMaterialData obj)
             {
-                indicesList.Add(currentList);
+                int result = 17;
+
+                result = result * 31 + obj.Ambient.GetHashCode();
+                result = result * 31 + obj.Diffuse.GetHashCode();
+                result = result * 31 + obj.Specular.GetHashCode();
+                result = result * 31 + obj.Shininess.GetHashCode();
+                result = result * 31 + obj.TextureId;
+                result = result * 31 + obj.SphereId;
+
+                return result;
             }
+        }
+
+        private List<int> CompressGroupedMaterial(List<List<int>> groupedMaterialIndices)
+        {
+            var vertexIndicesList = World.PmxModel.Vertices.IndexOfEachMaterialList;
+            var newVertexIndicesList = new List<List<int>>();
 
             var removeList = new List<int>();
 
-            foreach (var list in indicesList)
+            foreach (var materialIndices in groupedMaterialIndices)
             {
-                if (list.Count > 1)
-                {
-                    var compressedMaterial = MaterialList[list[0]];
+                var vertexIndices = vertexIndicesList[materialIndices[0]];
 
-                    for (int i = 1; i < list.Count; i++)
+                if (materialIndices.Count > 1)
+                {
+                    int addFaceCount = 0;
+
+                    for (int i = 1; i < materialIndices.Count; i++)
                     {
-                        compressedMaterial.FaceCount += MaterialList[list[i]].FaceCount;
-                        removeList.Add(list[i]);
+                        int index = materialIndices[i];
+
+                        addFaceCount += MaterialList[index].FaceCount;
+                        vertexIndices.AddRange(vertexIndicesList[index]);
+                        removeList.Add(index);
                     }
+
+                    MaterialList[materialIndices[0]].FaceCount += addFaceCount;
                 }
+                newVertexIndicesList.Add(vertexIndices);
             }
+
+            World.PmxModel.Vertices.IndexOfEachMaterialList.Clear();
+            World.PmxModel.Vertices.IndexOfEachMaterialList.AddRange(newVertexIndicesList);
+
+
+            var list = new List<int>();
+            foreach (var vertexIndices in newVertexIndicesList)
+            {
+                list.AddRange(vertexIndices);
+            }
+
+            World.PmxModel.Vertices.IndexList.Clear();
+            World.PmxModel.Vertices.IndexList.AddRange(list);
 
             return removeList;
-
-            bool Equals(PmxMaterialData x, PmxMaterialData y)
-            {
-                return x.Ambient == y.Ambient && x.Diffuse == y.Diffuse && x.Specular == y.Specular && x.Shininess == y.Shininess
-                && x.TextureId == y.TextureId && x.SphereId == y.SphereId;
-            }
         }
     }
 }

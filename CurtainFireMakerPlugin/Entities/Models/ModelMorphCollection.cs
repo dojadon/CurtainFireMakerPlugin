@@ -34,12 +34,12 @@ namespace CurtainFireMakerPlugin.Entities.Models
             MorphList.Add(morph);
         }
 
-        public void CompressMorph()
+        public void CompressMorph(ModelMaterialCollection materials)
         {
             CurtainFireMotion vmdMotion = World.VmdMotion;
 
             var typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
-            foreach (var morph in vmdMotion.MorphDict.Keys)
+            foreach (var morph in MorphList)
             {
                 typeMorphDict.Add(morph.MorphArray[0].GetMorphType(), morph);
             }
@@ -49,18 +49,21 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 Compress(morphList, vmdMotion.MorphDict);
             }
 
-            var removeMaterialIndices = new List<int>();
-            foreach (var morph in typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL])
+            typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
+            foreach (var morph in MorphList)
             {
-                removeMaterialIndices.AddRange(World.PmxModel.Materials.CompressMaterial(morph));
+                typeMorphDict.Add(morph.MorphArray[0].GetMorphType(), morph);
             }
+
+            var removeMaterialIndices = new List<int>();
+            removeMaterialIndices.AddRange(materials.CompressMaterial(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL]));
 
             RemoveElements(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL], removeMaterialIndices);
 
             removeMaterialIndices.Sort((a, b) => b - a);
             foreach (int index in removeMaterialIndices)
             {
-                World.PmxModel.Materials.MaterialList.RemoveAt(index);
+                materials.MaterialList.RemoveAt(index);
             }
         }
 
