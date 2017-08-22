@@ -34,7 +34,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             MorphList.Add(morph);
         }
 
-        public void CompressMorph(ModelMaterialCollection materials)
+        public void CompressMorph(ModelMaterialCollection materials, ModelVertexCollection vertices)
         {
             CurtainFireMotion vmdMotion = World.VmdMotion;
 
@@ -56,7 +56,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
 
             var removeMaterialIndices = new List<int>();
-            removeMaterialIndices.AddRange(materials.CompressMaterial(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL]));
+            removeMaterialIndices.AddRange(materials.CompressMaterial(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL], vertices));
 
             RemoveElements(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL], removeMaterialIndices);
 

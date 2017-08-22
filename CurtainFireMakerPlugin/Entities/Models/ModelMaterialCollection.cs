@@ -57,7 +57,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
         }
 
-        public List<int> CompressMaterial(List<PmxMorphData> morphList)
+        public List<int> CompressMaterial(List<PmxMorphData> morphList, ModelVertexCollection vertices)
         {
             var groupedMaterialIndices = new List<List<int>>();
 
@@ -79,7 +79,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 }
             }
 
-            return CompressGroupedMaterial(groupedMaterialIndices);
+            return CompressGroupedMaterial(groupedMaterialIndices, vertices);
 
             int GetHashCode(PmxMaterialData obj)
             {
@@ -96,9 +96,9 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
         }
 
-        private List<int> CompressGroupedMaterial(List<List<int>> groupedMaterialIndices)
+        private List<int> CompressGroupedMaterial(List<List<int>> groupedMaterialIndices, ModelVertexCollection vertices)
         {
-            var vertexIndicesList = World.PmxModel.Vertices.IndexOfEachMaterialList;
+            var vertexIndicesList = vertices.IndexOfEachMaterialList;
             var newVertexIndicesList = new List<List<int>>();
 
             var removeList = new List<int>();
@@ -127,7 +127,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
             World.PmxModel.Vertices.IndexOfEachMaterialList.Clear();
             World.PmxModel.Vertices.IndexOfEachMaterialList.AddRange(newVertexIndicesList);
-
 
             var list = new List<int>();
             foreach (var vertexIndices in newVertexIndicesList)
