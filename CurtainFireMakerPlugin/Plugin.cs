@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
+using IronPython.Runtime.Exceptions;
 
 namespace CurtainFireMakerPlugin
 {
@@ -40,7 +41,10 @@ namespace CurtainFireMakerPlugin
             {
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
-                    try { sw.WriteLine(PythonRunner.FormatException(e)); } catch { }
+                    if (e is IPythonException)
+                    {
+                        sw.WriteLine(PythonRunner.FormatException(e));
+                    }
                     sw.WriteLine(e);
                 }
             }
@@ -57,70 +61,64 @@ namespace CurtainFireMakerPlugin
         public Image Image => null;
         public Image SmallImage => null;
 
-        public void Dispose()
-        {
-            Config.Save();
-        }
+        public void Dispose() => Config.Save();
 
         public void Run(CommandArgs args)
         {
-            if (IsPlugin)
+            var form = new ExportSettingForm()
             {
-                var form = new ExportSettingForm()
+                ScriptPath = Config.ScriptPath,
+                ExportDirPath = Config.ExportDirPath,
+                ModelName = Config.ModelName,
+                ModelDescription = Config.ModelDescription,
+                KeepLogOpen = Config.KeepLogOpen
+            };
+            form.ShowDialog(ApplicationForm);
+
+            if (form.DialogResult == DialogResult.OK)
+            {
+                Config.ScriptPath = form.ScriptPath;
+                Config.ExportDirPath = form.ExportDirPath;
+                Config.ModelName = form.ModelName;
+                Config.ModelDescription = form.ModelDescription;
+                Config.KeepLogOpen = form.KeepLogOpen;
+
+                ProgressForm progressForm = new ProgressForm();
+
+                Task.Factory.StartNew(progressForm.ShowDialog);
+
+                StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
+                try
                 {
-                    ScriptPath = Config.ScriptPath,
-                    ExportDirPath = Config.ExportDirPath,
-                    ModelName = Config.ModelName,
-                    ModelDescription = Config.ModelDescription,
-                    KeepLogOpen = Config.KeepLogOpen
-                };
-                form.ShowDialog(ApplicationForm);
+                    Console.SetOut(sw);
+                    PythonRunner.SetOut(sw.BaseStream);
 
-                if (form.DialogResult == DialogResult.OK)
-                {
-                    Config.ScriptPath = form.ScriptPath;
-                    Config.ExportDirPath = form.ExportDirPath;
-                    Config.ModelName = form.ModelName;
-                    Config.ModelDescription = form.ModelDescription;
-                    Config.KeepLogOpen = form.KeepLogOpen;
+                    RunScript(Config.ScriptPath, progressForm);
 
-                    ProgressForm progressForm = new ProgressForm();
-
-                    Task.Factory.StartNew(progressForm.ShowDialog);
-
-                    StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8);
-                    try
+                    if (!Config.KeepLogOpen)
                     {
-                        Console.SetOut(sw);
-                        PythonRunner.SetOut(sw.BaseStream);
-
-                        RunScript(Config.ScriptPath, progressForm);
-
-                        if (!Config.KeepLogOpen)
-                        {
-                            progressForm.Dispose();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
-                        Console.WriteLine(e);
-                    }
-                    finally
-                    {
-                        sw.Dispose();
-
-                        StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
-                        Console.SetOut(standardOutput);
-                        PythonRunner.SetOut(standardOutput.BaseStream);
-
-                        if (!progressForm.IsDisposed)
-                            progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
+                        progressForm.Dispose();
                     }
                 }
-            }
-            else
-            {
+                catch (Exception e)
+                {
+                    if (e is IPythonException)
+                    {
+                        sw.WriteLine(PythonRunner.FormatException(e));
+                    }
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    sw.Dispose();
+
+                    StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+                    Console.SetOut(standardOutput);
+                    PythonRunner.SetOut(standardOutput.BaseStream);
+
+                    if (!progressForm.IsDisposed)
+                        progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
+                }
             }
         }
 

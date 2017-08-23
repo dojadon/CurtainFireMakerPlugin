@@ -13,22 +13,30 @@ namespace CurtainFireMakerPlugin.Entities
         private string BoneName { get; }
         private Vector3 InitializePos { get; }
 
+        public Model Model { get; }
+        public Bone Bone { get; }
+
         public EntityBone(World world, string modelName, string boneName) : base(world)
         {
-            Modelname = modelName;
-            BoneName = boneName;
-
-            Bone bone = GetBone();
-
-            BoneCollection bones = GetBones();
-
-            InitializePos = bone.InitialPosition;
-
-            if (bone.ParentBoneID != -1 && bones[bone.ParentBoneID] != null)
+            Model = World.Scene.Models.ToList().Find(m => m.DisplayName.Equals(Modelname));
+            if (Model == null)
             {
-                var parentBone = new EntityBone(world, Modelname, bones[bone.ParentBoneID].Name);
-                ParentEntity = parentBone;
-                InitializePos -= bones[bone.ParentBoneID].InitialPosition;
+                throw new ArgumentException($"Not found model : ({modelName}, {boneName})");
+            }
+
+            Bone = Model.Bones[boneName];
+            if (Bone == null)
+            {
+                throw new ArgumentException($"Not found bone : ({modelName}, {boneName})");
+            }
+
+            InitializePos = Bone.InitialPosition;
+
+            var parentBone = Model.Bones[Bone.ParentBoneID];
+            if (Bone.ParentBoneID != -1 && parentBone != null)
+            {
+                ParentEntity = new EntityBone(world, Modelname, parentBone.Name);
+                InitializePos -= parentBone.InitialPosition;
             }
 
             OnSpawn();
@@ -37,11 +45,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override void UpdatePos()
         {
-            Bone bone = GetBone();
             var pos = InitializePos;
             var rot = Quaternion.Identity;
 
-            foreach (var layer in bone.Layers)
+            foreach (var layer in Bone.Layers)
             {
                 MotionFrameData data = layer.Frames.GetFrame(World.FrameCount);
                 pos += data.Position;
@@ -54,35 +61,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override void OnDeath()
         {
-        }
-
-        private BoneCollection GetBones()
-        {
-            Model model = World.Scene.Models.ToList().Find(m => m.DisplayName.Equals(Modelname));
-
-            if (model != null)
-            {
-                return model.Bones;
-            }
-            else
-            {
-                throw new ApplicationException($"Not found model name : {Modelname}");
-            }
-        }
-
-        private Bone GetBone()
-        {
-            Bone bone = GetBones()[BoneName];
-
-            if (bone != null)
-            {
-                return bone;
-            }
-            else
-            {
-
-                throw new ApplicationException($"Not found bone name : {Modelname} : {BoneName}");
-            }
         }
     }
 }
