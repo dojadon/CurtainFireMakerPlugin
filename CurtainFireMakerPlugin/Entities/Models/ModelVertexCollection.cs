@@ -35,8 +35,8 @@ namespace CurtainFireMakerPlugin.Entities.Models
             {
                 vertex.VertexId = VertexList.Count;
                 vertex.BoneId = Array.ConvertAll(vertex.BoneId, i => i + boneCount);
+                VertexList.Add(vertex);
             }
-            VertexList.AddRange(vertices);
         }
     }
 }
