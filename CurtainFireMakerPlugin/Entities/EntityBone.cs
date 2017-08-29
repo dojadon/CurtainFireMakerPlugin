@@ -14,6 +14,8 @@ namespace CurtainFireMakerPlugin.Entities
         public Model Model { get; }
         public Bone Bone { get; }
 
+        public override Func<Entity, bool> DiedDecision { get => e => false; set { } }
+
         public EntityBone(World world, string modelName, string boneName) : base(world)
         {
             Model = World.Scene.Models.ToList().Find(m => m.DisplayName == modelName);

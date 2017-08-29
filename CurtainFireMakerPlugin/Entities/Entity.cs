@@ -16,8 +16,7 @@ namespace CurtainFireMakerPlugin.Entities
         public Vector3 WorldPos => WorldMat.TransformVec;
         public Quaternion WorldRot => WorldMat;
 
-        private Vector3 spawnPos = new Vector3();
-        public Vector3 SpawnPos => spawnPos;
+        public Vector3 SpawnPos { get; set; }
 
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
@@ -41,10 +40,7 @@ namespace CurtainFireMakerPlugin.Entities
         public int SpawnFrameNo { get; set; }
         public int DeathFrameNo { get; set; }
 
-        public virtual Func<Entity, bool> DiedDecision { get; set; } = e =>
-        {
-            return e.LivingLimit != 0 && e.FrameCount > e.LivingLimit || (e.Pos - e.SpawnPos).Length() > 400.0;
-        };
+        public virtual Func<Entity, bool> DiedDecision { get; set; } = e => e.LivingLimit != 0 && e.FrameCount > e.LivingLimit;
 
         public bool IsDeath { get; set; }
         public bool IsSpawned { get; set; }
@@ -127,7 +123,7 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual void OnSpawn()
         {
             SpawnFrameNo = World.AddEntity(this);
-            spawnPos = Pos;
+            SpawnPos = Pos;
             IsSpawned = true;
 
             SpawnEvent?.Invoke(this, EventArgs.Empty);
