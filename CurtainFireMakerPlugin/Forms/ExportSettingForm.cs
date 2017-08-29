@@ -13,26 +13,26 @@ namespace CurtainFireMakerPlugin.Forms
     {
         public string ScriptPath
         {
-            get { return this.scriptText.Text; }
+            get => scriptText.Text; 
             set
             {
-                this.scriptText.Text = value;
-                this.scriptFileDialog.FileName = value;
-                this.scriptFileDialog.InitialDirectory = Path.GetDirectoryName(value);
+                scriptText.Text = value;
+                scriptFileDialog.FileName = value;
+                scriptFileDialog.InitialDirectory = Path.GetDirectoryName(value);
+                ModelName = Path.GetFileNameWithoutExtension(value);
             }
         }
-        public string ModelName { get { return this.modelNameText.Text; } set { this.modelNameText.Text = value; } }
-        public string ModelDescription { get { return this.modelDescriptionText.Text; } set { this.modelDescriptionText.Text = value; } }
+        public string ModelName { get => modelNameText.Text; set => modelNameText.Text = value; }
+        public string ModelDescription { get => modelDescriptionText.Text; set => modelDescriptionText.Text = value; }
         public string ExportDirPath
         {
-            get { return this.exportDirText.Text; }
-            set
+            get => exportDirText.Text; set
             {
-                this.exportDirText.Text = value;
-                this.exportDirDialog.SelectedPath = value;
+                exportDirText.Text = value;
+                exportDirDialog.SelectedPath = value;
             }
         }
-        public bool KeepLogOpen { get { return this.checkBox1.Checked; } set { this.checkBox1.Checked = value; } }
+        public bool KeepLogOpen { get => checkBox1.Checked; set => checkBox1.Checked = value; }
 
         public ExportSettingForm()
         {
@@ -41,33 +41,33 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void Click_OK(object sender, EventArgs e)
         {
-            this.Close();
-            this.DialogResult = DialogResult.OK;
+            Close();
+            DialogResult = DialogResult.OK;
         }
 
         private void Click_Cancel(object sender, EventArgs e)
         {
-            this.Close();
-            this.DialogResult = DialogResult.Cancel;
+            Close();
+            DialogResult = DialogResult.Cancel;
         }
 
         private void Click_Script(object sender, EventArgs e)
         {
-            var result = this.scriptFileDialog.ShowDialog();
+            var result = scriptFileDialog.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                this.scriptText.Text = this.scriptFileDialog.FileName;
+                scriptText.Text = scriptFileDialog.FileName;
             }
         }
 
         private void Click_ExportDir(object sender, EventArgs e)
         {
-            var result = this.exportDirDialog.ShowDialog();
+            var result = exportDirDialog.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                this.exportDirText.Text = this.exportDirDialog.SelectedPath;
+                exportDirText.Text = exportDirDialog.SelectedPath;
             }
         }
     }
