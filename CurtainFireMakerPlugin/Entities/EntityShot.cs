@@ -125,8 +125,6 @@ namespace CurtainFireMakerPlugin.Entities
 
                     AddVmdMotion();
                 };
-
-                DiedDecision = e => (e.LivingLimit != 0 && e.FrameCount > e.LivingLimit) || (e.SpawnPos - e.Pos).Length() > 500;
             }
             catch (Exception e)
             {

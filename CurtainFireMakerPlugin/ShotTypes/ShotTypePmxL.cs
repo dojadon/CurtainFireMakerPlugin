@@ -27,7 +27,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             if (!ImageDict.ContainsKey(prop.Color))
             {
                 var image = new Bitmap(Plugin.Instance.Config.ResourceDirPath + "\\" + texture.Replace('/', '\\'));
-                this.SetPxcelColor(image, prop.Red, prop.Green, prop.Blue);
+                SetPxcelColor(image, prop.Red, prop.Green, prop.Blue);
                 ImageDict.Add(prop.Color, image);
 
                 wolrd.Export += (w, e) =>
