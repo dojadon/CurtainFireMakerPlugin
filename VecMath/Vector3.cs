@@ -119,5 +119,9 @@ namespace VecMath
         public static explicit operator DxMath.Vector3(Vector3 v1) => new DxMath.Vector3(v1.x, v1.y, v1.z);
 
         public static implicit operator Vector3(DxMath.Vector3 v1) => new Vector3(v1.X, v1.Y, v1.Z);
+
+        public static explicit operator float[] (Vector3 v1) => new float[] { v1.x, v1.y, v1.z };
+
+        public static implicit operator Vector3(float[] f) => new Vector3(f[0], f[1], f[2]);
     }
 }
