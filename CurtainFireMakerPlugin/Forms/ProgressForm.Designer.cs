@@ -55,7 +55,7 @@
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.ReadOnly = true;
             this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(358, 254);
+            this.logTextBox.Size = new System.Drawing.Size(358, 271);
             this.logTextBox.TabIndex = 1;
             // 
             // label
@@ -70,7 +70,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 308);
+            this.ClientSize = new System.Drawing.Size(382, 324);
             this.Controls.Add(this.label);
             this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.progressBar);
@@ -79,7 +79,9 @@
             this.Name = "ProgressForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "生成中";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProgressForm_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

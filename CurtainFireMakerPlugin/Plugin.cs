@@ -142,9 +142,17 @@ namespace CurtainFireMakerPlugin
             {
                 world.Frame();
                 form.Progress.PerformStep();
+
+                if (form.DialogResult == DialogResult.Cancel)
+                {
+                    break;
+                }
             }
 
-            world.Finish();
+            if (form.DialogResult != DialogResult.Cancel)
+            {
+                world.Finish();
+            }
         }
     }
 }
