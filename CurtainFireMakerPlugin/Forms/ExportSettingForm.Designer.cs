@@ -44,6 +44,7 @@
             this.scriptFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.exportDirDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +86,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.modelNameText);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(10, 88);
+            this.groupBox1.Location = new System.Drawing.Point(10, 86);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(1);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(456, 219);
@@ -157,7 +158,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(300, 311);
+            this.button4.Location = new System.Drawing.Point(300, 309);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 17;
@@ -167,7 +168,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(91, 311);
+            this.button3.Location = new System.Drawing.Point(91, 309);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 16;
@@ -183,18 +184,29 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(14, 55);
+            this.checkBox1.Location = new System.Drawing.Point(14, 63);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(128, 16);
             this.checkBox1.TabIndex = 22;
             this.checkBox1.Text = "ログを開いたままにする";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(339, 59);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(109, 23);
+            this.button2.TabIndex = 23;
+            this.button2.Text = "IronPython初期化";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Click_InitIronPython);
+            // 
             // ExportSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 344);
+            this.ClientSize = new System.Drawing.Size(476, 338);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button5);
@@ -232,5 +244,6 @@
         private System.Windows.Forms.OpenFileDialog scriptFileDialog;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.FolderBrowserDialog exportDirDialog;
+        private System.Windows.Forms.Button button2;
     }
 }

@@ -70,5 +70,10 @@ namespace CurtainFireMakerPlugin.Forms
                 exportDirText.Text = exportDirDialog.SelectedPath;
             }
         }
+
+        private void Click_InitIronPython(object sender, EventArgs e)
+        {
+            Plugin.Instance.InitIronPython();
+        }
     }
 }

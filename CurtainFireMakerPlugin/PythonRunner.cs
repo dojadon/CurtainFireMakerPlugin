@@ -11,10 +11,14 @@ namespace CurtainFireMakerPlugin
 {
     internal class PythonRunner
     {
-        private ScriptEngine Engine { get; }
-        private ScriptScope RootScope { get; }
+        private ScriptEngine Engine { get; set; }
+        private ScriptScope RootScope { get; set; }
 
-        public PythonRunner(string settingScriptPath, string[] modullesDirPaths)
+        public PythonRunner()
+        {
+        }
+
+        public void Init(string settingScriptPath, string[] modullesDirPaths)
         {
             Engine = Python.CreateEngine();
             RootScope = Engine.CreateScope();

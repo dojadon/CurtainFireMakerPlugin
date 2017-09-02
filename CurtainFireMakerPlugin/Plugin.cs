@@ -31,11 +31,12 @@ namespace CurtainFireMakerPlugin
             IsPlugin = isPlugin;
 
             Config = new Configuration(PluginRootPath + "\\config.xml");
+            PythonRunner = new PythonRunner();
 
             try
             {
                 Config.Load();
-                PythonRunner = new PythonRunner(Config.SettingScriptPath, Config.ModullesDirPaths);
+                InitIronPython();
             }
             catch (Exception e)
             {
@@ -48,6 +49,11 @@ namespace CurtainFireMakerPlugin
                     sw.WriteLine(e);
                 }
             }
+        }
+
+        public void InitIronPython()
+        {
+            PythonRunner.Init(Config.SettingScriptPath, Config.ModullesDirPaths);
         }
 
         public Guid GUID => new Guid();

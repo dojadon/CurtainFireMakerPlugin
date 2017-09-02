@@ -108,7 +108,6 @@ namespace SolidMath
                     });
                 }
             }
-
             return solid;
         }
     }
