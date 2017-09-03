@@ -5,13 +5,13 @@ using System.Text;
 using System.IO;
 using VecMath;
 
-namespace CurtainFireMakerPlugin.Solid
+namespace CurtainFireMakerPlugin.Solids
 {
     public class WavefrontLoader
     {
         public static void GetVertices(string filename, Action<Vector3> action)
         {
-            string text = File.ReadAllText(Plugin.Instance.Config.ResourceDirPath + "\\" + filename);
+            string text = File.ReadAllText(Plugin.Instance.Config.ResourceDirPath + "\\Wavefront\\" + filename);
             Parse(new StringReader(text), action);
         }
 
