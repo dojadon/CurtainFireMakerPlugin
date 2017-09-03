@@ -90,6 +90,7 @@
     <Compile Include="ShotTypes\ShotTypeList.cs" />
     <Compile Include="ShotTypes\ShotTypePmx.cs" />
     <Compile Include="ShotTypes\ShotTypePmxL.cs" />
+    <Compile Include="Solids\WavefrontLoader.cs" />
     <Compile Include="Tasks\TaskManager.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="World.cs" />
