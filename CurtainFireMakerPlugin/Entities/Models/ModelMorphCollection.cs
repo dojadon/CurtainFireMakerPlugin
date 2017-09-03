@@ -6,6 +6,7 @@ using CurtainFireMakerPlugin.Collections;
 using CsPmx;
 using CsPmx.Data;
 using CsVmd.Data;
+using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities.Models
 {
@@ -24,7 +25,25 @@ namespace CurtainFireMakerPlugin.Entities.Models
         {
             morph.MorphName = MorphList.Count.ToString();
             morph.Type = 4;
-            morph.MorphArray = ArrayUtil.Set(new PmxMorphMaterialData[appliedMaterialCount], i => new PmxMorphMaterialData());
+
+            morph.MorphArray = new PmxMorphMaterialData[appliedMaterialCount];
+
+            for (int i = 0; i < appliedMaterialCount; i++)
+            {
+                morph.MorphArray[i] = new PmxMorphMaterialData()
+                {
+                    CalcType = 0,
+                    Ambient = new Vector3(1, 1, 1),
+                    Diffuse = new Vector4(1, 1, 1, 0),
+                    Specular = new Vector3(1, 1, 1),
+                    Shininess = 1.0F,
+                    Edge = new Vector4(1, 1, 1, 1),
+                    EdgeThick = 1.0F,
+                    Texture = new Vector4(1, 1, 1, 1),
+                    SphereTexture = new Vector4(1, 1, 1, 1),
+                    ToonTexture = new Vector4(1, 1, 1, 1),
+                };
+            }
 
             for (int i = 0; i < appliedMaterialCount; i++)
             {
