@@ -22,16 +22,26 @@ namespace CurtainFireMakerPlugin.Entities.Models
             World = world;
         }
 
-        public void AddVmdMotion(VmdMotionFrameData motion)
+        public void AddVmdMotion(VmdMotionFrameData frameData)
         {
-            if (!motionList.Exists(m => m == null || m.BoneName.Equals(motion.BoneName) && m.KeyFrameNo == motion.KeyFrameNo))
+            if (frameData.KeyFrameNo < 0)
             {
-                motionList.Add(motion);
+                return;
+            }
+
+            if (!motionList.Exists(m => m.BoneName == frameData.BoneName && m.KeyFrameNo == frameData.KeyFrameNo))
+            {
+                motionList.Add(frameData);
             }
         }
 
         public void AddVmdMorph(VmdMorphFrameData frameData, PmxMorphData morph)
         {
+            if (frameData.KeyFrameNo < 0)
+            {
+                return;
+            }
+
             if (!MorphDict[morph].Exists(m => m.MorphName == frameData.MorphName && m.KeyFrameNo == frameData.KeyFrameNo))
             {
                 MorphDict[morph].Add(frameData);

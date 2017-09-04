@@ -135,7 +135,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         internal override void Frame()
         {
-            if (ShouldRecord)
+            if (ShouldRecord || World.FrameCount == 0)
             {
                 RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
             }

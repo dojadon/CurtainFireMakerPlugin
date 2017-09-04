@@ -138,6 +138,8 @@ namespace CurtainFireMakerPlugin
             form.Progress.Maximum = world.MaxFrame;
             form.Progress.Step = 1;
 
+            world.Init();
+
             for (int i = 0; i < world.MaxFrame; i++)
             {
                 world.Frame();
