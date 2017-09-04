@@ -111,9 +111,16 @@ namespace CurtainFireMakerPlugin.Entities
 
                 SpawnEvent += (sender, e) =>
                 {
-                    AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
-                    AddVmdMorph(0, 1.0F, MaterialMorph);
-                    AddVmdMorph(1, 0.0F, MaterialMorph);
+                    if(World.FrameCount < 0)
+                    {
+                        AddVmdMorph(-World.FrameCount, 0.0F, MaterialMorph);
+                    }
+                    else
+                    {
+                        AddVmdMorph(0, 1.0F, MaterialMorph);
+                        AddVmdMorph(1, 0.0F, MaterialMorph);
+                        AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
+                    }
 
                     AddVmdMotion();
                 };
