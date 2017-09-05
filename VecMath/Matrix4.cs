@@ -27,7 +27,7 @@ namespace VecMath
         public float m32;
         public float m33;
 
-        public Vector3 TransformVec
+        public Vector3 TranslationVec
         {
             get => new Vector3(m30, m31, m32);
             set
@@ -92,7 +92,7 @@ namespace VecMath
         public static Matrix4 Translation(Matrix3 m1, Vector3 trans)
         {
             Matrix4 m2 = m1;
-            m2.TransformVec += trans;
+            m2.TranslationVec += trans;
             return m2;
         }
 
@@ -181,7 +181,7 @@ namespace VecMath
             return ((Quaternion)m1) ^ exponent;
         }
 
-        public static Matrix4 Inverse(Matrix4 m1) => Translation(~(Matrix3)m1, m1.TransformVec);
+        public static Matrix4 Inverse(Matrix4 m1) => Translation(~(Matrix3)m1, m1.TranslationVec);
 
         public static Matrix4 Transpose(Matrix4 m1) => new Matrix4()
         {

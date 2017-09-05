@@ -13,10 +13,8 @@ namespace CurtainFireMakerPlugin.Entities
     public class Entity
     {
         public virtual Matrix4 WorldMat { get; set; }
-        public Vector3 WorldPos => WorldMat.TransformVec;
+        public Vector3 WorldPos => WorldMat.TranslationVec;
         public Quaternion WorldRot => WorldMat;
-
-        public Vector3 SpawnPos { get; set; }
 
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
@@ -123,7 +121,6 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual void OnSpawn()
         {
             SpawnFrameNo = World.AddEntity(this);
-            SpawnPos = Pos;
             IsSpawned = true;
 
             SpawnEvent?.Invoke(this, EventArgs.Empty);
