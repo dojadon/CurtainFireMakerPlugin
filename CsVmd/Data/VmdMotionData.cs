@@ -13,9 +13,9 @@ namespace CsVmd.Data
 
         public void Export(VmdExporter exporter)
         {
-            this.ExportVmdData(this.Header, exporter);
-            this.ExportVmdData(this.MotionArray, exporter);
-            this.ExportVmdData(this.MorphArray, exporter);
+            ExportVmdData(Header, exporter);
+            ExportVmdData(MotionArray, exporter);
+            ExportVmdData(MorphArray, exporter);
         }
 
         private void ExportVmdData<T>(T[] data, VmdExporter exporter) where T : IVmdData

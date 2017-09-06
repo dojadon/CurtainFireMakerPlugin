@@ -19,7 +19,7 @@ namespace CsPmx.Data
         public int ParentId { get; set; }
         /** 子(次)ボーンID. 末端の場合は0. */
         public int ArrowId { get; set; }
-        /** flags フラグが収められてる16 bit. {@link jp.sfjp.mikutoga.pmx.BoneFlags BoneFlags} 参照. */
+        /** flags フラグが収められてる16 bit. */
         public short Flag { get; set; }
         /** 外部親のID. */
         public int ExtraParentId { get; set; }
@@ -52,22 +52,22 @@ namespace CsPmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(this.BoneName);
-            exporter.WritePmxText(this.BoneNameE);
+            exporter.WritePmxText(BoneName);
+            exporter.WritePmxText(BoneNameE);
 
-            exporter.Write(this.Pos);
-            exporter.WritePmxId(PmxExporter.SIZE_BONE, this.ParentId);
+            exporter.Write(Pos);
+            exporter.WritePmxId(PmxExporter.SIZE_BONE, ParentId);
 
-            exporter.Write(this.Depth);
-            exporter.Write(this.Flag);
+            exporter.Write(Depth);
+            exporter.Write(Flag);
 
-            if (!BoneFlags.OFFSET.check(this.Flag))
+            if (!BoneFlags.OFFSET.Check(Flag))
             {
-                exporter.Write(this.PosOffset);
+                exporter.Write(PosOffset);
             }
             else
             {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.ArrowId);
+                exporter.WritePmxId(PmxExporter.SIZE_BONE, ArrowId);
             }
 
             //if (BoneFlags.ROTATE_LINK.check(this.flag) || BoneFlags.MOVE_LINK.check(this.flag))
@@ -122,61 +122,61 @@ namespace CsPmx.Data
 
         public void Parse(PmxParser parser)
         {
-            this.BoneName = parser.ReadPmxText();
-            this.BoneNameE = parser.ReadPmxText();
+            BoneName = parser.ReadPmxText();
+            BoneNameE = parser.ReadPmxText();
 
-            this.Pos = parser.ReadVector3();
-            this.ParentId = parser.ReadPmxId(parser.SizeBone);
+            Pos = parser.ReadVector3();
+            ParentId = parser.ReadPmxId(parser.SizeBone);
 
-            this.Depth = parser.ReadInt32();
-            this.Flag = parser.ReadInt16();
+            Depth = parser.ReadInt32();
+            Flag = parser.ReadInt16();
 
-            if (!BoneFlags.OFFSET.check(this.Flag))
+            if (!BoneFlags.OFFSET.Check(Flag))
             {
-                this.PosOffset = parser.ReadVector3();
+                PosOffset = parser.ReadVector3();
             }
             else
             {
-                this.ArrowId = parser.ReadPmxId(parser.SizeBone);
+                ArrowId = parser.ReadPmxId(parser.SizeBone);
             }
 
-            if (BoneFlags.ROTATE_LINK.check(this.Flag) || BoneFlags.MOVE_LINK.check(this.Flag))
+            if (BoneFlags.ROTATE_LINK.Check(Flag) || BoneFlags.MOVE_LINK.Check(Flag))
             {
-                this.LinkParent = parser.ReadPmxId(parser.SizeBone);
-                this.Rate = parser.ReadSingle();
+                LinkParent = parser.ReadPmxId(parser.SizeBone);
+                Rate = parser.ReadSingle();
             }
 
-            if (BoneFlags.AXIS_ROTATE.check(this.Flag))
+            if (BoneFlags.AXIS_ROTATE.Check(Flag))
             {
-                this.AxisVec = parser.ReadVector3();
+                AxisVec = parser.ReadVector3();
             }
 
-            if (BoneFlags.LOCAL_AXIS.check(this.Flag))
+            if (BoneFlags.LOCAL_AXIS.Check(Flag))
             {
-                this.LocalAxisVecX = parser.ReadVector3();
-                this.LocalAxisVecZ = parser.ReadVector3();
+                LocalAxisVecX = parser.ReadVector3();
+                LocalAxisVecZ = parser.ReadVector3();
             }
 
-            if (BoneFlags.EXTRA.check(this.Flag))
+            if (BoneFlags.EXTRA.Check(Flag))
             {
-                this.ExtraParentId = parser.ReadInt32();
+                ExtraParentId = parser.ReadInt32();
             }
 
-            if (BoneFlags.IK.check(this.Flag))
+            if (BoneFlags.IK.Check(Flag))
             {
-                this.IkTargetId = parser.ReadPmxId(parser.SizeBone);
+                IkTargetId = parser.ReadPmxId(parser.SizeBone);
 
-                this.IkDepth = parser.ReadInt32();
-                this.AngleLimit = parser.ReadSingle();
+                IkDepth = parser.ReadInt32();
+                AngleLimit = parser.ReadSingle();
 
                 int boneNum = parser.ReadInt32();
-                this.IkChilds = new int[boneNum];
-                this.IkAngleMin = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
-                this.IkAngleMax = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
+                IkChilds = new int[boneNum];
+                IkAngleMin = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
+                IkAngleMax = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
 
                 for (int i = 0; i < boneNum; i++)
                 {
-                    this.IkChilds[i] = parser.ReadPmxId(parser.SizeBone);
+                    IkChilds[i] = parser.ReadPmxId(parser.SizeBone);
 
                     int limit = parser.ReadByte();
 
@@ -236,7 +236,7 @@ namespace CsPmx.Data
          */
         private BoneFlags(short code)
         {
-            this.encoded = code;
+            encoded = code;
         }
 
         /**
@@ -244,13 +244,13 @@ namespace CsPmx.Data
          * @param code short値
          * @return デコードされた列挙子。該当するものがなければnull
          */
-        public static BoneFlags decode(short code)
+        public static BoneFlags Decode(short code)
         {
             BoneFlags result = null;
 
             foreach (BoneFlags type in FLAGS)
             {
-                if (type.encode() == code)
+                if (type.Encode() == code)
                 {
                     result = type;
                     break;
@@ -264,9 +264,9 @@ namespace CsPmx.Data
          * short値にエンコードする。
          * @return short値
          */
-        public short encode()
+        public short Encode()
         {
-            return this.encoded;
+            return encoded;
         }
 
         /**
@@ -274,9 +274,9 @@ namespace CsPmx.Data
          * @param objective テスト対象.
          * @return on なら true
          */
-        public bool check(short objective)
+        public bool Check(short objective)
         {
-            return ((objective & this.encoded) > 0);
+            return ((objective & encoded) > 0);
         }
     }
 }

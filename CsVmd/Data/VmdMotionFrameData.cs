@@ -20,11 +20,11 @@ namespace CsVmd.Data
 
         public void Export(VmdExporter exporter)
         {
-            exporter.WriteVmdText(this.BoneName, VmdExporter.BONE_NAME_LENGTH);
-            exporter.Write(this.KeyFrameNo);
-            exporter.Write(this.Pos);
-            exporter.Write(this.Rot);
-            this.ExportInterpolateData(exporter);
+            exporter.WriteVmdText(BoneName, VmdExporter.BONE_NAME_LENGTH);
+            exporter.Write(KeyFrameNo);
+            exporter.Write(Pos);
+            exporter.Write(Rot);
+            ExportInterpolateData(exporter);
         }
 
         private void ExportInterpolateData(VmdExporter exporter)

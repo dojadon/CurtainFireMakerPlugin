@@ -33,15 +33,15 @@ namespace CsPmx
             switch (size)
             {
                 case 1:
-                    this.Write((byte)id);
+                    Write((byte)id);
                     break;
 
                 case 2:
-                    this.Write((short)id);
+                    Write((short)id);
                     break;
 
                 case 4:
-                    this.Write((int)id);
+                    this.Write(id);
                     break;
             }
             return this;
@@ -56,37 +56,37 @@ namespace CsPmx
 
             byte[] bytes = ENCORDER.GetBytes(text.ToCharArray());
 
-            this.Write(bytes.Length);
-            this.Write(bytes);
+            Write(bytes.Length);
+            Write(bytes);
         }
 
         public void Write(Vector2 vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
+            Write(vec.x);
+            Write(vec.y);
         }
 
         public void Write(Vector3 vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
-            this.Write(vec.z);
+            Write(vec.x);
+            Write(vec.y);
+            Write(vec.z);
         }
 
         public void Write(Vector4 vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
-            this.Write(vec.z);
-            this.Write(vec.w);
+            Write(vec.x);
+            Write(vec.y);
+            Write(vec.z);
+            Write(vec.w);
         }
 
         public void Write(Quaternion vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
-            this.Write(vec.z);
-            this.Write(vec.w);
+            Write(vec.x);
+            Write(vec.y);
+            Write(vec.z);
+            Write(vec.w);
         }
     }
 }

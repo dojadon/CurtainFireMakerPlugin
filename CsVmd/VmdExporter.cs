@@ -30,31 +30,31 @@ namespace CsVmd
 
         public void Write(Vector2 vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
+            Write(vec.x);
+            Write(vec.y);
         }
 
         public void Write(Vector3 vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
-            this.Write(vec.z);
+            Write(vec.x);
+            Write(vec.y);
+            Write(vec.z);
         }
 
         public void Write(Vector4 vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
-            this.Write(vec.z);
-            this.Write(vec.w);
+            Write(vec.x);
+            Write(vec.y);
+            Write(vec.z);
+            Write(vec.w);
         }
 
         public void Write(Quaternion vec)
         {
-            this.Write(vec.x);
-            this.Write(vec.y);
-            this.Write(vec.z);
-            this.Write(vec.w);
+            Write(vec.x);
+            Write(vec.y);
+            Write(vec.z);
+            Write(vec.w);
         }
 
         private void WriteFiller(byte[] filler, int fillerLength)
@@ -78,12 +78,12 @@ namespace CsVmd
         {
             byte[] bytes = ENCORDING.GetBytes(str);
 
-            this.Write(bytes);
+            Write(bytes);
 
             int remain = fixedLength - bytes.Length;
             if (remain > 0)
             {
-                this.WriteFiller(NULL_STR, remain);
+                WriteFiller(NULL_STR, remain);
             }
         }
     }

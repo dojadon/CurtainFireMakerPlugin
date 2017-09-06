@@ -13,7 +13,7 @@ namespace CsVmd.Data
         public void Export(VmdExporter exporter)
         {
             exporter.WriteVmdText(HEADER, VmdExporter.HEADER_LENGTH);
-            exporter.WriteVmdText(this.ModelName, VmdExporter.MODEL_NAME_LENGTH);
+            exporter.WriteVmdText(ModelName, VmdExporter.MODEL_NAME_LENGTH);
         }
     }
 }
