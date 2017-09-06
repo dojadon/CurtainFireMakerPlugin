@@ -7,8 +7,8 @@ namespace CurtainFireMakerPlugin.Tasks
 {
     public class Task
     {
-        private Action<Task> state;
-        private Action<Task> task;
+        private Action<Task> State { get; set; }
+        private Action<Task> Action { get; set; }
 
         public int Interval { get; set; }
         public int UpdateCount { get; set; }
@@ -21,45 +21,45 @@ namespace CurtainFireMakerPlugin.Tasks
 
         public Task(Action<Task> task, int interval, int executionTimes, int waitTime)
         {
-            this.task = task;
-            this.Interval = this.UpdateCount = interval;
-            this.ExecutionTimes = executionTimes;
-            this.WaitTime = waitTime;
+            Action = task;
+            Interval = UpdateCount = interval;
+            ExecutionTimes = executionTimes;
+            WaitTime = waitTime;
 
-            this.state = waitTime > 0 ? WAITING : ACTIVE;
+            State = waitTime > 0 ? WAITING : ACTIVE;
         }
 
         public void Update()
         {
-            this.state(this);
+            State(this);
         }
 
         private void Run()
         {
-            this.task(this);
+            Action(this);
         }
 
         public Boolean IsFinished()
         {
-            return this.state == FINISHED;
+            return State == FINISHED;
         }
 
         private static Action<Task> WAITING = (task) =>
         {
             if (++task.WaitCount >= task.WaitTime)
             {
-                task.state = ACTIVE;
+                task.State = ACTIVE;
             }
         };
         private static Action<Task> ACTIVE = (task) =>
         {
-            if (++task.UpdateCount >= task.Interval)
+            if (++task.UpdateCount > task.Interval)
             {
                 task.UpdateCount = 0;
 
                 if (++task.RunCount > task.ExecutionTimes && task.ExecutionTimes != 0)
                 {
-                    task.state = FINISHED;
+                    task.State = FINISHED;
                 }
                 else
                 {
