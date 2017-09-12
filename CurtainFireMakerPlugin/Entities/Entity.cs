@@ -12,12 +12,13 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity
     {
-        public virtual Matrix4 WorldMat { get; set; }
-        public Vector3 WorldPos => WorldMat.TranslationVec;
-        public Quaternion WorldRot => WorldMat;
+        public virtual Matrix4 WorldMat { get; set; } = Matrix4.Identity;
+        public Vector3 WorldPos => WorldMat.Translation;
+        public Matrix3 WorldRot => WorldMat;
 
-        public virtual Vector3 Pos { get; set; }
-        public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
+        public virtual Matrix4 LocalMat { get; set; } = Matrix4.Identity;
+        public virtual Vector3 Pos { get => LocalMat.Translation; set => LocalMat = Matrix4.SetTranslation(LocalMat, value); }
+        public virtual Matrix3 Rot { get => LocalMat; set => LocalMat = Matrix4.SetRotation(LocalMat, value); }
 
         public virtual Vector3 Velocity { get; set; }
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
@@ -105,7 +106,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdateWorldMat()
         {
-            WorldMat = Matrix4.Translation(Rot, Pos);
+            WorldMat = LocalMat;
 
             if (ParentEntity != null)
             {

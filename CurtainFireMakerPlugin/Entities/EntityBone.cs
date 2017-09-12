@@ -56,7 +56,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
 
             Pos = pos;
-            Rot = rot;
+            Rot = (VecMath.Quaternion)rot;
         }
 
         public override void OnDeath()

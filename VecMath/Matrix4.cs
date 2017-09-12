@@ -27,7 +27,27 @@ namespace VecMath
         public float m32;
         public float m33;
 
-        public Vector3 TranslationVec
+        public Matrix3 Rotation
+        {
+            get => this;
+            set
+            {
+                m00 = value.m00;
+                m01 = value.m01;
+                m02 = value.m02;
+
+                m10 = value.m10;
+                m11 = value.m11;
+                m12 = value.m12;
+
+                m20 = value.m20;
+                m21 = value.m21;
+                m22 = value.m22;
+            }
+        }
+
+
+        public Vector3 Translation
         {
             get => new Vector3(m30, m31, m32);
             set
@@ -89,11 +109,16 @@ namespace VecMath
         {
         }
 
-        public static Matrix4 Translation(Matrix3 m1, Vector3 trans)
+        public static Matrix4 SetTranslation(Matrix4 m1, Vector3 trans)
         {
-            Matrix4 m2 = m1;
-            m2.TranslationVec += trans;
-            return m2;
+            m1.Translation = trans;
+            return m1;
+        }
+
+        public static Matrix4 SetRotation(Matrix4 m1, Matrix3 m2)
+        {
+            m1.Rotation = m2;
+            return m1;
         }
 
         public static Matrix4 RotationQuaternion(Quaternion q)
@@ -181,7 +206,7 @@ namespace VecMath
             return ((Quaternion)m1) ^ exponent;
         }
 
-        public static Matrix4 Inverse(Matrix4 m1) => Translation(~(Matrix3)m1, m1.TranslationVec);
+        public static Matrix4 Inverse(Matrix4 m1) => SetTranslation(~(Matrix3)m1, -m1.Translation);
 
         public static Matrix4 Transpose(Matrix4 m1) => new Matrix4()
         {
@@ -337,70 +362,6 @@ namespace VecMath
                 m32 = src[index++],
                 m33 = src[index++]
             };
-        }
-
-        public static implicit operator Matrix4(float[,] d)
-        {
-            var m = new Matrix4();
-
-            int index1 = 0;
-            int index2 = 0;
-            m.m00 = d[index2, index1++];
-            m.m01 = d[index2, index1++];
-            m.m02 = d[index2, index1++];
-            m.m03 = d[index2++, index1++];
-
-            index1 = 0;
-            m.m10 = d[index2, index1++];
-            m.m11 = d[index2, index1++];
-            m.m12 = d[index2, index1++];
-            m.m13 = d[index2++, index1++];
-
-            index1 = 0;
-            m.m20 = d[index2, index1++];
-            m.m21 = d[index2, index1++];
-            m.m22 = d[index2, index1++];
-            m.m23 = d[index2++, index1++];
-
-            index1 = 0;
-            m.m30 = d[index2, index1++];
-            m.m31 = d[index2, index1++];
-            m.m32 = d[index2, index1++];
-            m.m33 = d[index2++, index1++];
-
-            return m;
-        }
-
-        public static explicit operator float[,] (Matrix4 m)
-        {
-            float[,] result = new float[4, 4];
-
-            int index1 = 0;
-            int index2 = 0;
-            result[index2, index1++] = m.m00;
-            result[index2, index1++] = m.m01;
-            result[index2, index1++] = m.m02;
-            result[index2++, index1++] = m.m03;
-
-            index1 = 0;
-            result[index2, index1++] = m.m10;
-            result[index2, index1++] = m.m11;
-            result[index2, index1++] = m.m12;
-            result[index2++, index1++] = m.m13;
-
-            index1 = 0;
-            result[index2, index1++] = m.m20;
-            result[index2, index1++] = m.m21;
-            result[index2, index1++] = m.m22;
-            result[index2++, index1++] = m.m23;
-
-            index1 = 0;
-            result[index2, index1++] = m.m30;
-            result[index2, index1++] = m.m31;
-            result[index2, index1++] = m.m32;
-            result[index2++, index1++] = m.m33;
-
-            return result;
         }
     }
 }

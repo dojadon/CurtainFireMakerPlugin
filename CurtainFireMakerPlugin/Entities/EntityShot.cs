@@ -70,10 +70,10 @@ namespace CurtainFireMakerPlugin.Entities
             set => IsUpdatedPos |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
         }
 
-        public override Quaternion Rot
+        public override Matrix3 Rot
         {
             get => base.Rot;
-            set => IsUpdatedPos |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
+            set => IsUpdatedPos |= !Matrix3.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
         private bool recordWhenVelocityChanges = true;

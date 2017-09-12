@@ -181,6 +181,20 @@ namespace VecMath
             z = v1.x * m1.m02 + v1.y * m1.m12 + v1.z * m1.m22
         };
 
+        public static bool EpsilonEquals(Matrix3 m1, Matrix3 m2, float epsilon)
+        {
+            float diff;
+            float[] f1 = (float[])m1;
+            float[] f2 = (float[])m2;
+
+            for (int i = 0; i < 16; i++)
+            {
+                diff = f1[i] - f2[i];
+                if ((diff < 0 ? -diff : diff) > epsilon) return false;
+            }
+            return true;
+        }
+
         public float Det() => m00 * m11 * m22 + m01 * m12 * m21 + m02 * m10 * m21 - m02 * m11 * m21 - m01 * m10 * m22 - m00 * m12 * m21;
 
         public override string ToString() => $"[{m00}, {m01}, {m02}]\n[{m10}, {m11}, {m12}]\n[{m20}, {m21}, {m22}]";
@@ -198,5 +212,44 @@ namespace VecMath
         public static implicit operator Matrix3(Quaternion q1) => RotationQuaternion(q1);
 
         public static implicit operator Matrix3(Matrix4 m) => new Matrix3(m.m00, m.m01, m.m02, m.m10, m.m11, m.m12, m.m20, m.m21, m.m22);
+
+        public static explicit operator float[] (Matrix3 m)
+        {
+            var result = new float[16];
+
+            int index = 0;
+            result[index++] = m.m00;
+            result[index++] = m.m01;
+            result[index++] = m.m02;
+
+            result[index++] = m.m10;
+            result[index++] = m.m11;
+            result[index++] = m.m12;
+
+            result[index++] = m.m20;
+            result[index++] = m.m21;
+            result[index++] = m.m22;
+
+            return result;
+        }
+
+        public static implicit operator Matrix3(float[] src)
+        {
+            int index = 0;
+            return new Matrix3()
+            {
+                m00 = src[index++],
+                m01 = src[index++],
+                m02 = src[index++],
+
+                m10 = src[index++],
+                m11 = src[index++],
+                m12 = src[index++],
+
+                m20 = src[index++],
+                m21 = src[index++],
+                m22 = src[index++],
+            };
+        }
     }
 }
