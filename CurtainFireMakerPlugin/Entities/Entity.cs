@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual Matrix4 LocalMat { get; set; } = Matrix4.Identity;
         public virtual Vector3 Pos { get => LocalMat.Translation; set => LocalMat = Matrix4.SetTranslation(LocalMat, value); }
-        public virtual Matrix3 Rot { get => LocalMat; set => LocalMat = Matrix4.SetRotation(LocalMat, value); }
+        public virtual Matrix3 Rot { get => LocalMat; set => LocalMat = Matrix4.SetTranslation(value, LocalMat.Translation); }
 
         public virtual Vector3 Velocity { get; set; }
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
@@ -30,6 +30,7 @@ namespace CurtainFireMakerPlugin.Entities
             set
             {
                 parentEntity = value;
+                value.UpdateWorldMat();
                 UpdateWorldMat();
             }
         }

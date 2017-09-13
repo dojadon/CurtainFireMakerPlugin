@@ -64,16 +64,14 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public override Vector3 Pos
+        public override Matrix4 LocalMat
         {
-            get => base.Pos;
-            set => IsUpdatedPos |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
-        }
-
-        public override Matrix3 Rot
-        {
-            get => base.Rot;
-            set => IsUpdatedPos |= !Matrix3.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
+            get => base.LocalMat;
+            set
+            {
+                IsUpdatedPos |= !Matrix4.EpsilonEquals(base.LocalMat, value, Epsilon);
+                base.LocalMat = value;
+            }
         }
 
         private bool recordWhenVelocityChanges = true;
@@ -111,7 +109,7 @@ namespace CurtainFireMakerPlugin.Entities
 
                 SpawnEvent += (sender, e) =>
                 {
-                    if(World.FrameCount < 0)
+                    if (World.FrameCount < 0)
                     {
                         AddVmdMorph(-World.FrameCount, 0.0F, MaterialMorph);
                     }
@@ -153,9 +151,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override void UpdateRot()
         {
-            if (RecordWhenVelocityChanges)
+            if (RecordWhenVelocityChanges && Velocity != Vector3.Zero)
             {
-                Rot = Matrix4.LookAt(+Velocity, +Upward);
+                Rot = Matrix3.LookAt(+Velocity, +Upward);
             }
             base.UpdateRot();
         }

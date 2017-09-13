@@ -14,7 +14,6 @@ namespace CurtainFireMakerPlugin
     public class World
     {
         public int MaxFrame { get; set; } = 1000;
-        public int StartFrame { get; set; } = 0;
         public Scene Scene => Plugin.Instance.Scene;
 
         private List<Entity> addEntityList = new List<Entity>();
@@ -73,7 +72,6 @@ namespace CurtainFireMakerPlugin
 
         internal void Init()
         {
-            FrameCount = StartFrame;
         }
 
         internal void Frame()
