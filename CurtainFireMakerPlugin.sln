@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsVmd", "CsVmd\CsVmd.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VecMath", "VecMath\VecMath.csproj", "{454BE0AA-4FAB-4DF4-842A-DA450652C5EC}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "CurtainFireScript", "CurtainFireScript\CurtainFireScript.pyproj", "{B12E942B-A8AC-41E3-9840-A9A0D67531DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,14 @@ Global
 		{454BE0AA-4FAB-4DF4-842A-DA450652C5EC}.Release|x64.Build.0 = Release|Any CPU
 		{454BE0AA-4FAB-4DF4-842A-DA450652C5EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{454BE0AA-4FAB-4DF4-842A-DA450652C5EC}.Release|x86.Build.0 = Release|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Release|ARM.ActiveCfg = Release|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Release|x64.ActiveCfg = Release|Any CPU
+		{B12E942B-A8AC-41E3-9840-A9A0D67531DC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

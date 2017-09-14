@@ -42,10 +42,13 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.scriptFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.keepLogOpenCheckBox = new System.Windows.Forms.CheckBox();
             this.exportDirDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.button2 = new System.Windows.Forms.Button();
+            this.StartFrameNumeric = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StartFrameNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // label5
@@ -86,7 +89,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.modelNameText);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(10, 86);
+            this.groupBox1.Location = new System.Drawing.Point(10, 138);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(1);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(456, 219);
@@ -158,7 +161,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(300, 309);
+            this.button4.Location = new System.Drawing.Point(300, 361);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 17;
@@ -168,7 +171,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(91, 309);
+            this.button3.Location = new System.Drawing.Point(91, 361);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 16;
@@ -181,19 +184,19 @@
             this.scriptFileDialog.FileName = "openFileDialog1";
             this.scriptFileDialog.Filter = "|*.py";
             // 
-            // checkBox1
+            // keepLogOpenCheckBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(14, 63);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(128, 16);
-            this.checkBox1.TabIndex = 22;
-            this.checkBox1.Text = "ログを開いたままにする";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.keepLogOpenCheckBox.AutoSize = true;
+            this.keepLogOpenCheckBox.Location = new System.Drawing.Point(14, 115);
+            this.keepLogOpenCheckBox.Name = "keepLogOpenCheckBox";
+            this.keepLogOpenCheckBox.Size = new System.Drawing.Size(128, 16);
+            this.keepLogOpenCheckBox.TabIndex = 22;
+            this.keepLogOpenCheckBox.Text = "ログを開いたままにする";
+            this.keepLogOpenCheckBox.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(339, 59);
+            this.button2.Location = new System.Drawing.Point(339, 111);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(109, 23);
             this.button2.TabIndex = 23;
@@ -201,13 +204,31 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Click_InitIronPython);
             // 
+            // StartFrameNumeric
+            // 
+            this.StartFrameNumeric.Location = new System.Drawing.Point(14, 77);
+            this.StartFrameNumeric.Name = "StartFrameNumeric";
+            this.StartFrameNumeric.Size = new System.Drawing.Size(108, 19);
+            this.StartFrameNumeric.TabIndex = 24;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(16, 62);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 12);
+            this.label2.TabIndex = 25;
+            this.label2.Text = "開始フレーム";
+            // 
             // ExportSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 338);
+            this.ClientSize = new System.Drawing.Size(476, 392);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.StartFrameNumeric);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.keepLogOpenCheckBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.scriptText);
@@ -221,6 +242,7 @@
             this.Text = "出力設定";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StartFrameNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -242,8 +264,10 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.OpenFileDialog scriptFileDialog;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox keepLogOpenCheckBox;
         private System.Windows.Forms.FolderBrowserDialog exportDirDialog;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.NumericUpDown StartFrameNumeric;
+        private System.Windows.Forms.Label label2;
     }
 }

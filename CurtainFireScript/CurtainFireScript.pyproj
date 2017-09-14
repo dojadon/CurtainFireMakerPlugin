@@ -1,0 +1,75 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>b12e942b-a8ac-41e3-9840-a9a0d67531dc</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>..\..\..\..\tool\model\MikuMikuMoving64_v1275\System\x64</SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <InterpreterId>IronPython|2.7-32</InterpreterId>
+    <LaunchProvider>IronPython (.NET) launcher</LaunchProvider>
+    <OutputPath>.</OutputPath>
+    <Name>CurtainFireScript</Name>
+    <RootNamespace>CurtainFireScript</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <InterpreterReference Include="IronPython|2.7-32" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CurtainFireMakerPlugin\CurtainFireMakerPlugin.csproj">
+      <Name>CurtainFireMakerPlugin</Name>
+      <Project>{cc28360b-ab53-4d9f-bed6-74e652c9ced0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\VecMath\VecMath.csproj">
+      <Name>VecMath</Name>
+      <Project>{454be0aa-4fab-4df4-842a-da450652c5ec}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Script\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Script\template.py" />
+    <Compile Include="Script\「エンシェントデューパー」.py" />
+    <Compile Include="Script\「グランギニョル座の怪人」.py" />
+    <Compile Include="Script\「スカーレットディスティニー」.py" />
+    <Compile Include="Script\「デフレーションワールド」.py" />
+    <Compile Include="Script\「フェニックス再誕」.py" />
+    <Compile Include="Script\「ブラインドナイトバード」.py" />
+    <Compile Include="Script\「ブレイジングスター」.py" />
+    <Compile Include="Script\「夢想天生」.py" />
+    <Compile Include="Script\「天網蜘網捕蝶の法」.py" />
+    <Compile Include="Script\「季節外れのバタフライストーム」.py" />
+    <Compile Include="Script\「幻朧月睨」.py" />
+    <Compile Include="Script\「待宵反射衛星斬」.py" />
+    <Compile Include="Script\「日出ずる国の天子」.py" />
+    <Compile Include="Script\「深弾幕結界 -夢幻泡影-」.py" />
+    <Compile Include="Script\「深弾幕結界 -夢幻泡影-」last.py" />
+    <Compile Include="Script\「無何有浄化」.py" />
+    <Compile Include="Script\「蓬莱の樹海」.py" />
+    <Compile Include="Script\「西行寺無余涅槃」.py" />
+    <Compile Include="Script\マインドアミュレット.py" />
+    <Compile Include="Script\回霊「夢想封印　侘」.py" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

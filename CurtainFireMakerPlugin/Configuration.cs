@@ -55,6 +55,9 @@ namespace CurtainFireMakerPlugin
             set => NodeExport.InnerText = MightMakeRelative(value);
         }
 
+        private XmlNode NodeStartFrame => RootNode.SelectSingleNode("StartFrame");
+        public int StartFrame { get => int.Parse(NodeStartFrame.InnerText); set => NodeStartFrame.InnerText = value.ToString(); }
+
         private XmlNode NodeModel => RootNode.SelectSingleNode("Model");
 
         private XmlNode NodeModelName => NodeModel.SelectSingleNode("Name");

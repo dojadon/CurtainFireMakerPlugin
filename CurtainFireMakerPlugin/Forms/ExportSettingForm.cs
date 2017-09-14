@@ -13,13 +13,12 @@ namespace CurtainFireMakerPlugin.Forms
     {
         public string ScriptPath
         {
-            get => scriptText.Text; 
+            get => scriptText.Text;
             set
             {
                 scriptText.Text = value;
                 scriptFileDialog.FileName = value;
                 scriptFileDialog.InitialDirectory = Path.GetDirectoryName(value);
-                ModelName = Path.GetFileNameWithoutExtension(value);
             }
         }
         public string ModelName { get => modelNameText.Text; set => modelNameText.Text = value; }
@@ -32,7 +31,8 @@ namespace CurtainFireMakerPlugin.Forms
                 exportDirDialog.SelectedPath = value;
             }
         }
-        public bool KeepLogOpen { get => checkBox1.Checked; set => checkBox1.Checked = value; }
+        public bool KeepLogOpen { get => keepLogOpenCheckBox.Checked; set => keepLogOpenCheckBox.Checked = value; }
+        public int StartFrame { get => (int)StartFrameNumeric.Value; set => StartFrameNumeric.Value = value; }
 
         public ExportSettingForm()
         {

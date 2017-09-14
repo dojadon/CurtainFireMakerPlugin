@@ -77,7 +77,8 @@ namespace CurtainFireMakerPlugin
                 ExportDirPath = Config.ExportDirPath,
                 ModelName = Config.ModelName,
                 ModelDescription = Config.ModelDescription,
-                KeepLogOpen = Config.KeepLogOpen
+                KeepLogOpen = Config.KeepLogOpen,
+                StartFrame = Config.StartFrame
             };
             form.ShowDialog(ApplicationForm);
 
@@ -88,6 +89,7 @@ namespace CurtainFireMakerPlugin
                 Config.ModelName = form.ModelName;
                 Config.ModelDescription = form.ModelDescription;
                 Config.KeepLogOpen = form.KeepLogOpen;
+                Config.StartFrame = form.StartFrame;
 
                 ProgressForm progressForm = new ProgressForm();
 
@@ -131,6 +133,7 @@ namespace CurtainFireMakerPlugin
         public void RunScript(string path, ProgressForm form)
         {
             var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptPath));
+            world.FrameCount = Config.StartFrame;
 
             PythonRunner.RunScript(path, world);
 
