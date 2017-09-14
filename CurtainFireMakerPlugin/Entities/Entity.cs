@@ -12,28 +12,18 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity
     {
-        public virtual Matrix4 WorldMat { get; set; } = Matrix4.Identity;
+        public virtual Matrix4 WorldMat => ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
         public Vector3 WorldPos => WorldMat.Translation;
         public Matrix3 WorldRot => WorldMat;
 
-        public virtual Matrix4 LocalMat { get; set; } = Matrix4.Identity;
-        public virtual Vector3 Pos { get => LocalMat.Translation; set => LocalMat = Matrix4.SetTranslation(LocalMat, value); }
-        public virtual Matrix3 Rot { get => LocalMat; set => LocalMat = Matrix4.SetTranslation(value, LocalMat.Translation); }
+        public virtual Matrix4 LocalMat => Matrix4.SetTranslation(Rot, Pos);
+        public virtual Vector3 Pos { get; set; }
+        public virtual Quaternion Rot { get; set; }
 
         public virtual Vector3 Velocity { get; set; }
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
 
-        private Entity parentEntity;
-        public virtual Entity ParentEntity
-        {
-            get => parentEntity;
-            set
-            {
-                parentEntity = value;
-                value.UpdateWorldMat();
-                UpdateWorldMat();
-            }
-        }
+        public virtual Entity ParentEntity { get; set; }
 
         public int FrameCount { get; set; }
         public int LivingLimit { get; set; }
@@ -73,7 +63,6 @@ namespace CurtainFireMakerPlugin.Entities
 
             UpdatePos();
             UpdateRot();
-            UpdateWorldMat();
 
             FrameCount++;
             if (DiedDecision(this))
@@ -103,16 +92,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdateRot()
         {
-        }
-
-        protected virtual void UpdateWorldMat()
-        {
-            WorldMat = LocalMat;
-
-            if (ParentEntity != null)
-            {
-                WorldMat = WorldMat * ParentEntity.WorldMat;
-            }
         }
 
         public void __call__()

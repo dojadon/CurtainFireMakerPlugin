@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MikuMikuPlugin;
@@ -9,6 +10,8 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityBone : Entity
     {
+        private static Dictionary<Tuple<string, string>, EntityBone> BoneDict { get; } = new Dictionary<Tuple<string, string>, EntityBone>();
+
         private Vector3 InitializePos { get; }
 
         public Model Model { get; }
@@ -35,12 +38,23 @@ namespace CurtainFireMakerPlugin.Entities
             var parentBone = Model.Bones[Bone.ParentBoneID];
             if (Bone.ParentBoneID != -1 && parentBone != null)
             {
-                ParentEntity = new EntityBone(world, modelName, parentBone.Name);
+                var tuple = new Tuple<string, string>(modelName, parentBone.Name);
+
+                if (BoneDict.ContainsKey(tuple))
+                {
+                    ParentEntity = BoneDict[tuple];
+                }
+                else
+                {
+                    ParentEntity = new EntityBone(world, modelName, parentBone.Name);
+                }
                 InitializePos -= parentBone.InitialPosition;
             }
 
             OnSpawn();
             Frame();
+
+            BoneDict.Add(new Tuple<string, string>(modelName, boneName), this);
         }
 
         protected override void UpdatePos()
@@ -56,7 +70,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
 
             Pos = pos;
-            Rot = (VecMath.Quaternion)rot;
+            Rot = rot;
         }
 
         public override void OnDeath()

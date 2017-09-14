@@ -34,11 +34,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         private bool ShouldRecord
         {
-            get => RecordWhenVelocityChanges ? IsUpdatedVelocity : IsUpdatedPos;
-            set => IsUpdatedVelocity = IsUpdatedPos = value;
+            get => RecordWhenVelocityChanges ? IsUpdatedVelocity : IsUpdatedLocalMat;
+            set => IsUpdatedVelocity = IsUpdatedLocalMat = value;
         }
         private bool IsUpdatedVelocity { get; set; } = true;
-        private bool IsUpdatedPos { get; set; } = true;
+        private bool IsUpdatedLocalMat { get; set; } = true;
 
         private static float Epsilon { get; set; } = 0.00001F;
 
@@ -54,24 +54,16 @@ namespace CurtainFireMakerPlugin.Entities
             set => IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Upward, (base.Upward = value), Epsilon);
         }
 
-        public override Matrix4 WorldMat
+        public override Vector3 Pos
         {
-            get => base.WorldMat;
-            set
-            {
-                IsUpdatedPos |= WhetherToRecordWolrdPos && !Matrix4.EpsilonEquals(base.WorldMat, value, Epsilon);
-                base.WorldMat = value;
-            }
+            get => base.Pos;
+            set => IsUpdatedLocalMat |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
         }
 
-        public override Matrix4 LocalMat
+        public override Quaternion Rot
         {
-            get => base.LocalMat;
-            set
-            {
-                IsUpdatedPos |= !Matrix4.EpsilonEquals(base.LocalMat, value, Epsilon);
-                base.LocalMat = value;
-            }
+            get => base.Rot;
+            set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
         private bool recordWhenVelocityChanges = true;
@@ -81,7 +73,7 @@ namespace CurtainFireMakerPlugin.Entities
             set
             {
                 recordWhenVelocityChanges = value;
-                IsUpdatedVelocity = IsUpdatedPos = IsUpdatedVelocity | IsUpdatedPos;
+                IsUpdatedVelocity = IsUpdatedLocalMat = IsUpdatedVelocity | IsUpdatedLocalMat;
             }
         }
 
@@ -142,7 +134,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (ShouldRecord || World.FrameCount == 0)
             {
-                RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedPos));
+                RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedLocalMat));
             }
             ShouldRecord = false;
 

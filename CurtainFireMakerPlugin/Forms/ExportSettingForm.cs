@@ -11,14 +11,17 @@ namespace CurtainFireMakerPlugin.Forms
 {
     public partial class ExportSettingForm : Form
     {
+        private string scriptPath;
+
         public string ScriptPath
         {
-            get => scriptText.Text;
+            get => scriptPath;
             set
             {
-                scriptText.Text = value;
+                scriptPath = value;
                 scriptFileDialog.FileName = value;
                 scriptFileDialog.InitialDirectory = Path.GetDirectoryName(value);
+                scriptText.Text = Path.GetFileNameWithoutExtension(value);
             }
         }
         public string ModelName { get => modelNameText.Text; set => modelNameText.Text = value; }
@@ -57,7 +60,7 @@ namespace CurtainFireMakerPlugin.Forms
 
             if (result == DialogResult.OK)
             {
-                scriptText.Text = scriptFileDialog.FileName;
+                ScriptPath = scriptFileDialog.FileName;
             }
         }
 
@@ -67,7 +70,7 @@ namespace CurtainFireMakerPlugin.Forms
 
             if (result == DialogResult.OK)
             {
-                exportDirText.Text = exportDirDialog.SelectedPath;
+                ExportDirPath = exportDirDialog.SelectedPath;
             }
         }
 
