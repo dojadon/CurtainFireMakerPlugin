@@ -33,28 +33,36 @@ namespace CurtainFireMakerPlugin.Entities
                 throw new ArgumentException($"Not found bone : {modelName}, {boneName}");
             }
 
-            InitializePos = Bone.InitialPosition;
-
-            var parentBone = Model.Bones[Bone.ParentBoneID];
-            if (Bone.ParentBoneID != -1 && parentBone != null)
+            try
             {
-                var tuple = new Tuple<string, string>(modelName, parentBone.Name);
+                InitializePos = Bone.InitialPosition;
 
-                if (BoneDict.ContainsKey(tuple))
+                var parentBone = Model.Bones[Bone.ParentBoneID];
+                if (Bone.ParentBoneID != -1 && parentBone != null)
                 {
-                    ParentEntity = BoneDict[tuple];
+                    var tuple = new Tuple<string, string>(modelName, parentBone.Name);
+
+                    if (BoneDict.ContainsKey(tuple))
+                    {
+                        ParentEntity = BoneDict[tuple];
+                    }
+                    else
+                    {
+                        ParentEntity = new EntityBone(world, modelName, parentBone.Name);
+                    }
+                    InitializePos -= parentBone.InitialPosition;
                 }
-                else
-                {
-                    ParentEntity = new EntityBone(world, modelName, parentBone.Name);
-                }
-                InitializePos -= parentBone.InitialPosition;
+
+                OnSpawn();
+                Frame();
+
+                BoneDict[new Tuple<string, string>(modelName, boneName)] = this;
             }
-
-            OnSpawn();
-            Frame();
-
-            BoneDict.Add(new Tuple<string, string>(modelName, boneName), this);
+            catch (Exception e)
+            {
+                try { Console.WriteLine(Plugin.Instance.PythonRunner.FormatException(e)); } catch { }
+                Console.WriteLine(e);
+            }
         }
 
         protected override void UpdatePos()

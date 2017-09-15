@@ -42,10 +42,7 @@ namespace CurtainFireMakerPlugin
             {
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
-                    if (e is IPythonException)
-                    {
-                        sw.WriteLine(PythonRunner.FormatException(e));
-                    }
+                    try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
                     sw.WriteLine(e);
                 }
             }
@@ -110,10 +107,7 @@ namespace CurtainFireMakerPlugin
                 }
                 catch (Exception e)
                 {
-                    if (e is IPythonException)
-                    {
-                        sw.WriteLine(PythonRunner.FormatException(e));
-                    }
+                    try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
                     Console.WriteLine(e);
                 }
                 finally

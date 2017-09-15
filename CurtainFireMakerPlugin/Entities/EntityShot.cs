@@ -26,14 +26,16 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
-        public static Func<EntityShot, bool> RecordTypeNone { get; } = e => false;
-        public static Func<EntityShot, bool> RecordTypeVelocity { get; } = e => e.IsUpdatedVelocity;
-        public static Func<EntityShot, bool> RecordTypeLocalMat { get; } = e => e.IsUpdatedLocalMat;
+        public delegate bool RecordType(EntityShot entity);
 
-        public Func<EntityShot, bool> ShouldRecord { get; set; } = RecordTypeVelocity;
+        public static RecordType RecordTypeNone { get; } = e => false;
+        public static RecordType RecordTypeVelocity { get; } = e => e.IsUpdatedVelocity;
+        public static RecordType RecordTypeLocalMat { get; } = e => e.IsUpdatedLocalMat;
 
-        public bool IsUpdatedVelocity { get; set; } = true;
-        public bool IsUpdatedLocalMat { get; set; } = true;
+        public RecordType ShouldRecord { get; set; } = RecordTypeVelocity;
+
+        public bool IsUpdatedVelocity { get; private set; } = true;
+        public bool IsUpdatedLocalMat { get; private set; } = true;
 
         private static float Epsilon { get; set; } = 0.00001F;
 

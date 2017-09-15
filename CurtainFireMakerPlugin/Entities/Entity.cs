@@ -33,17 +33,17 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual Entity ParentEntity { get; set; }
 
-        public int FrameCount { get; set; }
+        public int FrameCount { get; private set; }
         public int LivingLimit { get; set; }
-        public int SpawnFrameNo { get; set; }
-        public int DeathFrameNo { get; set; }
+        public int SpawnFrameNo { get; private set; }
+        public int DeathFrameNo { get; private set; }
 
         public virtual Func<Entity, bool> DiedDecision { get; set; } = e => e.LivingLimit != 0 && e.FrameCount > e.LivingLimit;
 
-        public bool IsDeath { get; set; }
-        public bool IsSpawned { get; set; }
+        public bool IsDeath { get; private set; }
+        public bool IsSpawned { get; private set; }
 
-        protected MotionInterpolation MotionInterpolation { get; set; }
+        public MotionInterpolation MotionInterpolation { get; private set; }
         private TaskManager TaskManager { get; } = new TaskManager();
 
         public World World { get; }
