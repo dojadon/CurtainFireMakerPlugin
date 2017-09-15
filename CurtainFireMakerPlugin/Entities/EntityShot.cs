@@ -13,13 +13,7 @@ namespace CurtainFireMakerPlugin.Entities
         public override Entity ParentEntity
         {
             get => base.ParentEntity;
-            set
-            {
-                if ((base.ParentEntity = value) is EntityShot entity)
-                {
-                    RootBone.ParentId = entity.RootBone.BoneId;
-                }
-            }
+            set => RootBone.ParentId = (base.ParentEntity = value) is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
         }
 
         public ShotModelData ModelData { get; }
@@ -37,7 +31,7 @@ namespace CurtainFireMakerPlugin.Entities
         public bool IsUpdatedVelocity { get; private set; } = true;
         public bool IsUpdatedLocalMat { get; private set; } = true;
 
-        private static float Epsilon { get; set; } = 0.00001F;
+        public static float Epsilon { get; set; } = 0.00001F;
 
         public override Vector3 Velocity
         {

@@ -72,20 +72,20 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdatePos()
         {
-            Vector3 interpolatedVelocity = Velocity;
+            float interpolation = 1.0F;
 
             if (MotionInterpolation != null)
             {
                 if (MotionInterpolation.Within(World.FrameCount))
                 {
-                    interpolatedVelocity *= MotionInterpolation.GetChangeAmount(World.FrameCount);
+                    interpolation = MotionInterpolation.GetChangeAmount(World.FrameCount);
                 }
                 else
                 {
                     RemoveMotionInterpolationCurve();
                 }
             }
-            Pos += interpolatedVelocity;
+            Pos += Velocity * interpolation;
         }
 
         public void __call__()
