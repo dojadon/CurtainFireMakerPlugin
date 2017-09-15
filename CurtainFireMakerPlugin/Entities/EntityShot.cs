@@ -19,10 +19,6 @@ namespace CurtainFireMakerPlugin.Entities
                 {
                     RootBone.ParentId = entity.RootBone.BoneId;
                 }
-                else
-                {
-                    WhetherToRecordWolrdPos = true;
-                }
             }
         }
 
@@ -30,15 +26,14 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
-        private bool WhetherToRecordWolrdPos { get; set; } = false;
+        public static Func<EntityShot, bool> RecordTypeNone { get; } = e => false;
+        public static Func<EntityShot, bool> RecordTypeVelocity { get; } = e => e.IsUpdatedVelocity;
+        public static Func<EntityShot, bool> RecordTypeLocalMat { get; } = e => e.IsUpdatedLocalMat;
 
-        private bool ShouldRecord
-        {
-            get => RecordWhenVelocityChanges ? IsUpdatedVelocity : IsUpdatedLocalMat;
-            set => IsUpdatedVelocity = IsUpdatedLocalMat = value;
-        }
-        private bool IsUpdatedVelocity { get; set; } = true;
-        private bool IsUpdatedLocalMat { get; set; } = true;
+        public Func<EntityShot, bool> ShouldRecord { get; set; } = RecordTypeVelocity;
+
+        public bool IsUpdatedVelocity { get; set; } = true;
+        public bool IsUpdatedLocalMat { get; set; } = true;
 
         private static float Epsilon { get; set; } = 0.00001F;
 
@@ -66,21 +61,6 @@ namespace CurtainFireMakerPlugin.Entities
             set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
-        private bool recordWhenVelocityChanges = true;
-        public bool RecordWhenVelocityChanges
-        {
-            get => recordWhenVelocityChanges;
-            set
-            {
-                recordWhenVelocityChanges = value;
-                IsUpdatedVelocity = IsUpdatedLocalMat = IsUpdatedVelocity | IsUpdatedLocalMat;
-            }
-        }
-
-        public bool ModelDataIsOperable => ModelData.OwnerEntities.Count == 1;
-
-        public event EntityEventHandler<EntityShot, RecordEventArgs> RecordEvent;
-
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
 
         public EntityShot(World world, ShotProperty property) : base(world)
@@ -94,34 +74,6 @@ namespace CurtainFireMakerPlugin.Entities
 
                 Property.Type.Init(this);
                 Property.Type.InitModelData(ModelData);
-
-                RecordEvent += (sender, e) => AddVmdMotion();
-                SetMotionInterpolationCurveEvent += (sender, e) => AddVmdMotion();
-                RemoveMotionInterpolationCurveEvent += (sender, e) => AddVmdMotion();
-
-                SpawnEvent += (sender, e) =>
-                {
-                    if (World.FrameCount < 0)
-                    {
-                        AddVmdMorph(-World.FrameCount, 0.0F, MaterialMorph);
-                    }
-                    else
-                    {
-                        AddVmdMorph(0, 1.0F, MaterialMorph);
-                        AddVmdMorph(1, 0.0F, MaterialMorph);
-                        AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
-                    }
-
-                    AddVmdMotion();
-                };
-
-                DeathEvent += (sender, e) =>
-                {
-                    AddVmdMorph(-1, 0.0F, MaterialMorph);
-                    AddVmdMorph(0, 1.0F, MaterialMorph);
-
-                    AddVmdMotion();
-                };
             }
             catch (Exception e)
             {
@@ -130,24 +82,66 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        internal override void Frame()
+        public override void OnSpawn()
         {
-            if (ShouldRecord || World.FrameCount == 0)
-            {
-                RecordEvent?.Invoke(this, new RecordEventArgs(IsUpdatedVelocity, IsUpdatedLocalMat));
-            }
-            ShouldRecord = false;
+            base.OnSpawn();
 
-            base.Frame();
+            if (World.FrameCount < 0)
+            {
+                AddVmdMorph(-World.FrameCount, 0.0F, MaterialMorph);
+            }
+            else
+            {
+                AddVmdMorph(0, 1.0F, MaterialMorph);
+                AddVmdMorph(1, 0.0F, MaterialMorph);
+                AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
+            }
+
+            AddVmdMotion();
         }
 
-        protected override void UpdateRot()
+        public override void OnDeath()
         {
-            if (RecordWhenVelocityChanges && Velocity != Vector3.Zero)
+            base.OnDeath();
+
+            AddVmdMorph(-1, 0.0F, MaterialMorph);
+            AddVmdMorph(0, 1.0F, MaterialMorph);
+
+            AddVmdMotion();
+        }
+
+        internal override void Frame()
+        {
+            if (ShouldRecord(this) || World.FrameCount == 0)
+            {
+                AddVmdMotion();
+            }
+
+            base.Frame();
+
+            IsUpdatedVelocity = IsUpdatedLocalMat = false;
+        }
+
+        public void UpdateRot()
+        {
+            if (Velocity != Vector3.Zero)
             {
                 Rot = Matrix3.LookAt(+Velocity, +Upward);
             }
-            base.UpdateRot();
+        }
+
+        public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
+        {
+            base.SetMotionInterpolationCurve(pos1, pos2, length);
+
+            AddVmdMotion();
+        }
+
+        protected override void RemoveMotionInterpolationCurve()
+        {
+            AddVmdMotion();
+
+            base.RemoveMotionInterpolationCurve();
         }
 
         public void AddVmdMotion()
@@ -161,14 +155,7 @@ namespace CurtainFireMakerPlugin.Entities
                 bezier = MotionInterpolation.Curve;
             }
 
-            if (WhetherToRecordWolrdPos)
-            {
-                AddVmdMotion(RootBone, WorldPos, WorldRot, bezier);
-            }
-            else
-            {
-                AddVmdMotion(RootBone, Pos, Rot, bezier);
-            }
+            AddVmdMotion(RootBone, Pos, Rot, bezier);
         }
 
         public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
@@ -227,35 +214,13 @@ namespace CurtainFireMakerPlugin.Entities
                     var vertexMorph = new PmxMorphVertexData()
                     {
                         Index = vertex.VertexId,
-                        Position = (DxMath.Vector3)func(vertex.Pos)
+                        Position = func(vertex.Pos)
                     };
                     morph.MorphArray[i] = vertexMorph;
                 }
                 ModelData.AddMorph(morph);
             }
             return ModelData.MorphDict[morphName];
-        }
-    }
-
-    public class RecordEventArgs : EventArgs
-    {
-        public bool IsUpdatedVelocity { get; }
-        public bool IsUpdatedPos { get; }
-
-        public RecordEventArgs(bool isUpdatedVelocity, bool isUpdatedPos)
-        {
-            IsUpdatedVelocity = isUpdatedVelocity;
-            IsUpdatedPos = isUpdatedPos;
-        }
-    }
-
-    public class InitModelDataEventArgs : EventArgs
-    {
-        public ShotModelData ModelData { get; }
-
-        public InitModelDataEventArgs(ShotModelData data)
-        {
-            ModelData = data;
         }
     }
 }

@@ -16,9 +16,17 @@ namespace CurtainFireMakerPlugin.Entities
         public Vector3 WorldPos => WorldMat.Translation;
         public Matrix3 WorldRot => WorldMat;
 
-        public virtual Matrix4 LocalMat => Matrix4.SetTranslation(Rot, Pos);
+        public virtual Matrix4 LocalMat
+        {
+            get => Matrix4.SetTranslation(Rot, Pos);
+            set
+            {
+                Pos = value.Translation;
+                Rot = value;
+            }
+        }
         public virtual Vector3 Pos { get; set; }
-        public virtual Quaternion Rot { get; set; }
+        public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
         public virtual Vector3 Velocity { get; set; }
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
@@ -43,14 +51,6 @@ namespace CurtainFireMakerPlugin.Entities
         public int EntityId { get; }
         private static int nextEntityId;
 
-        public delegate void EntityEventHandler<T, R>(T sender, R e) where T : Entity where R : EventArgs;
-
-        public event EntityEventHandler<Entity, EventArgs> SpawnEvent;
-        public event EntityEventHandler<Entity, EventArgs> DeathEvent;
-
-        public event EntityEventHandler<Entity, EventArgs> SetMotionInterpolationCurveEvent;
-        public event EntityEventHandler<Entity, EventArgs> RemoveMotionInterpolationCurveEvent;
-
         public Entity(World world)
         {
             World = world;
@@ -62,7 +62,6 @@ namespace CurtainFireMakerPlugin.Entities
             TaskManager.Frame();
 
             UpdatePos();
-            UpdateRot();
 
             FrameCount++;
             if (DiedDecision(this))
@@ -79,8 +78,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 if (MotionInterpolation.Within(World.FrameCount))
                 {
-                    float changeAmount = MotionInterpolation.GetChangeAmount(World.FrameCount);
-                    interpolatedVelocity *= changeAmount;
+                    interpolatedVelocity *= MotionInterpolation.GetChangeAmount(World.FrameCount);
                 }
                 else
                 {
@@ -88,10 +86,6 @@ namespace CurtainFireMakerPlugin.Entities
                 }
             }
             Pos += interpolatedVelocity;
-        }
-
-        protected virtual void UpdateRot()
-        {
         }
 
         public void __call__()
@@ -103,29 +97,21 @@ namespace CurtainFireMakerPlugin.Entities
         {
             SpawnFrameNo = World.AddEntity(this);
             IsSpawned = true;
-
-            SpawnEvent?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual void OnDeath()
         {
             DeathFrameNo = World.RemoveEntity(this);
             IsDeath = true;
-
-            DeathEvent?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
         {
             MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2);
-
-            SetMotionInterpolationCurveEvent?.Invoke(this, EventArgs.Empty);
         }
 
-        internal virtual void RemoveMotionInterpolationCurve()
+        protected virtual void RemoveMotionInterpolationCurve()
         {
-            RemoveMotionInterpolationCurveEvent?.Invoke(this, EventArgs.Empty);
-
             MotionInterpolation = null;
         }
 
