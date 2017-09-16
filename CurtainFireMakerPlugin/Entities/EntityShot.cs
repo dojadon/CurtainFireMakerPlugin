@@ -1,8 +1,8 @@
-﻿using System;
-using VecMath;
-using CsPmx.Data;
+﻿using CsPmx.Data;
 using CsVmd.Data;
 using CurtainFireMakerPlugin.Mathematics;
+using System;
+using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -20,13 +20,14 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
-        public delegate bool RecordType(EntityShot entity);
+        public class RecordType
+        {
+            public static Predicate<EntityShot> None { get; } = e => false;
+            public static Predicate<EntityShot> Velocity { get; } = e => e.IsUpdatedVelocity;
+            public static Predicate<EntityShot> LocalMat { get; } = e => e.IsUpdatedLocalMat;
+        }
 
-        public static RecordType RecordTypeNone { get; } = e => false;
-        public static RecordType RecordTypeVelocity { get; } = e => e.IsUpdatedVelocity;
-        public static RecordType RecordTypeLocalMat { get; } = e => e.IsUpdatedLocalMat;
-
-        public RecordType ShouldRecord { get; set; } = RecordTypeVelocity;
+        public Predicate<EntityShot> ShouldRecord { get; set; } = RecordType.LocalMat;
 
         public bool IsUpdatedVelocity { get; private set; } = true;
         public bool IsUpdatedLocalMat { get; private set; } = true;
@@ -56,6 +57,9 @@ namespace CurtainFireMakerPlugin.Entities
             get => base.Rot;
             set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
+
+        public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
+        public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Velocity != Vector3.Zero ? (Quaternion)Matrix3.LookAt(+e.Velocity, +e.Upward) * e.Rot : e.Rot;
 
         public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
 
@@ -117,14 +121,6 @@ namespace CurtainFireMakerPlugin.Entities
             base.Frame();
         }
 
-        public void UpdateRot()
-        {
-            if (Velocity != Vector3.Zero)
-            {
-                Rot = Matrix3.LookAt(+Velocity, +Upward);
-            }
-        }
-
         public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
         {
             base.SetMotionInterpolationCurve(pos1, pos2, length);
@@ -141,8 +137,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddVmdMotion()
         {
-            UpdateRot();
-
             var bezier = CubicBezierCurve.Line;
 
             if (MotionInterpolation != null && MotionInterpolation.StartFrame < World.FrameCount)
@@ -150,7 +144,7 @@ namespace CurtainFireMakerPlugin.Entities
                 bezier = MotionInterpolation.Curve;
             }
 
-            AddVmdMotion(RootBone, Pos, Rot, bezier);
+            AddVmdMotion(RootBone, GetRecordedPos(this), GetRecordedRot(this), bezier);
         }
 
         public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
@@ -169,8 +163,7 @@ namespace CurtainFireMakerPlugin.Entities
                 Rot = rot,
                 InterpolatePointX = interpolation,
                 InterpolatePointY = interpolation,
-                InterpolatePointZ = interpolation,
-                InterpolatePointR = interpolation
+                InterpolatePointZ = interpolation
             };
 
             World.VmdMotion.AddVmdMotion(motion);
