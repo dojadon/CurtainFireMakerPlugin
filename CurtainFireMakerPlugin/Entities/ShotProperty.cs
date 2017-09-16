@@ -18,30 +18,13 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotProperty(string typeName, int color)
         {
-            this.Color = color;
-            this.Type = ShotTypeList.GetShotType(typeName);
+            Color = color;
+            Type = ShotTypeList.GetShotType(typeName);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
+        public override bool Equals(object obj) => obj is ShotProperty prop && Equals(prop);
 
-            var p = obj as ShotProperty;
-            if (p == null)
-            {
-                return false;
-            }
-
-            return this.Equals((ShotProperty)obj);
-        }
-
-        public bool Equals(ShotProperty p)
-        {
-            return p.Color == Color && Type.Name == p.Type.Name;
-        }
+        public bool Equals(ShotProperty p) => p.Color == Color && Type.Name == p.Type.Name;
 
         public override int GetHashCode()
         {

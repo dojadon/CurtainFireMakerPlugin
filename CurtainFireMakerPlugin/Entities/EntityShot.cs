@@ -112,10 +112,9 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 AddVmdMotion();
             }
+            IsUpdatedVelocity = IsUpdatedLocalMat = false;
 
             base.Frame();
-
-            IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
         public void UpdateRot()

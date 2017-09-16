@@ -83,26 +83,8 @@ namespace VecMath
         }
 
         public Matrix4(Vector3 x, Vector3 y, Vector3 z, Vector3 trans)
+        : this(x.x, y.x, z.x, 0, x.y, y.y, z.y, 0, x.z, y.z, z.z, 0, trans.x, trans.y, trans.z, 1)
         {
-            this.m00 = x.x;
-            this.m10 = x.y;
-            this.m20 = x.z;
-            this.m30 = trans.x;
-
-            this.m01 = y.x;
-            this.m11 = y.y;
-            this.m21 = y.z;
-            this.m31 = trans.y;
-
-            this.m02 = z.x;
-            this.m12 = z.y;
-            this.m22 = z.z;
-            this.m32 = trans.z;
-
-            this.m03 = 0;
-            this.m13 = 0;
-            this.m23 = 0;
-            this.m33 = 1;
         }
 
         public Matrix4(Vector3 x, Vector3 y, Vector3 z) : this(x, y, z, Vector3.Zero)

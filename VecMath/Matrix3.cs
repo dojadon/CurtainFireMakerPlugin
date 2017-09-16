@@ -138,28 +138,28 @@ namespace VecMath
             return ((Quaternion)m) ^ exponent;
         }
 
-        public static Matrix3 Inverse(Matrix3 m)
-        {
-            float det = m.Det();
+        public static Matrix3 Inverse(Matrix3 m) => Transpose(m);
+        //{
+        //    float det = m.Det();
 
-            if (det == 0)
-            {
-                throw new ArithmeticException("Determinant is 0");
-            }
+        //    if (det == 0)
+        //    {
+        //        throw new ArithmeticException("Determinant is 0");
+        //    }
 
-            return new Matrix3()
-            {
-                m00 = m.m11 * m.m22 - m.m12 * m.m21,
-                m01 = -m.m01 * m.m22 + m.m02 * m.m21,
-                m02 = m.m01 * m.m12 - m.m02 * m.m11,
-                m10 = -m.m10 * m.m22 + m.m12 * m.m20,
-                m11 = m.m00 * m.m22 - m.m02 * m.m20,
-                m12 = -m.m00 * m.m12 + -m.m02 * m.m10,
-                m20 = m.m10 * m.m21 - m.m11 * m.m20,
-                m21 = -m.m00 * m.m21 + m.m01 * m.m20,
-                m22 = m.m00 * m.m11 - m.m01 * m.m10,
-            } * (1.0F / det);
-        }
+        //    return new Matrix3()
+        //    {
+        //        m00 = m.m11 * m.m22 - m.m12 * m.m21,
+        //        m01 = -m.m01 * m.m22 + m.m02 * m.m21,
+        //        m02 = m.m01 * m.m12 - m.m02 * m.m11,
+        //        m10 = -m.m10 * m.m22 + m.m12 * m.m20,
+        //        m11 = m.m00 * m.m22 - m.m02 * m.m20,
+        //        m12 = -m.m00 * m.m12 + -m.m02 * m.m10,
+        //        m20 = m.m10 * m.m21 - m.m11 * m.m20,
+        //        m21 = -m.m00 * m.m21 + m.m01 * m.m20,
+        //        m22 = m.m00 * m.m11 - m.m01 * m.m10,
+        //    } * (1.0F / det);
+        //}
 
         public static Matrix3 Transpose(Matrix3 m1) => new Matrix4()
         {
