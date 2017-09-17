@@ -20,14 +20,14 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
-        public class RecordType
+        public static class RecordType
         {
-            public static Predicate<EntityShot> None { get; } = e => false;
-            public static Predicate<EntityShot> Velocity { get; } = e => e.IsUpdatedVelocity;
-            public static Predicate<EntityShot> LocalMat { get; } = e => e.IsUpdatedLocalMat;
+            public static Func<EntityShot, bool> None { get; } = e => false;
+            public static Func<EntityShot, bool> Velocity { get; } = e => e.IsUpdatedVelocity;
+            public static Func<EntityShot, bool> LocalMat { get; } = e => e.IsUpdatedLocalMat;
         }
 
-        public Predicate<EntityShot> ShouldRecord { get; set; } = RecordType.LocalMat;
+        public Func<EntityShot, bool> ShouldRecord { get; set; } = RecordType.Velocity;
 
         public bool IsUpdatedVelocity { get; private set; } = true;
         public bool IsUpdatedLocalMat { get; private set; } = true;
@@ -163,7 +163,8 @@ namespace CurtainFireMakerPlugin.Entities
                 Rot = rot,
                 InterpolatePointX = interpolation,
                 InterpolatePointY = interpolation,
-                InterpolatePointZ = interpolation
+                InterpolatePointZ = interpolation,
+                InterpolatePointR = interpolation,
             };
 
             World.VmdMotion.AddVmdMotion(motion);
