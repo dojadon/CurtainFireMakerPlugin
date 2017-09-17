@@ -155,7 +155,7 @@ namespace CurtainFireMakerPlugin.Entities
             interpolation[2] = (byte)(127 * bezier.P2.x);
             interpolation[3] = (byte)(127 * bezier.P2.y);
 
-            var motion = new VmdMotionFrameData()
+            World.VmdMotion.AddVmdMotion(new VmdMotionFrameData()
             {
                 BoneName = bone.BoneName,
                 KeyFrameNo = World.FrameCount,
@@ -165,22 +165,19 @@ namespace CurtainFireMakerPlugin.Entities
                 InterpolatePointY = interpolation,
                 InterpolatePointZ = interpolation,
                 InterpolatePointR = interpolation,
-            };
-
-            World.VmdMotion.AddVmdMotion(motion);
+            });
         }
 
         public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph, bool replace = false)
         {
             if (Property.Type.HasMesh)
             {
-                var frameData = new VmdMorphFrameData()
+                World.VmdMotion.AddVmdMorph(new VmdMorphFrameData()
                 {
                     MorphName = morph.MorphName,
                     KeyFrameNo = World.FrameCount + frameOffset,
                     Rate = rate
-                };
-                World.VmdMotion.AddVmdMorph(frameData, morph);
+                }, morph);
             }
         }
 
