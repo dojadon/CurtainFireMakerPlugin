@@ -48,7 +48,6 @@
     <Compile Include="Vmd\Data\VmdMotionFrameData.cs" />
     <Compile Include="Pmx\PmxParser.cs" />
     <Compile Include="Pmx\PmxExporter.cs" />
-    <Compile Include="Pmx\ArrayUtil.cs" />
     <Compile Include="Pmx\Data\IPmxData.cs" />
     <Compile Include="Pmx\Data\IPmxMorphTypeData.cs" />
     <Compile Include="Pmx\Data\PmxBoneData.cs" />

@@ -171,8 +171,8 @@ namespace CsMmdDataIO.Pmx.Data
 
                 int boneNum = parser.ReadInt32();
                 IkChilds = new int[boneNum];
-                IkAngleMin = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
-                IkAngleMax = ArrayUtil.Set(new Vector3[boneNum], i => new Vector3());
+                IkAngleMin = new Vector3[boneNum];
+                IkAngleMax = new Vector3[boneNum];
 
                 for (int i = 0; i < boneNum; i++)
                 {

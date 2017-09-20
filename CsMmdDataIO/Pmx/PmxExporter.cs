@@ -41,7 +41,7 @@ namespace CsMmdDataIO.Pmx
                     break;
 
                 case 4:
-                    this.Write(id);
+                    Write(id);
                     break;
             }
             return this;

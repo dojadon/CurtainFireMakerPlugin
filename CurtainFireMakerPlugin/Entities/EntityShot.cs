@@ -190,7 +190,7 @@ namespace CurtainFireMakerPlugin.Entities
                 var morph = new PmxMorphData()
                 {
                     MorphName = morphName,
-                    Type = PmxMorphData.MORPHTYPE_VERTEX,
+                    SlotType = PmxMorphData.MORPHTYPE_VERTEX,
                     MorphArray = new PmxMorphVertexData[vertices.Length]
                 };
 

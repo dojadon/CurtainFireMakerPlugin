@@ -35,13 +35,13 @@ namespace CsMmdDataIO.Pmx.Data
         public void Parse(PmxParser parser)
         {
             ParsePmxData(Header, parser);
-            VertexArray = ParsePmxData(len => ArrayUtil.Set(new PmxVertexData[len], i => new PmxVertexData()), parser);
+            VertexArray = ParsePmxData(len => new PmxVertexData[len], parser);
             VertexIndices = ParseData(len => new int[len], (p, i) => p.ReadPmxId(parser.SizeVertex), parser);
             TextureFiles = ParseData(len => new string[len], (p, i) => p.ReadPmxText(), parser);
-            MaterialArray = ParsePmxData(len => ArrayUtil.Set(new PmxMaterialData[len], i => new PmxMaterialData()), parser);
-            BoneArray = ParsePmxData(len => ArrayUtil.Set(new PmxBoneData[len], i => new PmxBoneData()), parser);
-            MorphArray = ParsePmxData(len => ArrayUtil.Set(new PmxMorphData[len], i => new PmxMorphData()), parser);
-            SlotArray = ParsePmxData(len => ArrayUtil.Set(new PmxSlotData[len], i => new PmxSlotData()), parser);
+            MaterialArray = ParsePmxData(len => new PmxMaterialData[len], parser);
+            BoneArray = ParsePmxData(len => new PmxBoneData[len], parser);
+            MorphArray = ParsePmxData(len => new PmxMorphData[len], parser);
+            SlotArray = ParsePmxData(len => new PmxSlotData[len], parser);
         }
 
         private void ExportData<T>(T[] data, Action<T, PmxExporter> action, PmxExporter exporter)
@@ -64,11 +64,11 @@ namespace CsMmdDataIO.Pmx.Data
         private T[] ParseData<T>(Func<int, T[]> func, Func<PmxParser, T, T> valueFunc, PmxParser parser)
         {
             int len = parser.ReadInt32();
-            T[] array = func.Invoke(len);
+            T[] array = func(len);
 
             for (int i = 0; i < len; i++)
             {
-                array[i] = valueFunc.Invoke(parser, array[i]);
+                array[i] = valueFunc(parser, array[i]);
             }
             return array;
         }
@@ -78,12 +78,14 @@ namespace CsMmdDataIO.Pmx.Data
             data.Parse(parser);
         }
 
-        private T[] ParsePmxData<T>(Func<int, T[]> func, PmxParser parser) where T : IPmxData
+        private T[] ParsePmxData<T>(Func<int, T[]> func, PmxParser parser) where T : IPmxData, new()
         {
             int len = parser.ReadInt32();
-            T[] array = func.Invoke(len);
+            T[] array = func(len);
+
             for (int i = 0; i < len; i++)
             {
+                array[i] = new T();
                 array[i].Parse(parser);
             }
             return array;
