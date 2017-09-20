@@ -79,7 +79,7 @@ namespace CsMmdDataIO.Pmx.Data
         }
     }
 
-    public enum SlotType
+    public enum SlotType : byte
     {
         SYSTEM = 0,
         EYEBROW = 1,
@@ -88,7 +88,7 @@ namespace CsMmdDataIO.Pmx.Data
         RIP = 4,
     }
 
-    public enum MorphType
+    public enum MorphType: byte
     {
         GROUP = 0,
         VERTEX = 1,

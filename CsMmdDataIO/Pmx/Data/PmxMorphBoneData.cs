@@ -28,10 +28,5 @@ namespace CsMmdDataIO.Pmx.Data
             Position = parser.ReadVector3();
             Rotation = parser.ReadQuaternion();
         }
-
-        public byte GetMorphType()
-        {
-            return PmxMorphData.MORPHTYPE_BONE;
-        }
     }
 }

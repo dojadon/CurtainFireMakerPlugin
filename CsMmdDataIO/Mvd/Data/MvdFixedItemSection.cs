@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Linearstar.Keystone.IO;
 
 namespace CsMmdDataIO.Mvd.Data
 {

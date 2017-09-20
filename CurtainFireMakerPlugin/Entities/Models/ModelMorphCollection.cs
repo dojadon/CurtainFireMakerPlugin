@@ -25,6 +25,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
         {
             morph.MorphName = MorphList.Count.ToString();
             morph.SlotType = SlotType.RIP;
+            morph.MorphType = MorphType.MATERIAL;
 
             morph.MorphArray = new PmxMorphMaterialData[appliedMaterialCount];
 
@@ -57,10 +58,10 @@ namespace CurtainFireMakerPlugin.Entities.Models
         {
             CurtainFireMotion vmdMotion = World.VmdMotion;
 
-            var typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
+            var typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
             foreach (var morph in MorphList)
             {
-                typeMorphDict.Add(morph.MorphArray[0].GetMorphType(), morph);
+                typeMorphDict.Add(morph.MorphType, morph);
             }
 
             foreach (var morphList in typeMorphDict.Values)
@@ -68,16 +69,16 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 Compress(morphList, vmdMotion.MorphDict);
             }
 
-            typeMorphDict = new MultiDictionary<byte, PmxMorphData>();
+            typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
             foreach (var morph in MorphList)
             {
-                typeMorphDict.Add(morph.MorphArray[0].GetMorphType(), morph);
+                typeMorphDict.Add(morph.MorphType, morph);
             }
 
             var removeMaterialIndices = new List<int>();
-            removeMaterialIndices.AddRange(materials.CompressMaterial(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL], vertices));
+            removeMaterialIndices.AddRange(materials.CompressMaterial(typeMorphDict[MorphType.MATERIAL], vertices));
 
-            RemoveElements(typeMorphDict[PmxMorphData.MORPHTYPE_MATERIAL], removeMaterialIndices);
+            RemoveElements(typeMorphDict[MorphType.MATERIAL], removeMaterialIndices);
 
             removeMaterialIndices.Sort((a, b) => b - a);
             foreach (int index in removeMaterialIndices)
