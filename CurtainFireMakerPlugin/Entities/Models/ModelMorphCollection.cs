@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Collections;
-using CsPmx;
-using CsPmx.Data;
-using CsVmd.Data;
+using CsMmdDataIO.Pmx;
+using CsMmdDataIO.Pmx.Data;
+using CsMmdDataIO.Vmd.Data;
 using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities.Models

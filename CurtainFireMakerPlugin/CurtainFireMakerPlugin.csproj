@@ -96,13 +96,9 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CsPmx\CsPmx.csproj">
-      <Project>{92cad24b-572d-430d-8157-b9cb8e56d9e5}</Project>
-      <Name>CsPmx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CsVmd\CsVmd.csproj">
-      <Project>{1a7ff11c-e657-44fd-8a31-12117a755ae9}</Project>
-      <Name>CsVmd</Name>
+    <ProjectReference Include="..\CsMmdDataIO\CsMmdDataIO.csproj">
+      <Project>{905fb5b6-b237-485a-8396-2274f2f24e2d}</Project>
+      <Name>CsMmdDataIO</Name>
     </ProjectReference>
     <ProjectReference Include="..\VecMath\VecMath.csproj">
       <Project>{454be0aa-4fab-4df4-842a-da450652c5ec}</Project>

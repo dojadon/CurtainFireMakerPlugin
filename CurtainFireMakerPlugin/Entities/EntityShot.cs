@@ -1,5 +1,5 @@
-﻿using CsPmx.Data;
-using CsVmd.Data;
+﻿using CsMmdDataIO.Pmx.Data;
+using CsMmdDataIO.Vmd.Data;
 using CurtainFireMakerPlugin.Mathematics;
 using System;
 using VecMath;

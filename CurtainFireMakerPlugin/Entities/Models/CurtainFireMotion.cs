@@ -4,9 +4,9 @@ using System.Linq;
 using System.IO;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Collections;
-using CsVmd.Data;
-using CsVmd;
-using CsPmx.Data;
+using CsMmdDataIO.Vmd.Data;
+using CsMmdDataIO.Vmd;
+using CsMmdDataIO.Pmx.Data;
 
 namespace CurtainFireMakerPlugin.Entities.Models
 {

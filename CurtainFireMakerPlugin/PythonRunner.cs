@@ -38,8 +38,8 @@ namespace CurtainFireMakerPlugin
             "sys.path.append(r\"" + Application.StartupPath + "\\System\\x64\")\n" +
             "import clr\n" +
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
-            "clr.AddReference(\"CsPmx\")\n" +
-            "clr.AddReference(\"CsVmd\")\n" +
+            "clr.AddReference(\"CsMmdDataIO.Pmx\")\n" +
+            "clr.AddReference(\"CsMmdDataIO.Vmd\")\n" +
             "clr.AddReference(\"DxMath\")\n" +
             "clr.AddReference(\"VecMath\")\n" +
             "clr.AddReference(\"MikuMikuPlugin\")\n", RootScope);

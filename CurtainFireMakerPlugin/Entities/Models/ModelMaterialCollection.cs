@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Collections;
-using CsPmx.Data;
+using CsMmdDataIO.Pmx.Data;
 using VecMath;
 using System.Collections;
 

@@ -1,6 +1,6 @@
 ﻿using System;
-using CsPmx;
-using CsPmx.Data;
+using CsMmdDataIO.Pmx;
+using CsMmdDataIO.Pmx.Data;
 using CurtainFireMakerPlugin.Entities;
 using VecMath;
 using System.IO;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CurtainFireMakerPlugin.Entities;
 using VecMath;
-using CsPmx.Data;
+using CsMmdDataIO.Pmx.Data;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 
