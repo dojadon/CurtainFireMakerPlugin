@@ -9,8 +9,6 @@ namespace CsMmdDataIO.Pmx.Data
     [Serializable]
     public class PmxMorphUVData : IPmxMorphTypeData
     {
-        public byte UvType { get; set; }
-
         public int Index { get; set; }
         public Vector4 Uv { get; set; }
 
@@ -24,11 +22,6 @@ namespace CsMmdDataIO.Pmx.Data
         {
             Index = parser.ReadPmxId(parser.SizeVertex);
             Uv = parser.ReadVector4();
-        }
-
-        public byte GetMorphType()
-        {
-            return UvType;
         }
     }
 }

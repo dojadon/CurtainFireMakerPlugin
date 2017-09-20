@@ -37,7 +37,7 @@ namespace CsMmdDataIO.Pmx.Data
             ParsePmxData(Header, parser);
             VertexArray = ParsePmxData(len => new PmxVertexData[len], parser);
             VertexIndices = ParseData(len => new int[len], (p, i) => p.ReadPmxId(parser.SizeVertex), parser);
-            TextureFiles = ParseData(len => new string[len], (p, i) => p.ReadPmxText(), parser);
+            TextureFiles = ParseData(len => new string[len], (p, i) => p.ReadText(), parser);
             MaterialArray = ParsePmxData(len => new PmxMaterialData[len], parser);
             BoneArray = ParsePmxData(len => new PmxBoneData[len], parser);
             MorphArray = ParsePmxData(len => new PmxMorphData[len], parser);

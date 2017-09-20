@@ -32,8 +32,8 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Parse(PmxParser parser)
         {
-            MorphName = parser.ReadPmxText();
-            MorphNameE = parser.ReadPmxText();
+            MorphName = parser.ReadText();
+            MorphNameE = parser.ReadText();
 
             SlotType = (SlotType)parser.ReadByte();
 

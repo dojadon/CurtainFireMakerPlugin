@@ -41,8 +41,8 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Parse(PmxParser parser)
         {
-            SlotName = parser.ReadPmxText();
-            SlotNameE = parser.ReadPmxText();
+            SlotName = parser.ReadText();
+            SlotNameE = parser.ReadText();
 
             NormalSlot = parser.ReadByte() == 0;
 

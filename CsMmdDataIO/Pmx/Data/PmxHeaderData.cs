@@ -50,11 +50,11 @@ namespace CsMmdDataIO.Pmx.Data
             this.Size = parser.ReadBytes(sizeLen);
             parser.Size = this.Size;
 
-            this.ModelName = parser.ReadPmxText();
-            this.ModelNameE = parser.ReadPmxText();
+            this.ModelName = parser.ReadText();
+            this.ModelNameE = parser.ReadText();
 
-            this.Description = parser.ReadPmxText();
-            this.DescriptionE = parser.ReadPmxText();
+            this.Description = parser.ReadText();
+            this.DescriptionE = parser.ReadText();
         }
     }
 }

@@ -122,8 +122,8 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Parse(PmxParser parser)
         {
-            BoneName = parser.ReadPmxText();
-            BoneNameE = parser.ReadPmxText();
+            BoneName = parser.ReadText();
+            BoneNameE = parser.ReadText();
 
             Pos = parser.ReadVector3();
             ParentId = parser.ReadPmxId(parser.SizeBone);

@@ -22,10 +22,5 @@ namespace CsMmdDataIO.Pmx.Data
             Index = parser.ReadPmxId(parser.SizeMorph);
             Rate = parser.ReadSingle();
         }
-
-        public byte GetMorphType()
-        {
-            return PmxMorphData.MORPHTYPE_GROUP;
-        }
     }
 }

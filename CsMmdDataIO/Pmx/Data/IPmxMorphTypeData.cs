@@ -7,7 +7,6 @@ namespace CsMmdDataIO.Pmx.Data
 {
     public interface IPmxMorphTypeData : IPmxData
     {
-        byte GetMorphType();
         int Index { get; set; }
     }
 }

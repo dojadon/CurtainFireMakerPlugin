@@ -23,10 +23,5 @@ namespace CsMmdDataIO.Pmx.Data
             Index = parser.ReadPmxId(parser.SizeVertex);
             Position = parser.ReadVector3();
         }
-
-        public byte GetMorphType()
-        {
-            return PmxMorphData.MORPHTYPE_VERTEX;
-        }
     }
 }

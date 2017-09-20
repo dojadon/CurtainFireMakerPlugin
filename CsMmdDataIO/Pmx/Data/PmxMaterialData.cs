@@ -89,8 +89,8 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Parse(PmxParser parser)
         {
-            MaterialName = parser.ReadPmxText();
-            MaterialNameE = parser.ReadPmxText();
+            MaterialName = parser.ReadText();
+            MaterialNameE = parser.ReadText();
 
             Diffuse = parser.ReadVector4();
             Specular = parser.ReadVector3();
@@ -116,7 +116,7 @@ namespace CsMmdDataIO.Pmx.Data
                 ToonId = parser.ReadByte();
             }
 
-            Script = parser.ReadPmxText();
+            Script = parser.ReadText();
 
             FaceCount = parser.ReadInt32();
         }

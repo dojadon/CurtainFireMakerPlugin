@@ -24,39 +24,34 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxId(PmxExporter.SIZE_MATERIAL, this.Index);
+            exporter.WritePmxId(PmxExporter.SIZE_MATERIAL, Index);
 
-            exporter.Write(this.CalcType);
-            exporter.Write(this.Diffuse);
-            exporter.Write(this.Specular);
-            exporter.Write(this.Shininess);
-            exporter.Write(this.Ambient);
-            exporter.Write(this.Edge);
-            exporter.Write(this.EdgeThick);
-            exporter.Write(this.Texture);
-            exporter.Write(this.SphereTexture);
-            exporter.Write(this.ToonTexture);
+            exporter.Write(CalcType);
+            exporter.Write(Diffuse);
+            exporter.Write(Specular);
+            exporter.Write(Shininess);
+            exporter.Write(Ambient);
+            exporter.Write(Edge);
+            exporter.Write(EdgeThick);
+            exporter.Write(Texture);
+            exporter.Write(SphereTexture);
+            exporter.Write(ToonTexture);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.Index = parser.ReadPmxId(parser.SizeMaterial);
+            Index = parser.ReadPmxId(parser.SizeMaterial);
 
-            this.CalcType = parser.ReadByte();
-            this.Diffuse = parser.ReadVector4();
-            this.Specular = parser.ReadVector3();
-            this.Shininess = parser.ReadSingle();
-            this.Ambient = parser.ReadVector3();
-            this.Edge = parser.ReadVector4();
-            this.EdgeThick = parser.ReadSingle();
-            this.Texture = parser.ReadVector4();
-            this.SphereTexture = parser.ReadVector4();
-            this.ToonTexture = parser.ReadVector4();
-        }
-
-        public byte GetMorphType()
-        {
-            return PmxMorphData.MORPHTYPE_MATERIAL;
+            CalcType = parser.ReadByte();
+            Diffuse = parser.ReadVector4();
+            Specular = parser.ReadVector3();
+            Shininess = parser.ReadSingle();
+            Ambient = parser.ReadVector3();
+            Edge = parser.ReadVector4();
+            EdgeThick = parser.ReadSingle();
+            Texture = parser.ReadVector4();
+            SphereTexture = parser.ReadVector4();
+            ToonTexture = parser.ReadVector4();
         }
     }
 }
