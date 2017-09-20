@@ -16,19 +16,19 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxId(PmxExporter.SIZE_VERTEX, this.Index);
-            exporter.Write(this.Uv);
+            exporter.WritePmxId(PmxExporter.SIZE_VERTEX, Index);
+            exporter.Write(Uv);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.Index = parser.ReadPmxId(parser.SizeVertex);
-            this.Uv = parser.ReadVector4();
+            Index = parser.ReadPmxId(parser.SizeVertex);
+            Uv = parser.ReadVector4();
         }
 
         public byte GetMorphType()
         {
-            return this.UvType;
+            return UvType;
         }
     }
 }

@@ -19,14 +19,14 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            this.ExportPmxData(this.Header, exporter);
-            this.ExportPmxData(this.VertexArray, exporter);
-            this.ExportData(this.VertexIndices, (i, ex) => ex.Write(i), exporter);
-            this.ExportData(this.TextureFiles, (s, ex) => ex.WritePmxText(s), exporter);
-            this.ExportPmxData(this.MaterialArray, exporter);
-            this.ExportPmxData(this.BoneArray, exporter);
-            this.ExportPmxData(this.MorphArray, exporter);
-            this.ExportPmxData(this.SlotArray, exporter);
+            ExportPmxData(Header, exporter);
+            ExportPmxData(VertexArray, exporter);
+            ExportData(VertexIndices, (i, ex) => ex.Write(i), exporter);
+            ExportData(TextureFiles, (s, ex) => ex.WriteText(s), exporter);
+            ExportPmxData(MaterialArray, exporter);
+            ExportPmxData(BoneArray, exporter);
+            ExportPmxData(MorphArray, exporter);
+            ExportPmxData(SlotArray, exporter);
             exporter.Write(0);//Number of Rigid
             exporter.Write(0);//Number of Joint
             // exporter.Write(0);//Number of SoftBody
@@ -34,14 +34,14 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Parse(PmxParser parser)
         {
-            this.ParsePmxData(this.Header, parser);
-            this.VertexArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxVertexData[len], i => new PmxVertexData()), parser);
-            this.VertexIndices = this.ParseData(len => new int[len], (p, i) => p.ReadPmxId(parser.SizeVertex), parser);
-            this.TextureFiles = this.ParseData(len => new string[len], (p, i) => p.ReadPmxText(), parser);
-            this.MaterialArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxMaterialData[len], i => new PmxMaterialData()), parser);
-            this.BoneArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxBoneData[len], i => new PmxBoneData()), parser);
-            this.MorphArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxMorphData[len], i => new PmxMorphData()), parser);
-            this.SlotArray = this.ParsePmxData(len => ArrayUtil.Set(new PmxSlotData[len], i => new PmxSlotData()), parser);
+            ParsePmxData(Header, parser);
+            VertexArray = ParsePmxData(len => ArrayUtil.Set(new PmxVertexData[len], i => new PmxVertexData()), parser);
+            VertexIndices = ParseData(len => new int[len], (p, i) => p.ReadPmxId(parser.SizeVertex), parser);
+            TextureFiles = ParseData(len => new string[len], (p, i) => p.ReadPmxText(), parser);
+            MaterialArray = ParsePmxData(len => ArrayUtil.Set(new PmxMaterialData[len], i => new PmxMaterialData()), parser);
+            BoneArray = ParsePmxData(len => ArrayUtil.Set(new PmxBoneData[len], i => new PmxBoneData()), parser);
+            MorphArray = ParsePmxData(len => ArrayUtil.Set(new PmxMorphData[len], i => new PmxMorphData()), parser);
+            SlotArray = ParsePmxData(len => ArrayUtil.Set(new PmxSlotData[len], i => new PmxSlotData()), parser);
         }
 
         private void ExportData<T>(T[] data, Action<T, PmxExporter> action, PmxExporter exporter)

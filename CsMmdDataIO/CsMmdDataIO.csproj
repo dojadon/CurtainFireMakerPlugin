@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExporterBase.cs" />
     <Compile Include="Vmd\VmdExporter.cs" />
     <Compile Include="Vmd\Data\IVmdData.cs" />
     <Compile Include="Vmd\Data\VmdHeaderData.cs" />

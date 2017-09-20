@@ -20,7 +20,7 @@ namespace CsMmdDataIO.Vmd.Data
 
         public void Export(VmdExporter exporter)
         {
-            exporter.WriteVmdText(BoneName, VmdExporter.BONE_NAME_LENGTH);
+            exporter.WriteTextWithFixedLength(BoneName, VmdExporter.BONE_NAME_LENGTH);
             exporter.Write(KeyFrameNo);
             exporter.Write(Pos);
             exporter.Write(Rot);

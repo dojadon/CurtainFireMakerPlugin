@@ -20,41 +20,41 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(this.SlotName);
-            exporter.WritePmxText(this.SlotNameE);
+            exporter.WriteText(SlotName);
+            exporter.WriteText(SlotNameE);
 
-            exporter.Write((byte)(this.NormalSlot ? 0 : 1));
+            exporter.Write((byte)(NormalSlot ? 0 : 1));
 
-            int elementCount = this.Indices.Length;
+            int elementCount = Indices.Length;
             exporter.Write(elementCount);
 
-            byte size = this.Type == SLOT_TYPE_BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
+            byte size = Type == SLOT_TYPE_BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
 
             for (int i = 0; i < elementCount; i++)
             {
-                exporter.Write(this.Type);
+                exporter.Write(Type);
 
-                int id = this.Indices[i];
+                int id = Indices[i];
                 exporter.WritePmxId(size, id);
             }
         }
 
         public void Parse(PmxParser parser)
         {
-            this.SlotName = parser.ReadPmxText();
-            this.SlotNameE = parser.ReadPmxText();
+            SlotName = parser.ReadPmxText();
+            SlotNameE = parser.ReadPmxText();
 
-            this.NormalSlot = parser.ReadByte() == 0;
+            NormalSlot = parser.ReadByte() == 0;
 
             int elementCount = parser.ReadInt32();
-            this.Indices = new int[elementCount];
+            Indices = new int[elementCount];
 
             for (int i = 0; i < elementCount; i++)
             {
                 byte type = parser.ReadByte();
                 byte size = type == SLOT_TYPE_BONE ? parser.SizeBone : parser.SizeMorph;
 
-                this.Indices[i] = parser.ReadPmxId(size);
+                Indices[i] = parser.ReadPmxId(size);
             }
         }
     }

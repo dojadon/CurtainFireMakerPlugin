@@ -6,9 +6,9 @@ using CsMmdDataIO.Pmx.Data;
 
 namespace CsMmdDataIO.Pmx
 {
-    public class PmxExporter : BinaryWriter
+    public class PmxExporter : ExporterBase
     {
-        private static readonly Encoding ENCORDER = Encoding.GetEncoding("utf-16");
+        public override Encoding CharEncording { get; } = Encoding.GetEncoding("utf-16");
 
         public const byte SIZE_VERTEX = 4;
         public const byte SIZE_TEXTURE = 2;
@@ -45,48 +45,6 @@ namespace CsMmdDataIO.Pmx
                     break;
             }
             return this;
-        }
-
-        public void WritePmxText(String text)
-        {
-            if (text == null)
-            {
-                text = "";
-            }
-
-            byte[] bytes = ENCORDER.GetBytes(text.ToCharArray());
-
-            Write(bytes.Length);
-            Write(bytes);
-        }
-
-        public void Write(Vector2 vec)
-        {
-            Write(vec.x);
-            Write(vec.y);
-        }
-
-        public void Write(Vector3 vec)
-        {
-            Write(vec.x);
-            Write(vec.y);
-            Write(vec.z);
-        }
-
-        public void Write(Vector4 vec)
-        {
-            Write(vec.x);
-            Write(vec.y);
-            Write(vec.z);
-            Write(vec.w);
-        }
-
-        public void Write(Quaternion vec)
-        {
-            Write(vec.x);
-            Write(vec.y);
-            Write(vec.z);
-            Write(vec.w);
         }
     }
 }

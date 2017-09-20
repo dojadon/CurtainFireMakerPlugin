@@ -52,8 +52,8 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(BoneName);
-            exporter.WritePmxText(BoneNameE);
+            exporter.WriteText(BoneName);
+            exporter.WriteText(BoneNameE);
 
             exporter.Write(Pos);
             exporter.WritePmxId(PmxExporter.SIZE_BONE, ParentId);

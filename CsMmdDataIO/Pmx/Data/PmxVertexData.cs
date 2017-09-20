@@ -14,7 +14,7 @@ namespace CsMmdDataIO.Pmx.Data
         public const byte WEIGHT_TYPE_BDEF4 = 2;
         public const byte WEIGHT_TYPE_SDEF = 3;
 
-        public int VertexId{ get; set; }
+        public int VertexId { get; set; }
 
         public Vector3 Pos { get; set; }
         public Vector3 Normal { get; set; }
@@ -39,85 +39,85 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.Write(this.Pos);
-            exporter.Write(this.Normal);
-            exporter.Write(this.Uv);
+            exporter.Write(Pos);
+            exporter.Write(Normal);
+            exporter.Write(Uv);
 
             // for (byte i = 0; i < num_uv; i++)
             // {
             // exporter.dumpLeFloat(uvEX.x).dumpLeFloat(uvEX.y).dumpLeFloat(uvEX.z).dumpLeFloat(uvEX.w);
             // }
 
-            exporter.Write(this.WeightType);
+            exporter.Write(WeightType);
 
             for (byte i = 0; i < this.BoneId.Length; i++)
             {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, this.BoneId[i]);
+                exporter.WritePmxId(PmxExporter.SIZE_BONE, BoneId[i]);
             }
 
-            switch (this.WeightType)
+            switch (WeightType)
             {
                 case WEIGHT_TYPE_BDEF1:
                     break;
 
                 case WEIGHT_TYPE_BDEF2:
                 case WEIGHT_TYPE_SDEF:
-                    exporter.Write(this.Weight[0]);
+                    exporter.Write(Weight[0]);
                     break;
 
                 case WEIGHT_TYPE_BDEF4:
                     for (byte i = 0; i < 4; i++)
                     {
-                        exporter.Write(this.Weight[i]);
+                        exporter.Write(Weight[i]);
                     }
                     break;
             }
 
             if (this.WeightType == WEIGHT_TYPE_SDEF)
             {
-                exporter.Write(this.Sdef_c);
-                exporter.Write(this.Sdef_r0);
-                exporter.Write(this.Sdef_r1);
+                exporter.Write(Sdef_c);
+                exporter.Write(Sdef_r0);
+                exporter.Write(Sdef_r1);
             }
-            exporter.Write(this.Edge);
+            exporter.Write(Edge);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.Pos = parser.ReadVector3();
-            this.Normal = parser.ReadVector3();
-            this.Uv = parser.ReadVector2();
+            Pos = parser.ReadVector3();
+            Normal = parser.ReadVector3();
+            Uv = parser.ReadVector2();
 
-            this.WeightType = parser.ReadByte();
+            WeightType = parser.ReadByte();
 
-            switch (this.WeightType)
+            switch (WeightType)
             {
                 case WEIGHT_TYPE_BDEF1:
-                    this.BoneId = new int[1];
+                    BoneId = new int[1];
                     break;
 
                 case WEIGHT_TYPE_BDEF2:
                 case WEIGHT_TYPE_SDEF:
-                    this.BoneId = new int[2];
+                    BoneId = new int[2];
                     break;
 
                 case WEIGHT_TYPE_BDEF4:
-                    this.BoneId = new int[4];
+                    BoneId = new int[4];
                     break;
             }
 
-            for (int i = 0; i < this.BoneId.Length; i++)
+            for (int i = 0; i < BoneId.Length; i++)
             {
-                this.BoneId[i] = parser.ReadPmxId(parser.SizeBone);
+                BoneId[i] = parser.ReadPmxId(parser.SizeBone);
             }
 
-            if (this.WeightType == WEIGHT_TYPE_SDEF)
+            if (WeightType == WEIGHT_TYPE_SDEF)
             {
-                this.Sdef_c = parser.ReadVector3();
-                this.Sdef_r0 = parser.ReadVector3();
-                this.Sdef_r1 = parser.ReadVector3();
+                Sdef_c = parser.ReadVector3();
+                Sdef_r0 = parser.ReadVector3();
+                Sdef_r1 = parser.ReadVector3();
             }
-            this.Edge = parser.ReadSingle();
+            Edge = parser.ReadSingle();
         }
     }
 }

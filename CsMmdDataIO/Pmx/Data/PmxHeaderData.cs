@@ -31,14 +31,14 @@ namespace CsMmdDataIO.Pmx.Data
             exporter.Write((byte)PmxExporter.SIZE.Length);
             exporter.Write(PmxExporter.SIZE);
 
-            exporter.WritePmxText(this.ModelName);
-            exporter.WritePmxText(this.ModelNameE);
+            exporter.WriteText(this.ModelName);
+            exporter.WriteText(this.ModelNameE);
 
             String description = this.Description.Replace(LF, CRLF);
-            exporter.WritePmxText(description);
+            exporter.WriteText(description);
 
             String descriptionE = this.DescriptionE.Replace(LF, CRLF);
-            exporter.WritePmxText(descriptionE);
+            exporter.WriteText(descriptionE);
         }
 
         public void Parse(PmxParser parser)

@@ -13,7 +13,7 @@ namespace CsMmdDataIO.Vmd.Data
 
         public void Export(VmdExporter exporter)
         {
-            exporter.WriteVmdText(MorphName, VmdExporter.MORPH_NAME_LENGTH);
+            exporter.WriteTextWithFixedLength(MorphName, VmdExporter.MORPH_NAME_LENGTH);
             exporter.Write(KeyFrameNo);
             exporter.Write(Rate);
         }

@@ -15,18 +15,18 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxId(PmxExporter.SIZE_BONE, this.Index);
+            exporter.WritePmxId(PmxExporter.SIZE_BONE, Index);
 
-            exporter.Write(this.Position);
-            exporter.Write(this.Rotation);
+            exporter.Write(Position);
+            exporter.Write(Rotation);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.Index = parser.ReadPmxId(parser.SizeBone);
+            Index = parser.ReadPmxId(parser.SizeBone);
 
-            this.Position = parser.ReadVector3();
-            this.Rotation = parser.ReadQuaternion();
+            Position = parser.ReadVector3();
+            Rotation = parser.ReadQuaternion();
         }
 
         public byte GetMorphType()

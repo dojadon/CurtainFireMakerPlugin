@@ -55,70 +55,70 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(this.MaterialName);
-            exporter.WritePmxText(this.MaterialNameE);
+            exporter.WriteText(MaterialName);
+            exporter.WriteText(MaterialNameE);
 
-            exporter.Write(this.Diffuse);
-            exporter.Write(this.Specular);
-            exporter.Write(this.Shininess);
-            exporter.Write(this.Ambient);
+            exporter.Write(Diffuse);
+            exporter.Write(Specular);
+            exporter.Write(Shininess);
+            exporter.Write(Ambient);
 
-            exporter.Write(this.Flag);
+            exporter.Write(Flag);
 
-            exporter.Write(this.Edge);
-            exporter.Write(this.EdgeThick);
+            exporter.Write(Edge);
+            exporter.Write(EdgeThick);
 
-            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.TextureId);
-            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.SphereId);
-            exporter.Write(this.Mode);
-            exporter.Write(this.SharedToon);
+            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, TextureId);
+            exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, SphereId);
+            exporter.Write(Mode);
+            exporter.Write(SharedToon);
 
-            if (this.SharedToon == 0)
+            if (SharedToon == 0)
             {
-                exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, this.ToonId);
+                exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, ToonId);
             }
             else
             {
-                exporter.Write((byte)this.ToonId);
+                exporter.Write((byte)ToonId);
             }
 
-            exporter.WritePmxText(this.Script);
+            exporter.WriteText(Script);
 
-            exporter.Write(this.FaceCount);
+            exporter.Write(FaceCount);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.MaterialName = parser.ReadPmxText();
-            this.MaterialNameE = parser.ReadPmxText();
+            MaterialName = parser.ReadPmxText();
+            MaterialNameE = parser.ReadPmxText();
 
-            this.Diffuse = parser.ReadVector4();
-            this.Specular = parser.ReadVector3();
-            this.Shininess = parser.ReadSingle();
-            this.Ambient = parser.ReadVector3();
+            Diffuse = parser.ReadVector4();
+            Specular = parser.ReadVector3();
+            Shininess = parser.ReadSingle();
+            Ambient = parser.ReadVector3();
 
-            this.Flag = parser.ReadByte();
+            Flag = parser.ReadByte();
 
-            this.Edge = parser.ReadVector4();
-            this.EdgeThick = parser.ReadSingle();
+            Edge = parser.ReadVector4();
+            EdgeThick = parser.ReadSingle();
 
-            this.TextureId = parser.ReadPmxId(parser.SizeTexture);
-            this.SphereId = parser.ReadPmxId(parser.SizeTexture);
-            this.Mode = parser.ReadByte();
-            this.SharedToon = parser.ReadByte();
+            TextureId = parser.ReadPmxId(parser.SizeTexture);
+            SphereId = parser.ReadPmxId(parser.SizeTexture);
+            Mode = parser.ReadByte();
+            SharedToon = parser.ReadByte();
 
-            if (this.SharedToon == 0)
+            if (SharedToon == 0)
             {
-                this.ToonId = parser.ReadPmxId(parser.SizeTexture);
+                ToonId = parser.ReadPmxId(parser.SizeTexture);
             }
             else
             {
-                this.ToonId = parser.ReadByte();
+                ToonId = parser.ReadByte();
             }
 
-            this.Script = parser.ReadPmxText();
+            Script = parser.ReadPmxText();
 
-            this.FaceCount = parser.ReadInt32();
+            FaceCount = parser.ReadInt32();
         }
     }
 }

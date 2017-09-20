@@ -24,8 +24,8 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxText(MorphName);
-            exporter.WritePmxText(MorphNameE);
+            exporter.WriteText(MorphName);
+            exporter.WriteText(MorphNameE);
 
             exporter.Write(Type);
 

@@ -14,14 +14,14 @@ namespace CsMmdDataIO.Pmx.Data
 
         public void Export(PmxExporter exporter)
         {
-            exporter.WritePmxId(PmxExporter.SIZE_VERTEX, this.Index);
-            exporter.Write(this.Position);
+            exporter.WritePmxId(PmxExporter.SIZE_VERTEX, Index);
+            exporter.Write(Position);
         }
 
         public void Parse(PmxParser parser)
         {
-            this.Index = parser.ReadPmxId(parser.SizeVertex);
-            this.Position = parser.ReadVector3();
+            Index = parser.ReadPmxId(parser.SizeVertex);
+            Position = parser.ReadVector3();
         }
 
         public byte GetMorphType()
