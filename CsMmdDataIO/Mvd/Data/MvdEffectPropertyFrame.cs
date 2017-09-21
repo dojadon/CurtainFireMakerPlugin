@@ -3,8 +3,8 @@ using System.Linq;
 
 namespace CsMmdDataIO.Mvd.Data
 {
-	public class MvdEffectPropertyFrame : MvdAccessoryPropertyFrame
-	{
+	public class MvdEffectPropertyFrame : MvdAccessoryPropertyFrame,  IKeyFrame
+    {
 		public MvdEffectParameterData[] Parameters
 		{
 			get;

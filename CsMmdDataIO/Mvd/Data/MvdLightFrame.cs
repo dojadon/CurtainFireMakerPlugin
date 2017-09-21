@@ -4,7 +4,7 @@ using VecMath;
 
 namespace CsMmdDataIO.Mvd.Data
 {
-    public class MvdLightFrame
+    public class MvdLightFrame : IKeyFrame
     {
         public long FrameTime
         {

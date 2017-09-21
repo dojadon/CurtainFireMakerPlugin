@@ -32,7 +32,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         public void AddMvdPropertyFrame(MvdModelPropertyFrame frame)
         {
-
+            PropertySection.Frames.Add(frame);
         }
 
         public void AddMvdBoneFrame(PmxBoneData bone, MvdBoneFrame frame)
@@ -88,27 +88,27 @@ namespace CurtainFireMakerPlugin.Entities.Models
         {
             foreach (var section in BoneSectionDict.Values)
             {
-                DistinctFrames(section.Frames, frame => frame.FrameTime);
+                DistinctFrames(section.Frames);
             }
 
             foreach (var section in MorphSectionDict.Values)
             {
-                DistinctFrames(section.Frames, frame => frame.FrameTime);
+                DistinctFrames(section.Frames);
             }
+
+            DistinctFrames(PropertySection.Frames);
         }
 
-        private void DistinctFrames<T>(IList<T> frames, Func<T, long> getFrameTime)
+        private void DistinctFrames<T>(IList<T> frames) where T : IKeyFrame
         {
             var frameNums = new HashSet<long>();
             var removeList = new List<T>();
 
             foreach (var frame in frames)
             {
-                long frameTime = getFrameTime(frame);
-
-                if (!frameNums.Contains(frameTime))
+                if (!frameNums.Contains(frame.FrameTime))
                 {
-                    frameNums.Add(frameTime);
+                    frameNums.Add(frame.FrameTime);
                 }
                 else
                 {

@@ -4,8 +4,8 @@ using VecMath;
 
 namespace CsMmdDataIO.Mvd.Data
 {
-	public class MvdCameraFrame
-	{
+	public class MvdCameraFrame : IKeyFrame
+    {
 		public int StageId
 		{
 			get;

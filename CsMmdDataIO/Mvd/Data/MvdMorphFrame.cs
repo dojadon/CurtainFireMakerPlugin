@@ -3,8 +3,8 @@ using System.Linq;
 
 namespace CsMmdDataIO.Mvd.Data
 {
-	public class MvdMorphFrame
-	{
+	public class MvdMorphFrame : IKeyFrame
+    {
 		public long FrameTime
 		{
 			get;

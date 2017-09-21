@@ -2,8 +2,8 @@
 
 namespace CsMmdDataIO.Mvd.Data
 {
-	public class MvdCameraPropertyFrame
-	{
+	public class MvdCameraPropertyFrame : IKeyFrame
+    {
 		public long FrameTime
 		{
 			get;
