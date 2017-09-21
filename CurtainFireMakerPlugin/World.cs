@@ -23,7 +23,7 @@ namespace CurtainFireMakerPlugin
 
         internal ShotManager ShotManager { get; }
         internal CurtainFireModel PmxModel { get; }
-        internal CurtainFireMotion VmdMotion { get; }
+        internal CurtainFireMotion KeyFrames { get; }
 
         private TaskManager TaskManager { get; } = new TaskManager();
 
@@ -35,14 +35,14 @@ namespace CurtainFireMakerPlugin
         {
             ShotManager = new ShotManager(this);
             PmxModel = new CurtainFireModel(this);
-            VmdMotion = new CurtainFireMotion(this);
+            KeyFrames = new CurtainFireMotion(this);
 
             ExportFileName = fileName;
 
             Export += (obj, e) =>
             {
                 PmxModel.Export(this);
-                VmdMotion.Export(this);
+                KeyFrames.Export(this);
             };
         }
 
@@ -92,6 +92,7 @@ namespace CurtainFireMakerPlugin
         internal void Finish()
         {
             EntityList.ForEach(e => e.OnDeath());
+            KeyFrames.Finish();
             PmxModel.Finish();
 
             OnExport(EventArgs.Empty);

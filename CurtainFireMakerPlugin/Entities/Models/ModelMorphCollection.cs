@@ -6,6 +6,7 @@ using CurtainFireMakerPlugin.Collections;
 using CsMmdDataIO.Pmx;
 using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Vmd.Data;
+using CsMmdDataIO.Mvd.Data;
 using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities.Models
@@ -21,9 +22,9 @@ namespace CurtainFireMakerPlugin.Entities.Models
             World = world;
         }
 
-        public void SetupMaterialMorph(PmxMorphData morph, int materialCount, int appliedMaterialCount)
+        public void SetupMaterialMorph(ShotProperty prop, PmxMorphData morph, int materialCount, int appliedMaterialCount)
         {
-            morph.MorphName = MorphList.Count.ToString();
+            morph.MorphName ="MO_" +  prop.Type.Name[0] + MorphList.Count.ToString();
             morph.SlotType = SlotType.RIP;
             morph.MorphType = MorphType.MATERIAL;
 
@@ -56,8 +57,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         public void CompressMorph(ModelMaterialCollection materials, ModelVertexCollection vertices)
         {
-            CurtainFireMotion vmdMotion = World.VmdMotion;
-
             var typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
             foreach (var morph in MorphList)
             {
@@ -66,7 +65,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
             foreach (var morphList in typeMorphDict.Values)
             {
-                Compress(morphList, vmdMotion.MorphDict);
+                Compress(morphList, World.KeyFrames.MorphSectionDict);
             }
 
             typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
@@ -87,13 +86,16 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
         }
 
-        private void Compress(List<PmxMorphData> morphList, MultiDictionary<PmxMorphData, VmdMorphFrameData> frameDataDict)
+        private void Compress(List<PmxMorphData> morphList, Dictionary<PmxMorphData, MvdMorphData> frameDict)
         {
-            var dict = new MultiDictionary<int[], PmxMorphData>(new IntegerArrayComparer());
+            var dict = new MultiDictionary<List<long>, PmxMorphData>(new IntegerArrayComparer());
 
             foreach (var morph in morphList)
             {
-                dict.Add(Array.ConvertAll(frameDataDict[morph].ToArray(), m => m.KeyFrameNo), morph);
+                var frames = new List<MvdMorphFrame>();
+                frames.AddRange(frameDict[morph].Frames);
+
+                dict.Add(frames.ConvertAll(m => m.FrameTime), morph);
             }
 
             foreach (var key in dict.Keys)
@@ -109,7 +111,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
                         var morph = removeList[i];
 
                         MorphList.Remove(morph);
-                        World.VmdMotion.MorphDict.Remove(morph);
                     }
                 }
             }
@@ -144,15 +145,15 @@ namespace CurtainFireMakerPlugin.Entities.Models
         }
     }
 
-    class IntegerArrayComparer : IEqualityComparer<int[]>
+    class IntegerArrayComparer : IEqualityComparer<List<long>>
     {
-        public bool Equals(int[] x, int[] y)
+        public bool Equals(List<long> x, List<long> y)
         {
-            if (x.Length != y.Length)
+            if (x.Count != y.Count)
             {
                 return false;
             }
-            for (int i = 0; i < x.Length; i++)
+            for (int i = 0; i < x.Count; i++)
             {
                 if (x[i] != y[i])
                 {
@@ -162,14 +163,14 @@ namespace CurtainFireMakerPlugin.Entities.Models
             return true;
         }
 
-        public int GetHashCode(int[] obj)
+        public int GetHashCode(List<long> obj)
         {
             int result = 17;
-            for (int i = 0; i < obj.Length; i++)
+            for (int i = 0; i < obj.Count; i++)
             {
                 unchecked
                 {
-                    result = result * 23 + obj[i];
+                    result = result * 23 + obj[i].GetHashCode();
                 }
             }
             return result;

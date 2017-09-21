@@ -43,9 +43,9 @@ namespace CurtainFireMakerPlugin.Entities.Models
         {
             Vertices.SetupVertices(data.Vertices, data.Indices, Array.ConvertAll(data.Materials, m => m.FaceCount), Bones.BoneList.Count);
 
-            Morphs.SetupMaterialMorph(data.MaterialMorph, Materials.MaterialList.Count, data.Materials.Length);
+            Morphs.SetupMaterialMorph(data.Property, data.MaterialMorph, Materials.MaterialList.Count, data.Materials.Length);
 
-            Materials.SetupMaterials(data.Materials, data.Textures);
+            Materials.SetupMaterials(data.Property, data.Materials, data.Textures);
 
             Bones.SetupBone(data, data.Bones);
         }

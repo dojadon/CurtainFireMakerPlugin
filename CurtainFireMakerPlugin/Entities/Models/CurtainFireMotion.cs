@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.IO;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Collections;
 using CsMmdDataIO.Vmd.Data;
 using CsMmdDataIO.Vmd;
 using CsMmdDataIO.Pmx.Data;
+using CsMmdDataIO.Mvd.Data;
 
 namespace CurtainFireMakerPlugin.Entities.Models
 {
     internal class CurtainFireMotion
     {
+        public List<string> NameList { get; } = new List<string>();
+
+        public MvdNameList NameListSection { get; } = new MvdNameList();
+        public MvdModelPropertyData PropertySection { get; } = new MvdModelPropertyData();
+        public Dictionary<PmxBoneData, MvdBoneData> BoneSectionDict { get; } = new Dictionary<PmxBoneData, MvdBoneData>();
+        public Dictionary<PmxMorphData, MvdMorphData> MorphSectionDict { get; } = new Dictionary<PmxMorphData, MvdMorphData>();
+
         private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
         public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphDict { get; } = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
 
@@ -22,62 +30,140 @@ namespace CurtainFireMakerPlugin.Entities.Models
             World = world;
         }
 
-        public void AddVmdMotion(VmdMotionFrameData frameData)
+        public void AddMvdPropertyFrame(MvdModelPropertyFrame frame)
         {
-            if (frameData.KeyFrameNo < 0)
+
+        }
+
+        public void AddMvdBoneFrame(PmxBoneData bone, MvdBoneFrame frame)
+        {
+            if (frame.FrameTime < 0) return;
+
+            var name = bone.BoneName;
+
+            if (!NameList.Contains(name))
             {
-                return;
+                NameListSection.Names[NameList.Count] = name;
+                NameList.Add(name);
             }
 
-            if (!motionList.Exists(m => m.BoneName == frameData.BoneName && m.KeyFrameNo == frameData.KeyFrameNo))
+            if (!BoneSectionDict.ContainsKey(bone))
             {
-                motionList.Add(frameData);
+                BoneSectionDict[bone] = new MvdBoneData()
+                {
+                    Key = NameList.IndexOf(name),
+                    ParentClipId = -1,
+                    StageCount = 1,
+                };
+            }
+
+            BoneSectionDict[bone].Frames.Add(frame);
+        }
+
+        public void AddMvdMorphFrame(PmxMorphData morph, MvdMorphFrame frame)
+        {
+            if (frame.FrameTime < 0) return;
+
+            var name = morph.MorphName;
+
+            if (!NameList.Contains(name))
+            {
+                NameListSection.Names[NameList.Count] = name;
+                NameList.Add(name);
+            }
+
+            if (!MorphSectionDict.ContainsKey(morph))
+            {
+                MorphSectionDict[morph] = new MvdMorphData()
+                {
+                    Key = NameList.IndexOf(name),
+                    ParentClipId = -1,
+                };
+            }
+
+            MorphSectionDict[morph].Frames.Add(frame);
+        }
+
+        public void Finish()
+        {
+            foreach (var section in BoneSectionDict.Values)
+            {
+                DistinctFrames(section.Frames, frame => frame.FrameTime);
+            }
+
+            foreach (var section in MorphSectionDict.Values)
+            {
+                DistinctFrames(section.Frames, frame => frame.FrameTime);
             }
         }
 
-        public void AddVmdMorph(VmdMorphFrameData frameData, PmxMorphData morph)
+        private void DistinctFrames<T>(IList<T> frames, Func<T, long> getFrameTime)
         {
-            if (frameData.KeyFrameNo < 0)
+            var frameNums = new HashSet<long>();
+            var removeList = new List<T>();
+
+            foreach (var frame in frames)
             {
-                return;
+                long frameTime = getFrameTime(frame);
+
+                if (!frameNums.Contains(frameTime))
+                {
+                    frameNums.Add(frameTime);
+                }
+                else
+                {
+                    removeList.Add(frame);
+                }
             }
 
-            if (!MorphDict[morph].Exists(m => m.MorphName == frameData.MorphName && m.KeyFrameNo == frameData.KeyFrameNo))
+            foreach (var frame in removeList)
             {
-                MorphDict[morph].Add(frameData);
+                frames.Remove(frame);
             }
         }
 
-        public void GetData(VmdMotionData data)
+        private void ExportMvd(Stream outStream)
         {
-            data.MotionArray = this.motionList.ToArray();
-
-            var list = new List<VmdMorphFrameData>();
-            foreach (var value in MorphDict.Values)
+            var doc = new MvdDocument()
             {
-                list.AddRange(value);
+                Version = 1.0F,
+                Encoding = Encoding.Unicode,
+            };
+
+            var obj = new MvdObject()
+            {
+                ObjectName = "弾幕",
+                EnglishObjectName = "Curtain Fire",
+                KeyFps = World.Scene.KeyFramePerSec,
+            };
+
+            obj.Sections.Add(NameListSection);
+
+            foreach (var section in BoneSectionDict.Values)
+            {
+                obj.Sections.Add(section);
             }
-            data.MorphArray = list.ToArray();
+
+            foreach (var section in MorphSectionDict.Values)
+            {
+                obj.Sections.Add(section);
+            }
+
+            doc.Objects.Add(obj);
+
+            doc.Write(outStream);
         }
 
         public void Export(World world)
         {
             var config = Plugin.Instance.Config;
 
-            string fileName = Path.GetFileNameWithoutExtension(config.ScriptPath);
-            string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
+            string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".mvd";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
             {
-                var exporter = new VmdExporter(stream);
-
-                var data = new VmdMotionData();
-                GetData(data);
-
-                data.Header.ModelName = config.ModelName;
-
-                exporter.Export(data);
+                ExportMvd(stream);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             World = world;
         }
 
-        public void SetupMaterials(PmxMaterialData[] materials, string[] textures)
+        public void SetupMaterials(ShotProperty prop, PmxMaterialData[] materials, string[] textures)
         {
             foreach (var texture in textures)
             {
@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = MaterialList.Count.ToString();
+                material.MaterialName = "MA_" + prop.Type.Name[0] + MaterialList.Count.ToString();
 
                 if (0 <= material.TextureId && material.TextureId < textures.Length)
                 {

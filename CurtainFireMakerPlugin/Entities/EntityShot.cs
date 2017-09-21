@@ -1,5 +1,6 @@
 ﻿using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Vmd.Data;
+using CsMmdDataIO.Mvd.Data;
 using CurtainFireMakerPlugin.Mathematics;
 using System;
 using VecMath;
@@ -88,33 +89,33 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (World.FrameCount < 0)
             {
-                AddVmdMorph(-World.FrameCount, 0.0F, MaterialMorph);
+                AddMorphFrame(-World.FrameCount, 0.0F, MaterialMorph);
             }
             else
             {
-                AddVmdMorph(0, 1.0F, MaterialMorph);
-                AddVmdMorph(1, 0.0F, MaterialMorph);
-                AddVmdMorph(-World.FrameCount, 1.0F, MaterialMorph);
+                AddMorphFrame(0, 1.0F, MaterialMorph);
+                AddMorphFrame(1, 0.0F, MaterialMorph);
+                AddMorphFrame(-World.FrameCount, 1.0F, MaterialMorph);
             }
 
-            AddVmdMotion();
+            AddBoneFrame();
         }
 
         public override void OnDeath()
         {
             base.OnDeath();
 
-            AddVmdMorph(-1, 0.0F, MaterialMorph);
-            AddVmdMorph(0, 1.0F, MaterialMorph);
+            AddMorphFrame(-1, 0.0F, MaterialMorph);
+            AddMorphFrame(0, 1.0F, MaterialMorph);
 
-            AddVmdMotion();
+            AddBoneFrame();
         }
 
         internal override void Frame()
         {
             if (ShouldRecord(this) || World.FrameCount == 0)
             {
-                AddVmdMotion();
+                AddBoneFrame();
             }
             IsUpdatedVelocity = IsUpdatedLocalMat = false;
 
@@ -125,17 +126,17 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.SetMotionInterpolationCurve(pos1, pos2, length);
 
-            AddVmdMotion();
+            AddBoneFrame();
         }
 
         protected override void RemoveMotionInterpolationCurve()
         {
-            AddVmdMotion();
+            AddBoneFrame();
 
             base.RemoveMotionInterpolationCurve();
         }
 
-        public void AddVmdMotion()
+        public void AddBoneFrame()
         {
             var bezier = CubicBezierCurve.Line;
 
@@ -144,40 +145,44 @@ namespace CurtainFireMakerPlugin.Entities
                 bezier = MotionInterpolation.Curve;
             }
 
-            AddVmdMotion(RootBone, GetRecordedPos(this), GetRecordedRot(this), bezier);
+            AddBoneFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), bezier);
         }
 
-        public void AddVmdMotion(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
+        public void AddBoneFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
         {
-            var interpolation = new byte[4];
-            interpolation[0] = (byte)(127 * bezier.P1.x);
-            interpolation[1] = (byte)(127 * bezier.P1.y);
-            interpolation[2] = (byte)(127 * bezier.P2.x);
-            interpolation[3] = (byte)(127 * bezier.P2.y);
-
-            World.VmdMotion.AddVmdMotion(new VmdMotionFrameData()
+            var point1 = new MvdInterpolationPoint()
             {
-                BoneName = bone.BoneName,
-                KeyFrameNo = World.FrameCount,
-                Pos = pos,
-                Rot = rot,
-                InterpolatePointX = interpolation,
-                InterpolatePointY = interpolation,
-                InterpolatePointZ = interpolation,
-                InterpolatePointR = interpolation,
+                X = (byte)(127 * bezier.P1.x),
+                Y = (byte)(127 * bezier.P1.y)
+            };
+            var point2 = new MvdInterpolationPoint()
+            {
+                X = (byte)(127 * bezier.P2.x),
+                Y = (byte)(127 * bezier.P2.y)
+            };
+
+            var interpolation = new MvdInterpolationPoint[] { point1, point2 };
+
+            World.KeyFrames.AddMvdBoneFrame(bone, new MvdBoneFrame()
+            {
+                FrameTime = World.FrameCount,
+                Position = pos,
+                Quaternion = rot,
+                XInterpolation = interpolation,
+                YInterpolation = interpolation,
+                ZInterpolation = interpolation,
             });
         }
 
-        public void AddVmdMorph(int frameOffset, float rate, PmxMorphData morph, bool replace = false)
+        public void AddMorphFrame(int frameOffset, float weight, PmxMorphData morph)
         {
             if (Property.Type.HasMesh)
             {
-                World.VmdMotion.AddVmdMorph(new VmdMorphFrameData()
+                World.KeyFrames.AddMvdMorphFrame(morph, new MvdMorphFrame()
                 {
-                    MorphName = morph.MorphName,
-                    KeyFrameNo = World.FrameCount + frameOffset,
-                    Rate = rate
-                }, morph);
+                    FrameTime = World.FrameCount + frameOffset,
+                    Weight = weight,
+                });
             }
         }
 
