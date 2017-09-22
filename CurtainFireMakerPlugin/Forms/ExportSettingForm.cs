@@ -35,7 +35,6 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
         public bool KeepLogOpen { get => keepLogOpenCheckBox.Checked; set => keepLogOpenCheckBox.Checked = value; }
-        public int StartFrame { get => (int)StartFrameNumeric.Value; set => StartFrameNumeric.Value = value; }
 
         public ExportSettingForm()
         {

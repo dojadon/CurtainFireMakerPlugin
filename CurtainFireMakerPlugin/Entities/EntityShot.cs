@@ -1,5 +1,4 @@
 ﻿using CsMmdDataIO.Pmx.Data;
-using CsMmdDataIO.Vmd.Data;
 using CsMmdDataIO.Mvd.Data;
 using CurtainFireMakerPlugin.Mathematics;
 using System;
@@ -89,33 +88,33 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (World.FrameCount < 0)
             {
-                AddMorphFrame(-World.FrameCount, 0.0F, MaterialMorph);
+                AddMorphKeyFrame(MaterialMorph, -World.FrameCount, 0.0F);
             }
             else
             {
-                AddMorphFrame(0, 1.0F, MaterialMorph);
-                AddMorphFrame(1, 0.0F, MaterialMorph);
-                AddMorphFrame(-World.FrameCount, 1.0F, MaterialMorph);
+                AddMorphKeyFrame(MaterialMorph, 0, 1.0F);
+                AddMorphKeyFrame(MaterialMorph, 1, 0.0F);
+                AddMorphKeyFrame(MaterialMorph, -World.FrameCount, 1.0F);
             }
 
-            AddBoneFrame();
+            AddBoneKeyFrame();
         }
 
         public override void OnDeath()
         {
             base.OnDeath();
 
-            AddMorphFrame(-1, 0.0F, MaterialMorph);
-            AddMorphFrame(0, 1.0F, MaterialMorph);
+            AddMorphKeyFrame(MaterialMorph, -1, 0.0F);
+            AddMorphKeyFrame(MaterialMorph, 0, 1.0F);
 
-            AddBoneFrame();
+            AddBoneKeyFrame();
         }
 
         internal override void Frame()
         {
             if (ShouldRecord(this) || World.FrameCount == 0)
             {
-                AddBoneFrame();
+                AddBoneKeyFrame();
             }
             IsUpdatedVelocity = IsUpdatedLocalMat = false;
 
@@ -126,17 +125,17 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.SetMotionInterpolationCurve(pos1, pos2, length);
 
-            AddBoneFrame();
+            AddBoneKeyFrame();
         }
 
         protected override void RemoveMotionInterpolationCurve()
         {
-            AddBoneFrame();
+            AddBoneKeyFrame();
 
             base.RemoveMotionInterpolationCurve();
         }
 
-        public void AddBoneFrame()
+        public void AddBoneKeyFrame()
         {
             var bezier = CubicBezierCurve.Line;
 
@@ -145,10 +144,10 @@ namespace CurtainFireMakerPlugin.Entities
                 bezier = MotionInterpolation.Curve;
             }
 
-            AddBoneFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), bezier);
+            AddBoneKeyFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), bezier);
         }
 
-        public void AddBoneFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
+        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
         {
             var point1 = new MvdInterpolationPoint()
             {
@@ -174,7 +173,7 @@ namespace CurtainFireMakerPlugin.Entities
             });
         }
 
-        public void AddMorphFrame(int frameOffset, float weight, PmxMorphData morph)
+        public void AddMorphKeyFrame(PmxMorphData morph, int frameOffset, float weight)
         {
             if (Property.Type.HasMesh)
             {

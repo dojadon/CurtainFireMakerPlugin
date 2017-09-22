@@ -16,6 +16,17 @@ namespace VecMath
         public float z;
         public float w;
 
+        public Vector3 xyz
+        {
+            get => new Vector3(x, y, z);
+            set
+            {
+                x = value.x;
+                y = value.y;
+                z = value.z;
+            }
+        }
+
         public float Length() => (float)Math.Sqrt(x * x + y * y + z * z + w * w);
 
         public Quaternion(float x, float y, float z, float w)
@@ -54,10 +65,8 @@ namespace VecMath
 
         public static Quaternion Mul(Quaternion q1, Quaternion q2) => new Quaternion()
         {
-            w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
-            x = q1.w * q2.x + q2.w * q1.x - q1.y * q2.z + q1.z * q2.y,
-            y = q1.w * q2.y + q2.w * q1.y + q1.x * q2.z - q1.z * q2.x,
-            z = q1.w * q2.z + q2.w * q1.z - q1.x * q2.y + q1.y * q2.x
+            w = q1.w * q2.w - q1.xyz * q2.xyz,
+            xyz = q1.w * q2.xyz + q2.w * q1.xyz + q2.xyz ^ q1.xyz,
         };
 
         public static Quaternion Normalize(Quaternion q1)

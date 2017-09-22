@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using MikuMikuPlugin;
-using CurtainFireMakerPlugin.Collections;
-using CsMmdDataIO.Vmd.Data;
-using CsMmdDataIO.Vmd;
 using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Mvd.Data;
 
@@ -16,12 +12,13 @@ namespace CurtainFireMakerPlugin.Entities.Models
         public List<string> NameList { get; } = new List<string>();
 
         public MvdNameList NameListSection { get; } = new MvdNameList();
-        public MvdModelPropertyData PropertySection { get; } = new MvdModelPropertyData();
+
+        public MvdModelPropertyData PropertySection { get; } = new MvdModelPropertyData()
+        {
+        };
+
         public Dictionary<PmxBoneData, MvdBoneData> BoneSectionDict { get; } = new Dictionary<PmxBoneData, MvdBoneData>();
         public Dictionary<PmxMorphData, MvdMorphData> MorphSectionDict { get; } = new Dictionary<PmxMorphData, MvdMorphData>();
-
-        private List<VmdMotionFrameData> motionList = new List<VmdMotionFrameData>();
-        public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphDict { get; } = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
 
         private World World { get; }
 
@@ -95,8 +92,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
             {
                 DistinctFrames(section.Frames);
             }
-
-            DistinctFrames(PropertySection.Frames);
         }
 
         private void DistinctFrames<T>(IList<T> frames) where T : IKeyFrame
