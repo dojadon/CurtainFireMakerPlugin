@@ -61,7 +61,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             TaskManager.Frame();
 
-            UpdatePos();
+            UpdateLocalMat();
 
             FrameCount++;
             if (DiedDecision(this))
@@ -70,7 +70,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        protected virtual void UpdatePos()
+        protected virtual void UpdateLocalMat()
         {
             float interpolation = 1.0F;
 

@@ -40,8 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExporterBase.cs" />
+    <Compile Include="Interfaces\Motion\IKeyFrame.cs" />
     <Compile Include="Mvd\BinaryExtension.cs" />
-    <Compile Include="Mvd\Data\IKeyFrame.cs" />
     <Compile Include="ParserBase.cs" />
     <Compile Include="Vmd\VmdExporter.cs" />
     <Compile Include="Vmd\Data\IVmdData.cs" />

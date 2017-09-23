@@ -1,5 +1,6 @@
 ﻿using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Mvd.Data;
+using CsMmdDataIO.Vmd.Data;
 using CurtainFireMakerPlugin.Mathematics;
 using System;
 using VecMath;
@@ -149,27 +150,21 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
         {
-            var point1 = new MvdInterpolationPoint()
-            {
-                X = (byte)(127 * bezier.P1.x),
-                Y = (byte)(127 * bezier.P1.y)
-            };
-            var point2 = new MvdInterpolationPoint()
-            {
-                X = (byte)(127 * bezier.P2.x),
-                Y = (byte)(127 * bezier.P2.y)
-            };
+            var interpolation = new byte[4];
+            interpolation[0] = (byte)(bezier.P1.x * 127);
+            interpolation[1] = (byte)(bezier.P1.y * 127);
+            interpolation[2] = (byte)(bezier.P2.x * 127);
+            interpolation[3] = (byte)(bezier.P2.y * 127);
 
-            var interpolation = new MvdInterpolationPoint[] { point1, point2 };
-
-            World.KeyFrames.AddMvdBoneFrame(bone, new MvdBoneFrame()
+            World.KeyFrames.AddBoneKeyFrame(bone, new VmdMotionFrameData()
             {
                 FrameTime = World.FrameCount,
-                Position = pos,
-                Quaternion = rot,
-                XInterpolation = interpolation,
-                YInterpolation = interpolation,
-                ZInterpolation = interpolation,
+                BoneName = bone.BoneName,
+                Pos = pos,
+                Rot = rot,
+                InterpolatePointX = interpolation,
+                InterpolatePointY = interpolation,
+                InterpolatePointZ = interpolation,
             });
         }
 
@@ -177,10 +172,11 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (Property.Type.HasMesh)
             {
-                World.KeyFrames.AddMvdMorphFrame(morph, new MvdMorphFrame()
+                World.KeyFrames.AddMorphKeyFrame(morph, new VmdMorphFrameData()
                 {
                     FrameTime = World.FrameCount + frameOffset,
-                    Weight = weight,
+                    MorphName = morph.MorphName,
+                    Weigth = weight,
                 });
             }
         }

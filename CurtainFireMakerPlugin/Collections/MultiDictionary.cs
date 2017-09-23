@@ -22,7 +22,6 @@ namespace CurtainFireMakerPlugin.Collections
             mDictionary = new Dictionary<TKey, List<TValue>>(comparer);
         }
 
-
         /// <summary>
         /// 指定したキーに関連付けられている複数の値を取得または設定します
         /// </summary>

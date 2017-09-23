@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using VecMath;
+using CsMmdDataIO.Interfaces.Motion;
 
 namespace CsMmdDataIO.Mvd.Data
 {

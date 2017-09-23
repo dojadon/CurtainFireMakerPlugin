@@ -65,7 +65,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
             foreach (var morphList in typeMorphDict.Values)
             {
-                Compress(morphList, World.KeyFrames.MorphSectionDict);
+                Compress(morphList, World.KeyFrames.MorphFrameDict);
             }
 
             typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
@@ -86,16 +86,13 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
         }
 
-        private void Compress(List<PmxMorphData> morphList, Dictionary<PmxMorphData, MvdMorphData> frameDict)
+        private void Compress(List<PmxMorphData> morphList, MultiDictionary<PmxMorphData, VmdMorphFrameData> frameDict)
         {
             var dict = new MultiDictionary<List<long>, PmxMorphData>(new IntegerArrayComparer());
 
             foreach (var morph in morphList)
             {
-                var frames = new List<MvdMorphFrame>();
-                frames.AddRange(frameDict[morph].Frames);
-
-                dict.Add(frames.ConvertAll(m => m.FrameTime), morph);
+                dict.Add(frameDict[morph].ConvertAll(m => m.FrameTime), morph);
             }
 
             foreach (var key in dict.Keys)

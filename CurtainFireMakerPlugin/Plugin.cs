@@ -18,17 +18,11 @@ namespace CurtainFireMakerPlugin
         internal Configuration Config { get; }
         internal PythonRunner PythonRunner { get; }
 
-        public bool IsPlugin { get; }
-        public string PluginRootPath => Application.StartupPath + (IsPlugin ? "\\CurtainFireMaker" : "");
+        public string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
 
-        public Plugin() : this(true)
-        {
-        }
-
-        public Plugin(bool isPlugin = true)
+        public Plugin()
         {
             Instance = this;
-            IsPlugin = isPlugin;
 
             Config = new Configuration(PluginRootPath + "\\config.xml");
             PythonRunner = new PythonRunner();
@@ -125,7 +119,6 @@ namespace CurtainFireMakerPlugin
         public void RunScript(string path, ProgressForm form)
         {
             var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptPath));
-            world.FrameCount = Config.StartFrame;
 
             PythonRunner.RunScript(path, world);
 

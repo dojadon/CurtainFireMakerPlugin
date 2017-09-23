@@ -10,7 +10,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityBone : Entity
     {
-        private Vector3 InitializePos { get; }
+        public Vector3 InitializePos { get; }
 
         public Model Model { get; }
         public Bone Bone { get; }
@@ -52,7 +52,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        protected override void UpdatePos()
+        protected override void UpdateLocalMat()
         {
             var pos = InitializePos;
             var rot = Quaternion.Identity;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CsMmdDataIO.Mvd.Data
+namespace CsMmdDataIO.Interfaces.Motion
 {
     public interface IKeyFrame
     {

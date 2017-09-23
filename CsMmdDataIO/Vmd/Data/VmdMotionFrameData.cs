@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using VecMath;
+using CsMmdDataIO.Interfaces.Motion;
 
 namespace CsMmdDataIO.Vmd.Data
 {
-    public class VmdMotionFrameData : IVmdData
+    public class VmdMotionFrameData : IVmdData, IKeyFrame
     {
         public string BoneName { get; set; }
-        public int KeyFrameNo { get; set; }
+        public long FrameTime { get; set; }
         public Vector3 Pos { get; set; } = new Vector3();
         public Quaternion Rot { get; set; } = new Quaternion();
 
@@ -21,7 +22,7 @@ namespace CsMmdDataIO.Vmd.Data
         public void Export(VmdExporter exporter)
         {
             exporter.WriteTextWithFixedLength(BoneName, VmdExporter.BONE_NAME_LENGTH);
-            exporter.Write(KeyFrameNo);
+            exporter.Write((int)FrameTime);
             exporter.Write(Pos);
             exporter.Write(Rot);
             ExportInterpolateData(exporter);

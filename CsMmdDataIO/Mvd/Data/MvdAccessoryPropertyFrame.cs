@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using CsMmdDataIO.Interfaces.Motion;
 
 namespace CsMmdDataIO.Mvd.Data
 {

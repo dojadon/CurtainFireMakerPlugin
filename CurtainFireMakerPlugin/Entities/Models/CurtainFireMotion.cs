@@ -2,95 +2,56 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using CurtainFireMakerPlugin.Collections;
 using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Mvd.Data;
+using CsMmdDataIO.Vmd;
+using CsMmdDataIO.Vmd.Data;
+using CsMmdDataIO.Interfaces.Motion;
 
 namespace CurtainFireMakerPlugin.Entities.Models
 {
     internal class CurtainFireMotion
     {
-        public List<string> NameList { get; } = new List<string>();
-
-        public MvdNameList NameListSection { get; } = new MvdNameList();
-
-        public MvdModelPropertyData PropertySection { get; } = new MvdModelPropertyData()
-        {
-        };
-
-        public Dictionary<PmxBoneData, MvdBoneData> BoneSectionDict { get; } = new Dictionary<PmxBoneData, MvdBoneData>();
-        public Dictionary<PmxMorphData, MvdMorphData> MorphSectionDict { get; } = new Dictionary<PmxMorphData, MvdMorphData>();
+        public MultiDictionary<PmxBoneData, VmdMotionFrameData> BoneFrameDict { get; }
+        public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphFrameDict { get; }
 
         private World World { get; }
 
         public CurtainFireMotion(World world)
         {
             World = world;
+
+            BoneFrameDict = new MultiDictionary<PmxBoneData, VmdMotionFrameData>();
+            MorphFrameDict = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
         }
 
-        public void AddMvdPropertyFrame(MvdModelPropertyFrame frame)
+        public void AddBoneKeyFrame(PmxBoneData bone, VmdMotionFrameData frame)
         {
-            PropertySection.Frames.Add(frame);
+            if (frame.FrameTime >= 0)
+            {
+                BoneFrameDict[bone].Add(frame);
+            }
         }
 
-        public void AddMvdBoneFrame(PmxBoneData bone, MvdBoneFrame frame)
+        public void AddMorphKeyFrame(PmxMorphData morph, VmdMorphFrameData frame)
         {
-            if (frame.FrameTime < 0) return;
-
-            var name = bone.BoneName;
-
-            if (!NameList.Contains(name))
+            if (frame.FrameTime >= 0)
             {
-                NameListSection.Names[NameList.Count] = name;
-                NameList.Add(name);
+                MorphFrameDict[morph].Add(frame);
             }
-
-            if (!BoneSectionDict.ContainsKey(bone))
-            {
-                BoneSectionDict[bone] = new MvdBoneData()
-                {
-                    Key = NameList.IndexOf(name),
-                    ParentClipId = -1,
-                    StageCount = 1,
-                };
-            }
-
-            BoneSectionDict[bone].Frames.Add(frame);
-        }
-
-        public void AddMvdMorphFrame(PmxMorphData morph, MvdMorphFrame frame)
-        {
-            if (frame.FrameTime < 0) return;
-
-            var name = morph.MorphName;
-
-            if (!NameList.Contains(name))
-            {
-                NameListSection.Names[NameList.Count] = name;
-                NameList.Add(name);
-            }
-
-            if (!MorphSectionDict.ContainsKey(morph))
-            {
-                MorphSectionDict[morph] = new MvdMorphData()
-                {
-                    Key = NameList.IndexOf(name),
-                    ParentClipId = -1,
-                };
-            }
-
-            MorphSectionDict[morph].Frames.Add(frame);
         }
 
         public void Finish()
         {
-            foreach (var section in BoneSectionDict.Values)
+            foreach (var value in BoneFrameDict.Values)
             {
-                DistinctFrames(section.Frames);
+                DistinctFrames(value);
             }
 
-            foreach (var section in MorphSectionDict.Values)
+            foreach (var value in MorphFrameDict.Values)
             {
-                DistinctFrames(section.Frames);
+                DistinctFrames(value);
             }
         }
 
@@ -117,48 +78,40 @@ namespace CurtainFireMakerPlugin.Entities.Models
             }
         }
 
-        private void ExportMvd(Stream outStream)
+        private void ExportVmd(Stream stream)
         {
-            var doc = new MvdDocument()
+            var motionList = new List<VmdMotionFrameData>();
+            foreach (var value in BoneFrameDict.Values)
             {
-                Version = 1.0F,
-                Encoding = Encoding.Unicode,
-            };
-
-            var obj = new MvdObject()
-            {
-                ObjectName = "弾幕",
-                EnglishObjectName = "Curtain Fire",
-                KeyFps = World.Scene.KeyFramePerSec,
-            };
-
-            obj.Sections.Add(NameListSection);
-
-            foreach (var section in BoneSectionDict.Values)
-            {
-                obj.Sections.Add(section);
+                motionList.AddRange(value);
             }
 
-            foreach (var section in MorphSectionDict.Values)
+            var morphList = new List<VmdMorphFrameData>();
+            foreach (var value in MorphFrameDict.Values)
             {
-                obj.Sections.Add(section);
+                morphList.AddRange(value);
             }
 
-            doc.Objects.Add(obj);
+            var exporter = new VmdExporter(stream);
 
-            doc.Write(outStream);
+            exporter.Export(new VmdMotionData()
+            {
+                Header = new VmdHeaderData() { ModelName = "弾幕" },
+                MotionArray = motionList.ToArray(),
+                MorphArray = morphList.ToArray(),
+            });
         }
 
         public void Export(World world)
         {
             var config = Plugin.Instance.Config;
 
-            string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".mvd";
+            string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
             {
-                ExportMvd(stream);
+                ExportVmd(stream);
             }
         }
     }
