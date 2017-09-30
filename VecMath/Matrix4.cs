@@ -83,13 +83,18 @@ namespace VecMath
         }
 
         public Matrix4(Vector3 x, Vector3 y, Vector3 z, Vector3 trans)
-        : this(x.x, y.x, z.x, 0, x.y, y.y, z.y, 0, x.z, y.z, z.z, 0, trans.x, trans.y, trans.z, 1)
-        {
-        }
+        : this(x.x, y.x, z.x, 0, x.y, y.y, z.y, 0, x.z, y.z, z.z, 0, trans.x, trans.y, trans.z, 1) { }
 
-        public Matrix4(Vector3 x, Vector3 y, Vector3 z) : this(x, y, z, Vector3.Zero)
-        {
-        }
+        public Matrix4(Vector3 x, Vector3 y, Vector3 z) : this(x, y, z, Vector3.Zero) { }
+
+        public Matrix4(Matrix3 m, Vector3 trans)
+        : this(m.m00, m.m01, m.m02, 0, m.m10, m.m11, m.m12, 0, m.m20, m.m21, m.m22, 0, trans.x, trans.y, trans.z, 1) { }
+
+        public Matrix4(Matrix3 m) : this(m, Vector3.Zero) { }
+
+        public Matrix4(Quaternion q, Vector3 trans) : this(new Matrix3(q), trans) { }
+
+        public Matrix4(Quaternion q) : this(q, Vector3.Zero) { }
 
         public static Matrix4 SetTranslation(Matrix4 m1, Vector3 trans)
         {
@@ -103,35 +108,7 @@ namespace VecMath
             return m1;
         }
 
-        public static Matrix4 RotationQuaternion(Quaternion q)
-        {
-            if (q == Quaternion.Identity)
-            {
-                return Identity;
-            }
-            float xx = q.x * q.x;
-            float yy = q.y * q.y;
-            float zz = q.z * q.z;
-
-            return new Matrix4()
-            {
-                m00 = 1 - 2 * (yy + zz),
-                m01 = 2 * (q.x * q.y + q.w * q.z),
-                m02 = 2 * (q.x * q.z - q.w * q.y),
-
-                m10 = 2 * (q.x * q.y - q.w * q.z),
-                m11 = 1 - 2 * (zz + xx),
-                m12 = 2 * (q.y * q.z + q.w * q.x),
-
-                m20 = 2 * (q.x * q.z + q.w * q.y),
-                m21 = 2 * (q.y * q.z - q.w * q.x),
-                m22 = 1 - 2 * (xx + yy),
-
-                m33 = 1
-            };
-        }
-
-        public static Matrix4 RotationAxis(Vector3 axis, float angle)
+        public static Matrix4 RotationAxis(Vector3 axis, float angle, Vector3? trans = null)
         {
             float cos = (float)Math.Cos(angle);
             float sin = (float)Math.Sin(angle);
@@ -148,16 +125,16 @@ namespace VecMath
             n = axis.z * axis;
             z = cos * (z - n) + sin * (axis ^ z) + n;
 
-            return new Matrix4(x, y, z);
+            return new Matrix4(x, y, z, trans ?? Vector3.Zero);
         }
 
-        public static Matrix4 LookAt(Vector3 forward, Vector3 upward)
+        public static Matrix4 LookAt(Vector3 forward, Vector3 upward, Vector3? trans = null)
         {
             var z = -forward;
             var x = +(upward ^ z);
             var y = +(z ^ x);
 
-            return new Matrix4(x, y, z);
+            return new Matrix4(x, y, z, trans ?? Vector3.Zero);
         }
 
         public static Matrix4 Mul(Matrix4 m1, Matrix4 m2) => new Matrix4()
@@ -183,12 +160,11 @@ namespace VecMath
             m33 = m1.m30 * m2.m03 + m1.m31 * m2.m13 + m1.m32 * m2.m23 + m1.m33 * m2.m33
         };
 
-        public static Matrix4 Pow(Matrix4 m1, float exponent)
+        public static Matrix4 Inverse(Matrix4 m1)
         {
-            return ((Quaternion)m1) ^ exponent;
+            var rot = ~m1.Rotation;
+            return SetTranslation(rot, -m1.Translation * rot);
         }
-
-        public static Matrix4 Inverse(Matrix4 m1) => SetTranslation(~(Matrix3)m1, -m1.Translation);
 
         public static Matrix4 Transpose(Matrix4 m1) => new Matrix4()
         {
@@ -267,29 +243,9 @@ namespace VecMath
 
         public static Vector3 operator *(Vector3 v1, Matrix4 m1) => Transform(v1, m1);
 
-        public static Matrix4 operator ^(Matrix4 m1, float d1) => Pow(m1, d1);
+        public static implicit operator Matrix4(Matrix3 m) => new Matrix4(m);
 
-        public static implicit operator Matrix4(Matrix3 m) => new Matrix4()
-        {
-            m00 = m.m00,
-            m01 = m.m01,
-            m02 = m.m02,
-            m03 = 0,
-            m10 = m.m10,
-            m11 = m.m11,
-            m12 = m.m12,
-            m13 = 0,
-            m20 = m.m20,
-            m21 = m.m21,
-            m22 = m.m22,
-            m23 = 0,
-            m30 = 0,
-            m31 = 0,
-            m32 = 0,
-            m33 = 1,
-        };
-
-        public static implicit operator Matrix4(Quaternion q1) => RotationQuaternion(q1);
+        public static implicit operator Matrix4(Quaternion q1) => new Matrix4(q1);
 
         public static explicit operator float[] (Matrix4 m)
         {

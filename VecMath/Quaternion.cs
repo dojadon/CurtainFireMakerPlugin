@@ -43,6 +43,64 @@ namespace VecMath
 
         public Quaternion(Vector3 v1, float w) : this(v1.x, v1.y, v1.z, w) { }
 
+        public Quaternion(Matrix3 m)
+        {
+            float[] values = new float[4];
+            values[0] = m.m00 - m.m11 - m.m22;
+            values[1] = -m.m00 + m.m11 - m.m22;
+            values[2] = -m.m00 - m.m11 + m.m22;
+            values[3] = m.m00 + m.m11 + m.m22;
+
+            int biggestIndex = 0;
+            for (int i = 1; i < 4; i++)
+            {
+                if (values[i] > values[biggestIndex]) biggestIndex = i;
+            }
+
+            float val = (float)Math.Sqrt(values[biggestIndex] + 1.0F) * 0.5F;
+            float mult = 0.25F / val;
+
+            switch (biggestIndex)
+            {
+                case 0:
+                    x = val;
+                    y = (m.m10 + m.m01) * mult;
+                    z = (m.m02 + m.m20) * mult;
+                    w = (m.m12 - m.m21) * mult;
+                    break;
+
+                case 1:
+                    x = (m.m10 + m.m01) * mult;
+                    y = val;
+                    z = (m.m21 + m.m12) * mult;
+                    w = (m.m20 - m.m02) * mult;
+                    break;
+
+                case 2:
+                    x = (m.m02 + m.m20) * mult;
+                    y = (m.m21 + m.m12) * mult;
+                    z = val;
+                    w = (m.m01 - m.m10) * mult;
+                    break;
+
+                case 3:
+                    x = (m.m12 - m.m21) * mult;
+                    y = (m.m20 - m.m02) * mult;
+                    z = (m.m01 - m.m10) * mult;
+                    w = val;
+                    break;
+
+                default:
+                    x = 0;
+                    y = 0;
+                    z = 0;
+                    w = 1;
+                    break;
+            }
+        }
+
+        public Quaternion(Matrix4 m) : this((Matrix3)m) { }
+
         public static Quaternion Conjugate(Quaternion q1) => new Quaternion()
         {
             w = q1.w,
@@ -105,76 +163,6 @@ namespace VecMath
                     z = a.z * amag * mag
                 };
             }
-        }
-
-        public static Quaternion RotationMatrix(Matrix3 m1)
-        {
-            float m00 = m1.m00;
-            float m01 = m1.m01;
-            float m02 = m1.m02;
-
-            float m10 = m1.m10;
-            float m11 = m1.m11;
-            float m12 = m1.m12;
-
-            float m20 = m1.m20;
-            float m21 = m1.m21;
-            float m22 = m1.m22;
-
-            float[] values = new float[4];
-            values[0] = m00 - m11 - m22;
-            values[1] = -m00 + m11 - m22;
-            values[2] = -m00 - m11 + m22;
-            values[3] = m00 + m11 + m22;
-
-            int biggestIndex = 0;
-            for (int i = 1; i < 4; i++)
-            {
-                if (values[i] > values[biggestIndex]) biggestIndex = i;
-            }
-
-            float val = (float)Math.Sqrt(values[biggestIndex] + 1.0F) * 0.5F;
-            float mult = 0.25F / val;
-
-            switch (biggestIndex)
-            {
-                case 0:
-                    return new Quaternion()
-                    {
-                        x = val,
-                        y = (m10 + m01) * mult,
-                        z = (m02 + m20) * mult,
-                        w = (m21 - m12) * mult
-                    };
-
-                case 1:
-                    return new Quaternion()
-                    {
-                        x = (m10 + m01) * mult,
-                        y = val,
-                        z = (m21 + m12) * mult,
-                        w = (m02 - m20) * mult
-                    };
-
-                case 2:
-                    return new Quaternion()
-                    {
-                        x = (m02 + m20) * mult,
-                        y = (m21 + m12) * mult,
-                        z = val,
-                        w = (m10 - m01) * mult
-                    };
-
-                case 3:
-                    return new Quaternion()
-                    {
-                        x = (m21 - m12) * mult,
-                        y = (m02 - m20) * mult,
-                        z = (m10 - m01) * mult,
-                        w = val
-                    };
-            }
-            return Identity;
         }
 
         public static Quaternion Pow(Quaternion q1, float exponent)
@@ -293,9 +281,9 @@ namespace VecMath
 
         public static Quaternion operator ^(Quaternion q1, double d1) => Pow(q1, (float)d1);
 
-        public static implicit operator Quaternion(Matrix4 m1) => RotationMatrix(m1);
+        public static implicit operator Quaternion(Matrix4 m1) => new Quaternion(m1);
 
-        public static implicit operator Quaternion(Matrix3 m1) => RotationMatrix(m1);
+        public static implicit operator Quaternion(Matrix3 m1) => new Quaternion(m1);
 
         public static implicit operator Quaternion(DxMath.Quaternion q1) => new Quaternion(q1.X, q1.Y, q1.Z, q1.W);
 

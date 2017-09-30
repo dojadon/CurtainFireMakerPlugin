@@ -35,46 +35,28 @@ namespace VecMath
             this.m22 = m22;
         }
 
-        public Matrix3(Vector3 x, Vector3 y, Vector3 z)
+        public Matrix3(Vector3 x, Vector3 y, Vector3 z) : this(x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z) { }
+
+        public Matrix3(Quaternion q)
         {
-            this.m00 = x.x;
-            this.m10 = x.y;
-            this.m20 = x.z;
-
-            this.m01 = y.x;
-            this.m11 = y.y;
-            this.m21 = y.z;
-
-            this.m02 = z.x;
-            this.m12 = z.y;
-            this.m22 = z.z;
-        }
-
-        public static Matrix3 RotationQuaternion(Quaternion q)
-        {
-            if (q == Quaternion.Identity)
-            {
-                return Identity;
-            }
             float xx = q.x * q.x;
             float yy = q.y * q.y;
             float zz = q.z * q.z;
 
-            return new Matrix3()
-            {
-                m00 = 1 - 2 * (yy + zz),
-                m01 = 2 * (q.x * q.y + q.w * q.z),
-                m02 = 2 * (q.x * q.z - q.w * q.y),
+            m00 = 1 - 2 * (yy + zz);
+            m01 = 2 * (q.x * q.y + q.w * q.z);
+            m02 = 2 * (q.x * q.z - q.w * q.y);
 
-                m10 = 2 * (q.x * q.y - q.w * q.z),
-                m11 = 1 - 2 * (zz + xx),
-                m12 = 2 * (q.y * q.z + q.w * q.x),
+            m10 = 2 * (q.x * q.y - q.w * q.z);
+            m11 = 1 - 2 * (zz + xx);
+            m12 = 2 * (q.y * q.z + q.w * q.x);
 
-                m20 = 2 * (q.x * q.z + q.w * q.y),
-                m21 = 2 * (q.y * q.z - q.w * q.x),
-                m22 = 1 - 2 * (xx + yy),
-            };
+            m20 = 2 * (q.x * q.z + q.w * q.y);
+            m21 = 2 * (q.y * q.z - q.w * q.x);
+            m22 = 1 - 2 * (xx + yy);
         }
+
+        public Matrix3(Matrix4 m) : this(m.m00, m.m01, m.m02, m.m10, m.m11, m.m12, m.m20, m.m21, m.m22) { }
 
         public static Matrix3 RotationAxis(Vector3 axis, float angle)
         {
@@ -138,28 +120,28 @@ namespace VecMath
             return ((Quaternion)m) ^ exponent;
         }
 
-        public static Matrix3 Inverse(Matrix3 m) => Transpose(m);
-        //{
-        //    float det = m.Det();
+        public static Matrix3 Inverse(Matrix3 m)
+        {
+            float det = m.Det();
 
-        //    if (det == 0)
-        //    {
-        //        throw new ArithmeticException("Determinant is 0");
-        //    }
+            if (det == 0)
+            {
+                throw new ArithmeticException("Determinant is 0");
+            }
 
-        //    return new Matrix3()
-        //    {
-        //        m00 = m.m11 * m.m22 - m.m12 * m.m21,
-        //        m01 = -m.m01 * m.m22 + m.m02 * m.m21,
-        //        m02 = m.m01 * m.m12 - m.m02 * m.m11,
-        //        m10 = -m.m10 * m.m22 + m.m12 * m.m20,
-        //        m11 = m.m00 * m.m22 - m.m02 * m.m20,
-        //        m12 = -m.m00 * m.m12 + -m.m02 * m.m10,
-        //        m20 = m.m10 * m.m21 - m.m11 * m.m20,
-        //        m21 = -m.m00 * m.m21 + m.m01 * m.m20,
-        //        m22 = m.m00 * m.m11 - m.m01 * m.m10,
-        //    } * (1.0F / det);
-        //}
+            return new Matrix3()
+            {
+                m00 = m.m11 * m.m22 - m.m12 * m.m21,
+                m01 = -m.m01 * m.m22 + m.m02 * m.m21,
+                m02 = m.m01 * m.m12 - m.m02 * m.m11,
+                m10 = -m.m10 * m.m22 + m.m12 * m.m20,
+                m11 = m.m00 * m.m22 - m.m02 * m.m20,
+                m12 = -m.m00 * m.m12 + -m.m02 * m.m10,
+                m20 = m.m10 * m.m21 - m.m11 * m.m20,
+                m21 = -m.m00 * m.m21 + m.m01 * m.m20,
+                m22 = m.m00 * m.m11 - m.m01 * m.m10,
+            } * (1.0F / det);
+        }
 
         public static Matrix3 Transpose(Matrix3 m1) => new Matrix4()
         {
@@ -209,9 +191,9 @@ namespace VecMath
 
         public static Matrix3 operator ^(Matrix3 m1, float d1) => Pow(m1, d1);
 
-        public static implicit operator Matrix3(Quaternion q1) => RotationQuaternion(q1);
+        public static implicit operator Matrix3(Quaternion q1) => new Matrix3(q1);
 
-        public static implicit operator Matrix3(Matrix4 m) => new Matrix3(m.m00, m.m01, m.m02, m.m10, m.m11, m.m12, m.m20, m.m21, m.m22);
+        public static implicit operator Matrix3(Matrix4 m) => new Matrix3(m);
 
         public static explicit operator float[] (Matrix3 m)
         {
