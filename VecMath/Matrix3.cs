@@ -35,7 +35,7 @@ namespace VecMath
             this.m22 = m22;
         }
 
-        public Matrix3(Vector3 x, Vector3 y, Vector3 z) : this(x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z) { }
+        public Matrix3(Vector3 x, Vector3 y, Vector3 z) : this(x.x, x.y, x.y, y.x, y.y, y.z, z.x, z.y, z.z) { }
 
         public Matrix3(Quaternion q)
         {
@@ -80,7 +80,7 @@ namespace VecMath
 
         public static Matrix3 LookAt(Vector3 forward, Vector3 upward)
         {
-            var z = -forward;
+            var z = -+forward;
             var x = +(upward ^ z);
             var y = +(z ^ x);
 

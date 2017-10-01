@@ -65,7 +65,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotModelData CreateGroup(EntityShot entity)
         {
-            ShotGroup group = new ShotGroup(entity.Property, World);
+            ShotGroup group = new ShotGroup(entity, World);
             group.AddEntity(entity);
             GroupList.Add(group);
 
@@ -78,12 +78,14 @@ namespace CurtainFireMakerPlugin.Entities
         public List<EntityShot> ShotList { get; } = new List<EntityShot>();
         public ShotModelData Data { get; }
 
+        private Entity ParentEntity { get; }
         private ShotProperty Property { get; }
         private World World { get; }
 
-        public ShotGroup(ShotProperty property, World world)
+        public ShotGroup(EntityShot entity, World world)
         {
-            Property = property;
+            ParentEntity = entity.ParentEntity;
+            Property = entity.Property;
             World = world;
 
             Data = new ShotModelData(World, Property);
@@ -91,7 +93,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public bool IsAddable(EntityShot entity)
         {
-            return Property.Equals(entity.Property) && !ShotList.Exists(e => !e.IsDeath);
+            return entity.ParentEntity == ParentEntity && Property.Equals(entity.Property) && !ShotList.Exists(e => !e.IsDeath);
         }
 
         public void AddEntity(EntityShot entity)

@@ -11,12 +11,6 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public ShotProperty Property { get; }
 
-        public override Entity ParentEntity
-        {
-            get => base.ParentEntity;
-            set => RootBone.ParentId = (base.ParentEntity = value) is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
-        }
-
         public ShotModelData ModelData { get; }
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
@@ -62,9 +56,10 @@ namespace CurtainFireMakerPlugin.Entities
         public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
         public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Velocity != Vector3.Zero ? (Quaternion)Matrix3.LookAt(+e.Velocity, +e.Upward) * e.Rot : e.Rot;
 
-        public EntityShot(World world, string typeName, int color) : this(world, new ShotProperty(typeName, color)) { }
+        public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(typeName, color), parentEntity) { }
 
-        public EntityShot(World world, ShotProperty property) : base(world)
+        public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
             try
             {
@@ -72,6 +67,8 @@ namespace CurtainFireMakerPlugin.Entities
 
                 ModelData = World.AddShot(this);
                 ModelData.OwnerEntities.Add(this);
+
+                RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
                 Property.Type.Init(this);
                 Property.Type.InitModelData(ModelData);

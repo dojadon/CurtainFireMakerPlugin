@@ -16,17 +16,6 @@ namespace VecMath
         public float z;
         public float w;
 
-        public Vector3 xyz
-        {
-            get => new Vector3(x, y, z);
-            set
-            {
-                x = value.x;
-                y = value.y;
-                z = value.z;
-            }
-        }
-
         public float Length() => (float)Math.Sqrt(x * x + y * y + z * z + w * w);
 
         public Quaternion(float x, float y, float z, float w)
@@ -91,11 +80,7 @@ namespace VecMath
                     break;
 
                 default:
-                    x = 0;
-                    y = 0;
-                    z = 0;
-                    w = 1;
-                    break;
+                    throw new ApplicationException();
             }
         }
 
@@ -187,7 +172,7 @@ namespace VecMath
         {
             float dot, s1, s2, om, sinom;
 
-            dot = q2.x * q1.x + q2.y * q1.y + q2.z * q1.z + q2.w * q1.w;
+            dot = Dot(q1, q2);
 
             if (dot < 0)
             {
@@ -218,6 +203,8 @@ namespace VecMath
                 z = s1 * q1.z + s2 * q2.z
             };
         }
+
+        public static float Dot(Quaternion q1, Quaternion q2) => q2.x * q1.x + q2.y * q1.y + q2.z * q1.z + q2.w * q1.w;
 
         public static Vector3 RotateVector(Vector3 v1, Quaternion q1)
         {

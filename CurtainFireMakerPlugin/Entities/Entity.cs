@@ -31,7 +31,7 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual Vector3 Velocity { get; set; }
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
 
-        public virtual Entity ParentEntity { get; set; }
+        public virtual Entity ParentEntity { get; protected set; }
 
         public int FrameCount { get; private set; }
         public int LivingLimit { get; set; }
@@ -51,10 +51,12 @@ namespace CurtainFireMakerPlugin.Entities
         public int EntityId { get; }
         private static int nextEntityId;
 
-        public Entity(World world)
+        public Entity(World world, Entity parentEntity = null)
         {
             World = world;
             EntityId = nextEntityId++;
+
+            ParentEntity = parentEntity;
         }
 
         internal virtual void Frame()
