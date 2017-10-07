@@ -66,6 +66,12 @@ namespace CurtainFireMakerPlugin
         private XmlNode NodeKeepLogOpen => RootNode.SelectSingleNode("KeepLogOpen");
         public bool KeepLogOpen { get => bool.Parse(NodeKeepLogOpen.InnerText); set => NodeKeepLogOpen.InnerText = value.ToString(); }
 
+        private XmlNode NodeDropPmxFile => RootNode.SelectSingleNode("DropPmxFile");
+        public bool DropPmxFile { get => bool.Parse(NodeDropPmxFile.InnerText); set => NodeDropPmxFile.InnerText = value.ToString(); }
+
+        private XmlNode NodeDropVmdFile => RootNode.SelectSingleNode("DropVmdFile");
+        public bool DropVmdFile { get => bool.Parse(NodeDropVmdFile.InnerText); set => NodeDropVmdFile.InnerText = value.ToString(); }
+
         public string ResourceDirPath => Plugin.Instance.PluginRootPath + "\\Resource";
 
         public Configuration(string path)

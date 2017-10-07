@@ -51,7 +51,7 @@ namespace CurtainFireMakerPlugin
                 scope.SetVariable(variable.Name, variable.Value);
             }
 
-            return Engine.Execute(path, scope);
+            return Engine.ExecuteFile(path, scope);
         }
 
         public void SetOut(Stream stream)

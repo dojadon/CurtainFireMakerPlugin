@@ -35,6 +35,8 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
         public bool KeepLogOpen { get => keepLogOpenCheckBox.Checked; set => keepLogOpenCheckBox.Checked = value; }
+        public bool DropPmxFile { get => checkBoxDropPmxFile.Checked; set => checkBoxDropPmxFile.Checked = value; }
+        public bool DropVmdFile { get => checkBoxDropVmdFile.Checked; set => checkBoxDropVmdFile.Checked = value; }
 
         public ExportSettingForm()
         {

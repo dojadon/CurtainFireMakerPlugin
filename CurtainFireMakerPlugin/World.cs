@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Entities.Models;
 using CurtainFireMakerPlugin.Tasks;
+using CurtainFireMakerPlugin.IO;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 
@@ -31,7 +33,10 @@ namespace CurtainFireMakerPlugin
 
         public String ExportFileName { get; set; }
 
-        public event EventHandler Export;
+        public event EventHandler ExportEvent;
+
+        public string PmxExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".pmx";
+        public string VmdExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".vmd";
 
         internal World(string fileName)
         {
@@ -40,17 +45,11 @@ namespace CurtainFireMakerPlugin
             KeyFrames = new CurtainFireMotion(this);
 
             ExportFileName = fileName;
-
-            Export += (obj, e) =>
-            {
-                PmxModel.Export(this);
-                KeyFrames.Export(this);
-            };
         }
 
         protected virtual void OnExport(EventArgs e)
         {
-            Export?.Invoke(this, e);
+            ExportEvent?.Invoke(this, e);
         }
 
         internal ShotModelData AddShot(EntityShot entity)
@@ -91,13 +90,27 @@ namespace CurtainFireMakerPlugin
             FrameCount++;
         }
 
-        internal void Finish()
+        internal void Export()
         {
             EntityList.ForEach(e => e.OnDeath());
-            KeyFrames.Finish();
             PmxModel.Finish();
+            KeyFrames.Finish();
 
-            OnExport(EventArgs.Empty);
+            KeyFrames.Export();
+            PmxModel.Export();
+        }
+
+        internal void Finish()
+        {
+            if (Config.DropPmxFile)
+            {
+                FileDropUtil.Drop(Plugin.Instance.ApplicationForm.Handle, new StringCollection() { PmxExportPath });
+            }
+
+            if (Config.DropVmdFile)
+            {
+                FileDropUtil.Drop(Plugin.Instance.ApplicationForm.Handle, new StringCollection() { VmdExportPath });
+            }
         }
 
         public void AddTask(Task task)

@@ -44,6 +44,11 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         public void Finish()
         {
+            foreach (var key in MorphFrameDict.Keys)
+            {
+                if (!World.PmxModel.Morphs.MorphList.Contains(key)) MorphFrameDict[key].Clear();
+            }
+
             foreach (var value in BoneFrameDict.Values)
             {
                 DistinctFrames(value);
@@ -102,9 +107,9 @@ namespace CurtainFireMakerPlugin.Entities.Models
             });
         }
 
-        public void Export(World world)
+        public void Export()
         {
-            string exportPath = world.Config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
+            string exportPath = World.VmdExportPath;
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))

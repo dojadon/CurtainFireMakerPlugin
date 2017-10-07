@@ -45,6 +45,8 @@
             this.keepLogOpenCheckBox = new System.Windows.Forms.CheckBox();
             this.exportDirDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.button2 = new System.Windows.Forms.Button();
+            this.checkBoxDropPmxFile = new System.Windows.Forms.CheckBox();
+            this.checkBoxDropVmdFile = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,7 +88,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.modelNameText);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(10, 101);
+            this.groupBox1.Location = new System.Drawing.Point(10, 142);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(1);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(456, 219);
@@ -158,7 +160,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(300, 324);
+            this.button4.Location = new System.Drawing.Point(300, 365);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 17;
@@ -168,7 +170,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(91, 324);
+            this.button3.Location = new System.Drawing.Point(91, 365);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 16;
@@ -201,11 +203,33 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Click_InitIronPython);
             // 
+            // checkBoxDropPmxFile
+            // 
+            this.checkBoxDropPmxFile.AutoSize = true;
+            this.checkBoxDropPmxFile.Location = new System.Drawing.Point(14, 89);
+            this.checkBoxDropPmxFile.Name = "checkBoxDropPmxFile";
+            this.checkBoxDropPmxFile.Size = new System.Drawing.Size(186, 16);
+            this.checkBoxDropPmxFile.TabIndex = 24;
+            this.checkBoxDropPmxFile.Text = "出力時にpmxファイルをドロップする";
+            this.checkBoxDropPmxFile.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDropVmdFile
+            // 
+            this.checkBoxDropVmdFile.AutoSize = true;
+            this.checkBoxDropVmdFile.Location = new System.Drawing.Point(14, 111);
+            this.checkBoxDropVmdFile.Name = "checkBoxDropVmdFile";
+            this.checkBoxDropVmdFile.Size = new System.Drawing.Size(186, 16);
+            this.checkBoxDropVmdFile.TabIndex = 25;
+            this.checkBoxDropVmdFile.Text = "出力時にvmdファイルをドロップする";
+            this.checkBoxDropVmdFile.UseVisualStyleBackColor = true;
+            // 
             // ExportSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 356);
+            this.ClientSize = new System.Drawing.Size(476, 398);
+            this.Controls.Add(this.checkBoxDropVmdFile);
+            this.Controls.Add(this.checkBoxDropPmxFile);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.keepLogOpenCheckBox);
             this.Controls.Add(this.label5);
@@ -245,5 +269,7 @@
         private System.Windows.Forms.CheckBox keepLogOpenCheckBox;
         private System.Windows.Forms.FolderBrowserDialog exportDirDialog;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox checkBoxDropPmxFile;
+        private System.Windows.Forms.CheckBox checkBoxDropVmdFile;
     }
 }

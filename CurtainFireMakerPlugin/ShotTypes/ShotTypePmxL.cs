@@ -30,7 +30,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
                 SetPxcelColor(image, prop.Red, prop.Green, prop.Blue);
                 ImageDict.Add(prop.Color, image);
 
-                wolrd.Export += (w, e) =>
+                wolrd.ExportEvent += (w, e) =>
                  {
                      var config = Plugin.Instance.Config;
 

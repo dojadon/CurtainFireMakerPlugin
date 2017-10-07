@@ -86,9 +86,9 @@ namespace CurtainFireMakerPlugin.Entities.Models
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
         }
 
-        public void Export(World world)
+        public void Export()
         {
-            string exportPath = world.Config.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
+            string exportPath = World.PmxExportPath;
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
@@ -98,12 +98,12 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 var data = new PmxModelData();
                 GetData(data);
 
-                data.Header.ModelName = world.Config.ModelName;
-                data.Header.Description += world.Config.ModelDescription;
+                data.Header.ModelName = World.Config.ModelName;
+                data.Header.Description += World.Config.ModelDescription;
 
                 exporter.Export(data);
 
-                Console.WriteLine("出力完了 : " + world.ExportFileName);
+                Console.WriteLine("出力完了 : " + World.ExportFileName);
                 Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
                 Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
                 Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
