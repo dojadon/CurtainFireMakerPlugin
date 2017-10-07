@@ -9,16 +9,16 @@ using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin
 {
-    internal class PythonRunner
+    internal class PythonExecutor
     {
-        private ScriptEngine Engine { get; set; }
-        private ScriptScope RootScope { get; set; }
+        public ScriptEngine Engine { get; set; }
+        public ScriptScope RootScope { get; set; }
 
-        public PythonRunner()
+        public PythonExecutor()
         {
         }
 
-        public void Init(string settingScriptPath, string[] modullesDirPaths)
+        public void Init(string[] modullesDirPaths)
         {
             Engine = Python.CreateEngine();
             RootScope = Engine.CreateScope();
@@ -34,27 +34,24 @@ namespace CurtainFireMakerPlugin
             Engine.Execute(
             "# -*- coding: utf-8 -*-\n" +
             "import sys\n" +
-            "sys.path.append(r\"" + Application.StartupPath + "\\Plugins\")\n" +
-            "sys.path.append(r\"" + Application.StartupPath + "\\System\\x64\")\n" +
+            $"sys.path.append(r\"{Application.StartupPath}\\Plugins\")\n" +
+            $"sys.path.append(r\"{Application.StartupPath}\\System\\x64\")\n" +
             "import clr\n" +
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
-            "clr.AddReference(\"CsMmdDataIO\")\n" +
-            "clr.AddReference(\"DxMath\")\n" +
             "clr.AddReference(\"VecMath\")\n" +
             "clr.AddReference(\"MikuMikuPlugin\")\n", RootScope);
-
-            ScriptScope scope = Engine.CreateScope(RootScope);
-
-            Engine.ExecuteFile(settingScriptPath, scope);
         }
 
-        public void RunScript(string path, World world)
+        public dynamic ExecuteScriptOnNewScope(string path, params Variable[] variables)
         {
             ScriptScope scope = Engine.CreateScope(RootScope);
 
-            scope.SetVariable("world", world);
+            foreach (var variable in variables)
+            {
+                scope.SetVariable(variable.Name, variable.Value);
+            }
 
-            Engine.ExecuteFile(path, scope);
+            return Engine.Execute(path, scope);
         }
 
         public void SetOut(Stream stream)
@@ -63,5 +60,17 @@ namespace CurtainFireMakerPlugin
         }
 
         public string FormatException(Exception e) => Engine.GetService<ExceptionOperations>().FormatException(e);
+    }
+
+    public class Variable
+    {
+        public string Name { get; set; }
+        public object Value { get; set; }
+
+        public Variable(string name, object value)
+        {
+            Name = name;
+            Value = value;
+        }
     }
 }

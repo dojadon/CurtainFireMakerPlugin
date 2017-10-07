@@ -15,6 +15,8 @@ namespace CurtainFireMakerPlugin
     {
         public int MaxFrame { get; set; } = 1000;
         public Scene Scene => Plugin.Instance.Scene;
+        public Configuration Config => Plugin.Instance.Config;
+        internal PythonExecutor Executor => Plugin.Instance.PythonExecutor;
 
         private List<Entity> addEntityList = new List<Entity>();
         private List<Entity> removeEntityList = new List<Entity>();

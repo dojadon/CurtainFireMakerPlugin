@@ -29,6 +29,7 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
         public virtual Vector3 Velocity { get; set; }
+        public virtual Quaternion RotVelocity { get; set; } = Quaternion.Identity;
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
 
         public virtual Entity ParentEntity { get; protected set; }
@@ -43,7 +44,7 @@ namespace CurtainFireMakerPlugin.Entities
         public bool IsDeath { get; private set; }
         public bool IsSpawned { get; private set; }
 
-        public MotionInterpolation MotionInterpolation { get; private set; }
+        public virtual MotionInterpolation MotionInterpolation { get; protected set; }
         private TaskManager TaskManager { get; } = new TaskManager();
 
         public World World { get; }

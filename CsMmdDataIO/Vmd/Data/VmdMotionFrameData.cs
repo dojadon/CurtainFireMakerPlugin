@@ -55,5 +55,10 @@ namespace CsMmdDataIO.Vmd.Data
             dist[31] = dist[46] = dist[61] = 1;
             exporter.Write(dist);
         }
+
+        public static byte[] ConvertToBytes(Vector2 pos1, Vector2 pos2)
+        {
+            return new byte[] { (byte)(pos1.x * 127), (byte)(pos1.y * 127), (byte)(pos2.x * 127), (byte)(pos2.y * 127) };
+        }
     }
 }

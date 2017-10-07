@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin
         public static Plugin Instance { get; set; }
 
         internal Configuration Config { get; }
-        internal PythonRunner PythonRunner { get; }
+        internal PythonExecutor PythonExecutor { get; }
 
         public string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
 
@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin
             Instance = this;
 
             Config = new Configuration(PluginRootPath + "\\config.xml");
-            PythonRunner = new PythonRunner();
+            PythonExecutor = new PythonExecutor();
 
             try
             {
@@ -36,7 +36,7 @@ namespace CurtainFireMakerPlugin
             {
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
-                    try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
+                    try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
                     sw.WriteLine(e);
                 }
             }
@@ -44,7 +44,8 @@ namespace CurtainFireMakerPlugin
 
         public void InitIronPython()
         {
-            PythonRunner.Init(Config.SettingScriptPath, Config.ModullesDirPaths);
+            PythonExecutor.Init(Config.ModullesDirPaths);
+            PythonExecutor.ExecuteScriptOnNewScope(Config.SettingScriptPath);
         }
 
         public Guid GUID => new Guid();
@@ -58,7 +59,10 @@ namespace CurtainFireMakerPlugin
         public Image Image => null;
         public Image SmallImage => null;
 
-        public void Dispose() => Config.Save();
+        public void Dispose()
+        {
+            Config.Save();
+        }
 
         public void Run(CommandArgs args)
         {
@@ -88,7 +92,7 @@ namespace CurtainFireMakerPlugin
                 try
                 {
                     Console.SetOut(sw);
-                    PythonRunner.SetOut(sw.BaseStream);
+                    PythonExecutor.SetOut(sw.BaseStream);
 
                     RunScript(Config.ScriptPath, progressForm);
 
@@ -99,7 +103,7 @@ namespace CurtainFireMakerPlugin
                 }
                 catch (Exception e)
                 {
-                    try { Console.WriteLine(PythonRunner.FormatException(e)); } catch { }
+                    try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
                     Console.WriteLine(e);
                 }
                 finally
@@ -108,7 +112,7 @@ namespace CurtainFireMakerPlugin
 
                     StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                     Console.SetOut(standardOutput);
-                    PythonRunner.SetOut(standardOutput.BaseStream);
+                    PythonExecutor.SetOut(standardOutput.BaseStream);
 
                     if (!progressForm.IsDisposed)
                         progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
@@ -120,7 +124,7 @@ namespace CurtainFireMakerPlugin
         {
             var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptPath));
 
-            PythonRunner.RunScript(path, world);
+            PythonExecutor.ExecuteScriptOnNewScope(path, new Variable("world", world));
 
             form.Progress.Minimum = 0;
             form.Progress.Maximum = world.MaxFrame;

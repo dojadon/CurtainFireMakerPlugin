@@ -85,7 +85,7 @@
     <Compile Include="Entities\EntityShot.cs" />
     <Compile Include="Entities\ShotProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PythonRunner.cs" />
+    <Compile Include="PythonExecutor.cs" />
     <Compile Include="ShotTypes\ShotType.cs" />
     <Compile Include="ShotTypes\ShotTypeList.cs" />
     <Compile Include="ShotTypes\ShotTypePmx.cs" />

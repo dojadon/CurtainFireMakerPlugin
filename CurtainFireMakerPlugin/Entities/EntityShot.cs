@@ -56,6 +56,16 @@ namespace CurtainFireMakerPlugin.Entities
         public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
         public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Velocity != Vector3.Zero ? (Quaternion)Matrix3.LookAt(+e.Velocity, +e.Upward) * e.Rot : e.Rot;
 
+        public override MotionInterpolation MotionInterpolation
+        {
+            get => base.MotionInterpolation;
+            protected set
+            {
+                AddBoneKeyFrame();
+                base.MotionInterpolation = value;
+            }
+        }
+
         public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(typeName, color), parentEntity) { }
 
@@ -75,7 +85,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
             catch (Exception e)
             {
-                try { Console.WriteLine(Plugin.Instance.PythonRunner.FormatException(e)); } catch { }
+                try { Console.WriteLine(Plugin.Instance.PythonExecutor.FormatException(e)); } catch { }
                 Console.WriteLine(e);
             }
         }
@@ -84,14 +94,14 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnSpawn();
 
-            if (World.FrameCount < 0)
+            if (World.FrameCount <= 0)
             {
                 AddMorphKeyFrame(MaterialMorph, -World.FrameCount, 0.0F);
             }
             else
             {
-                AddMorphKeyFrame(MaterialMorph, 0, 1.0F);
-                AddMorphKeyFrame(MaterialMorph, 1, 0.0F);
+                AddMorphKeyFrame(MaterialMorph, -1, 1.0F);
+                AddMorphKeyFrame(MaterialMorph, 0, 0.0F);
                 AddMorphKeyFrame(MaterialMorph, -World.FrameCount, 1.0F);
             }
 
@@ -119,39 +129,21 @@ namespace CurtainFireMakerPlugin.Entities
             base.Frame();
         }
 
-        public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
-        {
-            base.SetMotionInterpolationCurve(pos1, pos2, length);
-
-            AddBoneKeyFrame();
-        }
-
-        protected override void RemoveMotionInterpolationCurve()
-        {
-            AddBoneKeyFrame();
-
-            base.RemoveMotionInterpolationCurve();
-        }
-
         public void AddBoneKeyFrame()
         {
-            var bezier = CubicBezierCurve.Line;
+            var posCurve = CubicBezierCurve.Line;
 
             if (MotionInterpolation != null && MotionInterpolation.StartFrame < World.FrameCount)
             {
-                bezier = MotionInterpolation.Curve;
+                posCurve = MotionInterpolation.Curve;
             }
 
-            AddBoneKeyFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), bezier);
+            AddBoneKeyFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), posCurve);
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve bezier)
+        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve)
         {
-            var interpolation = new byte[4];
-            interpolation[0] = (byte)(bezier.P1.x * 127);
-            interpolation[1] = (byte)(bezier.P1.y * 127);
-            interpolation[2] = (byte)(bezier.P2.x * 127);
-            interpolation[3] = (byte)(bezier.P2.y * 127);
+            var posCurveBytes = VmdMotionFrameData.ConvertToBytes(posCurve.P1, posCurve.P2);
 
             World.KeyFrames.AddBoneKeyFrame(bone, new VmdMotionFrameData()
             {
@@ -159,9 +151,9 @@ namespace CurtainFireMakerPlugin.Entities
                 BoneName = bone.BoneName,
                 Pos = pos,
                 Rot = rot,
-                InterpolatePointX = interpolation,
-                InterpolatePointY = interpolation,
-                InterpolatePointZ = interpolation,
+                InterpolatePointX = posCurveBytes,
+                InterpolatePointY = posCurveBytes,
+                InterpolatePointZ = posCurveBytes,
             });
         }
 

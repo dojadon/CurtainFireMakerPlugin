@@ -104,9 +104,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         public void Export(World world)
         {
-            var config = Plugin.Instance.Config;
-
-            string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
+            string exportPath = world.Config.ExportDirPath + "\\" + world.ExportFileName + ".vmd";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))

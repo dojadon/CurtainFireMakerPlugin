@@ -88,8 +88,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         public void Export(World world)
         {
-            var config = Plugin.Instance.Config;
-            string exportPath = config.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
+            string exportPath = world.Config.ExportDirPath + "\\" + world.ExportFileName + ".pmx";
             File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
@@ -99,8 +98,8 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 var data = new PmxModelData();
                 GetData(data);
 
-                data.Header.ModelName = config.ModelName;
-                data.Header.Description += config.ModelDescription;
+                data.Header.ModelName = world.Config.ModelName;
+                data.Header.Description += world.Config.ModelDescription;
 
                 exporter.Export(data);
 

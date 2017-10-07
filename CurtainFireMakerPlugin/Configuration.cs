@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace CurtainFireMakerPlugin
 {
-    internal class Configuration
+    public class Configuration
     {
         private string CondigPath { get; }
 
