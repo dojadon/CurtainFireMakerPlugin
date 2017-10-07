@@ -36,7 +36,7 @@ namespace CurtainFireMakerPlugin
             {
                 using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
                 {
-                    try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                    try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
                     sw.WriteLine(e);
                 }
             }
