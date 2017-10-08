@@ -1,5 +1,4 @@
 ﻿using CsMmdDataIO.Pmx.Data;
-using CsMmdDataIO.Mvd.Data;
 using CsMmdDataIO.Vmd.Data;
 using CurtainFireMakerPlugin.Mathematics;
 using System;

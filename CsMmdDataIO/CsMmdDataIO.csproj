@@ -40,9 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExporterBase.cs" />
-    <Compile Include="Interfaces\Motion\IKeyFrame.cs" />
-    <Compile Include="Mvd\BinaryExtension.cs" />
     <Compile Include="ParserBase.cs" />
+    <Compile Include="Vmd\Data\IKeyFrame.cs" />
+    <Compile Include="Vmd\Data\VmdPropertyFrameData.cs" />
     <Compile Include="Vmd\VmdExporter.cs" />
     <Compile Include="Vmd\Data\IVmdData.cs" />
     <Compile Include="Vmd\Data\VmdHeaderData.cs" />
@@ -65,43 +65,6 @@
     <Compile Include="Pmx\Data\PmxMorphVertexData.cs" />
     <Compile Include="Pmx\Data\PmxSlotData.cs" />
     <Compile Include="Pmx\Data\PmxVertexData.cs" />
-    <Compile Include="Mvd\Data\MvdAccessoryPropertyData.cs" />
-    <Compile Include="Mvd\Data\MvdAccessoryPropertyFrame.cs" />
-    <Compile Include="Mvd\Data\MvdBoneData.cs" />
-    <Compile Include="Mvd\Data\MvdBoneFrame.cs" />
-    <Compile Include="Mvd\Data\MvdCameraData.cs" />
-    <Compile Include="Mvd\Data\MvdCameraFrame.cs" />
-    <Compile Include="Mvd\Data\MvdCameraPropertyData.cs" />
-    <Compile Include="Mvd\Data\MvdCameraPropertyFrame.cs" />
-    <Compile Include="Mvd\Data\MvdDocument.cs" />
-    <Compile Include="Mvd\Data\MvdEffectParameter.cs" />
-    <Compile Include="Mvd\Data\MvdEffectParameterData.cs" />
-    <Compile Include="Mvd\Data\MvdEffectParameterType.cs" />
-    <Compile Include="Mvd\Data\MvdEffectPropertyData.cs" />
-    <Compile Include="Mvd\Data\MvdEffectPropertyFrame.cs" />
-    <Compile Include="Mvd\Data\MvdFilterData.cs" />
-    <Compile Include="Mvd\Data\MvdFilterFrame.cs" />
-    <Compile Include="Mvd\Data\MvdFixedItemSection.cs" />
-    <Compile Include="Mvd\Data\MvdInterpolationPoint.cs" />
-    <Compile Include="Mvd\Data\MvdLightData.cs" />
-    <Compile Include="Mvd\Data\MvdLightFrame.cs" />
-    <Compile Include="Mvd\Data\MvdModelPropertyData.cs" />
-    <Compile Include="Mvd\Data\MvdModelPropertyFrame.cs" />
-    <Compile Include="Mvd\Data\MvdModelRelation.cs" />
-    <Compile Include="Mvd\Data\MvdMorphData.cs" />
-    <Compile Include="Mvd\Data\MvdMorphFrame.cs" />
-    <Compile Include="Mvd\Data\MvdMotionBlendLink.cs" />
-    <Compile Include="Mvd\Data\MvdMotionBlendLinkData.cs" />
-    <Compile Include="Mvd\Data\MvdMotionClip.cs" />
-    <Compile Include="Mvd\Data\MvdMotionClipData.cs" />
-    <Compile Include="Mvd\Data\MvdNameList.cs" />
-    <Compile Include="Mvd\Data\MvdObject.cs" />
-    <Compile Include="Mvd\Data\MvdProjectData.cs" />
-    <Compile Include="Mvd\Data\MvdProjectFrame.cs" />
-    <Compile Include="Mvd\Data\MvdSection.cs" />
-    <Compile Include="Mvd\Data\MvdSelfShadowModel.cs" />
-    <Compile Include="Mvd\Data\MvdTag.cs" />
-    <Compile Include="Mvd\Data\MvdTimeWarpPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

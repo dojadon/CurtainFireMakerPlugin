@@ -6,7 +6,6 @@ using CurtainFireMakerPlugin.Collections;
 using CsMmdDataIO.Pmx;
 using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Vmd.Data;
-using CsMmdDataIO.Mvd.Data;
 using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities.Models

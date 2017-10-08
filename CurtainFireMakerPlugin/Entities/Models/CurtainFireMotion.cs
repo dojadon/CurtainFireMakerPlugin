@@ -4,10 +4,8 @@ using System.Text;
 using System.IO;
 using CurtainFireMakerPlugin.Collections;
 using CsMmdDataIO.Pmx.Data;
-using CsMmdDataIO.Mvd.Data;
 using CsMmdDataIO.Vmd;
 using CsMmdDataIO.Vmd.Data;
-using CsMmdDataIO.Interfaces.Motion;
 
 namespace CurtainFireMakerPlugin.Entities.Models
 {
@@ -15,6 +13,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
     {
         public MultiDictionary<PmxBoneData, VmdMotionFrameData> BoneFrameDict { get; }
         public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphFrameDict { get; }
+        public List<VmdPropertyFrameData> PropertyFrameList { get; }
 
         private World World { get; }
 
@@ -24,6 +23,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
             BoneFrameDict = new MultiDictionary<PmxBoneData, VmdMotionFrameData>();
             MorphFrameDict = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
+            PropertyFrameList = new List<VmdPropertyFrameData>();
         }
 
         public void AddBoneKeyFrame(PmxBoneData bone, VmdMotionFrameData frame)
@@ -39,6 +39,14 @@ namespace CurtainFireMakerPlugin.Entities.Models
             if (frame.FrameTime >= 0)
             {
                 MorphFrameDict[morph].Add(frame);
+            }
+        }
+
+        public void AddPropertyKeyFrame(VmdPropertyFrameData frame)
+        {
+            if (frame.FrameTime >= 0)
+            {
+                PropertyFrameList.Add(frame);
             }
         }
 
@@ -58,6 +66,8 @@ namespace CurtainFireMakerPlugin.Entities.Models
             {
                 DistinctFrames(value);
             }
+
+            DistinctFrames(PropertyFrameList);
         }
 
         private void DistinctFrames<T>(IList<T> frames) where T : IKeyFrame
@@ -104,6 +114,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 Header = new VmdHeaderData() { ModelName = "弾幕" },
                 MotionArray = motionList.ToArray(),
                 MorphArray = morphList.ToArray(),
+                PropertyArray = PropertyFrameList.ToArray(),
             });
         }
 

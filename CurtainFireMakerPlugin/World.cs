@@ -10,6 +10,7 @@ using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.IO;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
+using CsMmdDataIO.Vmd.Data;
 
 namespace CurtainFireMakerPlugin
 {
@@ -73,6 +74,20 @@ namespace CurtainFireMakerPlugin
 
         internal void Init()
         {
+            if (FrameCount > 0)
+            {
+                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData()
+                {
+                    FrameTime = 0,
+                    IsVisible = false,
+                });
+
+                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData()
+                {
+                    FrameTime = FrameCount,
+                    IsVisible = true,
+                });
+            }
         }
 
         internal void Frame()
