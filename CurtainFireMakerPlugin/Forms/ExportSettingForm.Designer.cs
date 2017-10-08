@@ -208,9 +208,9 @@
             this.checkBoxDropPmxFile.AutoSize = true;
             this.checkBoxDropPmxFile.Location = new System.Drawing.Point(14, 89);
             this.checkBoxDropPmxFile.Name = "checkBoxDropPmxFile";
-            this.checkBoxDropPmxFile.Size = new System.Drawing.Size(186, 16);
+            this.checkBoxDropPmxFile.Size = new System.Drawing.Size(223, 16);
             this.checkBoxDropPmxFile.TabIndex = 24;
-            this.checkBoxDropPmxFile.Text = "出力時にpmxファイルをドロップする";
+            this.checkBoxDropPmxFile.Text = "出力時にpmxファイルをMMMへドロップする";
             this.checkBoxDropPmxFile.UseVisualStyleBackColor = true;
             // 
             // checkBoxDropVmdFile
@@ -218,9 +218,9 @@
             this.checkBoxDropVmdFile.AutoSize = true;
             this.checkBoxDropVmdFile.Location = new System.Drawing.Point(14, 111);
             this.checkBoxDropVmdFile.Name = "checkBoxDropVmdFile";
-            this.checkBoxDropVmdFile.Size = new System.Drawing.Size(186, 16);
+            this.checkBoxDropVmdFile.Size = new System.Drawing.Size(223, 16);
             this.checkBoxDropVmdFile.TabIndex = 25;
-            this.checkBoxDropVmdFile.Text = "出力時にvmdファイルをドロップする";
+            this.checkBoxDropVmdFile.Text = "出力時にvmdファイルをMMMへドロップする";
             this.checkBoxDropVmdFile.UseVisualStyleBackColor = true;
             // 
             // ExportSettingForm
@@ -241,7 +241,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ExportSettingForm";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.Text = "出力設定";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
