@@ -28,9 +28,9 @@ namespace CsMmdDataIO.Pmx.Data
         /** 矢先相対座標 */
         public Vector3 PosOffset { get; set; }
         /** 連動親ボーンID. */
-        public int LinkParent { get; set; }
+        public int LinkParentId { get; set; }
         /** 連動比. 負を指定することも可能. */
-        public float Rate { get; set; }
+        public float LinkWeight { get; set; }
         /** 軸の絶対座標 */
         public Vector3 AxisVec { get; set; }
         /** ローカルx軸 */
@@ -72,8 +72,8 @@ namespace CsMmdDataIO.Pmx.Data
 
             if ((BoneFlags.ROTATE_LINK & Flag) > 0 || (BoneFlags.MOVE_LINK & Flag) > 0)
             {
-                exporter.WritePmxId(PmxExporter.SIZE_BONE, LinkParent);
-                exporter.Write(Rate);
+                exporter.WritePmxId(PmxExporter.SIZE_BONE, LinkParentId);
+                exporter.Write(LinkWeight);
             }
 
             if ((BoneFlags.AXIS_ROTATE & Flag) > 0)
@@ -140,8 +140,8 @@ namespace CsMmdDataIO.Pmx.Data
 
             if ((BoneFlags.ROTATE_LINK & Flag) > 0 || (BoneFlags.MOVE_LINK & Flag) > 0)
             {
-                LinkParent = parser.ReadPmxId(parser.SizeBone);
-                Rate = parser.ReadSingle();
+                LinkParentId = parser.ReadPmxId(parser.SizeBone);
+                LinkWeight = parser.ReadSingle();
             }
 
             if ((BoneFlags.AXIS_ROTATE & Flag) > 0)
@@ -203,7 +203,7 @@ namespace CsMmdDataIO.Pmx.Data
         /** IK. */
         public const short IK = 0x0020;
         /** ローカル付与フラグ. */
-        public const short LINK = 0x0080;
+        public const short LOCAL_LINK = 0x0080;
         /** 回転付与. */
         public const short ROTATE_LINK = 0x0100;
         /** 移動付与. */

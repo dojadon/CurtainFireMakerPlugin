@@ -92,65 +92,75 @@ namespace CurtainFireMakerPlugin
 
                 Task.Factory.StartNew(progressForm.ShowDialog);
 
-                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
+                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = true, })
                 {
-                    try
+                    Console.SetOut(sw);
+                    PythonExecutor.SetOut(sw.BaseStream);
+
+                    RunScript(Config.ScriptPath, progressForm, Finalize);
+
+                    void Finalize()
                     {
-                        Console.SetOut(sw);
-                        PythonExecutor.SetOut(sw.BaseStream);
+                        sw.Dispose();
 
-                        RunScript(Config.ScriptPath, progressForm);
+                        StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+                        Console.SetOut(standardOutput);
+                        PythonExecutor.SetOut(standardOutput.BaseStream);
 
-                        if (!Config.KeepLogOpen)
-                        {
-                            progressForm.Dispose();
-                        }
+                        if (!form.IsDisposed)
+                            progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
                     }
-                    catch (Exception e)
+
+                    if (!Config.KeepLogOpen)
                     {
-                        try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
-                        Console.WriteLine(e);
+                        progressForm.Dispose();
                     }
                 }
             }
         }
 
-        public void RunScript(string path, ProgressForm form)
+        public void RunScript(string path, ProgressForm form, Action finalize)
         {
             var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptPath));
 
-            PythonExecutor.ExecuteScriptOnNewScope(path, new Variable("world", world));
-
-            form.Progress.Minimum = 0;
-            form.Progress.Maximum = world.MaxFrame;
-            form.Progress.Step = 1;
-
-            world.Init();
-
-            for (int i = 0; i < world.MaxFrame; i++)
+            try
             {
-                world.Frame();
-                form.Progress.PerformStep();
+                PythonExecutor.ExecuteScriptOnNewScope(path, new Variable("world", world));
 
-                if (form.DialogResult == DialogResult.Cancel)
+                form.Progress.Minimum = 0;
+                form.Progress.Maximum = world.MaxFrame;
+                form.Progress.Step = 1;
+
+                world.Init();
+
+                for (int i = 0; i < world.MaxFrame; i++)
                 {
-                    break;
+                    world.Frame();
+                    form.Progress.PerformStep();
+
+                    if (form.DialogResult == DialogResult.Cancel)
+                    {
+                        break;
+                    }
                 }
+
+                if (form.DialogResult != DialogResult.Cancel)
+                {
+                    world.Export();
+                }
+            }
+            catch (Exception e)
+            {
+                try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                finalize();
             }
 
             if (form.DialogResult != DialogResult.Cancel)
             {
-                world.Export();
-
-                Console.Out.Dispose();
-
-                StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
-                Console.SetOut(standardOutput);
-                PythonExecutor.SetOut(standardOutput.BaseStream);
-
-                if (!form.IsDisposed)
-                    form.LogTextBox.Text += File.ReadAllText("lastest.log");
-
                 world.Finish();
             }
         }

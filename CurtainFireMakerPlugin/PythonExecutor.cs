@@ -39,6 +39,7 @@ namespace CurtainFireMakerPlugin
             "import clr\n" +
             "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
             "clr.AddReference(\"VecMath\")\n" +
+            "clr.AddReference(\"CsMmdDataIO\")\n" +
             "clr.AddReference(\"MikuMikuPlugin\")\n", RootScope);
         }
 
