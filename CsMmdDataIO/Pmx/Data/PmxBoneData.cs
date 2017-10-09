@@ -61,63 +61,61 @@ namespace CsMmdDataIO.Pmx.Data
             exporter.Write(Depth);
             exporter.Write(Flag);
 
-            if (!BoneFlags.OFFSET.Check(Flag))
-            {
-                exporter.Write(PosOffset);
-            }
-            else
+            if ((BoneFlags.OFFSET & Flag) > 0)
             {
                 exporter.WritePmxId(PmxExporter.SIZE_BONE, ArrowId);
             }
+            else
+            {
+                exporter.Write(PosOffset);
+            }
 
-            //if (BoneFlags.ROTATE_LINK.check(this.flag) || BoneFlags.MOVE_LINK.check(this.flag))
-            //{
-            //    exporter.WritePmxId(PmxExporter.SIZE_BONE, this.linkParent);
-            //    exporter.Write(this.rate);
-            //}
+            if ((BoneFlags.ROTATE_LINK & Flag) > 0 || (BoneFlags.MOVE_LINK & Flag) > 0)
+            {
+                exporter.WritePmxId(PmxExporter.SIZE_BONE, LinkParent);
+                exporter.Write(Rate);
+            }
 
-            //if (BoneFlags.AXIS_ROTATE.check(this.flag))
-            //{
-            //    exporter.Write(this.axisVec);
-            //}
+            if ((BoneFlags.AXIS_ROTATE & Flag) > 0)
+            {
+                exporter.Write(AxisVec);
+            }
 
-            //if (BoneFlags.LOCAL_AXIS.check(this.flag))
-            //{
-            //    exporter.Write(this.localAxisVecX);
-            //    exporter.Write(this.localAxisVecZ);
-            //}
+            if ((BoneFlags.LOCAL_AXIS & Flag) > 0)
+            {
+                exporter.Write(LocalAxisVecX);
+                exporter.Write(LocalAxisVecZ);
+            }
 
-            //if (BoneFlags.EXTRA.check(this.flag))
-            //{
-            //    exporter.Write(this.extraParentId);
-            //}
+            if ((BoneFlags.EXTRA & Flag) > 0)
+            {
+                exporter.Write(ExtraParentId);
+            }
 
-            //if (BoneFlags.IK.check(this.flag))
-            //{
-            //    exporter.WritePmxId(PmxExporter.SIZE_BONE, this.ikTargetId);
+            if ((BoneFlags.IK & Flag) > 0)
+            {
+                exporter.WritePmxId(PmxExporter.SIZE_BONE, IkTargetId);
 
-            //    exporter.Write(this.ikDepth);
-            //    exporter.Write(this.angleLimit);
+                exporter.Write(IkDepth);
+                exporter.Write(AngleLimit);
 
-            //    int boneNum = this.ikChilds.Length;
+                int boneNum = IkChilds.Length;
 
-            //    Vector3 zeroVec = new Vector3();
+                for (int i = 0; i < boneNum; i++)
+                {
+                    int ikElement = IkChilds[i];
+                    exporter.WritePmxId(PmxExporter.SIZE_BONE, ikElement);
 
-            //    for (int i = 0; i < boneNum; i++)
-            //    {
-            //        int ikElement = this.ikChilds[i];
-            //        exporter.WritePmxId(PmxExporter.SIZE_BONE, ikElement);
+                    int limit = IkAngleMin[i] == Vector3.Zero && IkAngleMax[i] == Vector3.Zero ? 0 : 1;
+                    exporter.Write((byte)limit);
 
-            //        int limit = this.ikAngleMin[i].Equals(zeroVec) && this.ikAngleMax[i].Equals(zeroVec) ? 0 : 1;
-            //        exporter.Write((byte)limit);
-
-            //        if (limit > 0)
-            //        {
-            //            exporter.Write(this.ikAngleMin[i]);
-            //            exporter.Write(this.ikAngleMax[i]);
-            //        }
-            //    }
-            //}
+                    if (limit > 0)
+                    {
+                        exporter.Write(IkAngleMin[i]);
+                        exporter.Write(IkAngleMax[i]);
+                    }
+                }
+            }
         }
 
         public void Parse(PmxParser parser)
@@ -131,38 +129,38 @@ namespace CsMmdDataIO.Pmx.Data
             Depth = parser.ReadInt32();
             Flag = parser.ReadInt16();
 
-            if (!BoneFlags.OFFSET.Check(Flag))
-            {
-                PosOffset = parser.ReadVector3();
-            }
-            else
+            if ((BoneFlags.OFFSET & Flag) > 0)
             {
                 ArrowId = parser.ReadPmxId(parser.SizeBone);
             }
+            else
+            {
+                PosOffset = parser.ReadVector3();
+            }
 
-            if (BoneFlags.ROTATE_LINK.Check(Flag) || BoneFlags.MOVE_LINK.Check(Flag))
+            if ((BoneFlags.ROTATE_LINK & Flag) > 0 || (BoneFlags.MOVE_LINK & Flag) > 0)
             {
                 LinkParent = parser.ReadPmxId(parser.SizeBone);
                 Rate = parser.ReadSingle();
             }
 
-            if (BoneFlags.AXIS_ROTATE.Check(Flag))
+            if ((BoneFlags.AXIS_ROTATE & Flag) > 0)
             {
                 AxisVec = parser.ReadVector3();
             }
 
-            if (BoneFlags.LOCAL_AXIS.Check(Flag))
+            if ((BoneFlags.LOCAL_AXIS & Flag) > 0)
             {
                 LocalAxisVecX = parser.ReadVector3();
                 LocalAxisVecZ = parser.ReadVector3();
             }
 
-            if (BoneFlags.EXTRA.Check(Flag))
+            if ((BoneFlags.EXTRA & Flag) > 0)
             {
                 ExtraParentId = parser.ReadInt32();
             }
 
-            if (BoneFlags.IK.Check(Flag))
+            if ((BoneFlags.IK & Flag) > 0)
             {
                 IkTargetId = parser.ReadPmxId(parser.SizeBone);
 
@@ -190,93 +188,33 @@ namespace CsMmdDataIO.Pmx.Data
         }
     }
 
-    class BoneFlags
+    public class BoneFlags
     {
         /** オフセット. (0:のときオフセット. 1:のときボーン.) */
-        public static readonly BoneFlags OFFSET = new BoneFlags(0x0001);
+        public const short OFFSET = 0x0001;
         /** 回転. */
-        public static readonly BoneFlags ROTATE = new BoneFlags(0x0002);
+        public const short ROTATE = 0x0002;
         /** 移動. */
-        public static readonly BoneFlags MOVE = new BoneFlags(0x0004);
+        public const short MOVE = 0x0004;
         /** 表示. */
-        public static readonly BoneFlags VISIBLE = new BoneFlags(0x0008);
+        public const short VISIBLE = 0x0008;
         /** 操作. */
-        public static readonly BoneFlags OP = new BoneFlags(0x0010);
+        public const short OP = 0x0010;
         /** IK. */
-        public static readonly BoneFlags IK = new BoneFlags(0x0020);
+        public const short IK = 0x0020;
         /** ローカル付与フラグ. */
-        public static readonly BoneFlags LINK = new BoneFlags(0x0080);
+        public const short LINK = 0x0080;
         /** 回転付与. */
-        public static readonly BoneFlags ROTATE_LINK = new BoneFlags(0x0100);
+        public const short ROTATE_LINK = 0x0100;
         /** 移動付与. */
-        public static readonly BoneFlags MOVE_LINK = new BoneFlags(0x0200);
+        public const short MOVE_LINK = 0x0200;
         /** 回転軸固定. */
-        public static readonly BoneFlags AXIS_ROTATE = new BoneFlags(0x0400);
+        public const short AXIS_ROTATE = 0x0400;
         /** ローカル座標軸. */
-        public static readonly BoneFlags LOCAL_AXIS = new BoneFlags(0x0800);
+        public const short LOCAL_AXIS = 0x0800;
         /** 物理後変形 */
-        public static readonly BoneFlags PHYSICAL = new BoneFlags(0x1000);
+        public const short PHYSICAL = 0x1000;
         /** 外部親変形 */
-        public static readonly BoneFlags EXTRA = new BoneFlags(0x2000);
-
-        public static readonly BoneFlags[] FLAGS = { OFFSET, ROTATE, MOVE, VISIBLE, OP, IK, LINK, ROTATE_LINK, MOVE_LINK, AXIS_ROTATE, LOCAL_AXIS, PHYSICAL, EXTRA };
-
-        private readonly short encoded;
-        /**
-         * コンストラクタ。
-         * @param code 符号化int値
-         */
-        private BoneFlags(int code) : this((short)code)
-        {
-        }
-
-        /**
-         * コンストラクタ。
-         * @param code 符号化short値
-         */
-        private BoneFlags(short code)
-        {
-            encoded = code;
-        }
-
-        /**
-         * short値からデコードする。
-         * @param code short値
-         * @return デコードされた列挙子。該当するものがなければnull
-         */
-        public static BoneFlags Decode(short code)
-        {
-            BoneFlags result = null;
-
-            foreach (BoneFlags type in FLAGS)
-            {
-                if (type.Encode() == code)
-                {
-                    result = type;
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        /**
-         * short値にエンコードする。
-         * @return short値
-         */
-        public short Encode()
-        {
-            return encoded;
-        }
-
-        /**
-         * フラグがonかテストする.
-         * @param objective テスト対象.
-         * @return on なら true
-         */
-        public bool Check(short objective)
-        {
-            return ((objective & encoded) > 0);
-        }
+        public const short EXTRA = 0x2000;
     }
 }
