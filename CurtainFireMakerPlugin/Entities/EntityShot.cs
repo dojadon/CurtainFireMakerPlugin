@@ -53,7 +53,7 @@ namespace CurtainFireMakerPlugin.Entities
         }
 
         public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
-        public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Velocity != Vector3.Zero ? (Quaternion)Matrix3.LookAt(+e.Velocity, +e.Upward) * e.Rot : e.Rot;
+        public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Velocity != Vector3.Zero ? e.Rot * (Quaternion)Matrix3.LookAt(+e.Velocity, +e.Upward) : e.Rot;
 
         public override MotionInterpolation MotionInterpolation
         {
