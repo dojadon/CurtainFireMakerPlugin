@@ -80,6 +80,7 @@ namespace CurtainFireMakerPlugin.Entities
                 RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
                 Property.Type.InitEntity(this);
+                Property.Type.InitModelData(ModelData);
             }
             catch (Exception e)
             {

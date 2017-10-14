@@ -29,7 +29,6 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
         public virtual Vector3 Velocity { get; set; }
-        public virtual Quaternion RotVelocity { get; set; } = Quaternion.Identity;
         public virtual Vector3 Upward { get; set; } = new Vector3(0, 1, 0);
 
         public virtual Entity ParentEntity { get; protected set; }

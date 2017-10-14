@@ -5,6 +5,7 @@ using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Entities.Models;
 using CurtainFireMakerPlugin.Tasks;
+using CurtainFireMakerPlugin.ShotTypes;
 using CurtainFireMakerPlugin.IO;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
@@ -39,7 +40,7 @@ namespace CurtainFireMakerPlugin
         public string PmxExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".pmx";
         public string VmdExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".vmd";
 
-        internal World(Plugin plugin,  string fileName)
+        internal World(Plugin plugin, string fileName)
         {
             Plugin = plugin;
 
@@ -74,7 +75,15 @@ namespace CurtainFireMakerPlugin
             return FrameCount;
         }
 
-        internal void Init()
+        internal void InitPre()
+        {
+            foreach (var type in ShotType.TypeDict.Values)
+            {
+                type.InitWorld(this);
+            }
+        }
+
+        internal void InitPost()
         {
             if (FrameCount > 0)
             {

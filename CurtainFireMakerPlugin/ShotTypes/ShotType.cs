@@ -10,10 +10,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 {
     public class ShotType
     {
-        public static Dictionary<string, ShotType> TypeDict { get; } = new Dictionary<string, ShotType>()
-        {
-        { "BONE", new ShotType("BONE") },
-        };
+        public static Dictionary<string, ShotType> TypeDict { get; } = new Dictionary<string, ShotType>() { { "BONE", new ShotType("BONE") } };
 
         public static void RegisterType(ShotType type)
         {
@@ -29,10 +26,10 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public virtual bool HasMesh { get; } = false;
 
-        public virtual Action<EntityShot> InitEntity { get; set; } = e =>
-        {
-            var data = e.ModelData;
+        public virtual Action<EntityShot> InitEntity { get; set; } = e => { };
 
+        public virtual Action<ShotModelData> InitModelData { get; set; } = data =>
+        {
             if (data.Materials != null)
             {
                 var prop = data.Property;
@@ -44,7 +41,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             }
         };
 
-        public virtual Action InitWorld { get; set; } = () => { };
+        public virtual Action<World> InitWorld { get; set; } = world => { };
 
         public virtual PmxBoneData[] CreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
 

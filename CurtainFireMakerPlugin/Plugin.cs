@@ -127,6 +127,8 @@ namespace CurtainFireMakerPlugin
         {
             var world = new World(this, Path.GetFileNameWithoutExtension(Config.ScriptPath));
 
+            world.InitPre();
+
             bool dropFlag = false;
 
             try
@@ -137,7 +139,7 @@ namespace CurtainFireMakerPlugin
                 form.Progress.Maximum = world.MaxFrame;
                 form.Progress.Step = 1;
 
-                world.Init();
+                world.InitPost();
 
                 for (int i = 0; i < world.MaxFrame; i++)
                 {

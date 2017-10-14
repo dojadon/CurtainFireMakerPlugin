@@ -35,7 +35,7 @@ namespace VecMath
             this.m22 = m22;
         }
 
-        public Matrix3(Vector3 x, Vector3 y, Vector3 z) : this(x.x, x.y, x.y, y.x, y.y, y.z, z.x, z.y, z.z) { }
+        public Matrix3(Vector3 x, Vector3 y, Vector3 z) : this(x.x, x.y, x.z, y.x, y.y, y.z, z.x, z.y, z.z) { }
 
         public Matrix3(Quaternion q)
         {
