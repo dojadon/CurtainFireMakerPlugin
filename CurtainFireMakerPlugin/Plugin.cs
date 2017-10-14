@@ -40,6 +40,10 @@ namespace CurtainFireMakerPlugin
                     sw.WriteLine(e);
                 }
             }
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var stream = assembly.GetManifestResourceStream("CurtainFireMakerPlugin.Resources.icon.ico");
+            Image = Image.FromStream(stream);
         }
 
         public void InitIronPython()
@@ -56,17 +60,7 @@ namespace CurtainFireMakerPlugin
         public string Text => "弾幕生成";
         public string EnglishText => "Generate Curtain Fire";
 
-        public Image Image
-        {
-            get
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var stream = assembly.GetManifestResourceStream("CurtainFireMakerPlugin.Resources.icon.ico");
-
-                return Image.FromStream(stream);
-            }
-        }
-
+        public Image Image { get; set; }
         public Image SmallImage => Image;
 
         public void Dispose()
