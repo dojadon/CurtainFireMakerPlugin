@@ -21,16 +21,7 @@ namespace CsMmdDataIO.Pmx.Data
         public Vector2 Uv { get; set; }
         public float Edge { get; set; }
 
-        /**
-         * <ul>
-         * <li>0:BDEF1
-         * <li>1:BDEF2
-         * <li>2:BDEF4
-         * <li>3:SDEF
-         * <li>4:QDEF(※2.1拡張)
-         * </ul>
-         */
-        public byte WeightType { get; set; }
+        public WeightType WeightType { get; set; }
         public int[] BoneId { get; set; } = { };
         public float[] Weight { get; set; } = { };
         public Vector3 Sdef_c;
@@ -63,24 +54,24 @@ namespace CsMmdDataIO.Pmx.Data
             // exporter.dumpLeFloat(uvEX.x).dumpLeFloat(uvEX.y).dumpLeFloat(uvEX.z).dumpLeFloat(uvEX.w);
             // }
 
-            exporter.Write(WeightType);
+            exporter.Write((byte)WeightType);
 
-            for (byte i = 0; i < this.BoneId.Length; i++)
+            for (byte i = 0; i < BoneId.Length; i++)
             {
                 exporter.WritePmxId(PmxExporter.SIZE_BONE, BoneId[i]);
             }
 
             switch (WeightType)
             {
-                case WEIGHT_TYPE_BDEF1:
+                case WeightType.BDEF1:
                     break;
 
-                case WEIGHT_TYPE_BDEF2:
-                case WEIGHT_TYPE_SDEF:
+                case WeightType.BDEF2:
+                case WeightType.SDEF:
                     exporter.Write(Weight[0]);
                     break;
 
-                case WEIGHT_TYPE_BDEF4:
+                case WeightType.BDEF4:
                     for (byte i = 0; i < 4; i++)
                     {
                         exporter.Write(Weight[i]);
@@ -88,7 +79,7 @@ namespace CsMmdDataIO.Pmx.Data
                     break;
             }
 
-            if (this.WeightType == WEIGHT_TYPE_SDEF)
+            if (WeightType == WeightType.SDEF)
             {
                 exporter.Write(Sdef_c);
                 exporter.Write(Sdef_r0);
@@ -103,7 +94,7 @@ namespace CsMmdDataIO.Pmx.Data
             Normal = parser.ReadVector3();
             Uv = parser.ReadVector2();
 
-            WeightType = parser.ReadByte();
+            WeightType = (WeightType)parser.ReadByte();
 
             switch (WeightType)
             {
@@ -111,12 +102,12 @@ namespace CsMmdDataIO.Pmx.Data
                     BoneId = new int[1];
                     break;
 
-                case WEIGHT_TYPE_BDEF2:
-                case WEIGHT_TYPE_SDEF:
+                case WeightType.BDEF2:
+                case WeightType.SDEF:
                     BoneId = new int[2];
                     break;
 
-                case WEIGHT_TYPE_BDEF4:
+                case WeightType.BDEF4:
                     BoneId = new int[4];
                     break;
             }
@@ -132,13 +123,13 @@ namespace CsMmdDataIO.Pmx.Data
                     Weight = new float[] { 1 };
                     break;
 
-                case WEIGHT_TYPE_BDEF2:
-                case WEIGHT_TYPE_SDEF:
+                case WeightType.BDEF2:
+                case WeightType.SDEF:
                     float we = parser.ReadSingle();
                     Weight = new float[] { we, 1 - we };
                     break;
 
-                case WEIGHT_TYPE_BDEF4:
+                case WeightType.BDEF4:
                     Weight = new float[4];
                     for (byte i = 0; i < 4; i++)
                     {
@@ -147,7 +138,7 @@ namespace CsMmdDataIO.Pmx.Data
                     break;
             }
 
-            if (WeightType == WEIGHT_TYPE_SDEF)
+            if (WeightType == WeightType.SDEF)
             {
                 Sdef_c = parser.ReadVector3();
                 Sdef_r0 = parser.ReadVector3();
@@ -155,5 +146,13 @@ namespace CsMmdDataIO.Pmx.Data
             }
             Edge = parser.ReadSingle();
         }
+    }
+
+    public enum WeightType : byte
+    {
+        BDEF1 = 0,
+        BDEF2 = 1,
+        BDEF4 = 2,
+        SDEF = 3,
     }
 }

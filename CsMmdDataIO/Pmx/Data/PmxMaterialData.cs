@@ -14,16 +14,6 @@ namespace CsMmdDataIO.Pmx.Data
 
         public string Script { get; set; } = "";
 
-        /**
-         * 描画フラグ(8bit)
-         * <ul>
-         * <li>0x01:両面描画
-         * <li>0x02:地面影
-         * <li>0x04:セルフシャドウマップへの描画
-         * <li>0x08:セルフシャドウの描画
-         * <li>0x10:エッジ描画
-         * </ul>
-         */
         public byte Flag { get; set; }
 
         public Vector4 Edge { get; set; } = new Vector4();
@@ -36,19 +26,10 @@ namespace CsMmdDataIO.Pmx.Data
 
         public int TextureId { get; set; }
         public int SphereId { get; set; }
-        /**
-         * スフィアモード
-         * <ul>
-         * <li>0:無効
-         * <li>1:乗算(sph)
-         * <li>2:加算(spa)
-         * <li>3:サブテクスチャ(追加UV1のx,yをUV参照して通常テクスチャ描画を行う)
-         * </ul>
-         */
-        public byte Mode { get; set; }
-        /** 0: トゥーンはテクスチャーファイル. 1: 共有ファイル. */
-        public byte SharedToon { get; set; }
-        /** トゥーンファイル番号。 shared:1 では, 0ならtoon01.bmp, 9ならtoon10.bmp. 0xffならtoon0.bmp. shared:0 では, texture ID. */
+
+        public SphereMode Mode { get; set; }
+
+        public ToonMode SharedToon { get; set; }
         public int ToonId { get; set; }
         public int FaceCount { get; set; }
 
@@ -64,7 +45,7 @@ namespace CsMmdDataIO.Pmx.Data
             Specular = Specular,
             Ambient = Ambient,
             Shininess = Shininess,
-            TextureId= TextureId,
+            TextureId = TextureId,
             SphereId = SphereId,
             Mode = Mode,
             SharedToon = SharedToon,
@@ -89,8 +70,8 @@ namespace CsMmdDataIO.Pmx.Data
 
             exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, TextureId);
             exporter.WritePmxId(PmxExporter.SIZE_TEXTURE, SphereId);
-            exporter.Write(Mode);
-            exporter.Write(SharedToon);
+            exporter.Write((byte)Mode);
+            exporter.Write((byte)SharedToon);
 
             if (SharedToon == 0)
             {
@@ -123,8 +104,8 @@ namespace CsMmdDataIO.Pmx.Data
 
             TextureId = parser.ReadPmxId(parser.SizeTexture);
             SphereId = parser.ReadPmxId(parser.SizeTexture);
-            Mode = parser.ReadByte();
-            SharedToon = parser.ReadByte();
+            Mode = (SphereMode)parser.ReadByte();
+            SharedToon = (ToonMode)parser.ReadByte();
 
             if (SharedToon == 0)
             {
@@ -139,5 +120,28 @@ namespace CsMmdDataIO.Pmx.Data
 
             FaceCount = parser.ReadInt32();
         }
+    }
+
+    public enum RenderFlags : byte
+    {
+        DOUBLE_SIDED = 0x01,
+        GROUND_SHADOW = 0x02,
+        TO_SHADOW_MAP = 0x04,
+        SLEF_SHADOW = 0x08,
+        EDGE = 0x10,
+    }
+
+    public enum SphereMode : byte
+    {
+        DISBLE = 0,
+        MULT = 1,
+        ADD = 2,
+        SUB_TEXTURE = 3
+    }
+
+    public enum ToonMode : byte
+    {
+        TEXTURE_FILE = 0,
+        SHARED_FILE = 1,
     }
 }

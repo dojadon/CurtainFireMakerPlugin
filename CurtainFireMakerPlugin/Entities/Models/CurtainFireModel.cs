@@ -65,14 +65,14 @@ namespace CurtainFireMakerPlugin.Entities.Models
             var boneSlot = new PmxSlotData()
             {
                 SlotName = "弾ボーン",
-                Type = PmxSlotData.SLOT_TYPE_BONE,
+                Type = SlotType.BONE,
                 Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
             };
 
             var morphSlot = new PmxSlotData()
             {
                 SlotName = "弾モーフ",
-                Type = PmxSlotData.SLOT_TYPE_MORPH,
+                Type = SlotType.MORPH,
                 Indices = Enumerable.Range(0, Morphs.MorphList.Count).ToArray()
             };
 

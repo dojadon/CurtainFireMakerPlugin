@@ -8,14 +8,11 @@ namespace CsMmdDataIO.Pmx.Data
     [Serializable]
     public class PmxSlotData : IPmxData
     {
-        public const byte SLOT_TYPE_BONE = 0;
-        public const byte SLOT_TYPE_MORPH = 1;
-
         public string SlotName { get; set; } = "";
         public string SlotNameE { get; set; } = "";
 
         public bool NormalSlot { get; set; } = true;
-        public byte Type { get; set; }
+        public SlotType Type { get; set; }
         public int[] Indices { get; set; }
 
         public object Clone() => new PmxSlotData()
@@ -37,11 +34,11 @@ namespace CsMmdDataIO.Pmx.Data
             int elementCount = Indices.Length;
             exporter.Write(elementCount);
 
-            byte size = Type == SLOT_TYPE_BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
+            byte size = Type == SlotType.BONE ? PmxExporter.SIZE_BONE : PmxExporter.SIZE_MORPH;
 
             for (int i = 0; i < elementCount; i++)
             {
-                exporter.Write(Type);
+                exporter.Write((byte)Type);
 
                 int id = Indices[i];
                 exporter.WritePmxId(size, id);
@@ -61,10 +58,16 @@ namespace CsMmdDataIO.Pmx.Data
             for (int i = 0; i < elementCount; i++)
             {
                 byte type = parser.ReadByte();
-                byte size = type == SLOT_TYPE_BONE ? parser.SizeBone : parser.SizeMorph;
+                byte size = type == (byte)SlotType.BONE ? parser.SizeBone : parser.SizeMorph;
 
                 Indices[i] = parser.ReadPmxId(size);
             }
         }
+    }
+
+    public enum SlotType : byte
+    {
+        BONE = 0,
+        MORPH = 1,
     }
 }

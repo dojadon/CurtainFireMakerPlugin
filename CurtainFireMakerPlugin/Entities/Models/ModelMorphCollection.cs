@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
         public void SetupMaterialMorph(ShotProperty prop, PmxMorphData morph, int materialCount, int appliedMaterialCount)
         {
             morph.MorphName ="MO_" +  prop.Type.Name[0] + MorphList.Count.ToString();
-            morph.SlotType = SlotType.RIP;
+            morph.SlotType = MorphSlotType.RIP;
             morph.MorphType = MorphType.MATERIAL;
 
             morph.MorphArray = new IPmxMorphTypeData[appliedMaterialCount];

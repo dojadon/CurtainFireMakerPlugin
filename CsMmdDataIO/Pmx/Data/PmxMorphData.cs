@@ -7,7 +7,7 @@ namespace CsMmdDataIO.Pmx.Data
     {
         public string MorphName { get; set; } = "";
         public string MorphNameE { get; set; } = "";
-        public SlotType SlotType { get; set; }
+        public MorphSlotType SlotType { get; set; }
         public MorphType MorphType { get; set; }
 
         public IPmxMorphTypeData[] MorphArray { get; set; }
@@ -42,7 +42,7 @@ namespace CsMmdDataIO.Pmx.Data
             MorphName = parser.ReadText();
             MorphNameE = parser.ReadText();
 
-            SlotType = (SlotType)parser.ReadByte();
+            SlotType = (MorphSlotType)parser.ReadByte();
 
             MorphType = (MorphType)parser.ReadByte();
 
@@ -86,7 +86,7 @@ namespace CsMmdDataIO.Pmx.Data
         }
     }
 
-    public enum SlotType : byte
+    public enum MorphSlotType : byte
     {
         SYSTEM = 0,
         EYEBROW = 1,

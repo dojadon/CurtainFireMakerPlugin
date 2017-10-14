@@ -171,7 +171,7 @@ namespace CurtainFireMakerPlugin.Entities
                 var morph = new PmxMorphData()
                 {
                     MorphName = morphName,
-                    SlotType = SlotType.RIP,
+                    SlotType = MorphSlotType.RIP,
                     MorphType = MorphType.VERTEX,
                     MorphArray = new IPmxMorphTypeData[vertices.Length]
                 };
