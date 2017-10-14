@@ -5,11 +5,18 @@ using System.Text;
 
 namespace CsMmdDataIO.Vmd.Data
 {
-    public class VmdMorphFrameData : IVmdData, IKeyFrame
+    public struct VmdMorphFrameData : IVmdData, IKeyFrame
     {
         public string MorphName { get; set; }
         public long FrameTime { get; set; }
         public float Weigth { get; set; }
+
+        public VmdMorphFrameData(string morphName, long frameTime, float weight)
+        {
+            MorphName = morphName;
+            FrameTime = frameTime;
+            Weigth = weight;
+        }
 
         public void Export(VmdExporter exporter)
         {

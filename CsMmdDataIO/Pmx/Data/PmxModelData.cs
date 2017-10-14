@@ -17,6 +17,18 @@ namespace CsMmdDataIO.Pmx.Data
         public int[] VertexIndices { get; set; } = { };
         public string[] TextureFiles { get; set; } = { };
 
+        public object Clone() => new PmxModelData()
+        {
+            Header = CloneUtil.Clone(Header),
+            VertexArray = CloneUtil.CloneArray(VertexArray),
+            MaterialArray = CloneUtil.CloneArray(MaterialArray),
+            BoneArray = CloneUtil.CloneArray(BoneArray),
+            MorphArray = CloneUtil.CloneArray(MorphArray),
+            SlotArray = CloneUtil.CloneArray(SlotArray),
+            VertexIndices = CloneUtil.CloneArray(VertexIndices),
+            TextureFiles = CloneUtil.CloneArray(TextureFiles),
+        };
+
         public void Export(PmxExporter exporter)
         {
             ExportPmxData(Header, exporter);

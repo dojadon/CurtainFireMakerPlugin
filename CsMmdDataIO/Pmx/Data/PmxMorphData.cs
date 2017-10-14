@@ -5,13 +5,20 @@ namespace CsMmdDataIO.Pmx.Data
     [Serializable]
     public class PmxMorphData : IPmxData
     {
-        public String MorphName { get; set; } = "";
-        public String MorphNameE { get; set; } = "";
-        public int MorphId { get; set; }
+        public string MorphName { get; set; } = "";
+        public string MorphNameE { get; set; } = "";
         public SlotType SlotType { get; set; }
         public MorphType MorphType { get; set; }
 
         public IPmxMorphTypeData[] MorphArray { get; set; }
+
+        public object Clone() => new PmxMorphData()
+        {
+            MorphName = MorphName,
+            MorphNameE = MorphNameE,
+            SlotType = SlotType,
+            MorphArray = CloneUtil.CloneArray(MorphArray),
+        };
 
         public void Export(PmxExporter exporter)
         {
@@ -88,7 +95,7 @@ namespace CsMmdDataIO.Pmx.Data
         RIP = 4,
     }
 
-    public enum MorphType: byte
+    public enum MorphType : byte
     {
         GROUP = 0,
         VERTEX = 1,

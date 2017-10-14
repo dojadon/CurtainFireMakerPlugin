@@ -52,7 +52,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 {
                     material.SphereId = -1;
                 }
-                material.MaterialId = MaterialList.Count;
                 MaterialList.Add(material);
             }
         }

@@ -7,54 +7,63 @@ namespace CsMmdDataIO.Pmx.Data
     {
         private static readonly byte[] MAGIC_BYTES = { 0x50, 0x4d, 0x58, 0x20 };// PMX
         private static readonly byte[] SIZE_BYTES = { 0, 0, 4, 2, 4, 4, 2, 2 };
-        protected const String CR = "\r"; // 0x0d
-        protected const String LF = "\n"; // 0x0a
-        protected const String CRLF = CR + LF; // 0x0d, 0x0a
+        protected const string CR = "\r"; // 0x0d
+        protected const string LF = "\n"; // 0x0a
+        protected const string CRLF = CR + LF; // 0x0d, 0x0a
 
         public byte[] Size { get; set; }
 
         public float Version { get; set; }
-        public String ModelName { get; set; } = "";
-        public String ModelNameE { get; set; } = "";
-        public String Description { get; set; } = "";
-        public String DescriptionE { get; set; } = "";
+        public string ModelName { get; set; } = "";
+        public string ModelNameE { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string DescriptionE { get; set; } = "";
         public int Uv { get; set; }
 
         public int Encode { get; set; }
+
+        public object Clone() => new PmxHeaderData()
+        {
+            Size = Size,
+            Version = Version,
+            ModelName = ModelName,
+            ModelNameE = ModelNameE,
+            Description = Description,
+            DescriptionE = DescriptionE,
+            Uv = Uv,
+            Encode = Encode,
+        };
 
         public void Export(PmxExporter exporter)
         {
             exporter.Write(MAGIC_BYTES);
 
-            exporter.Write(this.Version);
+            exporter.Write(Version);
 
             exporter.Write((byte)PmxExporter.SIZE.Length);
             exporter.Write(PmxExporter.SIZE);
 
-            exporter.WriteText(this.ModelName);
-            exporter.WriteText(this.ModelNameE);
+            exporter.WriteText(ModelName);
+            exporter.WriteText(ModelNameE);
 
-            String description = this.Description.Replace(LF, CRLF);
-            exporter.WriteText(description);
-
-            String descriptionE = this.DescriptionE.Replace(LF, CRLF);
-            exporter.WriteText(descriptionE);
+            exporter.WriteText(Description.Replace(LF, CRLF));
+            exporter.WriteText(DescriptionE.Replace(LF, CRLF));
         }
 
         public void Parse(PmxParser parser)
         {
             byte[] magic = parser.ReadBytes(MAGIC_BYTES.Length);
 
-            this.Version = parser.ReadSingle();
+            Version = parser.ReadSingle();
             byte sizeLen = parser.ReadByte();
-            this.Size = parser.ReadBytes(sizeLen);
-            parser.Size = this.Size;
+            Size = parser.ReadBytes(sizeLen);
+            parser.Size = Size;
 
-            this.ModelName = parser.ReadText();
-            this.ModelNameE = parser.ReadText();
+            ModelName = parser.ReadText();
+            ModelNameE = parser.ReadText();
 
-            this.Description = parser.ReadText();
-            this.DescriptionE = parser.ReadText();
+            Description = parser.ReadText();
+            DescriptionE = parser.ReadText();
         }
     }
 }

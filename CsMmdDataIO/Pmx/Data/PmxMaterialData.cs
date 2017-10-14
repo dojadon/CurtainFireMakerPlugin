@@ -9,11 +9,10 @@ namespace CsMmdDataIO.Pmx.Data
     [Serializable]
     public class PmxMaterialData : IPmxData
     {
-        public String MaterialName { get; set; } = "";
-        public String MaterialNameE { get; set; } = "";
+        public string MaterialName { get; set; } = "";
+        public string MaterialNameE { get; set; } = "";
 
-        public int MaterialId { get; set; }
-        public String Script { get; set; } = "";
+        public string Script { get; set; } = "";
 
         /**
          * 描画フラグ(8bit)
@@ -52,6 +51,26 @@ namespace CsMmdDataIO.Pmx.Data
         /** トゥーンファイル番号。 shared:1 では, 0ならtoon01.bmp, 9ならtoon10.bmp. 0xffならtoon0.bmp. shared:0 では, texture ID. */
         public int ToonId { get; set; }
         public int FaceCount { get; set; }
+
+        public object Clone() => new PmxMaterialData()
+        {
+            MaterialName = MaterialName,
+            MaterialNameE = MaterialNameE,
+            Script = Script,
+            Flag = Flag,
+            Edge = Edge,
+            EdgeThick = EdgeThick,
+            Diffuse = Diffuse,
+            Specular = Specular,
+            Ambient = Ambient,
+            Shininess = Shininess,
+            TextureId= TextureId,
+            SphereId = SphereId,
+            Mode = Mode,
+            SharedToon = SharedToon,
+            ToonId = ToonId,
+            FaceCount = FaceCount,
+        };
 
         public void Export(PmxExporter exporter)
         {

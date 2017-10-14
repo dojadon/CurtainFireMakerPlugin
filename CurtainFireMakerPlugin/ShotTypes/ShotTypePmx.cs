@@ -4,6 +4,7 @@ using CsMmdDataIO.Pmx.Data;
 using CurtainFireMakerPlugin.Entities;
 using VecMath;
 using System.IO;
+using CsMmdDataIO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CurtainFireMakerPlugin.ShotTypes
@@ -23,7 +24,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             using (inStream)
             {
                 PmxParser parser = new PmxParser(inStream);
-                parser.Parse(this.Data);
+                parser.Parse(Data);
             }
 
             VertexScale = size;
@@ -36,7 +37,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
             PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = DeepCopy(Data.VertexArray[i]);
+                result[i] = CloneUtil.Clone(Data.VertexArray[i]);
                 result[i].Pos = Vector3.Scale(result[i].Pos, VertexScale);
             }
             return result;
@@ -44,55 +45,37 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
         {
-            var result = new int[this.Data.VertexIndices.Length];
-            Array.Copy(this.Data.VertexIndices, result, this.Data.VertexIndices.Length);
+            var result = new int[Data.VertexIndices.Length];
+            Array.Copy(Data.VertexIndices, result, Data.VertexIndices.Length);
 
             return result;
         }
 
         public override PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop)
         {
-            PmxMaterialData[] result = new PmxMaterialData[this.Data.MaterialArray.Length];
+            PmxMaterialData[] result = new PmxMaterialData[Data.MaterialArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = DeepCopy(this.Data.MaterialArray[i]);
+                result[i] = CloneUtil.Clone(Data.MaterialArray[i]);
             }
             return result;
         }
 
-        public override String[] CreateTextures(World wolrd, ShotProperty prop)
+        public override string[] CreateTextures(World wolrd, ShotProperty prop)
         {
-            String[] result = new String[this.Data.TextureFiles.Length];
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = DeepCopy(this.Data.TextureFiles[i]);
-            }
+            string[] result = new string[Data.TextureFiles.Length];
+            Array.Copy(Data.TextureFiles, result, Data.TextureFiles.Length);
 
             return result;
         }
 
-        public override PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop)
+        public override PmxBoneData[] CreateBones(World wolrd, ShotProperty prop)
         {
-            PmxBoneData[] result = new PmxBoneData[this.Data.BoneArray.Length];
+            PmxBoneData[] result = new PmxBoneData[Data.BoneArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = DeepCopy(this.Data.BoneArray[i]);
+                result[i] = CloneUtil.Clone(Data.BoneArray[i]);
             }
-            return result;
-        }
-
-        public static T DeepCopy<T>(T target)
-        {
-            T result;
-            BinaryFormatter b = new BinaryFormatter();
-
-            using (MemoryStream mem = new MemoryStream())
-            {
-                b.Serialize(mem, target);
-                mem.Position = 0;
-                result = (T)b.Deserialize(mem);
-            }
-
             return result;
         }
     }

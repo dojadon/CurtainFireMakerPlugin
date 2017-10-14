@@ -76,17 +76,8 @@ namespace CurtainFireMakerPlugin
         {
             if (FrameCount > 0)
             {
-                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData()
-                {
-                    FrameTime = 0,
-                    IsVisible = false,
-                });
-
-                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData()
-                {
-                    FrameTime = FrameCount,
-                    IsVisible = true,
-                });
+                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
+                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
             }
         }
 

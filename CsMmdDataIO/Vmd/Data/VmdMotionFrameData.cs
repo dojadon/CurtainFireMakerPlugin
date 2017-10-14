@@ -6,17 +6,29 @@ using VecMath;
 
 namespace CsMmdDataIO.Vmd.Data
 {
-    public class VmdMotionFrameData : IVmdData, IKeyFrame
+    public struct VmdMotionFrameData : IVmdData, IKeyFrame
     {
         public string BoneName { get; set; }
         public long FrameTime { get; set; }
-        public Vector3 Pos { get; set; } = new Vector3();
-        public Quaternion Rot { get; set; } = new Quaternion();
+        public Vector3 Pos { get; set; }
+        public Quaternion Rot { get; set; }
 
-        public byte[] InterpolatePointX { get; set; } = new byte[4];
-        public byte[] InterpolatePointY { get; set; } = new byte[4];
-        public byte[] InterpolatePointZ { get; set; } = new byte[4];
-        public byte[] InterpolatePointR { get; set; } = new byte[4];
+        public byte[] InterpolatePointX { get; set; }
+        public byte[] InterpolatePointY { get; set; }
+        public byte[] InterpolatePointZ { get; set; } 
+        public byte[] InterpolatePointR { get; set; }
+
+        public VmdMotionFrameData(string boneName, long frameTime, Vector3 pos, Quaternion rot)
+        {
+            BoneName = boneName;
+            FrameTime = frameTime;
+            Pos = pos;
+            Rot = rot;
+            InterpolatePointX = new byte[4];
+            InterpolatePointY = new byte[4];
+            InterpolatePointZ = new byte[4];
+            InterpolatePointR = new byte[4];
+        }
 
         public void Export(VmdExporter exporter)
         {

@@ -31,11 +31,26 @@ namespace CsMmdDataIO.Pmx.Data
          * </ul>
          */
         public byte WeightType { get; set; }
-        public int[] BoneId { get; set; }
-        public float[] Weight { get; set; }
+        public int[] BoneId { get; set; } = { };
+        public float[] Weight { get; set; } = { };
         public Vector3 Sdef_c;
         public Vector3 Sdef_r0;
         public Vector3 Sdef_r1;
+
+        public object Clone() => new PmxVertexData()
+        {
+            VertexId = VertexId,
+            Pos = Pos,
+            Normal = Normal,
+            Uv = Uv,
+            Edge = Edge,
+            WeightType = WeightType,
+            BoneId = CloneUtil.CloneArray(BoneId),
+            Weight = CloneUtil.CloneArray(Weight),
+            Sdef_c = Sdef_c,
+            Sdef_r0 = Sdef_r0,
+            Sdef_r1 = Sdef_r1,
+        };
 
         public void Export(PmxExporter exporter)
         {
@@ -109,6 +124,27 @@ namespace CsMmdDataIO.Pmx.Data
             for (int i = 0; i < BoneId.Length; i++)
             {
                 BoneId[i] = parser.ReadPmxId(parser.SizeBone);
+            }
+
+            switch (WeightType)
+            {
+                case WEIGHT_TYPE_BDEF1:
+                    Weight = new float[] { 1 };
+                    break;
+
+                case WEIGHT_TYPE_BDEF2:
+                case WEIGHT_TYPE_SDEF:
+                    float we = parser.ReadSingle();
+                    Weight = new float[] { we, 1 - we };
+                    break;
+
+                case WEIGHT_TYPE_BDEF4:
+                    Weight = new float[4];
+                    for (byte i = 0; i < 4; i++)
+                    {
+                        Weight[i] = parser.ReadSingle();
+                    }
+                    break;
             }
 
             if (WeightType == WEIGHT_TYPE_SDEF)

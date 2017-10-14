@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
              }
          };
 
-        public virtual PmxBoneData[] GetCreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
+        public virtual PmxBoneData[] CreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
 
         public virtual PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop) => null;
 

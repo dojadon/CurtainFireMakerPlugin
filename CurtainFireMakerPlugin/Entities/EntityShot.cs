@@ -144,28 +144,21 @@ namespace CurtainFireMakerPlugin.Entities
         {
             var posCurveBytes = VmdMotionFrameData.ConvertToBytes(posCurve.P1, posCurve.P2);
 
-            World.KeyFrames.AddBoneKeyFrame(bone, new VmdMotionFrameData()
+            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount, pos, rot)
             {
-                FrameTime = World.FrameCount,
-                BoneName = bone.BoneName,
-                Pos = pos,
-                Rot = rot,
                 InterpolatePointX = posCurveBytes,
                 InterpolatePointY = posCurveBytes,
                 InterpolatePointZ = posCurveBytes,
-            });
+            };
+            World.KeyFrames.AddBoneKeyFrame(bone, frame);
         }
 
         public void AddMorphKeyFrame(PmxMorphData morph, int frameOffset, float weight)
         {
             if (Property.Type.HasMesh)
             {
-                World.KeyFrames.AddMorphKeyFrame(morph, new VmdMorphFrameData()
-                {
-                    FrameTime = World.FrameCount + frameOffset,
-                    MorphName = morph.MorphName,
-                    Weigth = weight,
-                });
+                var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + frameOffset, weight);
+                World.KeyFrames.AddMorphKeyFrame(morph, frame);
             }
         }
 
@@ -180,7 +173,7 @@ namespace CurtainFireMakerPlugin.Entities
                     MorphName = morphName,
                     SlotType = SlotType.RIP,
                     MorphType = MorphType.VERTEX,
-                    MorphArray = new PmxMorphVertexData[vertices.Length]
+                    MorphArray = new IPmxMorphTypeData[vertices.Length]
                 };
 
                 for (int i = 0; i < morph.MorphArray.Length; i++)

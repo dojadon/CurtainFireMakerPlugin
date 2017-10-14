@@ -27,7 +27,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             morph.SlotType = SlotType.RIP;
             morph.MorphType = MorphType.MATERIAL;
 
-            morph.MorphArray = new PmxMorphMaterialData[appliedMaterialCount];
+            morph.MorphArray = new IPmxMorphTypeData[appliedMaterialCount];
 
             for (int i = 0; i < appliedMaterialCount; i++)
             {
@@ -49,7 +49,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
             for (int i = 0; i < appliedMaterialCount; i++)
             {
                 morph.MorphArray[i].Index = materialCount + i;
-                morph.MorphId = MorphList.Count + i;
             }
             MorphList.Add(morph);
         }

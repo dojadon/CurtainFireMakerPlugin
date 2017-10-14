@@ -11,12 +11,21 @@ namespace CsMmdDataIO.Pmx.Data
         public const byte SLOT_TYPE_BONE = 0;
         public const byte SLOT_TYPE_MORPH = 1;
 
-        public String SlotName { get; set; } = "";
-        public String SlotNameE { get; set; } = "";
+        public string SlotName { get; set; } = "";
+        public string SlotNameE { get; set; } = "";
 
         public bool NormalSlot { get; set; } = true;
         public byte Type { get; set; }
         public int[] Indices { get; set; }
+
+        public object Clone() => new PmxSlotData()
+        {
+            SlotName = SlotName,
+            SlotNameE = SlotNameE,
+            NormalSlot = NormalSlot,
+            Type = Type,
+            Indices = CloneUtil.CloneArray(Indices),
+        };
 
         public void Export(PmxExporter exporter)
         {

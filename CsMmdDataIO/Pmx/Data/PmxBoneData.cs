@@ -43,12 +43,34 @@ namespace CsMmdDataIO.Pmx.Data
         public int IkDepth { get; set; }
         /** 制限角度強度 */
         public float AngleLimit { get; set; }
-        /** IK影響下ボーンID */
-        public int[] IkChilds { get; set; } = { };
-        /** 回転角制御 */
-        public Vector3[] IkAngleMin { get; set; } = { };
-        /** 回転角制御 */
-        public Vector3[] IkAngleMax { get; set; } = { };
+
+        public PmxIkData[] IkChilds { get; set; } = { };
+
+        public object Clone()
+        {
+            return new PmxBoneData()
+            {
+                BoneName = BoneName,
+                BoneNameE = BoneNameE,
+                Pos = Pos,
+                BoneId = BoneId,
+                ParentId = ParentId,
+                ArrowId = ArrowId,
+                Flag = Flag,
+                ExtraParentId = ExtraParentId,
+                Depth = Depth,
+                PosOffset = PosOffset,
+                LinkParentId = LinkParentId,
+                LinkWeight = LinkWeight,
+                AxisVec = AxisVec,
+                LocalAxisVecX = LocalAxisVecX,
+                LocalAxisVecZ = LocalAxisVecZ,
+                IkTargetId = IkTargetId,
+                IkDepth = IkDepth,
+                AngleLimit = AngleLimit,
+                IkChilds = CloneUtil.CloneArray(IkChilds),
+            };
+        }
 
         public void Export(PmxExporter exporter)
         {
@@ -103,17 +125,7 @@ namespace CsMmdDataIO.Pmx.Data
 
                 for (int i = 0; i < boneNum; i++)
                 {
-                    int ikElement = IkChilds[i];
-                    exporter.WritePmxId(PmxExporter.SIZE_BONE, ikElement);
-
-                    int limit = IkAngleMin[i] == Vector3.Zero && IkAngleMax[i] == Vector3.Zero ? 0 : 1;
-                    exporter.Write((byte)limit);
-
-                    if (limit > 0)
-                    {
-                        exporter.Write(IkAngleMin[i]);
-                        exporter.Write(IkAngleMax[i]);
-                    }
+                    IkChilds[i].Export(exporter);
                 }
             }
         }
@@ -168,21 +180,12 @@ namespace CsMmdDataIO.Pmx.Data
                 AngleLimit = parser.ReadSingle();
 
                 int boneNum = parser.ReadInt32();
-                IkChilds = new int[boneNum];
-                IkAngleMin = new Vector3[boneNum];
-                IkAngleMax = new Vector3[boneNum];
+                IkChilds = new PmxIkData[boneNum];
 
                 for (int i = 0; i < boneNum; i++)
                 {
-                    IkChilds[i] = parser.ReadPmxId(parser.SizeBone);
-
-                    int limit = parser.ReadByte();
-
-                    if (limit > 0)
-                    {
-                        IkAngleMin[i] = parser.ReadVector3();
-                        IkAngleMax[i] = parser.ReadVector3();
-                    }
+                    IkChilds[i] = new PmxIkData();
+                    IkChilds[i].Parse(parser);
                 }
             }
         }
@@ -216,5 +219,46 @@ namespace CsMmdDataIO.Pmx.Data
         public const short PHYSICAL = 0x1000;
         /** 外部親変形 */
         public const short EXTRA = 0x2000;
+    }
+
+    public struct PmxIkData : IPmxData
+    {
+        public int ChildId { get; set; }
+        public Vector3 AngleMin { get; set; }
+        public Vector3 AngleMax { get; set; }
+
+        public object Clone() => new PmxIkData()
+        {
+            ChildId = ChildId,
+            AngleMin = AngleMin,
+            AngleMax = AngleMax
+        };
+
+        public void Export(PmxExporter exporter)
+        {
+            exporter.WritePmxId(PmxExporter.SIZE_BONE, ChildId);
+
+            int limit = AngleMin == Vector3.Zero && AngleMax == Vector3.Zero ? 0 : 1;
+            exporter.Write((byte)limit);
+
+            if (limit > 0)
+            {
+                exporter.Write(AngleMin);
+                exporter.Write(AngleMax);
+            }
+        }
+
+        public void Parse(PmxParser parser)
+        {
+            ChildId = parser.ReadPmxId(parser.SizeBone);
+
+            int limit = parser.ReadByte();
+
+            if (limit > 0)
+            {
+                AngleMin = parser.ReadVector3();
+                AngleMax = parser.ReadVector3();
+            }
+        }
     }
 }

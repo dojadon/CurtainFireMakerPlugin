@@ -28,7 +28,7 @@ namespace CurtainFireMakerPlugin.Entities
             Property = property;
             World = world;
 
-            Bones = Property.Type.GetCreateBones(world, property);
+            Bones = Property.Type.CreateBones(world, property);
             Vertices = Property.Type.CreateVertices(world, property);
             Indices = Property.Type.CreateVertexIndices(world, property);
             Materials = Property.Type.CreateMaterials(world, property);
