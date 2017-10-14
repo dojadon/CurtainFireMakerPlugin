@@ -7,23 +7,23 @@ namespace CurtainFireMakerPlugin.Tasks
 {
     public class TaskManager
     {
-        private List<Task> taskList = new List<Task>();
-        private List<Task> addTaskList = new List<Task>();
+        private List<Task> TaskList { get; } = new List<Task>();
+        private List<Task> AddTaskList { get; } = new List<Task>();
 
         public void AddTask(Task task)
         {
-            this.addTaskList.Add(task);
+            AddTaskList.Add(task);
         }
 
         public void Frame()
         {
-            this.taskList.AddRange(this.addTaskList);
-            this.addTaskList.Clear();
+            TaskList.AddRange(AddTaskList);
+            AddTaskList.Clear();
 
-            this.taskList.ForEach(task => task.Update());
-            this.taskList.RemoveAll(task => task.IsFinished());
+            TaskList.ForEach(task => task.Update());
+            TaskList.RemoveAll(task => task.IsFinished());
         }
 
-        public bool IsEmpty => this.taskList.Count == 0 && this.addTaskList.Count == 0;
+        public bool IsEmpty() => TaskList.Count == 0 && AddTaskList.Count == 0;
     }
 }

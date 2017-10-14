@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Entities.Models;
 using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.IO;
-using CurtainFireMakerPlugin.ShotTypes;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using CsMmdDataIO.Vmd.Data;
@@ -18,9 +15,11 @@ namespace CurtainFireMakerPlugin
     public class World
     {
         public int MaxFrame { get; set; } = 1000;
-        public Scene Scene => Plugin.Instance.Scene;
-        public Configuration Config => Plugin.Instance.Config;
-        internal PythonExecutor Executor => Plugin.Instance.PythonExecutor;
+
+        public Plugin Plugin { get; }
+        public Scene Scene => Plugin.Scene;
+        public Configuration Config => Plugin.Config;
+        internal PythonExecutor Executor => Plugin.PythonExecutor;
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
@@ -40,8 +39,10 @@ namespace CurtainFireMakerPlugin
         public string PmxExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".pmx";
         public string VmdExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".vmd";
 
-        internal World(string fileName)
+        internal World(Plugin plugin,  string fileName)
         {
+            Plugin = plugin;
+
             ShotManager = new ShotManager(this);
             PmxModel = new CurtainFireModel(this);
             KeyFrames = new CurtainFireMotion(this);

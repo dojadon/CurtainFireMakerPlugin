@@ -125,7 +125,7 @@ namespace CurtainFireMakerPlugin
 
         public void RunScript(string path, ProgressForm form, Action finalize)
         {
-            var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptPath));
+            var world = new World(this, Path.GetFileNameWithoutExtension(Config.ScriptPath));
 
             bool dropFlag = false;
 
