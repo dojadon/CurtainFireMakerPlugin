@@ -123,6 +123,8 @@ namespace CurtainFireMakerPlugin
         {
             var world = new World(Path.GetFileNameWithoutExtension(Config.ScriptPath));
 
+            bool dropFlag = false;
+
             try
             {
                 PythonExecutor.ExecuteScriptOnNewScope(path, new Variable("world", world));
@@ -147,6 +149,7 @@ namespace CurtainFireMakerPlugin
                 if (form.DialogResult != DialogResult.Cancel)
                 {
                     world.Export();
+                    dropFlag = true;
                 }
             }
             catch (Exception e)
@@ -159,9 +162,9 @@ namespace CurtainFireMakerPlugin
                 finalize();
             }
 
-            if (form.DialogResult != DialogResult.Cancel)
+            if(dropFlag)
             {
-                world.Finish();
+                world.DropFileToMMM();
             }
         }
     }

@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public ShotTypePmxL(string name, string path, Vector3 size) : base(name, path, size)
         {
-            InitModelData = data => { };
+            InitEntity = data => { };
         }
 
         public override string[] CreateTextures(World wolrd, ShotProperty prop)

@@ -8,6 +8,7 @@ using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Entities.Models;
 using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.IO;
+using CurtainFireMakerPlugin.ShotTypes;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using CsMmdDataIO.Vmd.Data;
@@ -21,8 +22,8 @@ namespace CurtainFireMakerPlugin
         public Configuration Config => Plugin.Instance.Config;
         internal PythonExecutor Executor => Plugin.Instance.PythonExecutor;
 
-        private List<Entity> addEntityList = new List<Entity>();
-        private List<Entity> removeEntityList = new List<Entity>();
+        private List<Entity> AddEntityList { get; } = new List<Entity>();
+        private List<Entity> RemoveEntityList { get; } = new List<Entity>();
         public List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
@@ -60,14 +61,14 @@ namespace CurtainFireMakerPlugin
 
         internal int AddEntity(Entity entity)
         {
-            addEntityList.Add(entity);
+            AddEntityList.Add(entity);
 
             return FrameCount;
         }
 
         internal int RemoveEntity(Entity entity)
         {
-            removeEntityList.Add(entity);
+            RemoveEntityList.Add(entity);
 
             return FrameCount;
         }
@@ -85,11 +86,11 @@ namespace CurtainFireMakerPlugin
         {
             TaskManager.Frame();
 
-            EntityList.AddRange(addEntityList);
-            removeEntityList.ForEach(e => EntityList.Remove(e));
+            EntityList.AddRange(AddEntityList);
+            RemoveEntityList.ForEach(e => EntityList.Remove(e));
 
-            addEntityList.Clear();
-            removeEntityList.Clear();
+            AddEntityList.Clear();
+            RemoveEntityList.Clear();
 
             EntityList.ForEach(e => e.Frame());
 
@@ -106,7 +107,7 @@ namespace CurtainFireMakerPlugin
             PmxModel.Export();
         }
 
-        internal void Finish()
+        internal void DropFileToMMM()
         {
             if (Config.DropPmxFile)
             {
