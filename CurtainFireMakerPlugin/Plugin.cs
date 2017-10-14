@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.IO;
+using System.Reflection;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
-using IronPython.Runtime.Exceptions;
 
 namespace CurtainFireMakerPlugin
 {
@@ -56,8 +56,18 @@ namespace CurtainFireMakerPlugin
         public string Text => "弾幕生成";
         public string EnglishText => "Generate Curtain Fire";
 
-        public Image Image => null;
-        public Image SmallImage => null;
+        public Image Image
+        {
+            get
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var stream = assembly.GetManifestResourceStream("CurtainFireMakerPlugin.Resources.icon.ico");
+
+                return Image.FromStream(stream);
+            }
+        }
+
+        public Image SmallImage => Image;
 
         public void Dispose()
         {
@@ -162,7 +172,7 @@ namespace CurtainFireMakerPlugin
                 finalize();
             }
 
-            if(dropFlag)
+            if (dropFlag)
             {
                 world.DropFileToMMM();
             }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportSettingForm));
             this.label5 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.scriptText = new System.Windows.Forms.TextBox();
@@ -239,8 +240,8 @@
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ExportSettingForm";
-            this.ShowIcon = false;
             this.Text = "出力設定";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

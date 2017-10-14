@@ -19,7 +19,15 @@ namespace CurtainFireMakerPlugin.Entities
         public ShotProperty(string typeName, int color)
         {
             Color = color;
-            Type = ShotType.TypeDict[typeName];
+
+            if(ShotType.TypeDict.ContainsKey(typeName))
+            {
+                Type = ShotType.TypeDict[typeName];
+            }
+            else
+            {
+                throw new ArgumentException($"Not found shot type name : {typeName}");
+            }
         }
 
         public override bool Equals(object obj) => obj is ShotProperty prop && Equals(prop);
