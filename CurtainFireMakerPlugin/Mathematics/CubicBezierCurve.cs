@@ -40,16 +40,14 @@ namespace CurtainFireMakerPlugin.Mathematics
             return set.ToArray();
         }
 
-        public float X(float t)
-        {
-            float inv = 1 - t;
-            return inv * inv * inv * P0.x + 3 * inv * inv * t * P1.x + 3 * inv * t * t * P2.x + t * t * t * P3.x;
-        }
+        public float X(float t) => GetPosition(t, P0.x, P1.x, P2.x, P3.x);
 
-        public float Y(float t)
+        public float Y(float t) => GetPosition(t, P0.y, P1.y, P2.y, P3.y);
+
+        public float GetPosition(float t, float p0, float p1, float p2, float p3)
         {
             float inv = 1 - t;
-            return inv * inv * inv * P0.y + 3 * inv * inv * t * P1.y + 3 * inv * t * t * P2.y + t * t * t * P3.y;
+            return inv * inv * inv * p0 + 3 * inv * inv * t * p1 + 3 * inv * t * t * p2 + t * t * t * p3;
         }
     }
 }
