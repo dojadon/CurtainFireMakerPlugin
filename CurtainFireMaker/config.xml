@@ -5,7 +5,10 @@
     <Dir>C:\Python27\Lib</Dir>
     <Dir>C:\Python27\Lib\site-packages</Dir>
   </Libs>
-  <Export>C:\Materials\CurtainFire</Export>
+  <Export>
+    <Pmx>Export</Pmx>
+    <Vmd>Export</Vmd>
+  </Export>
   <Scripts>
     <Run>template.py</Run>
     <Setting>setting.py</Setting>
@@ -13,8 +16,4 @@
   <KeepLogOpen>True</KeepLogOpen>
   <DropPmxFile>True</DropPmxFile>
   <DropVmdFile>True</DropVmdFile>
-  <Model>
-    <Name>弾幕</Name>
-    <Description>This model is created by Curtain Fire Maker Plugin</Description>
-  </Model>
 </Configuration>
