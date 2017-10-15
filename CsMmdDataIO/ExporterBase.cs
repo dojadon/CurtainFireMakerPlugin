@@ -29,6 +29,13 @@ namespace CsMmdDataIO
         {
             byte[] bytes = CharEncording.GetBytes(text);
 
+            if(bytes.Length > fixedLength)
+            {
+                byte[] fixedBytes = new byte[fixedLength];
+                Array.Copy(bytes, fixedBytes, fixedLength);
+                bytes = fixedBytes;
+             }
+
             Write(bytes);
 
             int remain = fixedLength - bytes.Length;
