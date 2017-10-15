@@ -37,8 +37,8 @@ namespace CurtainFireMakerPlugin
 
         public event EventHandler ExportEvent;
 
-        public string PmxExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".pmx";
-        public string VmdExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".vmd";
+        public string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
+        public string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
 
         public string ModelName { get; set; }
         public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";

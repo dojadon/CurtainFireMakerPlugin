@@ -49,10 +49,17 @@ namespace CurtainFireMakerPlugin
             }
         }
         private XmlNode NodeExport => RootNode.SelectSingleNode("Export");
-        public string ExportDirPath
+        private XmlNode NodePmxExport => NodeExport.SelectSingleNode("Pmx");
+        public string PmxExportDirPath
         {
-            get => MightMakeAbsolute(NodeExport.InnerText);
-            set => NodeExport.InnerText = MightMakeRelative(value);
+            get => MightMakeAbsolute(NodePmxExport.InnerText);
+            set => NodePmxExport.InnerText = MightMakeRelative(value);
+        }
+        private XmlNode NodeVndExport => NodeExport.SelectSingleNode("Vmd");
+        public string VmdExportDirPath
+        {
+            get => MightMakeAbsolute(NodeVndExport.InnerText);
+            set => NodeVndExport.InnerText = MightMakeRelative(value);
         }
 
         private XmlNode NodeKeepLogOpen => RootNode.SelectSingleNode("KeepLogOpen");

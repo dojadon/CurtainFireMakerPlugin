@@ -34,7 +34,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
                  {
                      var config = Plugin.Instance.Config;
 
-                     string exportPath = config.ExportDirPath + "\\" + colorTexture.Replace('/', '\\');
+                     string exportPath = config.PmxExportDirPath + "\\" + colorTexture.Replace('/', '\\');
                      File.Delete(exportPath);
 
                      image.Save(exportPath);

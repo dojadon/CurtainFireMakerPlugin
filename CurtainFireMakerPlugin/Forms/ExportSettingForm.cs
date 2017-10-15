@@ -24,14 +24,25 @@ namespace CurtainFireMakerPlugin.Forms
                 scriptText.Text = Path.GetFileNameWithoutExtension(value);
             }
         }
-        public string ExportDirPath
+
+        public string PmxExportDirPath
         {
-            get => exportDirText.Text; set
+            get => pmxExportPathTextBox.Text; set
             {
-                exportDirText.Text = value;
-                exportDirDialog.SelectedPath = value;
+                pmxExportPathTextBox.Text = value;
+                pmxExportDirDialog.SelectedPath = value;
             }
         }
+
+        public string VmdExportDirPath
+        {
+            get => vmdExportPathTextBox.Text; set
+            {
+                vmdExportPathTextBox.Text = value;
+                vmdExportDirDialog.SelectedPath = value;
+            }
+        }
+
         public bool KeepLogOpen { get => keepLogOpenCheckBox.Checked; set => keepLogOpenCheckBox.Checked = value; }
         public bool DropPmxFile { get => checkBoxDropPmxFile.Checked; set => checkBoxDropPmxFile.Checked = value; }
         public bool DropVmdFile { get => checkBoxDropVmdFile.Checked; set => checkBoxDropVmdFile.Checked = value; }
@@ -63,13 +74,23 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        private void Click_ExportDir(object sender, EventArgs e)
+        private void Click_PmxExportDir(object sender, EventArgs e)
         {
-            var result = exportDirDialog.ShowDialog();
+            var result = pmxExportDirDialog.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                ExportDirPath = exportDirDialog.SelectedPath;
+                PmxExportDirPath = pmxExportDirDialog.SelectedPath;
+            }
+        }
+
+        private void Click_VmdExportDir(object sender, EventArgs e)
+        {
+            var result = vmdExportDirDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                VmdExportDirPath = vmdExportDirDialog.SelectedPath;
             }
         }
 
