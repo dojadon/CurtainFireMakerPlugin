@@ -24,8 +24,6 @@ namespace CurtainFireMakerPlugin.Forms
                 scriptText.Text = Path.GetFileNameWithoutExtension(value);
             }
         }
-        public string ModelName { get => modelNameText.Text; set => modelNameText.Text = value; }
-        public string ModelDescription { get => modelDescriptionText.Text; set => modelDescriptionText.Text = value; }
         public string ExportDirPath
         {
             get => exportDirText.Text; set
@@ -78,6 +76,11 @@ namespace CurtainFireMakerPlugin.Forms
         private void Click_InitIronPython(object sender, EventArgs e)
         {
             Plugin.Instance.InitIronPython();
+        }
+
+        private void LoadForm(object sender, EventArgs e)
+        {
+            ActiveControl = label1;
         }
     }
 }

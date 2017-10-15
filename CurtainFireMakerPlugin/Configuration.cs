@@ -55,14 +55,6 @@ namespace CurtainFireMakerPlugin
             set => NodeExport.InnerText = MightMakeRelative(value);
         }
 
-        private XmlNode NodeModel => RootNode.SelectSingleNode("Model");
-
-        private XmlNode NodeModelName => NodeModel.SelectSingleNode("Name");
-        public string ModelName { get => NodeModelName.InnerText; set => NodeModelName.InnerText = value; }
-
-        private XmlNode NodeModelDescription => NodeModel.SelectSingleNode("Description");
-        public string ModelDescription { get => NodeModelDescription.InnerText; set => NodeModelDescription.InnerText = value; }
-
         private XmlNode NodeKeepLogOpen => RootNode.SelectSingleNode("KeepLogOpen");
         public bool KeepLogOpen { get => bool.Parse(NodeKeepLogOpen.InnerText); set => NodeKeepLogOpen.InnerText = value.ToString(); }
 

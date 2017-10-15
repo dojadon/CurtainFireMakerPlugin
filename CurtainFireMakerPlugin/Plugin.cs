@@ -74,8 +74,6 @@ namespace CurtainFireMakerPlugin
             {
                 ScriptPath = Config.ScriptPath,
                 ExportDirPath = Config.ExportDirPath,
-                ModelName = Config.ModelName,
-                ModelDescription = Config.ModelDescription,
                 KeepLogOpen = Config.KeepLogOpen,
                 DropPmxFile = Config.DropPmxFile,
                 DropVmdFile = Config.DropVmdFile,
@@ -86,8 +84,6 @@ namespace CurtainFireMakerPlugin
             {
                 Config.ScriptPath = form.ScriptPath;
                 Config.ExportDirPath = form.ExportDirPath;
-                Config.ModelName = form.ModelName;
-                Config.ModelDescription = form.ModelDescription;
                 Config.KeepLogOpen = form.KeepLogOpen;
                 Config.DropPmxFile = form.DropPmxFile;
                 Config.DropVmdFile = form.DropVmdFile;

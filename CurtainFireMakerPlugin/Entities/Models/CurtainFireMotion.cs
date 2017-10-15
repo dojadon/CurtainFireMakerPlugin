@@ -109,9 +109,9 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
             var exporter = new VmdExporter(stream);
 
-            exporter.Export(new VmdMotionData()
+            exporter.Export(new VmdMotionData
             {
-                Header = new VmdHeaderData() { ModelName = "弾幕" },
+                Header = new VmdHeaderData { ModelName = World.ModelName },
                 MotionArray = motionList.ToArray(),
                 MorphArray = morphList.ToArray(),
                 PropertyArray = PropertyFrameList.ToArray(),

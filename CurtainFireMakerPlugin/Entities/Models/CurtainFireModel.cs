@@ -57,19 +57,21 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         public void GetData(PmxModelData data)
         {
-            var header = new PmxHeaderData()
+            var header = new PmxHeaderData
             {
-                Version = 2.0F
+                Version = 2.0F,
+                ModelName = World.ModelName,
+                Description = World.ModelDescription,
             };
 
-            var boneSlot = new PmxSlotData()
+            var boneSlot = new PmxSlotData
             {
                 SlotName = "弾ボーン",
                 Type = SlotType.BONE,
                 Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
             };
 
-            var morphSlot = new PmxSlotData()
+            var morphSlot = new PmxSlotData
             {
                 SlotName = "弾モーフ",
                 Type = SlotType.MORPH,
@@ -97,9 +99,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
                 var data = new PmxModelData();
                 GetData(data);
-
-                data.Header.ModelName = World.Config.ModelName;
-                data.Header.Description += World.Config.ModelDescription;
 
                 exporter.Export(data);
 

@@ -40,6 +40,9 @@ namespace CurtainFireMakerPlugin
         public string PmxExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".pmx";
         public string VmdExportPath => Config.ExportDirPath + "\\" + ExportFileName + ".vmd";
 
+        public string ModelName { get; set; }
+        public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";
+
         internal World(Plugin plugin, string fileName)
         {
             Plugin = plugin;
@@ -49,6 +52,7 @@ namespace CurtainFireMakerPlugin
             KeyFrames = new CurtainFireMotion(this);
 
             ExportFileName = fileName;
+            ModelName = ExportFileName;
         }
 
         protected virtual void OnExport(EventArgs e)
