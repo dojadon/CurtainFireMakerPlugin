@@ -96,16 +96,6 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CsMmdDataIO\CsMmdDataIO.csproj">
-      <Project>{905fb5b6-b237-485a-8396-2274f2f24e2d}</Project>
-      <Name>CsMmdDataIO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VecMath\VecMath.csproj">
-      <Project>{454be0aa-4fab-4df4-842a-da450652c5ec}</Project>
-      <Name>VecMath</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Forms\ExportSettingForm.resx">
       <DependentUpon>ExportSettingForm.cs</DependentUpon>
     </EmbeddedResource>
