@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DxMath">
-      <HintPath>..\..\..\..\..\..\..\tool\model\MikuMikuMoving64_v1275\System\x64\DxMath.dll</HintPath>
+      <HintPath>..\..\..\..\tool\model\MikuMikuMoving64_v1275\System\x64\DxMath.dll</HintPath>
     </Reference>
     <Reference Include="IronPython, Version=2.7.7.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -42,7 +42,7 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\IronPython 2.7\Microsoft.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="MikuMikuPlugin">
-      <HintPath>..\..\..\..\..\..\..\tool\model\MikuMikuMoving64_v1275\System\x64\MikuMikuPlugin.dll</HintPath>
+      <HintPath>..\..\..\..\tool\model\MikuMikuMoving64_v1275\System\x64\MikuMikuPlugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -105,6 +105,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CsMmdDataIO\CsMmdDataIO\CsMmdDataIO.csproj">
+      <Project>{1aef787f-b0ed-44b4-b091-6570888a91f7}</Project>
+      <Name>CsMmdDataIO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\VecMath\VecMath\VecMath.csproj">
+      <Project>{008f0133-2636-42a3-b17b-d0631c5132d6}</Project>
+      <Name>VecMath</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

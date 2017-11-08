@@ -86,7 +86,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         private void Compress(List<PmxMorphData> morphList, MultiDictionary<PmxMorphData, VmdMorphFrameData> frameDict)
         {
-            var dict = new MultiDictionary<List<long>, PmxMorphData>(new IntegerArrayComparer());
+            var dict = new MultiDictionary<List<int>, PmxMorphData>(new IntegerArrayComparer());
 
             foreach (var morph in morphList)
             {
@@ -140,9 +140,9 @@ namespace CurtainFireMakerPlugin.Entities.Models
         }
     }
 
-    class IntegerArrayComparer : IEqualityComparer<List<long>>
+    class IntegerArrayComparer : IEqualityComparer<List<int>>
     {
-        public bool Equals(List<long> x, List<long> y)
+        public bool Equals(List<int> x, List<int> y)
         {
             if (x.Count != y.Count)
             {
@@ -158,7 +158,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             return true;
         }
 
-        public int GetHashCode(List<long> obj)
+        public int GetHashCode(List<int> obj)
         {
             int result = 17;
             for (int i = 0; i < obj.Count; i++)

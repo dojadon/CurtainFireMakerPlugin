@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             {
                 BoneName = "センター",
                 ParentId = -1,
-                Flag = 0x0002 | 0x0004 | 0x0008 | 0x0010
+                Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.VISIBLE | BoneFlags.OP,
             };
             BoneList.Add(centerBone);
         }
@@ -31,7 +31,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 PmxBoneData bone = bones[i];
 
                 bone.BoneName = data.Property.Type.Name[0] + (BoneList.Count - 1).ToString();
-                bone.Flag = 0x0002 | 0x0004 | 0x0010;
+                bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.OP;
                 bone.BoneId = BoneList.Count + i;
 
                 if (-1 < bone.ParentId && bone.ParentId < bones.Length)

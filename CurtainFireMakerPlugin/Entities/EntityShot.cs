@@ -142,13 +142,14 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve)
         {
-            var posCurveBytes = VmdMotionFrameData.ConvertToBytes(posCurve.P1, posCurve.P2);
-
             var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount, pos, rot)
             {
-                InterpolatePointX = posCurveBytes,
-                InterpolatePointY = posCurveBytes,
-                InterpolatePointZ = posCurveBytes,
+                InterpolationPointX1 = posCurve.P1,
+                InterpolationPointX2 = posCurve.P2,
+                InterpolationPointY1 = posCurve.P1,
+                InterpolationPointY2 = posCurve.P2,
+                InterpolationPointZ1 = posCurve.P1,
+                InterpolationPointZ2 = posCurve.P2,
             };
             World.KeyFrames.AddBoneKeyFrame(bone, frame);
         }
