@@ -12,7 +12,6 @@ namespace CurtainFireMakerPlugin.ShotTypes
     public class ShotTypePmx : ShotType
     {
         private PmxModelData Data { get; } = new PmxModelData();
-        private Vector3 VertexScale { get; }
 
         public ShotTypePmx(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
 
@@ -27,20 +26,23 @@ namespace CurtainFireMakerPlugin.ShotTypes
                 parser.Parse(Data);
             }
 
-            VertexScale = size;
+            for (int i = 0; i < Data.VertexArray.Length; i++)
+            {
+                var vertex = Data.VertexArray[i];
+                vertex.Pos = Vector3.Scale(vertex.Pos, size);
+            }
         }
 
         public override bool HasMesh => true;
 
         public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
         {
-            PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = CloneUtil.Clone(Data.VertexArray[i]);
-                result[i].Pos = Vector3.Scale(result[i].Pos, VertexScale);
-            }
-            return result;
+            //PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
+            //for (int i = 0; i < result.Length; i++)
+            //{
+            //    result[i] = CloneUtil.Clone(Data.VertexArray[i]);
+            //}
+            return Data.VertexArray;
         }
 
         public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
