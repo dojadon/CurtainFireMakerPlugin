@@ -21,10 +21,19 @@ namespace CurtainFireMakerPlugin.Entities
             public static Func<EntityShot, bool> LocalMat { get; } = e => e.IsUpdatedLocalMat;
         }
 
-        public Func<EntityShot, bool> ShouldRecord { get; set; } = RecordType.Velocity;
+        private Func<EntityShot, bool> _shouldRecord = RecordType.Velocity;
+        public Func<EntityShot, bool> ShouldRecord
+        {
+            get => _shouldRecord;
+            set
+            {
+                _shouldRecord = value;
+                IsUpdatedVelocity = IsUpdatedLocalMat = IsUpdatedVelocity || IsUpdatedLocalMat;
+            }
+        }
 
-        public bool IsUpdatedVelocity { get; private set; } = true;
-        public bool IsUpdatedLocalMat { get; private set; } = true;
+        private bool IsUpdatedVelocity { get; set; } = true;
+        private bool IsUpdatedLocalMat { get; set; } = true;
 
         public static float Epsilon { get; set; } = 0.00001F;
 
@@ -52,8 +61,10 @@ namespace CurtainFireMakerPlugin.Entities
             set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
+        public Quaternion LookAtRot { get; private set; } = Quaternion.Identity;
+
         public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
-        public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Velocity != Vector3.Zero ? e.Rot * (Quaternion)Matrix3.LookAt(+e.Velocity, +e.Upward) : e.Rot;
+        public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Rot * e.LookAtRot;
 
         public override MotionInterpolation MotionInterpolation
         {
@@ -119,6 +130,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         internal override void Frame()
         {
+            if (Velocity != Vector3.Zero)
+            {
+                LookAtRot = Matrix3.LookAt(+Velocity, +Upward);
+            }
+
             if (ShouldRecord(this) || World.FrameCount == 0)
             {
                 AddBoneKeyFrame();

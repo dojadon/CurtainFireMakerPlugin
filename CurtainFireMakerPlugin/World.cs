@@ -114,6 +114,7 @@ namespace CurtainFireMakerPlugin
         internal void Export()
         {
             EntityList.ForEach(e => e.OnDeath());
+
             PmxModel.Finish();
             KeyFrames.Finish();
 
@@ -128,7 +129,7 @@ namespace CurtainFireMakerPlugin
                 FileDropUtil.Drop(Plugin.Instance.ApplicationForm.Handle, new StringCollection() { PmxExportPath });
             }
 
-            if (Config.DropVmdFile)
+            if (Config.DropVmdFile && (Config.DropPmxFile || Scene.Models.Count > 0))
             {
                 FileDropUtil.Drop(Plugin.Instance.ApplicationForm.Handle, new StringCollection() { VmdExportPath });
             }

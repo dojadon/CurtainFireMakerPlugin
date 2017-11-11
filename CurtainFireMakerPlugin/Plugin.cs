@@ -131,6 +131,8 @@ namespace CurtainFireMakerPlugin
 
             try
             {
+                long time = Environment.TickCount;
+
                 PythonExecutor.ExecuteScriptOnNewScope(path, new Variable("world", world));
 
                 form.Progress.Minimum = 0;
@@ -155,6 +157,7 @@ namespace CurtainFireMakerPlugin
                     world.Export();
                     dropFlag = true;
                 }
+                Console.WriteLine($"{Environment.TickCount - time}ms");
             }
             catch (Exception e)
             {

@@ -7,7 +7,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class ShotProperty
+    public struct ShotProperty
     {
         public int Color { get; }
         public float Red => (Color >> 16 & 0x000000FF) / 255.0F;
