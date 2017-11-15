@@ -6,7 +6,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Mathematics
 {
-    public class MotionInterpolation
+    internal class MotionInterpolation
     {
         public CubicBezierCurve Curve { get; }
         public int StartFrame { get; }

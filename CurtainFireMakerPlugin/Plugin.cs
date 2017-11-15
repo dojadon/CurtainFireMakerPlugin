@@ -11,15 +11,21 @@ using CurtainFireMakerPlugin.Forms;
 
 namespace CurtainFireMakerPlugin
 {
+    /// <summary>
+    /// プラグイン
+    /// </summary>
     public class Plugin : ICommandPlugin
     {
-        public static Plugin Instance { get; set; }
+        internal static Plugin Instance { get; set; }
 
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
-        public string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
+        internal string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public Plugin()
         {
             Instance = this;
@@ -46,28 +52,41 @@ namespace CurtainFireMakerPlugin
             Image = Image.FromStream(stream);
         }
 
-        public void InitIronPython()
+        internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
             PythonExecutor.ExecuteScriptOnNewScope(Config.SettingScriptPath);
         }
 
+        /// <summary>GUID</summary>
         public Guid GUID => new Guid();
+        /// <summary>ApplicationForm</summary>
         public IWin32Window ApplicationForm { get; set; }
+        /// <summary>Scene</summary>
         public Scene Scene { get; set; }
 
+        /// <summary>Description</summary>
         public string Description => "Curtain Fire Maker Plugin by zyando";
+        /// <summary>Text</summary>
         public string Text => "弾幕生成";
+        /// <summary>EnglishText</summary>
         public string EnglishText => "Generate Curtain Fire";
 
+        /// <summary>Image</summary>
         public Image Image { get; set; }
+        /// <summary>SmallImage</summary>
         public Image SmallImage => Image;
 
+        /// <summary>Dispose</summary>
         public void Dispose()
         {
             Config.Save();
         }
 
+        /// <summary>
+        /// コマンドが実行されたときに呼ばれる
+        /// </summary>
+        /// <param name="args"></param>
         public void Run(CommandArgs args)
         {
             var form = new ExportSettingForm()
@@ -121,7 +140,7 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public void RunScript(string path, ProgressForm form, Action finalize)
+        private void RunScript(string path, ProgressForm form, Action finalize)
         {
             var world = new World(this, Path.GetFileNameWithoutExtension(Config.ScriptPath));
 

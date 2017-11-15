@@ -37,20 +37,20 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
         {
-            //PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
-            //for (int i = 0; i < result.Length; i++)
-            //{
-            //    result[i] = CloneUtil.Clone(Data.VertexArray[i]);
-            //}
-            return Data.VertexArray;
+            PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = CloneUtil.Clone(Data.VertexArray[i]);
+            }
+            return result;
         }
 
         public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
         {
-            var result = new int[Data.VertexIndices.Length];
-            Array.Copy(Data.VertexIndices, result, Data.VertexIndices.Length);
+            //int[] result = new int[Data.VertexIndices.Length];
+            //Array.Copy(Data.VertexIndices, result, Data.VertexIndices.Length);
 
-            return result;
+            return Data.VertexIndices;
         }
 
         public override PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop)
@@ -65,10 +65,10 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override string[] CreateTextures(World wolrd, ShotProperty prop)
         {
-            string[] result = new string[Data.TextureFiles.Length];
-            Array.Copy(Data.TextureFiles, result, Data.TextureFiles.Length);
+            //string[] result = new string[Data.TextureFiles.Length];
+            //Array.Copy(Data.TextureFiles, result, Data.TextureFiles.Length);
 
-            return result;
+            return Data.TextureFiles;
         }
 
         public override PmxBoneData[] CreateBones(World wolrd, ShotProperty prop)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CurtainFireMakerPlugin.Tasks
 {
-    public class TaskManager
+    internal class TaskManager
     {
         private List<Task> TaskList { get; } = new List<Task>();
         private List<Task> AddTaskList { get; } = new List<Task>();

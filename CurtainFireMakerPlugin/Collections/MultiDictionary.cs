@@ -8,7 +8,7 @@ namespace CurtainFireMakerPlugin.Collections
     /// <summary>
     /// キーと複数の値のコレクションを表します
     /// </summary>
-    public class MultiDictionary<TKey, TValue>
+    internal class MultiDictionary<TKey, TValue>
     {
         private readonly Dictionary<TKey, List<TValue>> mDictionary;
 

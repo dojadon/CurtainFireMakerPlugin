@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin.IO
 {
-    public class FileDropUtil
+    internal class FileDropUtil
     {
         public static void Drop(IntPtr hWnd, StringCollection filePaths)
         {

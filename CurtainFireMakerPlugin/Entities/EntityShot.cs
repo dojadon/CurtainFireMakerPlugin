@@ -14,33 +14,23 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
-        public static class RecordType
-        {
-            public static Func<EntityShot, bool> None { get; } = e => false;
-            public static Func<EntityShot, bool> Velocity { get; } = e => e.IsUpdatedVelocity;
-            public static Func<EntityShot, bool> LocalMat { get; } = e => e.IsUpdatedLocalMat;
-        }
+        public IRecordType RecordType { get; set; } = RecordTypes.Velocity;
 
-        private Func<EntityShot, bool> _shouldRecord = RecordType.Velocity;
-        public Func<EntityShot, bool> ShouldRecord
-        {
-            get => _shouldRecord;
-            set
-            {
-                _shouldRecord = value;
-                IsUpdatedVelocity = IsUpdatedLocalMat = IsUpdatedVelocity || IsUpdatedLocalMat;
-            }
-        }
+        public bool IsUpdatedVelocity { get; private set; } = true;
+        public bool IsUpdatedLocalMat { get; private set; } = true;
 
-        private bool IsUpdatedVelocity { get; set; } = true;
-        private bool IsUpdatedLocalMat { get; set; } = true;
+        private static float Epsilon { get; set; } = 0.00001F;
 
-        public static float Epsilon { get; set; } = 0.00001F;
+        public Vector3 LookAtVec { get; set; }
 
         public override Vector3 Velocity
         {
             get => base.Velocity;
-            set => IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Velocity, (base.Velocity = value), Epsilon);
+            set
+            {
+                IsUpdatedVelocity |= !Vector3.EpsilonEquals(base.Velocity, (base.Velocity = value), Epsilon);
+                if (Velocity != Vector3.Zero) LookAtVec = Velocity;
+            }
         }
 
         public override Vector3 Upward
@@ -61,15 +51,10 @@ namespace CurtainFireMakerPlugin.Entities
             set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
-        public Quaternion LookAtRot { get; private set; } = Quaternion.Identity;
-
-        public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
-        public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => e.Rot * e.LookAtRot;
-
-        public override MotionInterpolation MotionInterpolation
+        internal override MotionInterpolation MotionInterpolation
         {
             get => base.MotionInterpolation;
-            protected set
+            set
             {
                 AddBoneKeyFrame();
                 base.MotionInterpolation = value;
@@ -130,12 +115,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         internal override void Frame()
         {
-            if (Velocity != Vector3.Zero)
-            {
-                LookAtRot = Matrix3.LookAt(+Velocity, +Upward);
-            }
-
-            if (ShouldRecord(this) || World.FrameCount == 0)
+            if (RecordType.ShouldRecord(this) || World.FrameCount == 0)
             {
                 AddBoneKeyFrame();
             }
@@ -153,7 +133,7 @@ namespace CurtainFireMakerPlugin.Entities
                 posCurve = MotionInterpolation.Curve;
             }
 
-            AddBoneKeyFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), posCurve);
+            AddBoneKeyFrame(RootBone, RecordType.GetRecordedPos(this), RecordType.GetRecordedRot(this), posCurve);
         }
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve)

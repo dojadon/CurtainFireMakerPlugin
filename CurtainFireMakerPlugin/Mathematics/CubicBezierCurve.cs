@@ -8,7 +8,7 @@ namespace CurtainFireMakerPlugin.Mathematics
 {
     public struct CubicBezierCurve
     {
-        public static CubicBezierCurve Line = new CubicBezierCurve(new Vector2(0, 0), new Vector2(0.5F, 0.5F), new Vector2(0.5F, 0.5F), new Vector2(1, 1));
+        public static readonly CubicBezierCurve Line = new CubicBezierCurve(new Vector2(0, 0), new Vector2(0.5F, 0.5F), new Vector2(0.5F, 0.5F), new Vector2(1, 1));
 
         public Vector2 P0 { get; }
         public Vector2 P1 { get; }

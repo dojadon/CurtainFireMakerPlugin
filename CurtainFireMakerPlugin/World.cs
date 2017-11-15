@@ -19,12 +19,12 @@ namespace CurtainFireMakerPlugin
 
         public Plugin Plugin { get; }
         public Scene Scene => Plugin.Scene;
-        public Configuration Config => Plugin.Config;
+        internal Configuration Config => Plugin.Config;
         internal PythonExecutor Executor => Plugin.PythonExecutor;
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
-        public List<Entity> EntityList { get; } = new List<Entity>();
+        private List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
         internal ShotManager ShotManager { get; }
@@ -33,12 +33,12 @@ namespace CurtainFireMakerPlugin
 
         private TaskManager TaskManager { get; } = new TaskManager();
 
-        public String ExportFileName { get; set; }
+        internal String ExportFileName { get; set; }
 
-        public event EventHandler ExportEvent;
+        internal event EventHandler ExportEvent;
 
-        public string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
-        public string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
+        internal string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
+        internal string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
 
         public string ModelName { get; set; }
         public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";
@@ -55,7 +55,7 @@ namespace CurtainFireMakerPlugin
             ModelName = ExportFileName;
         }
 
-        protected virtual void OnExport(EventArgs e)
+        private void OnExport(EventArgs e)
         {
             ExportEvent?.Invoke(this, e);
         }
@@ -135,12 +135,12 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public void AddTask(Task task)
+        internal void AddTask(Task task)
         {
             TaskManager.AddTask(task);
         }
 
-        public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
+        internal void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
         {
             AddTask(new Task(task, interval, executeTimes, waitTime));
         }
