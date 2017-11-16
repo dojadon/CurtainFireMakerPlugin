@@ -57,13 +57,14 @@ namespace CurtainFireMakerPlugin.Tasks
             {
                 task.UpdateCount = 0;
 
-                if (++task.RunCount > task.ExecutionTimes && task.ExecutionTimes != 0)
+                if (task.RunCount + 1 > task.ExecutionTimes && task.ExecutionTimes != 0)
                 {
                     task.State = FINISHED;
                 }
                 else
                 {
                     task.Run();
+                    task.RunCount++;
                 }
             }
         };
