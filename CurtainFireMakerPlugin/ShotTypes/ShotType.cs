@@ -26,9 +26,9 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public virtual bool HasMesh { get; } = false;
 
-        public virtual Action<EntityShot> InitEntity { get; set; } = e => { };
+        public virtual void InitEntity(EntityShot entity) { }
 
-        public virtual Action<ShotModelData> InitModelData { get; set; } = data =>
+        public virtual void InitModelData(ShotModelData data)
         {
             if (data.Materials != null)
             {
@@ -39,9 +39,9 @@ namespace CurtainFireMakerPlugin.ShotTypes
                     material.Ambient = new Vector3(prop.Red, prop.Green, prop.Blue);
                 }
             }
-        };
+        }
 
-        public virtual Action<World> InitWorld { get; set; } = world => { };
+        public virtual void InitWorld(World world) { }
 
         public virtual PmxBoneData[] CreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
 
