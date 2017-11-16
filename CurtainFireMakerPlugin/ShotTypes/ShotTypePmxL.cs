@@ -10,7 +10,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 {
     public class ShotTypePmxL : ShotTypePmx
     {
-        private Dictionary<int, Image> ImageDict { get; } = new Dictionary<int, Image>();
+        private Dictionary<int, Image> ImageDict { get; set; } = new Dictionary<int, Image>();
 
         public ShotTypePmxL(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
 
@@ -22,14 +22,20 @@ namespace CurtainFireMakerPlugin.ShotTypes
         {
         }
 
+        public override void InitWorld(World world)
+        {
+            base.InitWorld(world);
+            ImageDict.Clear();
+        }
+
         public override string[] CreateTextures(World wolrd, ShotProperty prop)
         {
             var texture = base.CreateTextures(wolrd, prop)[0];
-            var colorTexture  = AppendFileName(texture, Convert.ToString(prop.Color, 16));
+            var colorTexture = AppendFileName(texture, Convert.ToString(prop.Color, 16));
 
             if (!ImageDict.ContainsKey(prop.Color))
             {
-                var image = new Bitmap(Plugin.Instance.Config.ResourceDirPath + "\\" + texture.Replace('/', '\\'));
+                var image = new Bitmap(wolrd.Config.ResourceDirPath + "\\" + texture.Replace('/', '\\'));
                 SetPxcelColor(image, prop.Red, prop.Green, prop.Blue);
                 ImageDict.Add(prop.Color, image);
 

@@ -120,6 +120,8 @@ namespace CurtainFireMakerPlugin
 
             KeyFrames.Export();
             PmxModel.Export();
+
+            OnExport(EventArgs.Empty);
         }
 
         internal void DropFileToMMM()

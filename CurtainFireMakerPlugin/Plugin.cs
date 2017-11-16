@@ -11,9 +11,6 @@ using CurtainFireMakerPlugin.Forms;
 
 namespace CurtainFireMakerPlugin
 {
-    /// <summary>
-    /// プラグイン
-    /// </summary>
     public class Plugin : ICommandPlugin
     {
         internal static Plugin Instance { get; set; }
@@ -23,9 +20,6 @@ namespace CurtainFireMakerPlugin
 
         internal string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
 
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
         public Plugin()
         {
             Instance = this;
@@ -58,35 +52,22 @@ namespace CurtainFireMakerPlugin
             PythonExecutor.ExecuteScriptOnNewScope(Config.SettingScriptPath);
         }
 
-        /// <summary>GUID</summary>
         public Guid GUID => new Guid();
-        /// <summary>ApplicationForm</summary>
         public IWin32Window ApplicationForm { get; set; }
-        /// <summary>Scene</summary>
         public Scene Scene { get; set; }
 
-        /// <summary>Description</summary>
         public string Description => "Curtain Fire Maker Plugin by zyando";
-        /// <summary>Text</summary>
         public string Text => "弾幕生成";
-        /// <summary>EnglishText</summary>
         public string EnglishText => "Generate Curtain Fire";
 
-        /// <summary>Image</summary>
         public Image Image { get; set; }
-        /// <summary>SmallImage</summary>
         public Image SmallImage => Image;
 
-        /// <summary>Dispose</summary>
         public void Dispose()
         {
             Config.Save();
         }
 
-        /// <summary>
-        /// コマンドが実行されたときに呼ばれる
-        /// </summary>
-        /// <param name="args"></param>
         public void Run(CommandArgs args)
         {
             var form = new ExportSettingForm()

@@ -5,7 +5,6 @@ using CurtainFireMakerPlugin.Entities;
 using VecMath;
 using System.IO;
 using CsMmdDataIO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
@@ -18,9 +17,8 @@ namespace CurtainFireMakerPlugin.ShotTypes
         public ShotTypePmx(string name, string path, Vector3 size) : base(name)
         {
             path = Plugin.Instance.Config.ResourceDirPath + "\\" + path;
-            var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-            using (inStream)
+            using (var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 PmxParser parser = new PmxParser(inStream);
                 parser.Parse(Data);
@@ -47,10 +45,10 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
         {
-            //int[] result = new int[Data.VertexIndices.Length];
-            //Array.Copy(Data.VertexIndices, result, Data.VertexIndices.Length);
+            int[] result = new int[Data.VertexIndices.Length];
+            Array.Copy(Data.VertexIndices, result, Data.VertexIndices.Length);
 
-            return Data.VertexIndices;
+            return result;
         }
 
         public override PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop)
@@ -65,10 +63,10 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public override string[] CreateTextures(World wolrd, ShotProperty prop)
         {
-            //string[] result = new string[Data.TextureFiles.Length];
-            //Array.Copy(Data.TextureFiles, result, Data.TextureFiles.Length);
+            string[] result = new string[Data.TextureFiles.Length];
+            Array.Copy(Data.TextureFiles, result, Data.TextureFiles.Length);
 
-            return Data.TextureFiles;
+            return result;
         }
 
         public override PmxBoneData[] CreateBones(World wolrd, ShotProperty prop)
