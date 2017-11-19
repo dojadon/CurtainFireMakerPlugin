@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\IRecordType.cs" />
+    <Compile Include="Entities\Recording.cs" />
     <Compile Include="Mathematics\CubicBezierCurve.cs" />
     <Compile Include="Collections\MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />

@@ -14,7 +14,7 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone => ModelData.Bones[0];
         public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
-        public IRecordType RecordType { get; set; } = RecordTypes.Velocity;
+        public IRecording Recording { get; set; } = Entities.Recording.Velocity;
 
         public bool IsUpdatedVelocity { get; private set; } = true;
         public bool IsUpdatedLocalMat { get; private set; } = true;
@@ -115,7 +115,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         internal override void Frame()
         {
-            if (RecordType.ShouldRecord(this) || World.FrameCount == 0)
+            if (Recording.ShouldRecord(this) || World.FrameCount == 0)
             {
                 AddBoneKeyFrame();
             }
@@ -133,7 +133,7 @@ namespace CurtainFireMakerPlugin.Entities
                 posCurve = MotionInterpolation.Curve;
             }
 
-            AddBoneKeyFrame(RootBone, RecordType.GetRecordedPos(this), RecordType.GetRecordedRot(this), posCurve);
+            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve);
         }
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve)
