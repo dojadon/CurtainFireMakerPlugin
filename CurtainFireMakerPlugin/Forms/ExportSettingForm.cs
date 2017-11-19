@@ -15,37 +15,36 @@ namespace CurtainFireMakerPlugin.Forms
 
         public string ScriptPath
         {
-            get => scriptPath;
+            get => TextBoxScriptPath.Text;
             set
             {
-                scriptPath = value;
-                scriptFileDialog.FileName = value;
-                scriptFileDialog.InitialDirectory = Path.GetDirectoryName(value);
-                scriptText.Text = Path.GetFileNameWithoutExtension(value);
+                TextBoxScriptPath.Text = value;
+                OpenFileDialogScript.FileName = value;
+                OpenFileDialogScript.InitialDirectory = Path.GetDirectoryName(value);
             }
         }
 
         public string PmxExportDirPath
         {
-            get => pmxExportPathTextBox.Text; set
+            get => TextBoxPmxExportPath.Text; set
             {
-                pmxExportPathTextBox.Text = value;
-                pmxExportDirDialog.SelectedPath = value;
+                TextBoxPmxExportPath.Text = value;
+                FolderBrowserDialogPmx.SelectedPath = value;
             }
         }
 
         public string VmdExportDirPath
         {
-            get => vmdExportPathTextBox.Text; set
+            get => TextBoxVmdExportPath.Text; set
             {
-                vmdExportPathTextBox.Text = value;
-                vmdExportDirDialog.SelectedPath = value;
+                TextBoxVmdExportPath.Text = value;
+                FolderBrowserDialogVmd.SelectedPath = value;
             }
         }
 
-        public bool KeepLogOpen { get => keepLogOpenCheckBox.Checked; set => keepLogOpenCheckBox.Checked = value; }
-        public bool DropPmxFile { get => checkBoxDropPmxFile.Checked; set => checkBoxDropPmxFile.Checked = value; }
-        public bool DropVmdFile { get => checkBoxDropVmdFile.Checked; set => checkBoxDropVmdFile.Checked = value; }
+        public bool KeepLogOpen { get => CheckBoxKeepLog.Checked; set => CheckBoxKeepLog.Checked = value; }
+        public bool DropPmxFile { get => CheckBoxDropPmxFile.Checked; set => CheckBoxDropPmxFile.Checked = value; }
+        public bool DropVmdFile { get => CheckBoxDropVmdFile.Checked; set => CheckBoxDropVmdFile.Checked = value; }
 
         public ExportSettingForm()
         {
@@ -66,31 +65,31 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void Click_Script(object sender, EventArgs e)
         {
-            var result = scriptFileDialog.ShowDialog();
+            var result = OpenFileDialogScript.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                ScriptPath = scriptFileDialog.FileName;
+                ScriptPath = OpenFileDialogScript.FileName;
             }
         }
 
         private void Click_PmxExportDir(object sender, EventArgs e)
         {
-            var result = pmxExportDirDialog.ShowDialog();
+            var result = FolderBrowserDialogPmx.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                PmxExportDirPath = pmxExportDirDialog.SelectedPath;
+                PmxExportDirPath = FolderBrowserDialogPmx.SelectedPath;
             }
         }
 
         private void Click_VmdExportDir(object sender, EventArgs e)
         {
-            var result = vmdExportDirDialog.ShowDialog();
+            var result = FolderBrowserDialogVmd.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                VmdExportDirPath = vmdExportDirDialog.SelectedPath;
+                VmdExportDirPath = FolderBrowserDialogVmd.SelectedPath;
             }
         }
 

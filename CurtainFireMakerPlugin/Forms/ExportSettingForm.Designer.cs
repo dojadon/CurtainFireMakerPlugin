@@ -31,22 +31,22 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportSettingForm));
             this.label5 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
-            this.scriptText = new System.Windows.Forms.TextBox();
+            this.TextBoxScriptPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.pmxExportPathTextBox = new System.Windows.Forms.TextBox();
+            this.TextBoxPmxExportPath = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.scriptFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.keepLogOpenCheckBox = new System.Windows.Forms.CheckBox();
-            this.pmxExportDirDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.OpenFileDialogScript = new System.Windows.Forms.OpenFileDialog();
+            this.CheckBoxKeepLog = new System.Windows.Forms.CheckBox();
+            this.FolderBrowserDialogPmx = new System.Windows.Forms.FolderBrowserDialog();
             this.button2 = new System.Windows.Forms.Button();
-            this.checkBoxDropPmxFile = new System.Windows.Forms.CheckBox();
-            this.checkBoxDropVmdFile = new System.Windows.Forms.CheckBox();
+            this.CheckBoxDropPmxFile = new System.Windows.Forms.CheckBox();
+            this.CheckBoxDropVmdFile = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.vmdExportPathTextBox = new System.Windows.Forms.TextBox();
+            this.TextBoxVmdExportPath = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
-            this.vmdExportDirDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.FolderBrowserDialogVmd = new System.Windows.Forms.FolderBrowserDialog();
             this.SuspendLayout();
             // 
             // label5
@@ -61,22 +61,24 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(403, 28);
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button5.Location = new System.Drawing.Point(469, 28);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(45, 23);
+            this.button5.Size = new System.Drawing.Size(44, 23);
             this.button5.TabIndex = 20;
             this.button5.Text = "参照";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.Click_Script);
             // 
-            // scriptText
+            // TextBoxScriptPath
             // 
-            this.scriptText.BackColor = System.Drawing.SystemColors.Window;
-            this.scriptText.Location = new System.Drawing.Point(14, 30);
-            this.scriptText.Name = "scriptText";
-            this.scriptText.ReadOnly = true;
-            this.scriptText.Size = new System.Drawing.Size(383, 19);
-            this.scriptText.TabIndex = 19;
+            this.TextBoxScriptPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxScriptPath.BackColor = System.Drawing.SystemColors.Window;
+            this.TextBoxScriptPath.Location = new System.Drawing.Point(14, 30);
+            this.TextBoxScriptPath.Name = "TextBoxScriptPath";
+            this.TextBoxScriptPath.Size = new System.Drawing.Size(448, 19);
+            this.TextBoxScriptPath.TabIndex = 19;
             // 
             // label1
             // 
@@ -88,16 +90,19 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Pmx出力先";
             // 
-            // pmxExportPathTextBox
+            // TextBoxPmxExportPath
             // 
-            this.pmxExportPathTextBox.Location = new System.Drawing.Point(14, 73);
-            this.pmxExportPathTextBox.Name = "pmxExportPathTextBox";
-            this.pmxExportPathTextBox.Size = new System.Drawing.Size(383, 19);
-            this.pmxExportPathTextBox.TabIndex = 1;
+            this.TextBoxPmxExportPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxPmxExportPath.Location = new System.Drawing.Point(14, 73);
+            this.TextBoxPmxExportPath.Name = "TextBoxPmxExportPath";
+            this.TextBoxPmxExportPath.Size = new System.Drawing.Size(448, 19);
+            this.TextBoxPmxExportPath.TabIndex = 1;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(403, 71);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(468, 71);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(45, 23);
             this.button1.TabIndex = 2;
@@ -107,7 +112,8 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(304, 236);
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.Location = new System.Drawing.Point(369, 241);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 17;
@@ -117,7 +123,8 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(95, 236);
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button3.Location = new System.Drawing.Point(95, 241);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 16;
@@ -125,24 +132,25 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Click_OK);
             // 
-            // scriptFileDialog
+            // OpenFileDialogScript
             // 
-            this.scriptFileDialog.FileName = "openFileDialog1";
-            this.scriptFileDialog.Filter = "|*.py";
+            this.OpenFileDialogScript.FileName = "openFileDialog1";
+            this.OpenFileDialogScript.Filter = "|*.py";
             // 
-            // keepLogOpenCheckBox
+            // CheckBoxKeepLog
             // 
-            this.keepLogOpenCheckBox.AutoSize = true;
-            this.keepLogOpenCheckBox.Location = new System.Drawing.Point(14, 161);
-            this.keepLogOpenCheckBox.Name = "keepLogOpenCheckBox";
-            this.keepLogOpenCheckBox.Size = new System.Drawing.Size(128, 16);
-            this.keepLogOpenCheckBox.TabIndex = 22;
-            this.keepLogOpenCheckBox.Text = "ログを開いたままにする";
-            this.keepLogOpenCheckBox.UseVisualStyleBackColor = true;
+            this.CheckBoxKeepLog.AutoSize = true;
+            this.CheckBoxKeepLog.Location = new System.Drawing.Point(14, 161);
+            this.CheckBoxKeepLog.Name = "CheckBoxKeepLog";
+            this.CheckBoxKeepLog.Size = new System.Drawing.Size(128, 16);
+            this.CheckBoxKeepLog.TabIndex = 22;
+            this.CheckBoxKeepLog.Text = "ログを開いたままにする";
+            this.CheckBoxKeepLog.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(339, 157);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(404, 157);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(109, 23);
             this.button2.TabIndex = 23;
@@ -150,25 +158,25 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Click_InitIronPython);
             // 
-            // checkBoxDropPmxFile
+            // CheckBoxDropPmxFile
             // 
-            this.checkBoxDropPmxFile.AutoSize = true;
-            this.checkBoxDropPmxFile.Location = new System.Drawing.Point(14, 183);
-            this.checkBoxDropPmxFile.Name = "checkBoxDropPmxFile";
-            this.checkBoxDropPmxFile.Size = new System.Drawing.Size(223, 16);
-            this.checkBoxDropPmxFile.TabIndex = 24;
-            this.checkBoxDropPmxFile.Text = "出力時にpmxファイルをMMMへドロップする";
-            this.checkBoxDropPmxFile.UseVisualStyleBackColor = true;
+            this.CheckBoxDropPmxFile.AutoSize = true;
+            this.CheckBoxDropPmxFile.Location = new System.Drawing.Point(14, 183);
+            this.CheckBoxDropPmxFile.Name = "CheckBoxDropPmxFile";
+            this.CheckBoxDropPmxFile.Size = new System.Drawing.Size(223, 16);
+            this.CheckBoxDropPmxFile.TabIndex = 24;
+            this.CheckBoxDropPmxFile.Text = "出力時にpmxファイルをMMMへドロップする";
+            this.CheckBoxDropPmxFile.UseVisualStyleBackColor = true;
             // 
-            // checkBoxDropVmdFile
+            // CheckBoxDropVmdFile
             // 
-            this.checkBoxDropVmdFile.AutoSize = true;
-            this.checkBoxDropVmdFile.Location = new System.Drawing.Point(14, 205);
-            this.checkBoxDropVmdFile.Name = "checkBoxDropVmdFile";
-            this.checkBoxDropVmdFile.Size = new System.Drawing.Size(223, 16);
-            this.checkBoxDropVmdFile.TabIndex = 25;
-            this.checkBoxDropVmdFile.Text = "出力時にvmdファイルをMMMへドロップする";
-            this.checkBoxDropVmdFile.UseVisualStyleBackColor = true;
+            this.CheckBoxDropVmdFile.AutoSize = true;
+            this.CheckBoxDropVmdFile.Location = new System.Drawing.Point(14, 205);
+            this.CheckBoxDropVmdFile.Name = "CheckBoxDropVmdFile";
+            this.CheckBoxDropVmdFile.Size = new System.Drawing.Size(223, 16);
+            this.CheckBoxDropVmdFile.TabIndex = 25;
+            this.CheckBoxDropVmdFile.Text = "出力時にvmdファイルをMMMへドロップする";
+            this.CheckBoxDropVmdFile.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -180,16 +188,19 @@
             this.label2.TabIndex = 26;
             this.label2.Text = "Vmd出力先";
             // 
-            // vmdExportPathTextBox
+            // TextBoxVmdExportPath
             // 
-            this.vmdExportPathTextBox.Location = new System.Drawing.Point(14, 115);
-            this.vmdExportPathTextBox.Name = "vmdExportPathTextBox";
-            this.vmdExportPathTextBox.Size = new System.Drawing.Size(383, 19);
-            this.vmdExportPathTextBox.TabIndex = 27;
+            this.TextBoxVmdExportPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxVmdExportPath.Location = new System.Drawing.Point(14, 115);
+            this.TextBoxVmdExportPath.Name = "TextBoxVmdExportPath";
+            this.TextBoxVmdExportPath.Size = new System.Drawing.Size(448, 19);
+            this.TextBoxVmdExportPath.TabIndex = 27;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(403, 113);
+            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button6.Location = new System.Drawing.Point(468, 113);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(45, 23);
             this.button6.TabIndex = 28;
@@ -201,20 +212,20 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 276);
+            this.ClientSize = new System.Drawing.Size(524, 281);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.vmdExportPathTextBox);
+            this.Controls.Add(this.TextBoxVmdExportPath);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.checkBoxDropVmdFile);
-            this.Controls.Add(this.pmxExportPathTextBox);
+            this.Controls.Add(this.CheckBoxDropVmdFile);
+            this.Controls.Add(this.TextBoxPmxExportPath);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkBoxDropPmxFile);
+            this.Controls.Add(this.CheckBoxDropPmxFile);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.keepLogOpenCheckBox);
+            this.Controls.Add(this.CheckBoxKeepLog);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.scriptText);
+            this.Controls.Add(this.TextBoxScriptPath);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -232,21 +243,21 @@
 
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.TextBox scriptText;
+        private System.Windows.Forms.TextBox TextBoxScriptPath;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox pmxExportPathTextBox;
+        private System.Windows.Forms.TextBox TextBoxPmxExportPath;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.OpenFileDialog scriptFileDialog;
-        private System.Windows.Forms.CheckBox keepLogOpenCheckBox;
-        private System.Windows.Forms.FolderBrowserDialog pmxExportDirDialog;
+        private System.Windows.Forms.OpenFileDialog OpenFileDialogScript;
+        private System.Windows.Forms.CheckBox CheckBoxKeepLog;
+        private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialogPmx;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox checkBoxDropPmxFile;
-        private System.Windows.Forms.CheckBox checkBoxDropVmdFile;
+        private System.Windows.Forms.CheckBox CheckBoxDropPmxFile;
+        private System.Windows.Forms.CheckBox CheckBoxDropVmdFile;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox vmdExportPathTextBox;
+        private System.Windows.Forms.TextBox TextBoxVmdExportPath;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.FolderBrowserDialog vmdExportDirDialog;
+        private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialogVmd;
     }
 }

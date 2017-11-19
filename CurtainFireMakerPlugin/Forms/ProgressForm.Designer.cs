@@ -40,7 +40,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.Location = new System.Drawing.Point(12, 12);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(358, 23);
+            this.progressBar.Size = new System.Drawing.Size(500, 23);
             this.progressBar.TabIndex = 0;
             // 
             // logTextBox
@@ -56,7 +56,7 @@
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.ReadOnly = true;
             this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(358, 271);
+            this.logTextBox.Size = new System.Drawing.Size(500, 228);
             this.logTextBox.TabIndex = 1;
             // 
             // label
@@ -71,7 +71,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 324);
+            this.ClientSize = new System.Drawing.Size(524, 281);
             this.Controls.Add(this.label);
             this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.progressBar);
