@@ -13,12 +13,12 @@ namespace CurtainFireMakerPlugin
 {
     public class Plugin : ICommandPlugin
     {
-        internal static Plugin Instance { get; set; }
+        public static Plugin Instance { get; set; }
 
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
-        internal string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
+        public string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
 
         public Plugin()
         {
