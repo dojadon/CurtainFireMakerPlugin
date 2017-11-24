@@ -27,7 +27,7 @@ namespace CurtainFireMakerPlugin
         private List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
-        internal ShotManager ShotManager { get; }
+        internal ShotGroupManager ShotManager { get; }
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion KeyFrames { get; }
 
@@ -47,7 +47,7 @@ namespace CurtainFireMakerPlugin
         {
             Plugin = plugin;
 
-            ShotManager = new ShotManager(this);
+            ShotManager = new ShotGroupManager(this);
             PmxModel = new CurtainFireModel(this);
             KeyFrames = new CurtainFireMotion(this);
 

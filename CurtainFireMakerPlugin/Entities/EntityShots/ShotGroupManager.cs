@@ -7,12 +7,12 @@ using CurtainFireMakerPlugin.ShotTypes;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    internal class ShotManager
+    internal class ShotGroupManager
     {
         private Dictionary<ShotType, ShotTypeGroup> TypeGroupDict { get; } = new Dictionary<ShotType, ShotTypeGroup>();
         private World World { get; }
 
-        public ShotManager(World world)
+        public ShotGroupManager(World world)
         {
             World = world;
         }
