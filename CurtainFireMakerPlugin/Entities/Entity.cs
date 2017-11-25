@@ -43,7 +43,6 @@ namespace CurtainFireMakerPlugin.Entities
         public bool IsDeath { get; private set; }
         public bool IsSpawned { get; private set; }
 
-        internal virtual MotionInterpolation MotionInterpolation { get; set; }
         private TaskManager TaskManager { get; } = new TaskManager();
 
         public World World { get; }
@@ -74,20 +73,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdateLocalMat()
         {
-            float interpolation = 1.0F;
-
-            if (MotionInterpolation != null)
-            {
-                if (MotionInterpolation.Within(World.FrameCount))
-                {
-                    interpolation = MotionInterpolation.GetChangeAmount(World.FrameCount);
-                }
-                else
-                {
-                    RemoveMotionInterpolationCurve();
-                }
-            }
-            Pos += Velocity * interpolation;
+            Pos += Velocity;
         }
 
         public void __call__()
@@ -105,16 +91,6 @@ namespace CurtainFireMakerPlugin.Entities
         {
             DeathFrameNo = World.RemoveEntity(this);
             IsDeath = true;
-        }
-
-        public virtual void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
-        {
-            MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2);
-        }
-
-        protected virtual void RemoveMotionInterpolationCurve()
-        {
-            MotionInterpolation = null;
         }
 
         public void AddTask(Task task)

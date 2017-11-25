@@ -51,15 +51,7 @@ namespace CurtainFireMakerPlugin.Entities
             set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
-        internal override MotionInterpolation MotionInterpolation
-        {
-            get => base.MotionInterpolation;
-            set
-            {
-                AddBoneKeyFrame();
-                base.MotionInterpolation = value;
-            }
-        }
+        private MotionInterpolation MotionInterpolation { get; set; }
 
         public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(typeName, color), parentEntity) { }
@@ -122,6 +114,36 @@ namespace CurtainFireMakerPlugin.Entities
             IsUpdatedVelocity = IsUpdatedLocalMat = false;
 
             base.Frame();
+        }
+
+        protected override void UpdateLocalMat()
+        {
+            float interpolation = 1.0F;
+
+            if (MotionInterpolation != null)
+            {
+                if (MotionInterpolation.Within(World.FrameCount))
+                {
+                    interpolation = MotionInterpolation.GetChangeAmount(World.FrameCount);
+                }
+                else
+                {
+                    RemoveMotionInterpolationCurve();
+                }
+            }
+            Pos += Velocity * interpolation;
+        }
+
+        public void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
+        {
+            AddBoneKeyFrame();
+            MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2);
+        }
+
+        protected void RemoveMotionInterpolationCurve()
+        {
+            AddBoneKeyFrame();
+            MotionInterpolation = null;
         }
 
         public void AddBoneKeyFrame()
