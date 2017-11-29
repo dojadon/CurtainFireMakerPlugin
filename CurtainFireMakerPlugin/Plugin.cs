@@ -49,7 +49,7 @@ namespace CurtainFireMakerPlugin
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
-            PythonExecutor.ExecuteScriptOnNewScope(Config.SettingScriptPath);
+            PythonExecutor.ExecuteScriptOnNewScope(Config.ShotTypeSettingScriptPath);
         }
 
         public Guid GUID => new Guid();
@@ -133,7 +133,7 @@ namespace CurtainFireMakerPlugin
             {
                 long time = Environment.TickCount;
 
-                PythonExecutor.ExecuteScriptOnNewScope(path, new Variable("world", world));
+                PythonExecutor.ExecuteScriptOnNewScope(path, new Dictionary<string, object> { { "world", world } });
 
                 form.Progress.Minimum = 0;
                 form.Progress.Maximum = world.MaxFrame;
@@ -171,7 +171,7 @@ namespace CurtainFireMakerPlugin
 
             if (dropFlag)
             {
-                world.DropFileToMMM();
+                try { world.DropFileToMMM(); } catch { }
             }
         }
     }

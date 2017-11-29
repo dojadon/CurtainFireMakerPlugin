@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace CurtainFireMakerPlugin
@@ -17,34 +18,26 @@ namespace CurtainFireMakerPlugin
         private XmlNode NodeScript => NodeScripts.SelectSingleNode("Run");
         public string ScriptPath
         {
-            get => MightMakeAbsolute(NodeScript.InnerText);
-            set => NodeScript.InnerText = MightMakeRelative(value);
+            get => GetAbsolutePath(NodeScript.InnerText);
+            set => NodeScript.InnerText = GetRelativePath(value);
         }
 
-        private XmlNode NodeSettingScript => NodeScripts.SelectSingleNode("Setting");
-        public string SettingScriptPath
+        private XmlNode NodeShotTypeSettingScript => NodeScripts.SelectSingleNode("ShotTypeSetting");
+        public string ShotTypeSettingScriptPath
         {
-            get => MightMakeAbsolute(NodeSettingScript.InnerText);
-            set => NodeSettingScript.InnerText = MightMakeRelative(value);
+            get => GetAbsolutePath(NodeShotTypeSettingScript.InnerText);
+            set => NodeShotTypeSettingScript.InnerText = GetRelativePath(value);
         }
 
         private XmlNode NodeLibs => RootNode.SelectSingleNode("Libs");
         public string[] ModullesDirPaths
         {
-            get
-            {
-                var array = new string[NodeLibs.ChildNodes.Count];
-                for (int i = 0; i < NodeLibs.ChildNodes.Count; i++)
-                {
-                    array[i] = MightMakeAbsolute(NodeLibs.ChildNodes.Item(i).InnerText);
-                }
-                return array;
-            }
+            get => (from XmlNode node in NodeLibs.ChildNodes select GetAbsolutePath(node.InnerText)).ToArray();
             set
             {
                 for (int i = 0; i < NodeLibs.ChildNodes.Count; i++)
                 {
-                    NodeLibs.ChildNodes.Item(i).InnerText = MightMakeRelative(value[i]);
+                    NodeLibs.ChildNodes.Item(i).InnerText = GetRelativePath(value[i]);
                 }
             }
         }
@@ -52,14 +45,14 @@ namespace CurtainFireMakerPlugin
         private XmlNode NodePmxExport => NodeExport.SelectSingleNode("Pmx");
         public string PmxExportDirPath
         {
-            get => MightMakeAbsolute(NodePmxExport.InnerText);
-            set => NodePmxExport.InnerText = MightMakeRelative(value);
+            get => GetAbsolutePath(NodePmxExport.InnerText);
+            set => NodePmxExport.InnerText = GetRelativePath(value);
         }
         private XmlNode NodeVndExport => NodeExport.SelectSingleNode("Vmd");
         public string VmdExportDirPath
         {
-            get => MightMakeAbsolute(NodeVndExport.InnerText);
-            set => NodeVndExport.InnerText = MightMakeRelative(value);
+            get => GetAbsolutePath(NodeVndExport.InnerText);
+            set => NodeVndExport.InnerText = GetRelativePath(value);
         }
 
         private XmlNode NodeKeepLogOpen => RootNode.SelectSingleNode("KeepLogOpen");
@@ -84,8 +77,8 @@ namespace CurtainFireMakerPlugin
 
         public void Save() => XmlDoc.Save(CondigPath);
 
-        private static string MightMakeAbsolute(string path) => Path.IsPathRooted(path) ? path : Plugin.Instance.PluginRootPath + "\\" + path;
+        private static string GetAbsolutePath(string path) => Path.IsPathRooted(path) ? path : Plugin.Instance.PluginRootPath + "\\" + path;
 
-        private static string MightMakeRelative(string path) => path.Replace(Plugin.Instance.PluginRootPath + "\\", "");
+        private static string GetRelativePath(string path) => path.Replace(Plugin.Instance.PluginRootPath + "\\", "");
     }
 }
