@@ -105,6 +105,7 @@ namespace CurtainFireMakerPlugin
                     void Finalize()
                     {
                         sw.Flush();
+                        sw.Dispose();
 
                         StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                         Console.SetOut(standardOutput);
