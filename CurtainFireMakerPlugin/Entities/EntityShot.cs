@@ -56,6 +56,9 @@ namespace CurtainFireMakerPlugin.Entities
         public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(typeName, color), parentEntity) { }
 
+        public EntityShot(World world, string typeName, int color, short group, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(typeName, color, group), parentEntity) { }
+
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
             try

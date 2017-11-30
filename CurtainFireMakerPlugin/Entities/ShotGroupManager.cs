@@ -93,7 +93,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public bool IsAddable(EntityShot entity)
         {
-            return entity.ParentEntity == ParentEntity && Property.Equals(entity.Property)
+            return entity.ParentEntity == ParentEntity && Property.GroupEquals(entity.Property)
             && !ShotList.Exists(e => !e.IsDeath || World.FrameCount == e.DeathFrameNo);
         }
 
