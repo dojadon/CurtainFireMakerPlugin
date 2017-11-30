@@ -50,6 +50,7 @@ namespace CurtainFireMakerPlugin
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
             PythonExecutor.ExecuteScriptOnNewScope(Config.ShotTypeSettingScriptPath);
+            PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "RAD", Math.PI / 180.0 }, { "PLUGIN_ROOT_PATH", PluginRootPath } });
         }
 
         public Guid GUID => new Guid();
@@ -94,7 +95,7 @@ namespace CurtainFireMakerPlugin
 
                 Task.Factory.StartNew(progressForm.ShowDialog);
 
-                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = false})
+                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = false })
                 {
                     Console.SetOut(sw);
                     PythonExecutor.SetOut(sw.BaseStream);
@@ -133,7 +134,8 @@ namespace CurtainFireMakerPlugin
             {
                 long time = Environment.TickCount;
 
-                PythonExecutor.ExecuteScriptOnNewScope(path, new Dictionary<string, object> { { "world", world } });
+                PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "WORLD", world } });
+                PythonExecutor.ExecuteScriptOnNewScope(path);
 
                 form.Progress.Minimum = 0;
                 form.Progress.Maximum = world.MaxFrame;
