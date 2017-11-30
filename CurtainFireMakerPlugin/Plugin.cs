@@ -94,7 +94,7 @@ namespace CurtainFireMakerPlugin
 
                 Task.Factory.StartNew(progressForm.ShowDialog);
 
-                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = true, })
+                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = false})
                 {
                     Console.SetOut(sw);
                     PythonExecutor.SetOut(sw.BaseStream);
@@ -103,7 +103,7 @@ namespace CurtainFireMakerPlugin
 
                     void Finalize()
                     {
-                        sw.Dispose();
+                        sw.Flush();
 
                         StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
                         Console.SetOut(standardOutput);
