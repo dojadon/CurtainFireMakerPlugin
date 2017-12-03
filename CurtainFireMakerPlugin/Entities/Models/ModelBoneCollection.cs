@@ -30,7 +30,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
             {
                 PmxBoneData bone = bones[i];
 
-                bone.BoneName = data.Property.Type.Name[0] + (BoneList.Count - 1).ToString();
+                bone.BoneName = $"B_{(BoneList.Count - 1).ToString()}";
                 bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.OP;
                 bone.BoneId = BoneList.Count + i;
 

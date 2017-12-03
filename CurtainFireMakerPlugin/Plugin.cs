@@ -18,13 +18,11 @@ namespace CurtainFireMakerPlugin
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
-        public string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
-
         public Plugin()
         {
             Instance = this;
 
-            Config = new Configuration(PluginRootPath + "\\config.xml");
+            Config = new Configuration(Configuration.SettingXmlFilePath);
             PythonExecutor = new PythonExecutor();
 
             try
@@ -49,8 +47,7 @@ namespace CurtainFireMakerPlugin
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
-            PythonExecutor.ExecuteScriptOnNewScope(Config.ShotTypeSettingScriptPath);
-            PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "RAD", Math.PI / 180.0 }, { "PLUGIN_ROOT_PATH", PluginRootPath } });
+            PythonExecutor.ExecuteScriptOnNewScope(Configuration.InitScriptFilePath);
         }
 
         public Guid GUID => new Guid();

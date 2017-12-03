@@ -10,18 +10,15 @@ namespace CurtainFireMakerPlugin.ShotTypes
 {
     public class ShotType
     {
-        public static Dictionary<string, ShotType> TypeDict { get; } = new Dictionary<string, ShotType>() { { "BONE", new ShotType("BONE") } };
+        public static List<ShotType> ShotTypeList { get; } = new List<ShotType>();
 
-        public static void RegisterType(ShotType type)
+        public int Id { get; }
+        private static int NextId { get; set; }
+
+        public ShotType()
         {
-            TypeDict[type.Name] = type;
-        }
-
-        public String Name { get; }
-
-        public ShotType(String name)
-        {
-            Name = name;
+            Id = NextId++;
+            ShotTypeList.Add(this);
         }
 
         public virtual bool HasMesh { get; } = false;

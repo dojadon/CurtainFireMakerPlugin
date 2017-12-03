@@ -18,33 +18,26 @@ namespace CurtainFireMakerPlugin.Entities
 
         public short ShotGroup { get; }
 
-        public ShotProperty(string typeName, int color) : this(typeName, color, short.MaxValue) { }
+        public ShotProperty(ShotType type, int color) : this(type, color, short.MaxValue) { }
 
-        public ShotProperty(string typeName, int color, short group)
+        public ShotProperty(ShotType type, int color, short group)
         {
             Color = color;
             ShotGroup = group;
 
-            if (ShotType.TypeDict.ContainsKey(typeName))
-            {
-                Type = ShotType.TypeDict[typeName];
-            }
-            else
-            {
-                throw new ArgumentException($"Not found shot type name : {typeName}");
-            }
+            Type = type;
         }
 
         public override bool Equals(object obj) => obj is ShotProperty prop && Equals(prop);
 
-        public bool Equals(ShotProperty p) => p.Color == Color && Type.Name == p.Type.Name && ShotGroup == p.ShotGroup;
+        public bool Equals(ShotProperty p) => p.Color == Color && Type == p.Type && ShotGroup == p.ShotGroup;
 
-        public bool GroupEquals(ShotProperty p) => p.Color == Color && Type.Name == p.Type.Name && (ShotGroup & p.ShotGroup) > 0;
+        public bool GroupEquals(ShotProperty p) => p.Color == Color && Type == p.Type && (ShotGroup & p.ShotGroup) > 0;
 
         public override int GetHashCode()
         {
             int result = 17;
-            result = result * 23 + Type.Name.GetHashCode();
+            result = result * 23 + Type.Id;
             result = result * 23 + Color;
             result = result * 23 + ShotGroup;
             return result;

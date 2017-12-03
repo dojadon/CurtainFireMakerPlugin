@@ -1,6 +1,7 @@
 ﻿using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Vmd.Data;
 using CurtainFireMakerPlugin.Mathematics;
+using CurtainFireMakerPlugin.ShotTypes;
 using System;
 using VecMath;
 
@@ -53,11 +54,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         private MotionInterpolation MotionInterpolation { get; set; }
 
-        public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
-        : this(world, new ShotProperty(typeName, color), parentEntity) { }
+        public EntityShot(World world, ShotType type, int color, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(type, color), parentEntity) { }
 
-        public EntityShot(World world, string typeName, int color, short group, EntityShot parentEntity = null)
-        : this(world, new ShotProperty(typeName, color, group), parentEntity) { }
+        public EntityShot(World world, ShotType type, int color, short group, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(type, color, group), parentEntity) { }
 
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {

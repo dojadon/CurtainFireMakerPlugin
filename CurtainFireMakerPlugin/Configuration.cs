@@ -2,13 +2,13 @@
 using System.Xml;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin
 {
-    internal class Configuration
+    public class Configuration
     {
-        private string CondigPath { get; }
+        private string ConfigPath { get; }
 
         private XmlDocument XmlDoc { get; }
         private XmlNode RootNode => XmlDoc.SelectSingleNode(@"//Configuration");
@@ -20,13 +20,6 @@ namespace CurtainFireMakerPlugin
         {
             get => GetAbsolutePath(NodeScript.InnerText);
             set => NodeScript.InnerText = GetRelativePath(value);
-        }
-
-        private XmlNode NodeShotTypeSettingScript => NodeScripts.SelectSingleNode("ShotTypeSetting");
-        public string ShotTypeSettingScriptPath
-        {
-            get => GetAbsolutePath(NodeShotTypeSettingScript.InnerText);
-            set => NodeShotTypeSettingScript.InnerText = GetRelativePath(value);
         }
 
         private XmlNode NodeLibs => RootNode.SelectSingleNode("Libs");
@@ -64,21 +57,24 @@ namespace CurtainFireMakerPlugin
         private XmlNode NodeDropVmdFile => RootNode.SelectSingleNode("DropVmdFile");
         public bool DropVmdFile { get => bool.Parse(NodeDropVmdFile.InnerText); set => NodeDropVmdFile.InnerText = value.ToString(); }
 
-        public string ResourceDirPath => Plugin.Instance.PluginRootPath + "\\Resource";
+        public static string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
+        public static string SettingXmlFilePath => PluginRootPath + "\\config.xml";
+        public static string InitScriptFilePath => PluginRootPath + "\\init.py";
+        public static string ResourceDirPath => PluginRootPath + "\\Resource";
 
         public Configuration(string path)
         {
-            CondigPath = path;
+            ConfigPath = path;
 
             XmlDoc = new XmlDocument();
         }
 
-        public void Load() => XmlDoc.Load(CondigPath);
+        public void Load() => XmlDoc.Load(ConfigPath);
 
-        public void Save() => XmlDoc.Save(CondigPath);
+        public void Save() => XmlDoc.Save(ConfigPath);
 
-        private static string GetAbsolutePath(string path) => Path.IsPathRooted(path) ? path : Plugin.Instance.PluginRootPath + "\\" + path;
+        private static string GetAbsolutePath(string path) => Path.IsPathRooted(path) ? path : PluginRootPath + "\\" + path;
 
-        private static string GetRelativePath(string path) => path.Replace(Plugin.Instance.PluginRootPath + "\\", "");
+        private static string GetRelativePath(string path) => path.Replace(PluginRootPath + "\\", "");
     }
 }

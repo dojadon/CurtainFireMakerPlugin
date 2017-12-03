@@ -81,7 +81,7 @@ namespace CurtainFireMakerPlugin
 
         internal void InitPre()
         {
-            foreach (var type in ShotType.TypeDict.Values)
+            foreach (var type in ShotType.ShotTypeList)
             {
                 type.InitWorld(this);
             }

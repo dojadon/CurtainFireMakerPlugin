@@ -12,9 +12,9 @@ namespace CurtainFireMakerPlugin.ShotTypes
     {
         private Dictionary<int, Image> ImageDict { get; set; } = new Dictionary<int, Image>();
 
-        public ShotTypePmxL(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
+        public ShotTypePmxL(string path, float size) : this(path, new Vector3(size, size, size)) { }
 
-        public ShotTypePmxL(string name, string path, Vector3 size) : base(name, path, size)
+        public ShotTypePmxL(string path, Vector3 size) : base(path, size)
         {
         }
 
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
             if (!ImageDict.ContainsKey(prop.Color))
             {
-                var image = new Bitmap(wolrd.Config.ResourceDirPath + "\\" + texture.Replace('/', '\\'));
+                var image = new Bitmap(Configuration.ResourceDirPath + "\\" + texture.Replace('/', '\\'));
                 SetPxcelColor(image, prop.Red, prop.Green, prop.Blue);
                 ImageDict.Add(prop.Color, image);
 
