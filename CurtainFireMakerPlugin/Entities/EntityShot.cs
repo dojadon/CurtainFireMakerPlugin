@@ -1,6 +1,7 @@
 ﻿using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Vmd.Data;
 using CurtainFireMakerPlugin.Mathematics;
+using CurtainFireMakerPlugin.ShotTypes;
 using System;
 using VecMath;
 
@@ -51,18 +52,13 @@ namespace CurtainFireMakerPlugin.Entities
             set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
         }
 
-        internal override MotionInterpolation MotionInterpolation
-        {
-            get => base.MotionInterpolation;
-            set
-            {
-                AddBoneKeyFrame();
-                base.MotionInterpolation = value;
-            }
-        }
+        private MotionInterpolation MotionInterpolation { get; set; }
 
-        public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
-        : this(world, new ShotProperty(typeName, color), parentEntity) { }
+        public EntityShot(World world, ShotType type, int color, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(type, color), parentEntity) { }
+
+        public EntityShot(World world, ShotType type, int color, short group, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(type, color, group), parentEntity) { }
 
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
@@ -124,6 +120,36 @@ namespace CurtainFireMakerPlugin.Entities
             base.Frame();
         }
 
+        protected override void UpdateLocalMat()
+        {
+            float interpolation = 1.0F;
+
+            if (MotionInterpolation != null)
+            {
+                if (MotionInterpolation.Within(World.FrameCount))
+                {
+                    interpolation = MotionInterpolation.GetChangeAmount(World.FrameCount);
+                }
+                else
+                {
+                    RemoveMotionInterpolationCurve();
+                }
+            }
+            Pos += Velocity * interpolation;
+        }
+
+        public void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
+        {
+            AddBoneKeyFrame();
+            MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2);
+        }
+
+        protected void RemoveMotionInterpolationCurve()
+        {
+            AddBoneKeyFrame();
+            MotionInterpolation = null;
+        }
+
         public void AddBoneKeyFrame()
         {
             var posCurve = CubicBezierCurve.Line;
@@ -159,8 +185,10 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public PmxMorphData CreateVertexMorph(string morphName, Func<Vector3, Vector3> func)
+        public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
+            string morphName = $"V_{MaterialMorph.MorphName}";
+
             if (!ModelData.MorphDict.ContainsKey(morphName))
             {
                 var vertices = ModelData.Vertices;

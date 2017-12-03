@@ -69,7 +69,7 @@
     <Compile Include="Entities\Models\ModelVertexCollection.cs" />
     <Compile Include="Entities\EntityBone.cs" />
     <Compile Include="Mathematics\MotionInterpolation.cs" />
-    <Compile Include="Entities\ShotManager.cs" />
+    <Compile Include="Entities\ShotGroupManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
     <Compile Include="Forms\ExportSettingForm.cs">
       <SubType>Form</SubType>
@@ -92,7 +92,6 @@
     <Compile Include="PythonExecutor.cs" />
     <Compile Include="ShotTypes\ShotType.cs" />
     <Compile Include="ShotTypes\ShotTypePmx.cs" />
-    <Compile Include="ShotTypes\ShotTypePmxL.cs" />
     <Compile Include="Tasks\TaskManager.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="World.cs" />
@@ -119,4 +118,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy CurtainFireMakerPlugin.* C:\tool\model\MikuMikuMoving64_v1275\Plugins
+copy CurtainFireMakerPlugin.dll C:\tool\model\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins</PostBuildEvent>
+  </PropertyGroup>
 </Project>

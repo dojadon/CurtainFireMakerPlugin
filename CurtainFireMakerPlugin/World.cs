@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin
 
         public Plugin Plugin { get; }
         public Scene Scene => Plugin.Scene;
-        internal Configuration Config => Plugin.Config;
+        public Configuration Config => Plugin.Config;
         internal PythonExecutor Executor => Plugin.PythonExecutor;
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
@@ -27,7 +27,7 @@ namespace CurtainFireMakerPlugin
         private List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
-        internal ShotManager ShotManager { get; }
+        internal ShotGroupManager ShotManager { get; }
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion KeyFrames { get; }
 
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin
 
         internal String ExportFileName { get; set; }
 
-        internal event EventHandler ExportEvent;
+        public event EventHandler ExportEvent;
 
         internal string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
         internal string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
@@ -47,7 +47,7 @@ namespace CurtainFireMakerPlugin
         {
             Plugin = plugin;
 
-            ShotManager = new ShotManager(this);
+            ShotManager = new ShotGroupManager(this);
             PmxModel = new CurtainFireModel(this);
             KeyFrames = new CurtainFireMotion(this);
 
@@ -81,7 +81,7 @@ namespace CurtainFireMakerPlugin
 
         internal void InitPre()
         {
-            foreach (var type in ShotType.TypeDict.Values)
+            foreach (var type in ShotType.ShotTypeList)
             {
                 type.InitWorld(this);
             }

@@ -18,13 +18,11 @@ namespace CurtainFireMakerPlugin
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
-        public string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
-
         public Plugin()
         {
             Instance = this;
 
-            Config = new Configuration(PluginRootPath + "\\config.xml");
+            Config = new Configuration(Configuration.SettingXmlFilePath);
             PythonExecutor = new PythonExecutor();
 
             try
@@ -49,7 +47,7 @@ namespace CurtainFireMakerPlugin
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
-            PythonExecutor.ExecuteScriptOnNewScope(Config.SettingScriptPath);
+            PythonExecutor.ExecuteScriptOnNewScope(Configuration.InitScriptFilePath);
         }
 
         public Guid GUID => new Guid();
@@ -94,7 +92,7 @@ namespace CurtainFireMakerPlugin
 
                 Task.Factory.StartNew(progressForm.ShowDialog);
 
-                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = true, })
+                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = false })
                 {
                     Console.SetOut(sw);
                     PythonExecutor.SetOut(sw.BaseStream);
@@ -103,6 +101,7 @@ namespace CurtainFireMakerPlugin
 
                     void Finalize()
                     {
+                        sw.Flush();
                         sw.Dispose();
 
                         StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
@@ -133,7 +132,8 @@ namespace CurtainFireMakerPlugin
             {
                 long time = Environment.TickCount;
 
-                PythonExecutor.ExecuteScriptOnNewScope(path, new Variable("world", world));
+                PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "WORLD", world } });
+                PythonExecutor.ExecuteScriptOnNewScope(path);
 
                 form.Progress.Minimum = 0;
                 form.Progress.Maximum = world.MaxFrame;
@@ -171,7 +171,7 @@ namespace CurtainFireMakerPlugin
 
             if (dropFlag)
             {
-                world.DropFileToMMM();
+                try { world.DropFileToMMM(); } catch { }
             }
         }
     }

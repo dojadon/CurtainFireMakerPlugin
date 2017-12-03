@@ -43,16 +43,26 @@ namespace CurtainFireMakerPlugin
             "clr.AddReference(\"MikuMikuPlugin\")\n", RootScope);
         }
 
-        public dynamic ExecuteScriptOnNewScope(string path, params Variable[] variables)
+        public dynamic ExecuteScriptOnNewScope(string path, Dictionary<string, object> variables = null)
         {
             ScriptScope scope = Engine.CreateScope(RootScope);
 
+            if (variables != null)
+            {
+                foreach (var variable in variables)
+                {
+                    scope.SetVariable(variable.Key, variable.Value);
+                }
+            }
+            return Engine.ExecuteFile(path, scope);
+        }
+
+        public void SetGlobalVariable(Dictionary<string, object> variables)
+        {
             foreach (var variable in variables)
             {
-                scope.SetVariable(variable.Name, variable.Value);
+                RootScope.SetVariable(variable.Key, variable.Value);
             }
-
-            return Engine.ExecuteFile(path, scope);
         }
 
         public void SetOut(Stream stream)
@@ -61,17 +71,5 @@ namespace CurtainFireMakerPlugin
         }
 
         public string FormatException(Exception e) => Engine.GetService<ExceptionOperations>().FormatException(e);
-    }
-
-    public class Variable
-    {
-        public string Name { get; set; }
-        public object Value { get; set; }
-
-        public Variable(string name, object value)
-        {
-            Name = name;
-            Value = value;
-        }
     }
 }

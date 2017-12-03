@@ -12,11 +12,11 @@ namespace CurtainFireMakerPlugin.ShotTypes
     {
         private PmxModelData Data { get; } = new PmxModelData();
 
-        public ShotTypePmx(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
+        public ShotTypePmx(string path, float size) : this(path, new Vector3(size, size, size)) { }
 
-        public ShotTypePmx(string name, string path, Vector3 size) : base(name)
+        public ShotTypePmx(string path, Vector3 size) : base()
         {
-            path = Plugin.Instance.Config.ResourceDirPath + "\\" + path;
+            path = Configuration.ResourceDirPath + "\\" + path;
 
             using (var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {

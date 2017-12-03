@@ -7,12 +7,12 @@ using CurtainFireMakerPlugin.ShotTypes;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    internal class ShotManager
+    internal class ShotGroupManager
     {
         private Dictionary<ShotType, ShotTypeGroup> TypeGroupDict { get; } = new Dictionary<ShotType, ShotTypeGroup>();
         private World World { get; }
 
-        public ShotManager(World world)
+        public ShotGroupManager(World world)
         {
             World = world;
         }
@@ -93,7 +93,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public bool IsAddable(EntityShot entity)
         {
-            return entity.ParentEntity == ParentEntity && Property.Equals(entity.Property)
+            return entity.ParentEntity == ParentEntity && Property.GroupEquals(entity.Property)
             && !ShotList.Exists(e => !e.IsDeath || World.FrameCount == e.DeathFrameNo);
         }
 
