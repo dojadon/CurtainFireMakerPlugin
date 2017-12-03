@@ -118,4 +118,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy CurtainFireMakerPlugin.* C:\tool\model\MikuMikuMoving64_v1275\Plugins
+copy CurtainFireMakerPlugin.dll C:\tool\model\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins</PostBuildEvent>
+  </PropertyGroup>
 </Project>

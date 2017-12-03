@@ -185,8 +185,10 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public PmxMorphData CreateVertexMorph(string morphName, Func<Vector3, Vector3> func)
+        public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
+            string morphName = $"V_{MaterialMorph.MorphName}";
+
             if (!ModelData.MorphDict.ContainsKey(morphName))
             {
                 var vertices = ModelData.Vertices;
