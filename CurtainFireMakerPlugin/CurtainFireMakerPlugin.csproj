@@ -92,7 +92,6 @@
     <Compile Include="PythonExecutor.cs" />
     <Compile Include="ShotTypes\ShotType.cs" />
     <Compile Include="ShotTypes\ShotTypePmx.cs" />
-    <Compile Include="ShotTypes\ShotTypePmxL.cs" />
     <Compile Include="Tasks\TaskManager.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="World.cs" />

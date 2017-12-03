@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin
 
         public Plugin Plugin { get; }
         public Scene Scene => Plugin.Scene;
-        internal Configuration Config => Plugin.Config;
+        public Configuration Config => Plugin.Config;
         internal PythonExecutor Executor => Plugin.PythonExecutor;
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin
 
         internal String ExportFileName { get; set; }
 
-        internal event EventHandler ExportEvent;
+        public event EventHandler ExportEvent;
 
         internal string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
         internal string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
