@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = $"MA_{ MaterialList.Count.ToString() }";
+                material.MaterialName = "MA_" + MaterialList.Count.ToString();
 
                 if (0 <= material.TextureId && material.TextureId < textures.Length)
                 {

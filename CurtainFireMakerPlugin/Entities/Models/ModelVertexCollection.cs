@@ -19,22 +19,22 @@ namespace CurtainFireMakerPlugin.Entities.Models
             World = world;
         }
 
-        public void SetupVertices(PmxVertexData[] vertices, int[] indices, int[] faceCount, int boneCount)
+        public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices, IEnumerable<int> faceCount, int boneCount)
         {
-            int[] convertedIndices = Array.ConvertAll(indices, i => i + VertexList.Count);
+            List<int> convertedIndices = (from index in indices select index + VertexList.Count).ToList();
             IndexList.AddRange(convertedIndices);
 
             int total = 0;
             foreach (int count in faceCount)
             {
-                IndexOfEachMaterialList.Add(convertedIndices.ToList().GetRange(total, count));
+                IndexOfEachMaterialList.Add(convertedIndices.GetRange(total, count));
                 total += count;
             }
 
             foreach (var vertex in vertices)
             {
                 vertex.VertexId = VertexList.Count;
-                vertex.BoneId = Array.ConvertAll(vertex.BoneId, i => i + boneCount);
+                for (int i = 0; i < vertex.BoneId.Length; i++) vertex.BoneId[i] += boneCount;
                 VertexList.Add(vertex);
             }
         }

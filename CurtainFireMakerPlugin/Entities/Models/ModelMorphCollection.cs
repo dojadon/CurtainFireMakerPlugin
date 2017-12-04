@@ -23,7 +23,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
 
         public void SetupMaterialMorph(ShotProperty prop, PmxMorphData morph, int materialCount, int appliedMaterialCount)
         {
-            morph.MorphName = $"MO_{ MorphList.Count.ToString() }";
+            morph.MorphName = "MO_" + MorphList.Count.ToString();
             morph.SlotType = MorphSlotType.RIP;
             morph.MorphType = MorphType.MATERIAL;
 
@@ -66,12 +66,6 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 Compress(morphList, World.KeyFrames.MorphFrameDict);
             }
 
-            typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
-            foreach (var morph in MorphList)
-            {
-                typeMorphDict.Add(morph.MorphType, morph);
-            }
-
             var removeMaterialIndices = new List<int>();
             removeMaterialIndices.AddRange(materials.CompressMaterial(typeMorphDict[MorphType.MATERIAL], vertices));
 
@@ -106,6 +100,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
                         var morph = removeList[i];
 
                         MorphList.Remove(morph);
+                        morphList.Remove(morph);
                     }
                 }
             }

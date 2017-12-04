@@ -18,9 +18,9 @@ namespace CurtainFireMakerPlugin
         public int MaxFrame { get; set; } = 1000;
 
         public Plugin Plugin { get; }
-        public Scene Scene => Plugin.Scene;
-        public Configuration Config => Plugin.Config;
-        internal PythonExecutor Executor => Plugin.PythonExecutor;
+        public Scene Scene { get; }
+        public Configuration Config { get; }
+        internal PythonExecutor Executor { get; }
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
@@ -46,6 +46,10 @@ namespace CurtainFireMakerPlugin
         internal World(Plugin plugin, string fileName)
         {
             Plugin = plugin;
+
+            Scene = Plugin.Scene;
+            Config = Plugin.Config;
+            Executor = Plugin.PythonExecutor;
 
             ShotManager = new ShotGroupManager(this);
             PmxModel = new CurtainFireModel(this);
@@ -115,7 +119,7 @@ namespace CurtainFireMakerPlugin
         {
             EntityList.ForEach(e => e.OnDeath());
 
-            PmxModel.Finish();
+            PmxModel.FinalizeModel();
             KeyFrames.Finish();
 
             KeyFrames.Export();
