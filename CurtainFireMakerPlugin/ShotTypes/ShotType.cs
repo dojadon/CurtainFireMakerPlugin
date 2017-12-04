@@ -8,7 +8,7 @@ using CsMmdDataIO.Pmx.Data;
 
 namespace CurtainFireMakerPlugin.ShotTypes
 {
-    public class ShotType
+    public abstract class ShotType
     {
         public static List<ShotType> ShotTypeList { get; } = new List<ShotType>();
 
@@ -40,14 +40,14 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public virtual void InitWorld(World world) { }
 
-        public virtual PmxBoneData[] CreateBones(World wolrd, ShotProperty prop) => new PmxBoneData[] { new PmxBoneData() };
+        public abstract PmxBoneData[] CreateBones(World wolrd, ShotProperty prop);
 
-        public virtual PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop) => null;
+        public abstract PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop);
 
-        public virtual string[] CreateTextures(World wolrd, ShotProperty prop) => null;
+        public abstract string[] CreateTextures(World wolrd, ShotProperty prop);
 
-        public virtual int[] CreateVertexIndices(World wolrd, ShotProperty prop) => null;
+        public abstract int[] CreateVertexIndices(World wolrd, ShotProperty prop);
 
-        public virtual PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop) => null;
+        public abstract PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop);
     }
 }
