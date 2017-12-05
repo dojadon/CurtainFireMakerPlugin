@@ -47,7 +47,6 @@ namespace CurtainFireMakerPlugin
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
-            PythonExecutor.ExecuteScriptOnNewScope(Configuration.InitScriptFilePath);
         }
 
         public Guid GUID => new Guid();

@@ -43,17 +43,10 @@ namespace CurtainFireMakerPlugin
             "clr.AddReference(\"MikuMikuPlugin\")\n", RootScope);
         }
 
-        public dynamic ExecuteScriptOnNewScope(string path, Dictionary<string, object> variables = null)
+        public dynamic ExecuteScriptOnNewScope(string path)
         {
             ScriptScope scope = Engine.CreateScope(RootScope);
 
-            if (variables != null)
-            {
-                foreach (var variable in variables)
-                {
-                    scope.SetVariable(variable.Key, variable.Value);
-                }
-            }
             return Engine.ExecuteFile(path, scope);
         }
 
