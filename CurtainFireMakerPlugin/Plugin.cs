@@ -132,7 +132,7 @@ namespace CurtainFireMakerPlugin
                 long time = Environment.TickCount;
 
                 PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "WORLD", world } });
-                PythonExecutor.ExecuteScriptOnNewScope(path);
+                PythonExecutor.ExecuteScriptOnNewScope(Configuration.InitScriptFilePath, path);
 
                 form.Progress.Minimum = 0;
                 form.Progress.Maximum = world.MaxFrame;

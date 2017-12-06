@@ -106,6 +106,7 @@ namespace CurtainFireMakerPlugin.Entities.Models
                 Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
                 Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
                 Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
+                Console.WriteLine("テクスチャ数 : " + String.Format("{0:#,0}", data.TextureFiles.Length));
                 Console.WriteLine("ボーン数 : " + String.Format("{0:#,0}", data.BoneArray.Length));
                 Console.WriteLine("モーフ数 : " + String.Format("{0:#,0}", data.MorphArray.Length));
             }
