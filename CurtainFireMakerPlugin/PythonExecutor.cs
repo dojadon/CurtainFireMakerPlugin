@@ -35,22 +35,17 @@ namespace CurtainFireMakerPlugin
             "# -*- coding: utf-8 -*-\n" +
             "import sys\n" +
             $"sys.path.append(r\"{Application.StartupPath}\\Plugins\")\n" +
-            $"sys.path.append(r\"{Application.StartupPath}\\System\\x64\")\n" +
-            "import clr\n" +
-            "clr.AddReference(\"CurtainFireMakerPlugin\")\n" +
-            "clr.AddReference(\"VecMath\")\n" +
-            "clr.AddReference(\"CsMmdDataIO\")\n" +
-            "clr.AddReference(\"MikuMikuPlugin\")\n", RootScope);
+            $"sys.path.append(r\"{Application.StartupPath}\\System\\x64\")\n", RootScope);
         }
 
-        public void ExecuteScriptOnNewScope(params string[] paths)
+        public void ExecuteScriptOnRootScope(string path)
         {
-            ScriptScope scope = Engine.CreateScope(RootScope);
+            Engine.ExecuteFile(path, RootScope);
+        }
 
-            foreach (string path in paths)
-            {
-                Engine.ExecuteFile(path, scope);
-            }
+        public void ExecuteScriptOnNewScope(string path)
+        {
+            Engine.ExecuteFile(path, RootScope);
         }
 
         public void SetGlobalVariable(Dictionary<string, object> variables)

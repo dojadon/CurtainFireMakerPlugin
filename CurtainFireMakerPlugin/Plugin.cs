@@ -47,6 +47,7 @@ namespace CurtainFireMakerPlugin
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
+            PythonExecutor.ExecuteScriptOnRootScope(Configuration.InitScriptFilePath);
         }
 
         public Guid GUID => new Guid();
@@ -132,7 +133,7 @@ namespace CurtainFireMakerPlugin
                 long time = Environment.TickCount;
 
                 PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "WORLD", world } });
-                PythonExecutor.ExecuteScriptOnNewScope(Configuration.InitScriptFilePath, path);
+                PythonExecutor.ExecuteScriptOnNewScope(path);
 
                 form.Progress.Minimum = 0;
                 form.Progress.Maximum = world.MaxFrame;
