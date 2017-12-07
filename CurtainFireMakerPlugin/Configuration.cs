@@ -59,7 +59,7 @@ namespace CurtainFireMakerPlugin
 
         public static string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker";
         public static string SettingXmlFilePath => PluginRootPath + "\\config.xml";
-        public static string InitScriptFilePath => PluginRootPath + "\\init.py";
+        public static string InitScriptFilePath => PluginRootPath + "\\init_script.py";
         public static string ResourceDirPath => PluginRootPath + "\\Resource";
 
         public Configuration(string path)
