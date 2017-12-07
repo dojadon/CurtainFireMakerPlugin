@@ -9,7 +9,7 @@ using CurtainFireMakerPlugin.ShotTypes;
 using CurtainFireMakerPlugin.IO;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
-using CsMmdDataIO.Vmd.Data;
+using CsMmdDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin
 {

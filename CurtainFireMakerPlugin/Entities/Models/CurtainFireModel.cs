@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using CsMmdDataIO.Pmx.Data;
 using CsMmdDataIO.Pmx;
-using CsMmdDataIO.Vmd.Data;
+using CsMmdDataIO.Pmx;
+using CsMmdDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities.Models
 {
