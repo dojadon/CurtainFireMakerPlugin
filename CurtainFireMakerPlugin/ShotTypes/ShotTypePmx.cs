@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin.ShotTypes
 
         public ShotTypePmx(string path, Vector3 size) : base()
         {
-            path = Configuration.ResourceDirPath + "\\" + path;
+            path = Configuration.ResourceDirPath + path;
 
             using (var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {

@@ -32,7 +32,7 @@ namespace CurtainFireMakerPlugin
             }
             catch (Exception e)
             {
-                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8))
+                using (StreamWriter sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8))
                 {
                     try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
                     sw.WriteLine(e);
@@ -47,7 +47,7 @@ namespace CurtainFireMakerPlugin
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
-            PythonExecutor.ExecuteScriptOnRootScope(Configuration.InitScriptFilePath);
+            PythonExecutor.ExecuteScriptOnRootScope(Config.InitScriptPath);
         }
 
         public Guid GUID => new Guid();
@@ -92,7 +92,7 @@ namespace CurtainFireMakerPlugin
 
                 Task.Factory.StartNew(progressForm.ShowDialog);
 
-                using (StreamWriter sw = new StreamWriter("lastest.log", false, Encoding.UTF8) { AutoFlush = false })
+                using (StreamWriter sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
                 {
                     Console.SetOut(sw);
                     PythonExecutor.SetOut(sw.BaseStream);
@@ -109,7 +109,7 @@ namespace CurtainFireMakerPlugin
                         PythonExecutor.SetOut(standardOutput.BaseStream);
 
                         if (!form.IsDisposed)
-                            progressForm.LogTextBox.Text = File.ReadAllText("lastest.log");
+                            progressForm.LogTextBox.Text = File.ReadAllText(Config.LogPath);
                     }
 
                     if (!Config.KeepLogOpen)
