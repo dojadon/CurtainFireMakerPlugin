@@ -104,7 +104,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\icon.ico" />
+    <EmbeddedResource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CsMmdDataIO\CsMmdDataIO\CsMmdDataIO.csproj">

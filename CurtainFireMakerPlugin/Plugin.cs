@@ -40,7 +40,7 @@ namespace CurtainFireMakerPlugin
             }
 
             var assembly = Assembly.GetExecutingAssembly();
-            var stream = assembly.GetManifestResourceStream("CurtainFireMakerPlugin.Resources.icon.ico");
+            var stream = assembly.GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
             Image = Image.FromStream(stream);
         }
 
