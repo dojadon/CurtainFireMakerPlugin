@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Windows.Forms;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Entities.Models;
 using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.ShotTypes;
-using CurtainFireMakerPlugin.IO;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using CsMmdDataIO.Vmd;
@@ -132,12 +132,26 @@ namespace CurtainFireMakerPlugin
         {
             if (Config.DropPmxFile)
             {
-                FileDropUtil.Drop(Plugin.Instance.ApplicationForm.Handle, new StringCollection() { PmxExportPath });
+                Drop(Plugin.ApplicationForm.Handle, new StringCollection() { PmxExportPath });
             }
 
             if (Config.DropVmdFile && (Config.DropPmxFile || Scene.Models.Count > 0))
             {
-                FileDropUtil.Drop(Plugin.Instance.ApplicationForm.Handle, new StringCollection() { VmdExportPath });
+                Drop(Plugin.ApplicationForm.Handle, new StringCollection() { VmdExportPath });
+            }
+
+            void Drop(IntPtr hWnd, StringCollection filePaths)
+            {
+                Clipboard.Clear();
+                Clipboard.SetFileDropList(filePaths);
+                var data = Clipboard.GetDataObject();
+
+                IDropTarget target = Control.FromHandle(hWnd);
+                DragDropEffects dwEffect = DragDropEffects.Copy | DragDropEffects.Link;
+
+                target.OnDragDrop(new DragEventArgs(data, 0, 0, 0, dwEffect, dwEffect));
+
+                Clipboard.Clear();
             }
         }
 
