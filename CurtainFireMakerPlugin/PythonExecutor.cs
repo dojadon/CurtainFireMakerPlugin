@@ -38,14 +38,15 @@ namespace CurtainFireMakerPlugin
             $"sys.path.append(r\"{Application.StartupPath}\\System\\x64\")\n", RootScope);
         }
 
-        public void ExecuteScriptOnRootScope(string path)
+        public dynamic ExecuteScriptOnRootScope(string path)
         {
-            Engine.ExecuteFile(path, RootScope);
+            return Engine.ExecuteFile(path, RootScope);
         }
 
-        public void ExecuteScriptOnNewScope(string path)
+        public dynamic ExecuteScriptOnNewScope(string path)
         {
-            Engine.ExecuteFile(path, RootScope);
+            var scope = Engine.CreateScope(RootScope);
+            return Engine.ExecuteFile(path, scope);
         }
 
         public void SetGlobalVariable(Dictionary<string, object> variables)
