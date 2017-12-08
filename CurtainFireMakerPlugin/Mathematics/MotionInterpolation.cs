@@ -12,14 +12,16 @@ namespace CurtainFireMakerPlugin.Mathematics
         public int StartFrame { get; }
         public int EndFrame { get; }
         public int Length { get; }
+        public bool IsSync { get; }
 
-        public MotionInterpolation(int startFrame, int length, Vector2 p1, Vector2 p2)
+        public MotionInterpolation(int startFrame, int length, Vector2 p1, Vector2 p2, bool isSync)
         {
             Curve = new CubicBezierCurve(new Vector2(0, 0), p1, p2, new Vector2(1, 1));
 
             StartFrame = startFrame;
             Length = length;
             EndFrame = StartFrame + Length;
+            IsSync = isSync;
         }
 
         public bool Within(int frame)

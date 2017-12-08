@@ -129,6 +129,12 @@ namespace CurtainFireMakerPlugin.Entities
                 if (MotionInterpolation.Within(World.FrameCount))
                 {
                     interpolation = MotionInterpolation.GetChangeAmount(World.FrameCount);
+
+                    if (!MotionInterpolation.Within(World.FrameCount + 1) && MotionInterpolation.IsSync)
+                    {
+                        Velocity *= interpolation;
+                        interpolation = 1.0F;
+                    }
                 }
                 else
                 {
@@ -138,10 +144,10 @@ namespace CurtainFireMakerPlugin.Entities
             Pos += Velocity * interpolation;
         }
 
-        public void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length)
+        public void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
         {
             AddBoneKeyFrame();
-            MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2);
+            MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2, isSyncingVelocity);
         }
 
         protected void RemoveMotionInterpolationCurve()
