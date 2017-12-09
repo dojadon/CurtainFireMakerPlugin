@@ -1,6 +1,5 @@
 ﻿using CsMmdDataIO.Pmx;
 using CsMmdDataIO.Vmd;
-using CurtainFireMakerPlugin.Mathematics;
 using CurtainFireMakerPlugin.ShotTypes;
 using System;
 using VecMath;

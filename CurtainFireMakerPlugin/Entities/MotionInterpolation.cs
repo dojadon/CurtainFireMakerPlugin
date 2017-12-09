@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using VecMath;
 
-namespace CurtainFireMakerPlugin.Mathematics
+namespace CurtainFireMakerPlugin.Entities
 {
     internal class MotionInterpolation
     {

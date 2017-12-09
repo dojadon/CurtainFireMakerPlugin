@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using VecMath;
 using CurtainFireMakerPlugin.Tasks;
-using CurtainFireMakerPlugin.Mathematics;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 
