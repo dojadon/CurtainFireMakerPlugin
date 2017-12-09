@@ -88,8 +88,6 @@
     <Compile Include="PythonExecutor.cs" />
     <Compile Include="Entities\ShotType.cs" />
     <Compile Include="Entities\ShotTypePmx.cs" />
-    <Compile Include="TaskManager.cs" />
-    <Compile Include="Task.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
