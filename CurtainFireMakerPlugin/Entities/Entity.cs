@@ -58,7 +58,7 @@ namespace CurtainFireMakerPlugin.Entities
             ParentEntity = parentEntity;
         }
 
-        internal virtual void Frame()
+        public virtual void Frame()
         {
             UpdateLocalMat();
 

@@ -109,7 +109,7 @@ namespace CurtainFireMakerPlugin.Entities
             AddBoneKeyFrame();
         }
 
-        internal override void Frame()
+        public override void Frame()
         {
             if (Recording.ShouldRecord(this) || World.FrameCount == 0)
             {

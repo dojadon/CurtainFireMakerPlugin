@@ -67,7 +67,6 @@
     <Compile Include="Entities\ModelMaterialCollection.cs" />
     <Compile Include="Entities\ModelMorphCollection.cs" />
     <Compile Include="Entities\ModelVertexCollection.cs" />
-    <Compile Include="Entities\EntityBone.cs" />
     <Compile Include="Mathematics\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotGroupManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
