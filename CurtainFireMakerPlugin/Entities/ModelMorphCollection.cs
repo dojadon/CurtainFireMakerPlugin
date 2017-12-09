@@ -8,7 +8,7 @@ using CsMmdDataIO.Pmx;
 using CsMmdDataIO.Vmd;
 using VecMath;
 
-namespace CurtainFireMakerPlugin.Entities.Models
+namespace CurtainFireMakerPlugin.Entities
 {
     public class ModelMorphCollection
     {

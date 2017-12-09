@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Windows.Forms;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
-using CurtainFireMakerPlugin.Entities.Models;
 using CurtainFireMakerPlugin.Tasks;
 using CurtainFireMakerPlugin.ShotTypes;
 using IronPython.Runtime;

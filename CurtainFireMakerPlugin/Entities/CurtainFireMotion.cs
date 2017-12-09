@@ -7,7 +7,7 @@ using CsMmdDataIO.Pmx;
 using CsMmdDataIO.Vmd;
 using CsMmdDataIO.Vmd;
 
-namespace CurtainFireMakerPlugin.Entities.Models
+namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireMotion
     {

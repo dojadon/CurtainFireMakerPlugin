@@ -7,7 +7,7 @@ using CsMmdDataIO.Pmx;
 using VecMath;
 using System.Collections;
 
-namespace CurtainFireMakerPlugin.Entities.Models
+namespace CurtainFireMakerPlugin.Entities
 {
     public class ModelMaterialCollection
     {

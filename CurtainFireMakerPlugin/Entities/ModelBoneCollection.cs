@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CsMmdDataIO.Pmx;
 
-namespace CurtainFireMakerPlugin.Entities.Models
+namespace CurtainFireMakerPlugin.Entities
 {
     public class ModelBoneCollection
     {
