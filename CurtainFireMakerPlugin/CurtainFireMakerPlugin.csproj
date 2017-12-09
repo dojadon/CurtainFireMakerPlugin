@@ -58,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Recording.cs" />
-    <Compile Include="Entities\CubicBezierCurve.cs" />
     <Compile Include="Collections\MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
@@ -67,7 +66,6 @@
     <Compile Include="Entities\ModelMaterialCollection.cs" />
     <Compile Include="Entities\ModelMorphCollection.cs" />
     <Compile Include="Entities\ModelVertexCollection.cs" />
-    <Compile Include="Entities\MotionInterpolation.cs" />
     <Compile Include="Entities\ShotGroupManager.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
     <Compile Include="Forms\ExportSettingForm.cs">
