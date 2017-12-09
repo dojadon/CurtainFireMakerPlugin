@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CurtainFireMakerPlugin.Collections;
 using CsMmdDataIO.Pmx;
-using VecMath;
-using System.Collections;
 
 namespace CurtainFireMakerPlugin.Entities
 {

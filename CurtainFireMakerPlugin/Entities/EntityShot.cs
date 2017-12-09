@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using CsMmdDataIO.Pmx;
 using CsMmdDataIO.Vmd;
-using CurtainFireMakerPlugin.ShotTypes;
 using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities

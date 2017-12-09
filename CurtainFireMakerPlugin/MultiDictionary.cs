@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CurtainFireMakerPlugin.Collections
+namespace CurtainFireMakerPlugin
 {
     /// <summary>
     /// キーと複数の値のコレクションを表します

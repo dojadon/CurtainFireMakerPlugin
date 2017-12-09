@@ -1,12 +1,10 @@
 ﻿using System;
 using CsMmdDataIO.Pmx;
-using CsMmdDataIO.Pmx;
-using CurtainFireMakerPlugin.Entities;
 using VecMath;
 using System.IO;
 using CsMmdDataIO;
 
-namespace CurtainFireMakerPlugin.ShotTypes
+namespace CurtainFireMakerPlugin.Entities
 {
     public class ShotTypePmx : ShotType
     {

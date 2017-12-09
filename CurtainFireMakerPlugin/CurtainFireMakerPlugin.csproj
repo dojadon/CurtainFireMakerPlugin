@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Recording.cs" />
-    <Compile Include="Collections\MultiDictionary.cs" />
+    <Compile Include="MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
@@ -86,10 +86,10 @@
     <Compile Include="Entities\ShotProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonExecutor.cs" />
-    <Compile Include="ShotTypes\ShotType.cs" />
-    <Compile Include="ShotTypes\ShotTypePmx.cs" />
-    <Compile Include="Tasks\TaskManager.cs" />
-    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Entities\ShotType.cs" />
+    <Compile Include="Entities\ShotTypePmx.cs" />
+    <Compile Include="TaskManager.cs" />
+    <Compile Include="Task.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

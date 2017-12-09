@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using VecMath;
-using CurtainFireMakerPlugin.Tasks;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 
