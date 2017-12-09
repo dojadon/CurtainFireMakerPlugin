@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 using MikuMikuPlugin;
@@ -90,7 +89,7 @@ namespace CurtainFireMakerPlugin
 
                 ProgressForm progressForm = new ProgressForm();
 
-                Task.Factory.StartNew(progressForm.ShowDialog);
+                System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
 
                 using (StreamWriter sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
                 {
