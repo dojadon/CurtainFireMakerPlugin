@@ -86,8 +86,8 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (World.FrameCount > 0)
             {
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1);
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, false);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, false);
             }
             AddBoneKeyFrame();
         }
@@ -97,7 +97,7 @@ namespace CurtainFireMakerPlugin.Entities
             base.OnDeath();
 
             AddBoneKeyFrame(-1);
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 0);
+            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 0, false);
         }
 
         public override void Frame()
@@ -147,7 +147,7 @@ namespace CurtainFireMakerPlugin.Entities
             MotionInterpolation = null;
         }
 
-        public void AddBoneKeyFrame(int frameOffset = 0)
+        public void AddBoneKeyFrame(int frameOffset = 0, bool replace = true)
         {
             var posCurve = CubicBezierCurve.Line;
 
@@ -156,10 +156,10 @@ namespace CurtainFireMakerPlugin.Entities
                 posCurve = MotionInterpolation.Curve;
             }
 
-            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, frameOffset);
+            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, frameOffset, replace);
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset = 0)
+        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset = 0, bool replace = true)
         {
             var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot)
             {
@@ -170,15 +170,15 @@ namespace CurtainFireMakerPlugin.Entities
                 InterpolationPointZ1 = posCurve.P1,
                 InterpolationPointZ2 = posCurve.P2,
             };
-            World.KeyFrames.AddBoneKeyFrame(bone, frame);
+            World.KeyFrames.AddBoneKeyFrame(bone, frame, replace);
         }
 
-        public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset)
+        public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, bool replace = true)
         {
             if (Property.Type.HasMesh)
             {
                 var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + frameOffset, weight);
-                World.KeyFrames.AddMorphKeyFrame(morph, frame);
+                World.KeyFrames.AddMorphKeyFrame(morph, frame, replace);
             }
         }
 

@@ -49,7 +49,7 @@ namespace CurtainFireMakerPlugin.Entities
         public void FinalizeModel()
         {
             Materials.CompressMaterial(Vertices);
-            Morphs.CompressMorph();
+            Morphs.CompressMorph(World.KeyFrames.MorphFrames);
         }
 
         public void GetData(PmxModelData data)

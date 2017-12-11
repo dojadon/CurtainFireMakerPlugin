@@ -18,9 +18,9 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void CompressMorph()
+        public void CompressMorph(IEnumerable<VmdMorphFrameData> morphFrameList)
         {
-            var framesEachMorph = World.KeyFrames.MorphFrameList.ToLookup(f => f.MorphName);
+            var framesEachMorph = morphFrameList.ToLookup(f => f.Name);
 
             foreach (var group in MorphList.ToLookup(m => m.MorphType))
             {

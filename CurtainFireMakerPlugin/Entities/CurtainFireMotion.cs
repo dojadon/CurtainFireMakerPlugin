@@ -8,11 +8,28 @@ using CsMmdDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {
+    class KeyFrameEqualityComparer<T> : IEqualityComparer<T> where T : IElementKeyFrame
+    {
+        public bool Equals(T x, T y)
+        {
+            return x.FrameTime == y.FrameTime && x.Name == y.Name;
+        }
+
+        public int GetHashCode(T obj)
+        {
+            int result = 17;
+            result = result * 23 + obj.FrameTime;
+            result = result * 23 + obj.Name.GetHashCode();
+
+            return result;
+        }
+    }
+
     internal class CurtainFireMotion
     {
-        public List<VmdMotionFrameData> BoneFrameList { get; }
-        public List<VmdMorphFrameData> MorphFrameList { get; }
-        public List<VmdPropertyFrameData> PropertyFrameList { get; }
+        public HashSet<VmdMotionFrameData> BoneFrames { get; }
+        public HashSet<VmdMorphFrameData> MorphFrames { get; }
+        public List<VmdPropertyFrameData> PropertyFrames { get; }
 
         private World World { get; }
 
@@ -20,26 +37,24 @@ namespace CurtainFireMakerPlugin.Entities
         {
             World = world;
 
-            BoneFrameList = new List<VmdMotionFrameData>();
-            MorphFrameList = new List<VmdMorphFrameData>();
-            PropertyFrameList = new List<VmdPropertyFrameData>();
+            BoneFrames = new HashSet<VmdMotionFrameData>(new KeyFrameEqualityComparer<VmdMotionFrameData>());
+            MorphFrames = new HashSet<VmdMorphFrameData>(new KeyFrameEqualityComparer<VmdMorphFrameData>());
+            PropertyFrames = new List<VmdPropertyFrameData>();
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, VmdMotionFrameData frame)
+        public void AddBoneKeyFrame(PmxBoneData bone, VmdMotionFrameData frame, bool replace)
         {
-            if (frame.FrameTime >= 0)
+            if (frame.FrameTime >= 0 && (replace || !BoneFrames.Contains(frame)))
             {
-                BoneFrameList.RemoveAll(f => f.FrameTime == frame.FrameTime && f.BoneName == frame.BoneName);
-                BoneFrameList.Add(frame);
+                BoneFrames.Add(frame);
             }
         }
 
-        public void AddMorphKeyFrame(PmxMorphData morph, VmdMorphFrameData frame)
+        public void AddMorphKeyFrame(PmxMorphData morph, VmdMorphFrameData frame, bool replace)
         {
-            if (frame.FrameTime >= 0)
+            if (frame.FrameTime >= 0 && (replace || !MorphFrames.Contains(frame)))
             {
-                MorphFrameList.RemoveAll(f => f.FrameTime == frame.FrameTime && f.MorphName == frame.MorphName);
-                MorphFrameList.Add(frame);
+                MorphFrames.Add(frame);
             }
         }
 
@@ -47,12 +62,14 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (frame.FrameTime >= 0)
             {
-                PropertyFrameList.Add(frame);
+                PropertyFrames.Add(frame);
             }
         }
 
-        public void Finish()
+        public void FinalizeKeyFrame()
         {
+            var morphNames = World.PmxModel.Morphs.MorphList.Select(m => m.MorphName).ToList();
+            MorphFrames.RemoveWhere(f => !morphNames.Contains(f.Name));
         }
 
         private void ExportVmd(Stream stream)
@@ -62,9 +79,9 @@ namespace CurtainFireMakerPlugin.Entities
             exporter.Export(new VmdMotionData
             {
                 Header = new VmdHeaderData { ModelName = World.ModelName },
-                MotionFrameArray = BoneFrameList.ToArray(),
-                MorphFrameArray = MorphFrameList.ToArray(),
-                PropertyFrameArray = PropertyFrameList.ToArray(),
+                MotionFrameArray = BoneFrames.ToArray(),
+                MorphFrameArray = MorphFrames.ToArray(),
+                PropertyFrameArray = PropertyFrames.ToArray(),
             });
         }
 
