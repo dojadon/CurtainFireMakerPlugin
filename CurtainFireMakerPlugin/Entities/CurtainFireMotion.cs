@@ -110,9 +110,9 @@ namespace CurtainFireMakerPlugin.Entities
             exporter.Export(new VmdMotionData
             {
                 Header = new VmdHeaderData { ModelName = World.ModelName },
-                MotionArray = motionList.ToArray(),
-                MorphArray = morphList.ToArray(),
-                PropertyArray = PropertyFrameList.ToArray(),
+                MotionFrameArray = motionList.ToArray(),
+                MorphFrameArray = morphList.ToArray(),
+                PropertyFrameArray = PropertyFrameList.ToArray(),
             });
         }
 

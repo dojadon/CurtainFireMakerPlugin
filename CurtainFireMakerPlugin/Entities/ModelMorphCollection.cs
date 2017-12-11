@@ -11,7 +11,6 @@ namespace CurtainFireMakerPlugin.Entities
     public class ModelMorphCollection
     {
         public List<PmxMorphData> MorphList { get; } = new List<PmxMorphData>();
-
         public World World { get; }
 
         public ModelMorphCollection(World world)
@@ -19,39 +18,7 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void SetupMaterialMorph(ShotProperty prop, PmxMorphData morph, int materialCount, int appliedMaterialCount)
-        {
-            morph.MorphName = "MO_" + MorphList.Count.ToString();
-            morph.SlotType = MorphSlotType.RIP;
-            morph.MorphType = MorphType.MATERIAL;
-
-            morph.MorphArray = new IPmxMorphTypeData[appliedMaterialCount];
-
-            for (int i = 0; i < appliedMaterialCount; i++)
-            {
-                morph.MorphArray[i] = new PmxMorphMaterialData()
-                {
-                    CalcType = 0,
-                    Ambient = new Vector3(1, 1, 1),
-                    Diffuse = new Vector4(1, 1, 1, 0),
-                    Specular = new Vector3(1, 1, 1),
-                    Shininess = 1.0F,
-                    Edge = new Vector4(1, 1, 1, 1),
-                    EdgeThick = 1.0F,
-                    Texture = new Vector4(1, 1, 1, 1),
-                    SphereTexture = new Vector4(1, 1, 1, 1),
-                    ToonTexture = new Vector4(1, 1, 1, 1),
-                };
-            }
-
-            for (int i = 0; i < appliedMaterialCount; i++)
-            {
-                morph.MorphArray[i].Index = materialCount + i;
-            }
-            MorphList.Add(morph);
-        }
-
-        public void CompressMorph(ModelMaterialCollection materials, ModelVertexCollection vertices)
+        public void CompressMorph()
         {
             var typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
             foreach (var morph in MorphList)
@@ -62,17 +29,6 @@ namespace CurtainFireMakerPlugin.Entities
             foreach (var morphList in typeMorphDict.Values)
             {
                 Compress(morphList, World.KeyFrames.MorphFrameDict);
-            }
-
-            var removeMaterialIndices = new List<int>();
-            removeMaterialIndices.AddRange(materials.CompressMaterial(typeMorphDict[MorphType.MATERIAL], vertices));
-
-            RemoveElements(typeMorphDict[MorphType.MATERIAL], removeMaterialIndices);
-
-            removeMaterialIndices.Sort((a, b) => b - a);
-            foreach (int index in removeMaterialIndices)
-            {
-                materials.MaterialList.RemoveAt(index);
             }
         }
 
@@ -112,24 +68,6 @@ namespace CurtainFireMakerPlugin.Entities
                 morphTypeDataList.AddRange(morph.MorphArray);
             }
             return morphTypeDataList.ToArray();
-        }
-
-        private void RemoveElements(List<PmxMorphData> morphList, List<int> removeIndices)
-        {
-            foreach (var morph in morphList)
-            {
-                var typeList = new List<IPmxMorphTypeData>();
-
-                foreach (var typeMorph in morph.MorphArray)
-                {
-                    if (!removeIndices.Contains(typeMorph.Index))
-                    {
-                        typeMorph.Index -= removeIndices.FindAll(i => i < typeMorph.Index).Count;
-                        typeList.Add(typeMorph);
-                    }
-                }
-                morph.MorphArray = typeList.ToArray();
-            }
         }
     }
 

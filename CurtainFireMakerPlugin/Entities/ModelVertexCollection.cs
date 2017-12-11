@@ -9,8 +9,7 @@ namespace CurtainFireMakerPlugin.Entities
     public class ModelVertexCollection
     {
         public List<PmxVertexData> VertexList { get; } = new List<PmxVertexData>();
-        public List<int> IndexList { get; } = new List<int>();
-        public List<List<int>> IndexOfEachMaterialList { get; } = new List<List<int>>();
+        public List<int> Indices { get; } = new List<int>();
 
         public World World { get; }
 
@@ -19,17 +18,10 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices, IEnumerable<int> faceCount, int boneCount)
+        public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices,int boneCount)
         {
             List<int> convertedIndices = (from index in indices select index + VertexList.Count).ToList();
-            IndexList.AddRange(convertedIndices);
-
-            int total = 0;
-            foreach (int count in faceCount)
-            {
-                IndexOfEachMaterialList.Add(convertedIndices.GetRange(total, count));
-                total += count;
-            }
+            Indices.AddRange(convertedIndices);
 
             foreach (var vertex in vertices)
             {

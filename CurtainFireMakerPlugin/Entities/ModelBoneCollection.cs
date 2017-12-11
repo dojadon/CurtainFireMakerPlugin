@@ -30,13 +30,13 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 PmxBoneData bone = bones[i];
 
-                bone.BoneName = $"B_{(BoneList.Count - 1).ToString()}";
+                bone.BoneName = "B" + (BoneList.Count - 1);
                 bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.OP;
-                bone.BoneId = BoneList.Count + i;
+                bone.BoneId = BoneList.Count;
 
                 if (-1 < bone.ParentId && bone.ParentId < bones.Length)
                 {
-                    bone.ParentId = BoneList.IndexOf(bones[bone.ParentId]);
+                    bone.ParentId = bones[bone.ParentId].BoneId;
                 }
                 else
                 {

@@ -10,9 +10,7 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public HashSet<EntityShot> OwnerEntities { get; } = new HashSet<EntityShot>();
 
-        public PmxMorphData MaterialMorph { get; } = new PmxMorphData();
-
-        public Dictionary<string, PmxMorphData> MorphDict { get; } = new Dictionary<string, PmxMorphData>();
+        public PmxMorphData VertexMorph { get; }
 
         public PmxBoneData[] Bones { get; }
         public PmxVertexData[] Vertices { get; }
@@ -22,8 +20,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotProperty Property { get; }
         public World World { get; }
-
-        private static System.Diagnostics.Stopwatch Stopwatch { get; } = new System.Diagnostics.Stopwatch();
 
         public ShotModelData(World world, ShotProperty property)
         {
@@ -50,7 +46,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddMorph(PmxMorphData morph)
         {
-            MorphDict.Add(morph.MorphName, morph);
             World.PmxModel.Morphs.MorphList.Add(morph);
         }
     }

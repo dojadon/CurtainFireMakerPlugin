@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CsMmdDataIO.Pmx;
+using System.Collections;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class ModelMaterialCollection
+    public class ModelMaterialCollection 
     {
         public List<PmxMaterialData> MaterialList { get; } = new List<PmxMaterialData>();
         public List<string> TextureList { get; } = new List<string>();
@@ -30,7 +31,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = "MA_" + MaterialList.Count.ToString();
+                material.MaterialName = "MA" + MaterialList.Count;
 
                 if (0 <= material.TextureId && material.TextureId < textures.Length)
                 {
@@ -53,29 +54,21 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public List<int> CompressMaterial(List<PmxMorphData> morphList, ModelVertexCollection vertices)
+        public void CompressMaterial(ModelVertexCollection vertices)
         {
-            var groupedMaterialIndices = new List<List<int>>();
-
-            foreach (var morph in morphList)
+            var materialDict = new MultiDictionary<int, int>();
+            for (int i = 0; i < MaterialList.Count; i++)
             {
-                int[] indices = Array.ConvertAll(morph.MorphArray, m => m.Index);
-                Array.Sort(indices);
-
-                var materialDict = new MultiDictionary<int, int>();
-
-                foreach (int index in indices)
-                {
-                    materialDict.Add(GetHashCode(MaterialList[index]), index);
-                }
-
-                foreach (var materialIndices in materialDict.Values)
-                {
-                    groupedMaterialIndices.Add(materialIndices);
-                }
+                materialDict.Add(GetHashCode(MaterialList[i]), i);
             }
 
-            return CompressGroupedMaterial(groupedMaterialIndices, vertices);
+            var removeIndices = CompressGroupedMaterial(materialDict.Values.ToList(), vertices);
+
+            removeIndices.Sort((a, b) => b - a);
+            foreach (int index in removeIndices)
+            {
+                MaterialList.RemoveAt(index);
+            }
 
             int GetHashCode(PmxMaterialData obj)
             {
@@ -94,7 +87,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private List<int> CompressGroupedMaterial(List<List<int>> groupedMaterialIndices, ModelVertexCollection vertices)
         {
-            var vertexIndicesList = vertices.IndexOfEachMaterialList;
+            var vertexIndicesList = CreateVertexIndicesEachMaterial(vertices.Indices);
             var newVertexIndicesList = new List<List<int>>();
 
             var removeList = new List<int>();
@@ -115,14 +108,10 @@ namespace CurtainFireMakerPlugin.Entities
                         vertexIndices.AddRange(vertexIndicesList[index]);
                         removeList.Add(index);
                     }
-
                     MaterialList[materialIndices[0]].FaceCount += addFaceCount;
                 }
                 newVertexIndicesList.Add(vertexIndices);
             }
-
-            World.PmxModel.Vertices.IndexOfEachMaterialList.Clear();
-            World.PmxModel.Vertices.IndexOfEachMaterialList.AddRange(newVertexIndicesList);
 
             var list = new List<int>();
             foreach (var vertexIndices in newVertexIndicesList)
@@ -130,10 +119,23 @@ namespace CurtainFireMakerPlugin.Entities
                 list.AddRange(vertexIndices);
             }
 
-            World.PmxModel.Vertices.IndexList.Clear();
-            World.PmxModel.Vertices.IndexList.AddRange(list);
+            World.PmxModel.Vertices.Indices.Clear();
+            World.PmxModel.Vertices.Indices.AddRange(list);
 
             return removeList;
+        }
+
+        private List<List<int>> CreateVertexIndicesEachMaterial(List<int> vertexIndices)
+        {
+            var vertexIndicesEachMaterial = new List<List<int>>();
+
+            int total = 0;
+            foreach (var material in MaterialList)
+            {
+                vertexIndicesEachMaterial.Add(vertexIndices.GetRange(total, material.FaceCount));
+                total += material.FaceCount;
+            }
+            return vertexIndicesEachMaterial;
         }
     }
 }

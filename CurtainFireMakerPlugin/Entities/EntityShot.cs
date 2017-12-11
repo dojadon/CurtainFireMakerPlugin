@@ -13,7 +13,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotModelData ModelData { get; }
         public PmxBoneData RootBone => ModelData.Bones[0];
-        public PmxMorphData MaterialMorph => ModelData.MaterialMorph;
 
         public IRecording Recording { get; set; } = Entities.Recording.Velocity;
 
@@ -85,17 +84,11 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnSpawn();
 
-            if (World.FrameCount <= 0)
+            if (World.FrameCount > 0)
             {
-                AddMorphKeyFrame(MaterialMorph, -World.FrameCount, 0.0F);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount);
             }
-            else
-            {
-                AddMorphKeyFrame(MaterialMorph, -1, 1.0F);
-                AddMorphKeyFrame(MaterialMorph, 0, 0.0F);
-                AddMorphKeyFrame(MaterialMorph, -World.FrameCount, 1.0F);
-            }
-
             AddBoneKeyFrame();
         }
 
@@ -103,10 +96,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnDeath();
 
-            AddMorphKeyFrame(MaterialMorph, -1, 0.0F);
-            AddMorphKeyFrame(MaterialMorph, 0, 1.0F);
-
             AddBoneKeyFrame();
+            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1);
         }
 
         public override void Frame()
@@ -165,12 +156,12 @@ namespace CurtainFireMakerPlugin.Entities
                 posCurve = MotionInterpolation.Curve;
             }
 
-            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve);
+            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, 0);
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve)
+        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset)
         {
-            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount, pos, rot)
+            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot)
             {
                 InterpolationPointX1 = posCurve.P1,
                 InterpolationPointX2 = posCurve.P2,
@@ -182,7 +173,7 @@ namespace CurtainFireMakerPlugin.Entities
             World.KeyFrames.AddBoneKeyFrame(bone, frame);
         }
 
-        public void AddMorphKeyFrame(PmxMorphData morph, int frameOffset, float weight)
+        public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset)
         {
             if (Property.Type.HasMesh)
             {
@@ -193,15 +184,13 @@ namespace CurtainFireMakerPlugin.Entities
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
-            string morphName = $"V_{MaterialMorph.MorphName}";
-
-            if (!ModelData.MorphDict.ContainsKey(morphName))
+            if (ModelData.VertexMorph != null)
             {
                 var vertices = ModelData.Vertices;
 
                 var morph = new PmxMorphData()
                 {
-                    MorphName = morphName,
+                    MorphName = "V" + EntityId,
                     SlotType = MorphSlotType.RIP,
                     MorphType = MorphType.VERTEX,
                     MorphArray = new IPmxMorphTypeData[vertices.Length]
@@ -219,7 +208,7 @@ namespace CurtainFireMakerPlugin.Entities
                 }
                 ModelData.AddMorph(morph);
             }
-            return ModelData.MorphDict[morphName];
+            return ModelData.VertexMorph;
         }
     }
 

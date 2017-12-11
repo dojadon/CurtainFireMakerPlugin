@@ -41,9 +41,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void SetupShotModelData(ShotModelData data)
         {
-            Vertices.SetupVertices(data.Vertices, data.Indices, from m in data.Materials select m.FaceCount, Bones.BoneList.Count);
-
-            Morphs.SetupMaterialMorph(data.Property, data.MaterialMorph, Materials.MaterialList.Count, data.Materials.Length);
+            Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
 
             Materials.SetupMaterials(data.Property, data.Materials, data.Textures);
 
@@ -52,7 +50,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void FinalizeModel()
         {
-            Morphs.CompressMorph(Materials, Vertices);
+            Materials.CompressMaterial(Vertices);
+            Morphs.CompressMorph();
         }
 
         public void GetData(PmxModelData data)
@@ -79,11 +78,11 @@ namespace CurtainFireMakerPlugin.Entities
             };
 
             data.Header = header;
-            data.VertexIndices = Vertices.IndexList.ToArray();
+            data.VertexIndices = Vertices.Indices.ToArray();
             data.TextureFiles = Materials.TextureList.ToArray();
             data.VertexArray = Vertices.VertexList.ToArray();
             data.MaterialArray = Materials.MaterialList.ToArray();
-            data.BoneArray = Bones.BoneList.ToArray();
+            data.BoneArray= Bones.BoneList.ToArray();
             data.MorphArray = Morphs.MorphList.ToArray();
             data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
         }
