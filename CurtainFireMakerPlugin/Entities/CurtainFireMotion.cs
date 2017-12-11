@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Linq;
 using CsMmdDataIO.Pmx;
 using CsMmdDataIO.Vmd;
 
@@ -28,6 +29,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (frame.FrameTime >= 0)
             {
+                BoneFrameDict[bone].RemoveAll(f => f.FrameTime == frame.FrameTime);
                 BoneFrameDict[bone].Add(frame);
             }
         }
@@ -36,6 +38,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (frame.FrameTime >= 0)
             {
+                MorphFrameDict[morph].RemoveAll(f => f.FrameTime == frame.FrameTime);
                 MorphFrameDict[morph].Add(frame);
             }
         }
@@ -50,68 +53,17 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void Finish()
         {
-            foreach (var key in MorphFrameDict.Keys)
-            {
-                if (!World.PmxModel.Morphs.MorphList.Contains(key)) MorphFrameDict[key].Clear();
-            }
-
-            foreach (var value in BoneFrameDict.Values)
-            {
-                DistinctFrames(value);
-            }
-
-            foreach (var value in MorphFrameDict.Values)
-            {
-                DistinctFrames(value);
-            }
-
-            DistinctFrames(PropertyFrameList);
-        }
-
-        private void DistinctFrames<T>(IList<T> frames) where T : IKeyFrame
-        {
-            var frameNums = new HashSet<long>();
-            var removeList = new List<T>();
-
-            foreach (var frame in frames)
-            {
-                if (!frameNums.Contains(frame.FrameTime))
-                {
-                    frameNums.Add(frame.FrameTime);
-                }
-                else
-                {
-                    removeList.Add(frame);
-                }
-            }
-
-            foreach (var frame in removeList)
-            {
-                frames.Remove(frame);
-            }
         }
 
         private void ExportVmd(Stream stream)
         {
-            var motionList = new List<VmdMotionFrameData>();
-            foreach (var value in BoneFrameDict.Values)
-            {
-                motionList.AddRange(value);
-            }
-
-            var morphList = new List<VmdMorphFrameData>();
-            foreach (var value in MorphFrameDict.Values)
-            {
-                morphList.AddRange(value);
-            }
-
             var exporter = new VmdExporter(stream);
 
             exporter.Export(new VmdMotionData
             {
                 Header = new VmdHeaderData { ModelName = World.ModelName },
-                MotionFrameArray = motionList.ToArray(),
-                MorphFrameArray = morphList.ToArray(),
+                MotionFrameArray = BoneFrameDict.Values.SelectMany(list => list).ToArray(),
+                MorphFrameArray = MorphFrameDict.Values.SelectMany(list => list).ToArray(),
                 PropertyFrameArray = PropertyFrameList.ToArray(),
             });
         }

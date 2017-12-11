@@ -96,8 +96,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnDeath();
 
-            AddBoneKeyFrame();
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1);
+            AddBoneKeyFrame(-1);
+            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 0);
         }
 
         public override void Frame()
@@ -147,7 +147,7 @@ namespace CurtainFireMakerPlugin.Entities
             MotionInterpolation = null;
         }
 
-        public void AddBoneKeyFrame()
+        public void AddBoneKeyFrame(int frameOffset = 0)
         {
             var posCurve = CubicBezierCurve.Line;
 
@@ -156,10 +156,10 @@ namespace CurtainFireMakerPlugin.Entities
                 posCurve = MotionInterpolation.Curve;
             }
 
-            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, 0);
+            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, frameOffset);
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset)
+        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset = 0)
         {
             var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot)
             {
