@@ -10,8 +10,8 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireMotion
     {
-        public MultiDictionary<PmxBoneData, VmdMotionFrameData> BoneFrameDict { get; }
-        public MultiDictionary<PmxMorphData, VmdMorphFrameData> MorphFrameDict { get; }
+        public List<VmdMotionFrameData> BoneFrameList { get; }
+        public List<VmdMorphFrameData> MorphFrameList { get; }
         public List<VmdPropertyFrameData> PropertyFrameList { get; }
 
         private World World { get; }
@@ -20,8 +20,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             World = world;
 
-            BoneFrameDict = new MultiDictionary<PmxBoneData, VmdMotionFrameData>();
-            MorphFrameDict = new MultiDictionary<PmxMorphData, VmdMorphFrameData>();
+            BoneFrameList = new List<VmdMotionFrameData>();
+            MorphFrameList = new List<VmdMorphFrameData>();
             PropertyFrameList = new List<VmdPropertyFrameData>();
         }
 
@@ -29,8 +29,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (frame.FrameTime >= 0)
             {
-                BoneFrameDict[bone].RemoveAll(f => f.FrameTime == frame.FrameTime);
-                BoneFrameDict[bone].Add(frame);
+                BoneFrameList.RemoveAll(f => f.FrameTime == frame.FrameTime && f.BoneName == frame.BoneName);
+                BoneFrameList.Add(frame);
             }
         }
 
@@ -38,8 +38,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (frame.FrameTime >= 0)
             {
-                MorphFrameDict[morph].RemoveAll(f => f.FrameTime == frame.FrameTime);
-                MorphFrameDict[morph].Add(frame);
+                MorphFrameList.RemoveAll(f => f.FrameTime == frame.FrameTime && f.MorphName == frame.MorphName);
+                MorphFrameList.Add(frame);
             }
         }
 
@@ -62,8 +62,8 @@ namespace CurtainFireMakerPlugin.Entities
             exporter.Export(new VmdMotionData
             {
                 Header = new VmdHeaderData { ModelName = World.ModelName },
-                MotionFrameArray = BoneFrameDict.Values.SelectMany(list => list).ToArray(),
-                MorphFrameArray = MorphFrameDict.Values.SelectMany(list => list).ToArray(),
+                MotionFrameArray = BoneFrameList.ToArray(),
+                MorphFrameArray = MorphFrameList.ToArray(),
                 PropertyFrameArray = PropertyFrameList.ToArray(),
             });
         }

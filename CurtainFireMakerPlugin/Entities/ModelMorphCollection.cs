@@ -20,83 +20,55 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void CompressMorph()
         {
-            var typeMorphDict = new MultiDictionary<MorphType, PmxMorphData>();
-            foreach (var morph in MorphList)
-            {
-                typeMorphDict.Add(morph.MorphType, morph);
-            }
+            var framesEachMorph = World.KeyFrames.MorphFrameList.ToLookup(f => f.MorphName);
 
-            foreach (var morphList in typeMorphDict.Values)
+            foreach (var group in MorphList.ToLookup(m => m.MorphType))
             {
-                Compress(morphList, World.KeyFrames.MorphFrameDict);
+                Compress(group, framesEachMorph);
             }
         }
 
-        private void Compress(List<PmxMorphData> morphList, MultiDictionary<PmxMorphData, VmdMorphFrameData> frameDict)
+        private void Compress(IEnumerable<PmxMorphData> morphList, ILookup<string, VmdMorphFrameData> framesEachMorph)
         {
-            var dict = new MultiDictionary<List<int>, PmxMorphData>(new IntegerArrayComparer());
+            var lookupedMorphs = morphList.ToLookup(m => (from f in framesEachMorph[m.MorphName] select f.FrameTime).ToArray(), new IntegerArrayComparer());
 
-            foreach (var morph in morphList)
+            foreach (var group in lookupedMorphs)
             {
-                dict.Add(frameDict[morph].ConvertAll(m => m.FrameTime), morph);
-            }
+                var grouptedMorphs = group.ToList();
 
-            foreach (var key in dict.Keys)
-            {
-                var removeList = dict[key];
-
-                if (removeList.Count > 1)
+                if (grouptedMorphs.Count > 1)
                 {
-                    removeList[0].MorphArray = Compress(removeList);
+                    grouptedMorphs[0].MorphArray = grouptedMorphs.SelectMany(m => m.MorphArray).ToArray();
 
-                    for (int i = 1; i < removeList.Count; i++)
+                    for (int i = 1; i < grouptedMorphs.Count; i++)
                     {
-                        var morph = removeList[i];
-
-                        MorphList.Remove(morph);
-                        morphList.Remove(morph);
+                        MorphList.Remove(grouptedMorphs[i]);
                     }
                 }
             }
         }
-
-        private IPmxMorphTypeData[] Compress(List<PmxMorphData> list)
-        {
-            var morphTypeDataList = new List<IPmxMorphTypeData>();
-            foreach (var morph in list)
-            {
-                morphTypeDataList.AddRange(morph.MorphArray);
-            }
-            return morphTypeDataList.ToArray();
-        }
     }
 
-    class IntegerArrayComparer : IEqualityComparer<List<int>>
+    class IntegerArrayComparer : IEqualityComparer<int[]>
     {
-        public bool Equals(List<int> x, List<int> y)
+        public bool Equals(int[] x, int[] y)
         {
-            if (x.Count != y.Count)
+            if (x.Length != y.Length) return false;
+            for (int i = 0; i < x.Length; i++)
             {
-                return false;
-            }
-            for (int i = 0; i < x.Count; i++)
-            {
-                if (x[i] != y[i])
-                {
-                    return false;
-                }
+                if (x[i] != y[i]) return false;
             }
             return true;
         }
 
-        public int GetHashCode(List<int> obj)
+        public int GetHashCode(int[] obj)
         {
             int result = 17;
-            for (int i = 0; i < obj.Count; i++)
+            foreach (int i in obj)
             {
                 unchecked
                 {
-                    result = result * 23 + obj[i].GetHashCode();
+                    result = result * 23 + i;
                 }
             }
             return result;

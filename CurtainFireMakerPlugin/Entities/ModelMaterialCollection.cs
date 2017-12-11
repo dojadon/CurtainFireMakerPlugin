@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CsMmdDataIO.Pmx;
-using System.Collections;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class ModelMaterialCollection 
+    public class ModelMaterialCollection
     {
         public List<PmxMaterialData> MaterialList { get; } = new List<PmxMaterialData>();
         public List<string> TextureList { get; } = new List<string>();
@@ -29,43 +28,25 @@ namespace CurtainFireMakerPlugin.Entities
                 }
             }
 
+            bool HasTexture(int i) => 0 <= i && i < textures.Length;
+
             foreach (PmxMaterialData material in materials)
             {
                 material.MaterialName = "MA" + MaterialList.Count;
 
-                if (0 <= material.TextureId && material.TextureId < textures.Length)
-                {
-                    material.TextureId = TextureList.IndexOf(textures[material.TextureId]);
-                }
-                else
-                {
-                    material.TextureId = -1;
-                }
+                material.TextureId = HasTexture(material.TextureId) ? TextureList.IndexOf(textures[material.TextureId]) : -1;
+                material.SphereId = HasTexture(material.SphereId) ? TextureList.IndexOf(textures[material.SphereId]) : -1;
 
-                if (0 <= material.SphereId && material.SphereId < textures.Length)
-                {
-                    material.SphereId = TextureList.IndexOf(textures[material.SphereId]);
-                }
-                else
-                {
-                    material.SphereId = -1;
-                }
                 MaterialList.Add(material);
             }
         }
 
         public void CompressMaterial(ModelVertexCollection vertices)
         {
-            var materialDict = new MultiDictionary<int, int>();
-            for (int i = 0; i < MaterialList.Count; i++)
-            {
-                materialDict.Add(GetHashCode(MaterialList[i]), i);
-            }
+            var grouptedMaterialIndices = Enumerable.Range(0, MaterialList.Count).ToLookup(i => GetHashCode(MaterialList[i]));
+            var removedMaterialIndices = CompressGroupedMaterial(from g in grouptedMaterialIndices select g.ToList(), vertices);
 
-            var removeIndices = CompressGroupedMaterial(materialDict.Values.ToList(), vertices);
-
-            removeIndices.Sort((a, b) => b - a);
-            foreach (int index in removeIndices)
+            foreach (int index in removedMaterialIndices.OrderByDescending(i => i))
             {
                 MaterialList.RemoveAt(index);
             }
@@ -85,7 +66,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        private List<int> CompressGroupedMaterial(List<List<int>> groupedMaterialIndices, ModelVertexCollection vertices)
+        private List<int> CompressGroupedMaterial(IEnumerable<List<int>> groupedMaterialIndices, ModelVertexCollection vertices)
         {
             var vertexIndicesList = CreateVertexIndicesEachMaterial(vertices.Indices);
             var newVertexIndicesList = new List<List<int>>();

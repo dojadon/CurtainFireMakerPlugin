@@ -20,8 +20,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices,int boneCount)
         {
-            List<int> convertedIndices = (from index in indices select index + VertexList.Count).ToList();
-            Indices.AddRange(convertedIndices);
+            Indices.AddRange(from i in indices select i + VertexList.Count);
 
             foreach (var vertex in vertices)
             {

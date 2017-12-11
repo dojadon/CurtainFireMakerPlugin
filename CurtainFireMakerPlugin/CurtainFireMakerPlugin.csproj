@@ -58,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Recording.cs" />
-    <Compile Include="MultiDictionary.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
