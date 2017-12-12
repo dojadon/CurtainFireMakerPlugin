@@ -72,17 +72,15 @@ namespace CurtainFireMakerPlugin.Entities
             MorphFrames.RemoveWhere(f => !morphNames.Contains(f.Name));
         }
 
-        private void ExportVmd(Stream stream)
+        private VmdMotionData CreateVmdMotionData()
         {
-            var exporter = new VmdExporter(stream);
-
-            exporter.Export(new VmdMotionData
+            return new VmdMotionData
             {
                 Header = new VmdHeaderData { ModelName = World.ModelName },
                 MotionFrameArray = BoneFrames.ToArray(),
                 MorphFrameArray = MorphFrames.ToArray(),
                 PropertyFrameArray = PropertyFrames.ToArray(),
-            });
+            };
         }
 
         public void Export()
@@ -92,7 +90,8 @@ namespace CurtainFireMakerPlugin.Entities
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
             {
-                ExportVmd(stream);
+                var data = CreateVmdMotionData();
+                VmdExporter.Export(data, stream);
             }
         }
     }

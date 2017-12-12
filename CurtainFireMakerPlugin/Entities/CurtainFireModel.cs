@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
             else
             {
-                Bones.SetupBone(data, data.Bones[0]);
+                Bones.SetupBone(data, data.Bones);
             }
         }
 
@@ -52,7 +52,7 @@ namespace CurtainFireMakerPlugin.Entities
             Morphs.CompressMorph(World.KeyFrames.MorphFrames);
         }
 
-        public void GetData(PmxModelData data)
+        public PmxModelData CreatePmxModelData()
         {
             var header = new PmxHeaderData
             {
@@ -75,14 +75,17 @@ namespace CurtainFireMakerPlugin.Entities
                 Indices = Enumerable.Range(0, Morphs.MorphList.Count).ToArray()
             };
 
-            data.Header = header;
-            data.VertexIndices = Vertices.Indices.ToArray();
-            data.TextureFiles = Materials.TextureList.ToArray();
-            data.VertexArray = Vertices.VertexList.ToArray();
-            data.MaterialArray = Materials.MaterialList.ToArray();
-            data.BoneArray= Bones.BoneList.ToArray();
-            data.MorphArray = Morphs.MorphList.ToArray();
-            data.SlotArray = new PmxSlotData[] { boneSlot, morphSlot };
+            return new PmxModelData
+            {
+                Header = header,
+                VertexIndices = Vertices.Indices.ToArray(),
+                TextureFiles = Materials.TextureList.ToArray(),
+                VertexArray = Vertices.VertexList.ToArray(),
+                MaterialArray = Materials.MaterialList.ToArray(),
+                BoneArray = Bones.BoneList.ToArray(),
+                MorphArray = Morphs.MorphList.ToArray(),
+                SlotArray = new PmxSlotData[] { boneSlot, morphSlot },
+            };
         }
 
         public void Export()
@@ -92,20 +95,16 @@ namespace CurtainFireMakerPlugin.Entities
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
             {
-                var exporter = new PmxExporter(stream);
-
-                var data = new PmxModelData();
-                GetData(data);
-
-                exporter.Export(data);
+                var data = CreatePmxModelData();
+                PmxExporter.Export(data, stream);
 
                 Console.WriteLine("出力完了 : " + World.ExportFileName);
-                Console.WriteLine("頂点数 : " + String.Format("{0:#,0}", data.VertexArray.Length));
-                Console.WriteLine("面数 : " + String.Format("{0:#,0}", data.VertexIndices.Length / 3));
-                Console.WriteLine("材質数 : " + String.Format("{0:#,0}", data.MaterialArray.Length));
-                Console.WriteLine("テクスチャ数 : " + String.Format("{0:#,0}", data.TextureFiles.Length));
-                Console.WriteLine("ボーン数 : " + String.Format("{0:#,0}", data.BoneArray.Length));
-                Console.WriteLine("モーフ数 : " + String.Format("{0:#,0}", data.MorphArray.Length));
+                Console.WriteLine("頂点数 : " + string.Format("{0:#,0}", data.VertexArray.Length));
+                Console.WriteLine("面数 : " + string.Format("{0:#,0}", data.VertexIndices.Length / 3));
+                Console.WriteLine("材質数 : " + string.Format("{0:#,0}", data.MaterialArray.Length));
+                Console.WriteLine("テクスチャ数 : " + string.Format("{0:#,0}", data.TextureFiles.Length));
+                Console.WriteLine("ボーン数 : " + string.Format("{0:#,0}", data.BoneArray.Length));
+                Console.WriteLine("モーフ数 : " + string.Format("{0:#,0}", data.MorphArray.Length));
             }
         }
     }

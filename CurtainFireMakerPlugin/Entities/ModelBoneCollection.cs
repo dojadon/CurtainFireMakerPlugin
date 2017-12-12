@@ -26,15 +26,15 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void SetupBone(ShotModelData data, params PmxBoneData[] bones)
         {
-            foreach(var bone in bones)
+            foreach (var bone in bones)
             {
                 bone.BoneName = "B" + (BoneList.Count - 1);
                 bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.OP;
                 bone.BoneId = BoneList.Count;
 
-                if (-1 < bone.ParentId && bone.ParentId < bones.Length)
+                if (-1 < bone.ParentId && bone.ParentId < bones.Length - 1)
                 {
-                    bone.ParentId = BoneList.IndexOf(bones[bone.ParentId]);
+                    bone.ParentId = bones[bone.ParentId].BoneId;
                 }
                 else
                 {

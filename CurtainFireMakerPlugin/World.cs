@@ -119,8 +119,8 @@ namespace CurtainFireMakerPlugin
             PmxModel.FinalizeModel();
             KeyFrames.FinalizeKeyFrame();
 
-            KeyFrames.Export();
             PmxModel.Export();
+            KeyFrames.Export();
 
             OnExport(EventArgs.Empty);
         }
