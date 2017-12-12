@@ -129,7 +129,8 @@ namespace CurtainFireMakerPlugin.Entities
                 }
                 else
                 {
-                    RemoveMotionInterpolationCurve();
+                    AddBoneKeyFrame();
+                    MotionInterpolation = null;
                 }
             }
             Pos += Velocity * interpolation;
@@ -141,12 +142,6 @@ namespace CurtainFireMakerPlugin.Entities
             MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2, isSyncingVelocity);
         }
 
-        protected void RemoveMotionInterpolationCurve()
-        {
-            AddBoneKeyFrame();
-            MotionInterpolation = null;
-        }
-
         public void AddBoneKeyFrame(int frameOffset = 0, bool replace = true)
         {
             var posCurve = CubicBezierCurve.Line;
@@ -155,21 +150,15 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 posCurve = MotionInterpolation.Curve;
             }
-
             AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, frameOffset, replace);
         }
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset = 0, bool replace = true)
         {
-            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot)
-            {
-                InterpolationPointX1 = posCurve.P1,
-                InterpolationPointX2 = posCurve.P2,
-                InterpolationPointY1 = posCurve.P1,
-                InterpolationPointY2 = posCurve.P2,
-                InterpolationPointZ1 = posCurve.P1,
-                InterpolationPointZ2 = posCurve.P2,
-            };
+            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot);
+            frame.InterpolationPointX1 = frame.InterpolationPointY1 = frame.InterpolationPointZ1 = posCurve.P1;
+            frame.InterpolationPointX2 = frame.InterpolationPointY2 = frame.InterpolationPointZ2 = posCurve.P2;
+
             World.KeyFrames.AddBoneKeyFrame(bone, frame, replace);
         }
 
@@ -184,31 +173,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
-            if (ModelData.VertexMorph != null)
-            {
-                var vertices = ModelData.Vertices;
-
-                var morph = new PmxMorphData()
-                {
-                    MorphName = "V" + EntityId,
-                    SlotType = MorphSlotType.RIP,
-                    MorphType = MorphType.VERTEX,
-                    MorphArray = new IPmxMorphTypeData[vertices.Length]
-                };
-
-                for (int i = 0; i < morph.MorphArray.Length; i++)
-                {
-                    var vertex = vertices[i];
-                    var vertexMorph = new PmxMorphVertexData()
-                    {
-                        Index = vertex.VertexId,
-                        Position = func(vertex.Pos)
-                    };
-                    morph.MorphArray[i] = vertexMorph;
-                }
-                ModelData.AddMorph(morph);
-            }
-            return ModelData.VertexMorph;
+            return ModelData.CreateVertexMorph("V" + EntityId, func);
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CsMmdDataIO.Pmx;
+using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -10,7 +11,7 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public HashSet<EntityShot> OwnerEntities { get; } = new HashSet<EntityShot>();
 
-        public PmxMorphData VertexMorph { get; }
+        public PmxMorphData VertexMorph { get; set; }
 
         public PmxBoneData[] Bones { get; }
         public PmxVertexData[] Vertices { get; }
@@ -42,6 +43,33 @@ namespace CurtainFireMakerPlugin.Entities
                 Materials = new PmxMaterialData[0];
                 Textures = new string[0];
             }
+        }
+
+        public PmxMorphData CreateVertexMorph(string morphName, Func<Vector3, Vector3> func)
+        {
+            if (VertexMorph == null)
+            {
+                VertexMorph = new PmxMorphData()
+                {
+                    MorphName = "V" + morphName,
+                    SlotType = MorphSlotType.RIP,
+                    MorphType = MorphType.VERTEX,
+                    MorphArray = new IPmxMorphTypeData[Vertices.Length]
+                };
+
+                for (int i = 0; i < VertexMorph.MorphArray.Length; i++)
+                {
+                    var vertex = Vertices[i];
+                    var vertexMorph = new PmxMorphVertexData()
+                    {
+                        Index = vertex.VertexId,
+                        Position = func(vertex.Pos)
+                    };
+                    VertexMorph.MorphArray[i] = vertexMorph;
+                }
+                AddMorph(VertexMorph);
+            }
+            return VertexMorph;
         }
 
         public void AddMorph(PmxMorphData morph)

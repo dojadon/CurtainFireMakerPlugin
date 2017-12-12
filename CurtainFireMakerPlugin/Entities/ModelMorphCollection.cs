@@ -30,19 +30,19 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void Compress(IEnumerable<PmxMorphData> morphList, ILookup<string, VmdMorphFrameData> framesEachMorph)
         {
-            var lookupedMorphs = morphList.ToLookup(m => (from f in framesEachMorph[m.MorphName] select f.FrameTime).ToArray(), new IntegerArrayComparer());
+            var groupedMorphs = morphList.ToLookup(m => (from f in framesEachMorph[m.MorphName] select f.FrameTime).ToArray(), new IntegerArrayComparer());
 
-            foreach (var group in lookupedMorphs)
+            foreach (var group in groupedMorphs)
             {
-                var grouptedMorphs = group.ToList();
+                var morphs = group.ToList();
 
-                if (grouptedMorphs.Count > 1)
+                if (morphs.Count > 1)
                 {
-                    grouptedMorphs[0].MorphArray = grouptedMorphs.SelectMany(m => m.MorphArray).ToArray();
+                    morphs[0].MorphArray = morphs.SelectMany(m => m.MorphArray).ToArray();
 
-                    for (int i = 1; i < grouptedMorphs.Count; i++)
+                    for (int i = 1; i < morphs.Count; i++)
                     {
-                        MorphList.Remove(grouptedMorphs[i]);
+                        MorphList.Remove(morphs[i]);
                     }
                 }
             }
