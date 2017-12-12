@@ -18,10 +18,9 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices,int boneCount)
+        public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices, int boneCount)
         {
             Indices.AddRange(from i in indices select i + VertexList.Count);
-
             foreach (var vertex in vertices)
             {
                 vertex.VertexId = VertexList.Count;

@@ -69,41 +69,21 @@ namespace CurtainFireMakerPlugin.Entities
         private List<int> CompressGroupedMaterial(IEnumerable<List<int>> groupedMaterialIndices, ModelVertexCollection vertices)
         {
             var vertexIndicesList = CreateVertexIndicesEachMaterial(vertices.Indices);
-            var newVertexIndicesList = new List<List<int>>();
+            vertices.Indices.Clear();
 
-            var removeList = new List<int>();
+            var removedMaterialIndices = new List<int>();
 
             foreach (var materialIndices in groupedMaterialIndices)
             {
-                var vertexIndices = vertexIndicesList[materialIndices[0]];
+                vertices.Indices.AddRange(materialIndices.SelectMany(i => vertexIndicesList[materialIndices[i]]));
 
                 if (materialIndices.Count > 1)
                 {
-                    int addFaceCount = 0;
-
-                    for (int i = 1; i < materialIndices.Count; i++)
-                    {
-                        int index = materialIndices[i];
-
-                        addFaceCount += MaterialList[index].FaceCount;
-                        vertexIndices.AddRange(vertexIndicesList[index]);
-                        removeList.Add(index);
-                    }
-                    MaterialList[materialIndices[0]].FaceCount += addFaceCount;
+                    removedMaterialIndices.AddRange(materialIndices.GetRange(1, materialIndices.Count));
+                    MaterialList[materialIndices[0]].FaceCount = materialIndices.Sum(i => MaterialList[materialIndices[i]].FaceCount);
                 }
-                newVertexIndicesList.Add(vertexIndices);
             }
-
-            var list = new List<int>();
-            foreach (var vertexIndices in newVertexIndicesList)
-            {
-                list.AddRange(vertexIndices);
-            }
-
-            World.PmxModel.Vertices.Indices.Clear();
-            World.PmxModel.Vertices.Indices.AddRange(list);
-
-            return removeList;
+            return removedMaterialIndices;
         }
 
         private List<List<int>> CreateVertexIndicesEachMaterial(List<int> vertexIndices)

@@ -29,21 +29,16 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (data.Property.Type.HasMesh)
             {
-                SetupShotModelData(data);
+                SetupMeshData(data);
             }
-            else
-            {
-                Bones.SetupBone(data, data.Bones);
-            }
+            Bones.SetupBone(data, data.Bones);
         }
 
-        private void SetupShotModelData(ShotModelData data)
+        private void SetupMeshData(ShotModelData data)
         {
             Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
 
             Materials.SetupMaterials(data.Property, data.Materials, data.Textures);
-
-            Bones.SetupBone(data, data.Bones);
         }
 
         public void FinalizeModel()

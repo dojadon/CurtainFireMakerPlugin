@@ -20,36 +20,28 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void CompressMorph(IEnumerable<VmdMorphFrameData> morphFrameList)
         {
-            var framesEachMorph = morphFrameList.ToLookup(f => f.Name);
+            var framesEachMorph = morphFrameList.ToLookup(f => f.Name, f => f.FrameTime).ToDictionary(g => g.Key, g => g.ToArray());
 
-            foreach (var group in MorphList.ToLookup(m => m.MorphType))
+            foreach(var removedMorph in MorphList.ToLookup(m => m.MorphType).SelectMany(g => Grouping(g, framesEachMorph)))
             {
-                Compress(group, framesEachMorph);
+                MorphList.Remove(removedMorph);
             }
         }
 
-        private void Compress(IEnumerable<PmxMorphData> morphList, ILookup<string, VmdMorphFrameData> framesEachMorph)
+        private IEnumerable<PmxMorphData> Grouping(IEnumerable<PmxMorphData> morphList, Dictionary<string, int[]> framesEachMorph)
         {
-            var groupedMorphs = morphList.ToLookup(m => (from f in framesEachMorph[m.MorphName] select f.FrameTime).ToArray(), new IntegerArrayComparer());
+            var removedMorphs = new List<PmxMorphData>();
 
-            foreach (var group in groupedMorphs)
+            foreach (var group in morphList.ToLookup(m => framesEachMorph[m.MorphName], new IntArrayComparer()).Where(g => g.Count() > 1))
             {
-                var morphs = group.ToList();
-
-                if (morphs.Count > 1)
-                {
-                    morphs[0].MorphArray = morphs.SelectMany(m => m.MorphArray).ToArray();
-
-                    for (int i = 1; i < morphs.Count; i++)
-                    {
-                        MorphList.Remove(morphs[i]);
-                    }
-                }
+                group.First().MorphArray = group.SelectMany(m => m.MorphArray).ToArray();
+                removedMorphs.AddRange(group.Skip(1));
             }
+            return removedMorphs;
         }
     }
 
-    class IntegerArrayComparer : IEqualityComparer<int[]>
+    class IntArrayComparer : IEqualityComparer<int[]>
     {
         public bool Equals(int[] x, int[] y)
         {
