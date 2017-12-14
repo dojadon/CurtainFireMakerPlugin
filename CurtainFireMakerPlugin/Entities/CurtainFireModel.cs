@@ -31,19 +31,19 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 SetupMeshData(data);
             }
-            Bones.SetupBone(data, data.Bones);
+            Bones.SetupBone(data.Bones);
         }
 
         private void SetupMeshData(ShotModelData data)
         {
-            Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
+            Vertices.SetupVertices(data.Vertices, data.Indices, Bones);
 
             Materials.SetupMaterials(data.Property, data.Materials, data.Textures);
         }
 
         public void FinalizeModel()
         {
-            Materials.CompressMaterial(Vertices);
+            Materials.CompressMaterial(Vertices.Indices);
             Morphs.CompressMorph(World.KeyFrames.MorphFrames);
         }
 

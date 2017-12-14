@@ -41,14 +41,14 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public void CompressMaterial(ModelVertexCollection vertices)
+        public void CompressMaterial(List<int> vertexIndices)
         {
             var grouptedMaterialIndices = Enumerable.Range(0, MaterialList.Count).ToLookup(i => GetHashCode(MaterialList[i]));
-            var removedMaterialIndices = CompressGroupedMaterial(from g in grouptedMaterialIndices select g.ToList(), vertices);
+            var removedMaterialIndices = CompressGroupedMaterial(grouptedMaterialIndices, vertexIndices);
 
-            foreach (int index in removedMaterialIndices.OrderByDescending(i => i))
+            foreach (int removedMaterialIndex in removedMaterialIndices.OrderByDescending(i => i))
             {
-                MaterialList.RemoveAt(index);
+                MaterialList.RemoveAt(removedMaterialIndex);
             }
 
             int GetHashCode(PmxMaterialData obj)
@@ -66,35 +66,34 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        private List<int> CompressGroupedMaterial(IEnumerable<List<int>> groupedMaterialIndices, ModelVertexCollection vertices)
+        private IEnumerable<int> CompressGroupedMaterial(IEnumerable<IEnumerable<int>> groupedMaterialIndices, List<int> vertexIndices)
         {
-            var vertexIndicesList = CreateVertexIndicesEachMaterial(vertices.Indices);
-            vertices.Indices.Clear();
+            var vertexIndicesEachMaterial = CreateVertexIndicesEachMaterial(vertexIndices);
+            vertexIndices.Clear();
 
             var removedMaterialIndices = new List<int>();
 
             foreach (var materialIndices in groupedMaterialIndices)
             {
-                vertices.Indices.AddRange(materialIndices.SelectMany(i => vertexIndicesList[materialIndices[i]]));
+                vertexIndices.AddRange(materialIndices.SelectMany(i => vertexIndicesEachMaterial[i]));
 
-                if (materialIndices.Count > 1)
+                if (materialIndices.Count() > 1)
                 {
-                    removedMaterialIndices.AddRange(materialIndices.GetRange(1, materialIndices.Count));
-                    MaterialList[materialIndices[0]].FaceCount = materialIndices.Sum(i => MaterialList[materialIndices[i]].FaceCount);
+                    removedMaterialIndices.AddRange(materialIndices.Skip(1));
+                    MaterialList[materialIndices.First()].FaceCount = materialIndices.Sum(i => MaterialList[i].FaceCount);
                 }
             }
             return removedMaterialIndices;
         }
 
-        private List<List<int>> CreateVertexIndicesEachMaterial(List<int> vertexIndices)
+        private List<IEnumerable<int>> CreateVertexIndicesEachMaterial(IEnumerable<int> vertexIndices)
         {
-            var vertexIndicesEachMaterial = new List<List<int>>();
+            var vertexIndicesEachMaterial = new List<IEnumerable<int>>();
 
-            int total = 0;
             foreach (var material in MaterialList)
             {
-                vertexIndicesEachMaterial.Add(vertexIndices.GetRange(total, material.FaceCount));
-                total += material.FaceCount;
+                vertexIndicesEachMaterial.Add(vertexIndices.Take(material.FaceCount));
+                vertexIndices = vertexIndices.Skip(material.FaceCount);
             }
             return vertexIndicesEachMaterial;
         }

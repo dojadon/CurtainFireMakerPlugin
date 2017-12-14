@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin.Entities
             BoneList.Add(centerBone);
         }
 
-        public void SetupBone(ShotModelData data, params PmxBoneData[] bones)
+        public void SetupBone(params PmxBoneData[] bones)
         {
             foreach (var bone in bones)
             {
