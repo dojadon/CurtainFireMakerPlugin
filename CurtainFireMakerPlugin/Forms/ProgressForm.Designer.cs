@@ -30,8 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressForm));
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.logTextBox = new System.Windows.Forms.TextBox();
             this.label = new System.Windows.Forms.Label();
+            this.logTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // progressBar
@@ -42,6 +42,14 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(500, 23);
             this.progressBar.TabIndex = 0;
+            // 
+            // label
+            // 
+            this.label.AutoSize = true;
+            this.label.Location = new System.Drawing.Point(12, 13);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(0, 12);
+            this.label.TabIndex = 2;
             // 
             // logTextBox
             // 
@@ -58,14 +66,6 @@
             this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.logTextBox.Size = new System.Drawing.Size(500, 228);
             this.logTextBox.TabIndex = 1;
-            // 
-            // label
-            // 
-            this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(12, 13);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(0, 12);
-            this.label.TabIndex = 2;
             // 
             // ProgressForm
             // 
@@ -90,7 +90,7 @@
         #endregion
 
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.TextBox logTextBox;
         private System.Windows.Forms.Label label;
+        private System.Windows.Forms.TextBox logTextBox;
     }
 }

@@ -44,7 +44,7 @@ namespace CurtainFireMakerPlugin.Entities
         public void CompressMaterial(List<int> vertexIndices)
         {
             var grouptedMaterialIndices = Enumerable.Range(0, MaterialList.Count).ToLookup(i => GetHashCode(MaterialList[i]));
-            var removedMaterialIndices = CompressGroupedMaterial(grouptedMaterialIndices, vertexIndices);
+            var removedMaterialIndices = CompressGroupedMaterial(grouptedMaterialIndices.Select(g => g.ToArray()), vertexIndices);
 
             foreach (int removedMaterialIndex in removedMaterialIndices.OrderByDescending(i => i))
             {
@@ -66,18 +66,20 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        private IEnumerable<int> CompressGroupedMaterial(IEnumerable<IEnumerable<int>> groupedMaterialIndices, List<int> vertexIndices)
+        private IEnumerable<int> CompressGroupedMaterial(IEnumerable<int[]> groupedMaterialIndices, List<int> vertexIndices)
         {
             var vertexIndicesEachMaterial = CreateVertexIndicesEachMaterial(vertexIndices);
             vertexIndices.Clear();
 
             var removedMaterialIndices = new List<int>();
 
+            long time = Environment.TickCount;
+
             foreach (var materialIndices in groupedMaterialIndices)
             {
                 vertexIndices.AddRange(materialIndices.SelectMany(i => vertexIndicesEachMaterial[i]));
 
-                if (materialIndices.Count() > 1)
+                if (materialIndices.Length > 1)
                 {
                     removedMaterialIndices.AddRange(materialIndices.Skip(1));
                     MaterialList[materialIndices.First()].FaceCount = materialIndices.Sum(i => MaterialList[i].FaceCount);
@@ -86,14 +88,15 @@ namespace CurtainFireMakerPlugin.Entities
             return removedMaterialIndices;
         }
 
-        private List<IEnumerable<int>> CreateVertexIndicesEachMaterial(IEnumerable<int> vertexIndices)
+        private List<List<int>> CreateVertexIndicesEachMaterial(List<int> vertexIndices)
         {
-            var vertexIndicesEachMaterial = new List<IEnumerable<int>>();
+            var vertexIndicesEachMaterial = new List<List<int>>();
 
+            int total = 0;
             foreach (var material in MaterialList)
             {
-                vertexIndicesEachMaterial.Add(vertexIndices.Take(material.FaceCount));
-                vertexIndices = vertexIndices.Skip(material.FaceCount);
+                vertexIndicesEachMaterial.Add(vertexIndices.GetRange(total, material.FaceCount));
+                total += material.FaceCount;
             }
             return vertexIndicesEachMaterial;
         }

@@ -31,15 +31,14 @@ namespace CurtainFireMakerPlugin
             }
             catch (Exception e)
             {
-                using (StreamWriter sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8))
+                using (var sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
                 {
                     try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
                     sw.WriteLine(e);
                 }
             }
 
-            var assembly = Assembly.GetExecutingAssembly();
-            var stream = assembly.GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
             Image = Image.FromStream(stream);
         }
 
@@ -87,91 +86,83 @@ namespace CurtainFireMakerPlugin
                 Config.DropPmxFile = form.DropPmxFile;
                 Config.DropVmdFile = form.DropVmdFile;
 
-                ProgressForm progressForm = new ProgressForm();
-
-                System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
-
-                using (StreamWriter sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
-                {
-                    Console.SetOut(sw);
-                    PythonExecutor.SetOut(sw.BaseStream);
-
-                    RunScript(Config.ScriptPath, progressForm, Finalize);
-
-                    void Finalize()
-                    {
-                        sw.Flush();
-                        sw.Dispose();
-
-                        StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
-                        Console.SetOut(standardOutput);
-                        PythonExecutor.SetOut(standardOutput.BaseStream);
-
-                        if (!form.IsDisposed)
-                            progressForm.LogTextBox.Text = File.ReadAllText(Config.LogPath);
-                    }
-
-                    if (!Config.KeepLogOpen)
-                    {
-                        progressForm.Dispose();
-                    }
-                }
+                GenerateCurainFire();
             }
         }
 
-        private void RunScript(string path, ProgressForm form, Action finalize)
+        private void GenerateCurainFire()
         {
-            var world = new World(this, Path.GetFileNameWithoutExtension(Config.ScriptPath));
+            ProgressForm progressForm = new ProgressForm();
+
+            System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
+
+            using (var sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
+            {
+                Console.SetOut(sw);
+                PythonExecutor.SetOut(sw.BaseStream);
+
+                try
+                {
+                    var world = new World(this, Path.GetFileNameWithoutExtension(Config.ScriptPath));
+
+                    if (RunWorld(world, progressForm))
+                    {
+                        Finalize();
+
+                        try { world.DropFileToMMM(); } catch { }
+                    }
+                }
+                catch (Exception e)
+                {
+                    try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                    sw.WriteLine(e);
+
+                    Finalize();
+                }
+
+                void Finalize()
+                {
+                    sw.Flush();
+                    sw.Dispose();
+
+                    if (!progressForm.IsDisposed)
+                        progressForm.LogText = File.ReadAllText(Config.LogPath);
+                }
+            }
+
+            if (!Config.KeepLogOpen)
+            {
+                progressForm.Dispose();
+            }
+        }
+
+        private bool RunWorld(World world, ProgressForm form)
+        {
+            bool isNeededDroping = false;
 
             world.InitPre();
 
-            bool dropFlag = false;
+            PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "WORLD", world } });
+            PythonExecutor.ExecuteScriptOnNewScope(Config.ScriptPath);
 
-            try
+            world.InitPost();
+
+            form.ProgressBar.Minimum = 0;
+            form.ProgressBar.Maximum = world.MaxFrame;
+            form.ProgressBar.Step = 1;
+
+            for (int i = 0; i < world.MaxFrame && form.DialogResult != DialogResult.Cancel; i++)
             {
-                long time = Environment.TickCount;
-
-                PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "WORLD", world } });
-                PythonExecutor.ExecuteScriptOnNewScope(path);
-
-                form.Progress.Minimum = 0;
-                form.Progress.Maximum = world.MaxFrame;
-                form.Progress.Step = 1;
-
-                world.InitPost();
-
-                for (int i = 0; i < world.MaxFrame; i++)
-                {
-                    world.Frame();
-                    form.Progress.PerformStep();
-
-                    if (form.DialogResult == DialogResult.Cancel)
-                    {
-                        break;
-                    }
-                }
-
-                if (form.DialogResult != DialogResult.Cancel)
-                {
-                    world.Export();
-                    dropFlag = true;
-                }
-                Console.WriteLine($"{Environment.TickCount - time}ms");
-            }
-            catch (Exception e)
-            {
-                try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                finalize();
+                world.Frame();
+                form.ProgressBar.PerformStep();
             }
 
-            if (dropFlag)
+            if ((isNeededDroping = form.DialogResult != DialogResult.Cancel))
             {
-                try { world.DropFileToMMM(); } catch { }
+                world.Export();
             }
+
+            return isNeededDroping;
         }
     }
 }

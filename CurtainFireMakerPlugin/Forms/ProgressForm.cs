@@ -1,12 +1,13 @@
 ﻿using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin.Forms
 {
     public partial class ProgressForm : Form
     {
-        public ProgressBar Progress => progressBar;
-        public TextBox LogTextBox => logTextBox;
+        public ProgressBar ProgressBar => progressBar;
+        public string LogText { get => logTextBox.Text; set => logTextBox.Text = value; }
 
         public ProgressForm()
         {
