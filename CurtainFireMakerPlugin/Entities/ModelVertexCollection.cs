@@ -18,13 +18,13 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices, ModelBoneCollection bones)
+        public void SetupVertices(PmxVertexData[] vertices, IEnumerable<int> indices, int boneCount)
         {
-            Indices.AddRange(from i in indices select i + VertexList.Count);
+            Indices.AddRange(indices.Select(i => i + VertexList.Count));
             foreach (var vertex in vertices)
             {
                 vertex.VertexId = VertexList.Count;
-                for (int i = 0; i < vertex.BoneId.Length; i++) vertex.BoneId[i] += bones.BoneList.Count;
+                for (int i = 0; i < vertex.BoneId.Length; i++) vertex.BoneId[i] += boneCount;
                 VertexList.Add(vertex);
             }
         }

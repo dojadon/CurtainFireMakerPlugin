@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using CsMmdDataIO.Pmx;
+using CsMmdDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -36,15 +37,14 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void SetupMeshData(ShotModelData data)
         {
-            Vertices.SetupVertices(data.Vertices, data.Indices, Bones);
-
-            Materials.SetupMaterials(data.Property, data.Materials, data.Textures);
+            Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
+            Materials.SetupMaterials(data.Materials, data.Textures);
         }
 
-        public void FinalizeModel()
+        public void FinalizeModel(IEnumerable<VmdMorphFrameData> morphFrames)
         {
             Materials.CompressMaterial(Vertices.Indices);
-            Morphs.CompressMorph(World.KeyFrames.MorphFrames);
+            Morphs.CompressMorph(morphFrames);
         }
 
         public PmxModelData CreatePmxModelData()
@@ -86,7 +86,6 @@ namespace CurtainFireMakerPlugin.Entities
         public void Export()
         {
             string exportPath = World.PmxExportPath;
-            File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
             {

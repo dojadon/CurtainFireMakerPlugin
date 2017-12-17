@@ -66,9 +66,9 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public void FinalizeKeyFrame()
+        public void FinalizeKeyFrame(IEnumerable<PmxMorphData> morphs)
         {
-            var morphNames = World.PmxModel.Morphs.MorphList.Select(m => m.MorphName).ToList();
+            var morphNames = morphs.Select(m => m.MorphName);
             MorphFrames.RemoveWhere(f => !morphNames.Contains(f.Name));
         }
 
@@ -86,7 +86,6 @@ namespace CurtainFireMakerPlugin.Entities
         public void Export()
         {
             string exportPath = World.VmdExportPath;
-            File.Delete(exportPath);
 
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
             {

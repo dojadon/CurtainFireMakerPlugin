@@ -77,15 +77,15 @@ namespace CurtainFireMakerPlugin
             };
             form.ShowDialog(ApplicationForm);
 
+            Config.ScriptPath = form.ScriptPath;
+            Config.PmxExportDirPath = form.PmxExportDirPath;
+            Config.VmdExportDirPath = form.VmdExportDirPath;
+            Config.KeepLogOpen = form.KeepLogOpen;
+            Config.DropPmxFile = form.DropPmxFile;
+            Config.DropVmdFile = form.DropVmdFile;
+
             if (form.DialogResult == DialogResult.OK)
             {
-                Config.ScriptPath = form.ScriptPath;
-                Config.PmxExportDirPath = form.PmxExportDirPath;
-                Config.VmdExportDirPath = form.VmdExportDirPath;
-                Config.KeepLogOpen = form.KeepLogOpen;
-                Config.DropPmxFile = form.DropPmxFile;
-                Config.DropVmdFile = form.DropVmdFile;
-
                 GenerateCurainFire();
             }
         }
