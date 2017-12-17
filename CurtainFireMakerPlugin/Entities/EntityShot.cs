@@ -14,6 +14,7 @@ namespace CurtainFireMakerPlugin.Entities
         public ShotModelData ModelData { get; }
         public PmxBoneData RootBone => ModelData.Bones[0];
 
+        public IMotionRecorder MotionRecorder { get; set; } = VmdMotionRecorder.Instance;
         public IRecording Recording { get; set; } = Entities.Recording.Velocity;
 
         public bool IsUpdatedVelocity { get; private set; } = true;
@@ -113,18 +114,17 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override void UpdateLocalMat()
         {
-            float interpolation = 1.0F;
+            Vector3 interpolatedVelocity = Velocity;
 
             if (MotionInterpolation != null)
             {
                 if (MotionInterpolation.Within(World.FrameCount))
                 {
-                    interpolation = MotionInterpolation.GetChangeAmount(World.FrameCount);
+                    interpolatedVelocity *= MotionInterpolation.GetChangeAmount(World.FrameCount);
 
-                    if (!MotionInterpolation.Within(World.FrameCount + 1) && MotionInterpolation.IsSync)
+                    if (!MotionInterpolation.Within(World.FrameCount + 1) && MotionInterpolation.IsSyncVelocity)
                     {
-                        Velocity *= interpolation;
-                        interpolation = 1.0F;
+                        Velocity = interpolatedVelocity;
                     }
                 }
                 else
@@ -133,7 +133,7 @@ namespace CurtainFireMakerPlugin.Entities
                     MotionInterpolation = null;
                 }
             }
-            Pos += Velocity * interpolation;
+            Pos += interpolatedVelocity;
         }
 
         public void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
@@ -155,65 +155,17 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset = 0, bool replace = true)
         {
-            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot);
-            frame.InterpolationPointX1 = frame.InterpolationPointY1 = frame.InterpolationPointZ1 = posCurve.P1;
-            frame.InterpolationPointX2 = frame.InterpolationPointY2 = frame.InterpolationPointZ2 = posCurve.P2;
-
-            World.KeyFrames.AddBoneKeyFrame(bone, frame, replace);
+            MotionRecorder.AddBoneKeyFrame(World, bone, pos, rot, posCurve, World.FrameCount + frameOffset, replace);
         }
 
         public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, bool replace = true)
         {
-            if (Property.Type.HasMesh)
-            {
-                var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + frameOffset, weight);
-                World.KeyFrames.AddMorphKeyFrame(morph, frame, replace);
-            }
+            MotionRecorder.AddMorphKeyFrame(World, morph, weight, World.FrameCount + frameOffset, replace);
         }
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
         {
             return ModelData.CreateVertexMorph("V" + EntityId, func);
-        }
-    }
-
-    public struct CubicBezierCurve
-    {
-        public static readonly CubicBezierCurve Line = new CubicBezierCurve(new Vector2(0, 0), new Vector2(0.5F, 0.5F), new Vector2(0.5F, 0.5F), new Vector2(1, 1));
-
-        public Vector2 P0 { get; }
-        public Vector2 P1 { get; }
-        public Vector2 P2 { get; }
-        public Vector2 P3 { get; }
-
-        public CubicBezierCurve(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
-        {
-            P0 = p0;
-            P1 = p1;
-            P2 = p2;
-            P3 = p3;
-        }
-
-        public float[] SolveTimeFromX(float x, float eps = 1.0E-4F)
-        {
-            float a0 = P0.x - x;
-            float a1 = 3 * (-P0.x + P1.x);
-            float a2 = 3 * (P0.x - 2 * P1.x + P2.x);
-            float a3 = -P0.x + P3.x + 3 * (P1.x - P2.x);
-
-            double[] solution = EquationUtil.SolveCubic(a3, a2, a1, a0);
-
-            return (from d in solution where (0 - eps <= d && d <= 1 + eps) select (float)d).Distinct().ToArray();
-        }
-
-        public float X(float t) => GetPosition(t, P0.x, P1.x, P2.x, P3.x);
-
-        public float Y(float t) => GetPosition(t, P0.y, P1.y, P2.y, P3.y);
-
-        public float GetPosition(float t, float p0, float p1, float p2, float p3)
-        {
-            float inv = 1 - t;
-            return inv * inv * inv * p0 + 3 * inv * inv * t * p1 + 3 * inv * t * t * p2 + t * t * t * p3;
         }
     }
 
@@ -223,7 +175,7 @@ namespace CurtainFireMakerPlugin.Entities
         public int StartFrame { get; }
         public int EndFrame { get; }
         public int Length { get; }
-        public bool IsSync { get; }
+        public bool IsSyncVelocity { get; }
 
         public MotionInterpolation(int startFrame, int length, Vector2 p1, Vector2 p2, bool isSync)
         {
@@ -232,7 +184,7 @@ namespace CurtainFireMakerPlugin.Entities
             StartFrame = startFrame;
             Length = length;
             EndFrame = StartFrame + Length;
-            IsSync = isSync;
+            IsSyncVelocity = isSync;
         }
 
         public bool Within(int frame)
