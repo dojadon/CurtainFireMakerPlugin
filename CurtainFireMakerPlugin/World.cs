@@ -116,7 +116,7 @@ namespace CurtainFireMakerPlugin
         {
             EntityList.ForEach(e => e.OnDeath());
 
-            PmxModel.FinalizeModel(KeyFrames.MorphFrames);
+            PmxModel.FinalizeModel(KeyFrames.MorphFrameDict.Values);
             KeyFrames.FinalizeKeyFrame(PmxModel.Morphs.MorphList);
 
             PmxModel.Export();

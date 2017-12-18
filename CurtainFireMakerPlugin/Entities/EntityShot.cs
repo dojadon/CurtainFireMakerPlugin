@@ -87,8 +87,8 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (World.FrameCount > 0)
             {
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, false);
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, false);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
             }
             AddBoneKeyFrame();
         }
@@ -97,8 +97,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnDeath();
 
-            AddBoneKeyFrame(-1);
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 0, false);
+            AddBoneKeyFrame(frameOffset: -1);
+            AddBoneKeyFrame(RootBone, (Pos = new Vector3(0, -5000000, 0)), Quaternion.Identity, CubicBezierCurve.Line, 0, -1);
         }
 
         public override void Frame()
@@ -116,20 +116,20 @@ namespace CurtainFireMakerPlugin.Entities
         {
             Vector3 interpolatedVelocity = Velocity;
 
-            if (MotionInterpolation != null)
+            if (MotionInterpolation != null && World.FrameCount <= MotionInterpolation.EndFrame)
             {
-                if (MotionInterpolation.Within(World.FrameCount))
+                if (World.FrameCount < MotionInterpolation.EndFrame)
                 {
                     interpolatedVelocity *= MotionInterpolation.GetChangeAmount(World.FrameCount);
 
-                    if (!MotionInterpolation.Within(World.FrameCount + 1) && MotionInterpolation.IsSyncVelocity)
+                    if (MotionInterpolation.EndFrame < World.FrameCount + 1 && MotionInterpolation.IsSyncVelocity)
                     {
                         Velocity = interpolatedVelocity;
                     }
                 }
                 else
                 {
-                    AddBoneKeyFrame();
+                    AddBoneKeyFrame(frameOffset: 0, priority: 1);
                     MotionInterpolation = null;
                 }
             }
@@ -142,7 +142,7 @@ namespace CurtainFireMakerPlugin.Entities
             MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2, isSyncingVelocity);
         }
 
-        public void AddBoneKeyFrame(int frameOffset = 0, bool replace = true)
+        public void AddBoneKeyFrame(int frameOffset = 0, int priority = 0)
         {
             var posCurve = CubicBezierCurve.Line;
 
@@ -150,17 +150,17 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 posCurve = MotionInterpolation.Curve;
             }
-            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, frameOffset, replace);
+            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), posCurve, frameOffset, priority);
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset = 0, bool replace = true)
+        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve posCurve, int frameOffset = 0, int priority = 0)
         {
-            MotionRecorder.AddBoneKeyFrame(World, bone, pos, rot, posCurve, World.FrameCount + frameOffset, replace);
+            MotionRecorder.AddBoneKeyFrame(World, bone, pos, rot, posCurve, World.FrameCount + frameOffset, priority);
         }
 
-        public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, bool replace = true)
+        public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, int priority = 0)
         {
-            MotionRecorder.AddMorphKeyFrame(World, morph, weight, World.FrameCount + frameOffset, replace);
+            MotionRecorder.AddMorphKeyFrame(World, morph, weight, World.FrameCount + frameOffset, priority);
         }
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
