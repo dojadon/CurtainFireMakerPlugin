@@ -58,9 +58,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void Frame()
         {
-            TaskManager.Frame();
-
             UpdateLocalMat();
+
+            TaskManager.Frame();
 
             FrameCount++;
             if (DiedDecision(this))

@@ -10,12 +10,8 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireMotion
     {
-        public Dictionary<(string, int), VmdMotionFrameData> BoneFrameDict { get; } = new Dictionary<(string, int), VmdMotionFrameData>();
-        private Dictionary<(string, int), int> BoneFramePriorityDict { get; } = new Dictionary<(string, int), int>();
-
-        public Dictionary<(string, int), VmdMorphFrameData> MorphFrameDict { get; } = new Dictionary<(string, int), VmdMorphFrameData>();
-        private Dictionary<(string, int), int> MorphFramePriorityDict { get; } = new Dictionary<(string, int), int>();
-
+        public Dictionary<(string name, int time), (VmdMotionFrameData frame, int priority)> BoneFrameDict { get; }
+        public Dictionary<(string name, int time), (VmdMorphFrameData frame, int priority)> MorphFrameDict { get; }
         public List<VmdPropertyFrameData> PropertyFrames { get; }
 
         private World World { get; }
@@ -24,6 +20,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             World = world;
 
+            BoneFrameDict = new Dictionary<(string name, int time), (VmdMotionFrameData frame, int priority)>();
+            MorphFrameDict = new Dictionary<(string name, int time), (VmdMorphFrameData frame, int priority)>();
             PropertyFrames = new List<VmdPropertyFrameData>();
         }
 
@@ -31,15 +29,9 @@ namespace CurtainFireMakerPlugin.Entities
         {
             (string, int) key = (frame.Name, frame.FrameTime);
 
-            if (BoneFrameDict.ContainsKey(key))
+            if (frame.FrameTime >= 0 && (!BoneFrameDict.ContainsKey(key) || (BoneFrameDict[key].priority <= priority)))
             {
-                Console.WriteLine("{0}, {1}", BoneFrameDict[key].FrameTime, frame.FrameTime);
-            }
-
-            if (frame.FrameTime >= 0 && (!BoneFramePriorityDict.ContainsKey(key) || (BoneFramePriorityDict[key] <= priority)))
-            {
-                BoneFrameDict[key] = frame;
-                BoneFramePriorityDict[key] = priority;
+                BoneFrameDict[key] = (frame, priority);
             }
         }
 
@@ -47,10 +39,9 @@ namespace CurtainFireMakerPlugin.Entities
         {
             (string, int) key = (frame.Name, frame.FrameTime);
 
-            if (frame.FrameTime >= 0 && (!MorphFramePriorityDict.ContainsKey(key) || (MorphFramePriorityDict[key] <= priority)))
+            if (frame.FrameTime >= 0 && (!MorphFrameDict.ContainsKey(key) || (MorphFrameDict[key].priority <= priority)))
             {
-                MorphFrameDict[key] = frame;
-                MorphFramePriorityDict[key] = priority;
+                MorphFrameDict[key] = (frame, priority);
             }
         }
 
@@ -75,7 +66,7 @@ namespace CurtainFireMakerPlugin.Entities
             var morphNames = morphs.Select(m => m.MorphName);
             foreach (var key in MorphFrameDict.Keys)
             {
-                if (!morphNames.Contains(key.Item1)) MorphFrameDict.Remove(key);
+                if (!morphNames.Contains(key.name)) MorphFrameDict.Remove(key);
             }
         }
 
@@ -84,8 +75,8 @@ namespace CurtainFireMakerPlugin.Entities
             return new VmdMotionData
             {
                 Header = new VmdHeaderData { ModelName = World.ModelName },
-                MotionFrameArray = BoneFrameDict.Values.ToArray(),
-                MorphFrameArray = MorphFrameDict.Values.ToArray(),
+                MotionFrameArray = BoneFrameDict.Values.Select(t => t.frame).ToArray(),
+                MorphFrameArray = MorphFrameDict.Values.Select(t => t.frame).ToArray(),
                 PropertyFrameArray = PropertyFrames.ToArray(),
             };
         }

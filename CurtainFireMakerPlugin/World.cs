@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Forms;
@@ -116,7 +117,7 @@ namespace CurtainFireMakerPlugin
         {
             EntityList.ForEach(e => e.OnDeath());
 
-            PmxModel.FinalizeModel(KeyFrames.MorphFrameDict.Values);
+            PmxModel.FinalizeModel(KeyFrames.MorphFrameDict.Values.Select(t => t.frame));
             KeyFrames.FinalizeKeyFrame(PmxModel.Morphs.MorphList);
 
             PmxModel.Export();
