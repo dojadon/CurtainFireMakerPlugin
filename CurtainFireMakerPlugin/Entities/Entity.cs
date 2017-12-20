@@ -26,9 +26,6 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
-        public virtual Vector3 Velocity { get; set; }
-        public virtual Vector3 Upward { get; set; } = Vector3.UnitY;
-
         public virtual Entity ParentEntity { get; protected set; }
 
         public int FrameCount { get; private set; }
@@ -58,9 +55,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void Frame()
         {
-            UpdateLocalMat();
-
-            TaskManager.Frame();
+            UpdateTasks();
 
             FrameCount++;
             if (DiedDecision(this))
@@ -69,9 +64,9 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        protected virtual void UpdateLocalMat()
+        protected virtual void UpdateTasks()
         {
-            Pos += Velocity;
+            TaskManager.Frame();
         }
 
         public void __call__()
