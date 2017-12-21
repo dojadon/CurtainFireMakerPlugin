@@ -12,8 +12,6 @@ namespace CurtainFireMakerPlugin.Entities
         public List<PmxMaterialData> MaterialList { get; } = new List<PmxMaterialData>();
         public List<string> TextureList { get; } = new List<string>();
 
-        private List<(ShotType type, PmxMaterialData material)> MaterialAndShotTypeList { get; } = new List<(ShotType, PmxMaterialData)>();
-
         public World World { get; }
 
         public ModelMaterialCollection(World world)
@@ -21,7 +19,7 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void SetupMaterials(ShotType type, PmxMaterialData[] materials, string[] textures)
+        public void SetupMaterials(PmxMaterialData[] materials, string[] textures)
         {
             foreach (var texture in textures)
             {
@@ -40,13 +38,12 @@ namespace CurtainFireMakerPlugin.Entities
                 material.SphereId = GetTextureId(material.SphereId);
 
                 MaterialList.Add(material);
-                MaterialAndShotTypeList.Add((type, material));
             }
         }
 
         public void CompressMaterial(List<int> vertexIndices)
         {
-            var grouptedMaterialIndices = MaterialAndShotTypeList.ToLookup(t => GetMaterialHashCode(t), t => MaterialList.IndexOf(t.material));
+            var grouptedMaterialIndices = Enumerable.Range(0, MaterialList.Count).ToLookup(i => GetMaterialHashCode(MaterialList[i]));
             var removedMaterialIndices = CompressGroupedMaterial(grouptedMaterialIndices, vertexIndices);
 
             foreach (int removedMaterialIndex in removedMaterialIndices.OrderByDescending(i => i))
@@ -54,17 +51,16 @@ namespace CurtainFireMakerPlugin.Entities
                 MaterialList.RemoveAt(removedMaterialIndex);
             }
 
-            int GetMaterialHashCode((ShotType type, PmxMaterialData material) tuple)
+            int GetMaterialHashCode(PmxMaterialData obj)
             {
                 int result = 17;
 
-                result = result * 31 + tuple.material.Ambient.GetHashCode();
-                result = result * 31 + tuple.material.Diffuse.GetHashCode();
-                result = result * 31 + tuple.material.Specular.GetHashCode();
-                result = result * 31 + tuple.material.Shininess.GetHashCode();
-                result = result * 31 + tuple.material.TextureId;
-                result = result * 31 + tuple.material.SphereId;
-                result = result * 31 + tuple.type.Id;
+                result = result * 31 + obj.Ambient.GetHashCode();
+                result = result * 31 + obj.Diffuse.GetHashCode();
+                result = result * 31 + obj.Specular.GetHashCode();
+                result = result * 31 + obj.Shininess.GetHashCode();
+                result = result * 31 + obj.TextureId;
+                result = result * 31 + obj.SphereId;
 
                 return result;
             }
