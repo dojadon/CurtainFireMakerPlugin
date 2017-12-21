@@ -32,7 +32,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             var removedMorphs = new List<PmxMorphData>();
 
-            foreach (var group in morphList.ToLookup(m => GetHashCode(framesEachMorph[m.MorphName])).Where(g => g.Count() > 1))
+            foreach (var group in morphList.GroupBy(m => GetHashCode(framesEachMorph[m.MorphName])).Where(g => g.Skip(1).Any()))
             {
                 group.First().MorphArray = group.SelectMany(m => m.MorphArray).ToArray();
                 removedMorphs.AddRange(group.Skip(1));
