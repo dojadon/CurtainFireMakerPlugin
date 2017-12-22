@@ -29,8 +29,8 @@ namespace CurtainFireMakerPlugin.Entities
             foreach (var bone in bones)
             {
                 bone.BoneName = "B" + (BoneList.Count - 1);
-                bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.OP;
                 bone.BoneId = BoneList.Count;
+                bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.OP;
 
                 if (-1 < bone.ParentId && bone.ParentId < bones.Length - 1)
                 {

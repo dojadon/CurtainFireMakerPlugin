@@ -92,13 +92,7 @@ namespace CurtainFireMakerPlugin.Entities
                 var data = CreatePmxModelData();
                 PmxExporter.Export(data, stream);
 
-                Console.WriteLine("出力完了 : " + World.ExportFileName);
-                Console.WriteLine("頂点数 : " + string.Format("{0:#,0}", data.VertexArray.Length));
-                Console.WriteLine("面数 : " + string.Format("{0:#,0}", data.VertexIndices.Length / 3));
-                Console.WriteLine("材質数 : " + string.Format("{0:#,0}", data.MaterialArray.Length));
-                Console.WriteLine("テクスチャ数 : " + string.Format("{0:#,0}", data.TextureFiles.Length));
-                Console.WriteLine("ボーン数 : " + string.Format("{0:#,0}", data.BoneArray.Length));
-                Console.WriteLine("モーフ数 : " + string.Format("{0:#,0}", data.MorphArray.Length));
+                World.Plugin.Script.output_pmx_log(data);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.IO;
 using IronPython.Hosting;
@@ -18,18 +19,12 @@ namespace CurtainFireMakerPlugin
         {
         }
 
-        public void Init(string[] modullesDirPaths)
+        public void Init(IEnumerable<string> modullesDirPaths)
         {
             Engine = Python.CreateEngine();
             RootScope = Engine.CreateScope();
 
-            ICollection<string> paths = Engine.GetSearchPaths();
-
-            foreach (var path in modullesDirPaths)
-            {
-                paths.Add(path.Trim(' '));
-            }
-            Engine.SetSearchPaths(paths);
+            Engine.SetSearchPaths(Engine.GetSearchPaths().Concat(modullesDirPaths).ToList());
 
             Engine.Execute(
             "# -*- coding: utf-8 -*-\n" +
@@ -49,17 +44,17 @@ namespace CurtainFireMakerPlugin
             return Engine.ExecuteFile(path, scope);
         }
 
-        public void SetGlobalVariable(Dictionary<string, object> variables)
+        public void SetGlobalVariable(params (string name, object value)[] variables)
         {
             foreach (var variable in variables)
             {
-                RootScope.SetVariable(variable.Key, variable.Value);
+                RootScope.SetVariable(variable.name, variable.value);
             }
         }
 
         public void SetOut(Stream stream)
         {
-            Engine.Runtime.IO.SetOutput(stream, Encoding.ASCII);
+            Engine.Runtime.IO.SetOutput(stream, Encoding.UTF8);
         }
 
         public string FormatException(Exception e) => Engine.GetService<ExceptionOperations>().FormatException(e);

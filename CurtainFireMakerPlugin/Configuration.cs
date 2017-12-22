@@ -22,13 +22,6 @@ namespace CurtainFireMakerPlugin
             set => NodeRunScript.InnerText = GetRelativePath(value);
         }
 
-        private XmlNode NodeInitScript => NodeScripts.SelectSingleNode("Init");
-        public string InitScriptPath
-        {
-            get => GetAbsolutePath(NodeInitScript.InnerText);
-            set => NodeInitScript.InnerText = GetRelativePath(value);
-        }
-
         private XmlNode NodeLibs => RootNode.SelectSingleNode("Libs");
         public string[] ModullesDirPaths
         {
@@ -77,6 +70,7 @@ namespace CurtainFireMakerPlugin
 
         public static string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker\\";
         public static string SettingXmlFilePath => PluginRootPath + "config.xml";
+        public static string SettingPythonFilePath => PluginRootPath + "config.py";
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
 
         public static Uri PluginRootUri { get; } = new Uri(PluginRootPath);

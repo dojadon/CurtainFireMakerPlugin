@@ -17,6 +17,8 @@ namespace CurtainFireMakerPlugin
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
+        public dynamic Script { get; private set; }
+
         public Plugin()
         {
             Instance = this;
@@ -45,7 +47,7 @@ namespace CurtainFireMakerPlugin
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
-            PythonExecutor.ExecuteScriptOnRootScope(Config.InitScriptPath);
+            Script = PythonExecutor.ExecuteScriptOnRootScope(Configuration.SettingPythonFilePath);
         }
 
         public Guid GUID => new Guid();
@@ -142,7 +144,7 @@ namespace CurtainFireMakerPlugin
 
             world.InitPre();
 
-            PythonExecutor.SetGlobalVariable(new Dictionary<string, object> { { "WORLD", world } });
+            PythonExecutor.SetGlobalVariable(("WORLD", world));
             PythonExecutor.ExecuteScriptOnNewScope(Config.ScriptPath);
 
             world.InitPost();
