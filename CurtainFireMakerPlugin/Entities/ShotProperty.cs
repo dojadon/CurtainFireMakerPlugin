@@ -30,7 +30,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public bool Equals(ShotProperty p) => p.Color == Color && Type == p.Type && ShotGroup == p.ShotGroup;
 
-        public bool GroupEquals(ShotProperty p) => p.Color == Color && Type == p.Type && (ShotGroup & p.ShotGroup) > 0;
+        public bool IsGroupable(ShotProperty p) => p.Color == Color && Type == p.Type && (ShotGroup & p.ShotGroup) > 0;
 
         public override int GetHashCode()
         {

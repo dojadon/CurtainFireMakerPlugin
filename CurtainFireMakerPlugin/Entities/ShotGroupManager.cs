@@ -6,50 +6,22 @@ using System.Text;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    internal class ShotGroupManager
+    internal class ShotModelDataProvider
     {
-        private Dictionary<ShotType, ShotTypeGroup> TypeGroupDict { get; } = new Dictionary<ShotType, ShotTypeGroup>();
-        private World World { get; }
-
-        public ShotGroupManager(World world)
-        {
-            World = world;
-        }
-
-        public ShotModelData AddEntity(EntityShot entity)
-        {
-            if (!TypeGroupDict.ContainsKey(entity.Property.Type))
-            {
-                TypeGroupDict[entity.Property.Type] = new ShotTypeGroup(entity.Property.Type, World);
-            }
-
-            ShotTypeGroup typeGroup = TypeGroupDict[entity.Property.Type];
-
-            ShotModelData data = typeGroup.AddEntityToGroup(entity);
-            if (data == null)
-            {
-                data = typeGroup.CreateGroup(entity);
-                World.PmxModel.InitShotModelData(data);
-            }
-
-            return data;
-        }
-    }
-
-    internal class ShotTypeGroup
-    {
-        private ShotType Type { get; }
         private List<ShotGroup> GroupList { get; } = new List<ShotGroup>();
 
-        private World World { get; }
-
-        public ShotTypeGroup(ShotType type, World world)
+        public bool AddEntity(EntityShot entity, out ShotModelData data)
         {
-            Type = type;
-            World = world;
+            data = AddEntityToGroup(entity);
+            if (data == null)
+            {
+                data = CreateGroup(entity);
+                return true;
+            }
+            return false;
         }
 
-        public ShotModelData AddEntityToGroup(EntityShot entity)
+        private ShotModelData AddEntityToGroup(EntityShot entity)
         {
             foreach (ShotGroup group in GroupList)
             {
@@ -62,9 +34,9 @@ namespace CurtainFireMakerPlugin.Entities
             return null;
         }
 
-        public ShotModelData CreateGroup(EntityShot entity)
+        private ShotModelData CreateGroup(EntityShot entity)
         {
-            ShotGroup group = new ShotGroup(entity, World);
+            ShotGroup group = new ShotGroup(entity);
             group.AddEntity(entity);
             GroupList.Add(group);
 
@@ -75,25 +47,17 @@ namespace CurtainFireMakerPlugin.Entities
     internal class ShotGroup
     {
         public List<EntityShot> ShotList { get; } = new List<EntityShot>();
+
         public ShotModelData Data { get; }
 
-        private Entity ParentEntity { get; }
-        private ShotProperty Property { get; }
-        private World World { get; }
-
-        public ShotGroup(EntityShot entity, World world)
+        public ShotGroup(EntityShot entity)
         {
-            ParentEntity = entity.ParentEntity;
-            Property = entity.Property;
-            World = world;
-
-            Data = new ShotModelData(World, Property);
+            Data = new ShotModelData(entity.World, entity.Property);
         }
 
         public bool IsAddable(EntityShot entity)
         {
-            return entity.ParentEntity == ParentEntity && Property.GroupEquals(entity.Property)
-            && !ShotList.Exists(e => !e.IsDeath || World.FrameCount == e.DeathFrameNo);
+            return !ShotList.Exists(e => !entity.IsGroupable(e));
         }
 
         public void AddEntity(EntityShot entity)
