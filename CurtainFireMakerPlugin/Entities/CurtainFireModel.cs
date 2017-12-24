@@ -54,6 +54,12 @@ namespace CurtainFireMakerPlugin.Entities
                 Version = 2.0F,
                 ModelName = World.ModelName,
                 Description = World.ModelDescription,
+                VertexIndexSize = 4,
+                TextureIndexSize = 1,
+                MaterialIndexSize = 1,
+                BoneIndexSize = 2,
+                MorphIndexSize = 1,
+                RigidIndexSize = 1,
             };
 
             var boneSlot = new PmxSlotData
@@ -90,7 +96,7 @@ namespace CurtainFireMakerPlugin.Entities
             using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
             {
                 var data = CreatePmxModelData();
-                PmxExporter.Export(data, stream);
+                data.Write(new BinaryWriter(stream));
 
                 World.Plugin.Script.output_pmx_log(data);
             }

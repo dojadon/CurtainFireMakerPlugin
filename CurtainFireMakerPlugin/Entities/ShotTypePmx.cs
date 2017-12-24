@@ -16,10 +16,9 @@ namespace CurtainFireMakerPlugin.Entities
         {
             path = Configuration.ResourceDirPath + path;
 
-            using (var inStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                PmxParser parser = new PmxParser(inStream);
-                parser.Parse(Data);
+                Data.Parse(new BinaryReader(stream));
             }
 
             for (int i = 0; i < Data.VertexArray.Length; i++)
