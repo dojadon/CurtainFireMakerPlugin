@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
 
@@ -152,11 +153,13 @@ namespace CurtainFireMakerPlugin
             form.ProgressBar.Minimum = 0;
             form.ProgressBar.Maximum = world.MaxFrame;
             form.ProgressBar.Step = 1;
+            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal);
 
             for (int i = 0; i < world.MaxFrame && form.DialogResult != DialogResult.Cancel; i++)
             {
                 world.Frame();
                 form.ProgressBar.PerformStep();
+                TaskbarManager.Instance.SetProgressValue(i, world.MaxFrame);
             }
 
             if ((isNeededDroping = form.DialogResult != DialogResult.Cancel))
