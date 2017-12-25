@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                Data.Parse(new BinaryReader(stream));
+                Data.Read(new BinaryReader(stream));
             }
 
             for (int i = 0; i < Data.VertexArray.Length; i++)
