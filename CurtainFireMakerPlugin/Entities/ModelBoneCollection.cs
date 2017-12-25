@@ -30,7 +30,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 bone.BoneName = "B" + (BoneList.Count - 1);
                 bone.BoneId = BoneList.Count;
-                bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.OP;
+                bone.Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.VISIBLE | BoneFlags.OP;
 
                 if (-1 < bone.ParentId && bone.ParentId < bones.Length - 1)
                 {

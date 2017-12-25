@@ -62,6 +62,13 @@ namespace CurtainFireMakerPlugin.Entities
                 RigidIndexSize = 1,
             };
 
+            var centerBoneSlot = new PmxSlotData
+            {
+                SlotName = "センター",
+                Type = SlotType.BONE,
+                Indices = new[] { 0 },
+            };
+
             var boneSlot = new PmxSlotData
             {
                 SlotName = "弾ボーン",
@@ -85,7 +92,7 @@ namespace CurtainFireMakerPlugin.Entities
                 MaterialArray = Materials.MaterialList.ToArray(),
                 BoneArray = Bones.BoneList.ToArray(),
                 MorphArray = Morphs.MorphList.ToArray(),
-                SlotArray = new PmxSlotData[] { boneSlot, morphSlot },
+                SlotArray = new PmxSlotData[] { centerBoneSlot, boneSlot, morphSlot },
             };
         }
 
