@@ -64,9 +64,9 @@ namespace CurtainFireMakerPlugin.Entities
         public void FinalizeKeyFrame(IEnumerable<PmxMorphData> morphs)
         {
             var morphNames = morphs.Select(m => m.MorphName);
-            foreach (var key in MorphFrameDict.Keys)
+            foreach (var key in MorphFrameDict.Keys.Where(k => !morphNames.Contains(k.name)).ToArray())
             {
-                if (!morphNames.Contains(key.name)) MorphFrameDict.Remove(key);
+                MorphFrameDict.Remove(key);
             }
         }
 
