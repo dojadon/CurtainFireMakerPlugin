@@ -67,6 +67,11 @@ namespace CurtainFireMakerPlugin
             Config.Save();
         }
 
+        public void Run()
+        {
+            Run(null);
+        }
+
         public void Run(CommandArgs args)
         {
             var form = new ExportSettingForm()
@@ -107,9 +112,11 @@ namespace CurtainFireMakerPlugin
                 try
                 {
                     var world = new World(this, Path.GetFileNameWithoutExtension(Config.ScriptPath));
+                    long time = Environment.TickCount;
 
                     if (RunWorld(world, progressForm))
                     {
+                        Console.WriteLine((Environment.TickCount - time) + "ms");
                         Finalize();
 
                         try { world.DropFileToMMM(); } catch { }

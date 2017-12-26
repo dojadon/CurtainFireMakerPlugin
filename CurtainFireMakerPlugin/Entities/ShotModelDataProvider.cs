@@ -2,36 +2,46 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
-using System.Text;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     internal class ShotModelDataProvider
     {
         private List<ShotGroup> GroupList { get; } = new List<ShotGroup>();
+        private Dictionary<int, ShotGroup[]> CurrentGroupDict { get; set; }
+
+        public void Frame()
+        {
+            CurrentGroupDict = GroupList.Where(g => g.ShotList.All(e => e.IsDeath && e.DeathFrameNo < e.World.FrameCount))
+            .ToLookup(g => GetPropertyHashCode(g.Data.Property)).ToDictionary(g => g.Key, g => g.ToArray());
+        }
+
+        private int GetPropertyHashCode(ShotProperty property)
+        {
+            int result = 17;
+            result = result * 23 + property.Color;
+            result = result * 23 + property.Type.Id;
+            return result;
+        }
 
         public bool AddEntity(EntityShot entity, out ShotModelData data)
         {
-            data = AddEntityToGroup(entity);
-            if (data == null)
-            {
-                data = CreateGroup(entity);
-                return true;
-            }
-            return false;
-        }
+            int hash = GetPropertyHashCode(entity.Property);
 
-        private ShotModelData AddEntityToGroup(EntityShot entity)
-        {
-            foreach (ShotGroup group in GroupList)
+            if (CurrentGroupDict.ContainsKey(hash))
             {
-                if (group.IsAddable(entity))
+                foreach (ShotGroup group in CurrentGroupDict[hash])
                 {
-                    group.AddEntity(entity);
-                    return group.Data;
+                    if (group.IsAddable(entity))
+                    {
+                        group.AddEntity(entity);
+                        data = group.Data;
+                        return false;
+                    }
                 }
             }
-            return null;
+            data = CreateGroup(entity);
+            return true;
         }
 
         private ShotModelData CreateGroup(EntityShot entity)
@@ -47,7 +57,6 @@ namespace CurtainFireMakerPlugin.Entities
     internal class ShotGroup
     {
         public List<EntityShot> ShotList { get; } = new List<EntityShot>();
-
         public ShotModelData Data { get; }
 
         public ShotGroup(EntityShot entity)
@@ -57,7 +66,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public bool IsAddable(EntityShot entity)
         {
-            return !ShotList.Exists(e => !entity.IsGroupable(e));
+            return ShotList.All(entity.IsGroupable);
         }
 
         public void AddEntity(EntityShot entity)

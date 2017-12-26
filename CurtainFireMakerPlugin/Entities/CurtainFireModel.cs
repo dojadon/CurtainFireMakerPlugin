@@ -9,6 +9,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class CurtainFireModel
     {
+        private PmxHeaderData Header { get; }
         public ModelVertexCollection Vertices { get; }
         public ModelMaterialCollection Materials { get; }
         public ModelMorphCollection Morphs { get; }
@@ -24,6 +25,19 @@ namespace CurtainFireMakerPlugin.Entities
             Materials = new ModelMaterialCollection(World);
             Morphs = new ModelMorphCollection(World);
             Bones = new ModelBoneCollection(World);
+
+            Header = new PmxHeaderData
+            {
+                Version = 2.0F,
+                ModelName = World.ModelName,
+                Description = World.ModelDescription,
+                VertexIndexSize = 4,
+                TextureIndexSize = 1,
+                MaterialIndexSize = 1,
+                BoneIndexSize = 2,
+                MorphIndexSize = 1,
+                RigidIndexSize = 1,
+            };
         }
 
         public void InitShotModelData(ShotModelData data)
@@ -49,50 +63,42 @@ namespace CurtainFireMakerPlugin.Entities
 
         public PmxModelData CreatePmxModelData()
         {
-            var header = new PmxHeaderData
+            var slotList = new List<PmxSlotData>
             {
-                Version = 2.0F,
-                ModelName = World.ModelName,
-                Description = World.ModelDescription,
-                VertexIndexSize = 4,
-                TextureIndexSize = 1,
-                MaterialIndexSize = 1,
-                BoneIndexSize = 2,
-                MorphIndexSize = 1,
-                RigidIndexSize = 1,
+                new PmxSlotData
+                {
+                    SlotName = "センター",
+                    Type = SlotType.BONE,
+                    Indices = new[] { 0 },
+                },
+                new PmxSlotData
+                {
+                    SlotName = "弾ボーン",
+                    Type = SlotType.BONE,
+                    Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
+                }
             };
 
-            var centerBoneSlot = new PmxSlotData
+            if (Morphs.MorphList.Count > 0)
             {
-                SlotName = "センター",
-                Type = SlotType.BONE,
-                Indices = new[] { 0 },
-            };
-
-            var boneSlot = new PmxSlotData
-            {
-                SlotName = "弾ボーン",
-                Type = SlotType.BONE,
-                Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
-            };
-
-            var morphSlot = new PmxSlotData
-            {
-                SlotName = "弾モーフ",
-                Type = SlotType.MORPH,
-                Indices = Enumerable.Range(0, Morphs.MorphList.Count).ToArray()
-            };
+                slotList.Add(new PmxSlotData
+                {
+                    SlotName = "弾モーフ",
+                    Type = SlotType.MORPH,
+                    Indices = Enumerable.Range(0, Morphs.MorphList.Count).ToArray()
+                });
+            }
 
             return new PmxModelData
             {
-                Header = header,
+                Header = Header,
                 VertexIndices = Vertices.Indices.ToArray(),
                 TextureFiles = Materials.TextureList.ToArray(),
                 VertexArray = Vertices.VertexList.ToArray(),
                 MaterialArray = Materials.MaterialList.ToArray(),
                 BoneArray = Bones.BoneList.ToArray(),
                 MorphArray = Morphs.MorphList.ToArray(),
-                SlotArray = new PmxSlotData[] { centerBoneSlot, boneSlot, morphSlot },
+                SlotArray = slotList.ToArray(),
             };
         }
 

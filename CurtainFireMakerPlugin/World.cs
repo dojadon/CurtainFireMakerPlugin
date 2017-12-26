@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin
         private List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
-        internal ShotModelDataProvider ShotManager { get; }
+        internal ShotModelDataProvider ShotModelProvider { get; }
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion KeyFrames { get; }
 
@@ -49,12 +49,12 @@ namespace CurtainFireMakerPlugin
             Config = Plugin.Config;
             Executor = Plugin.PythonExecutor;
 
-            ShotManager = new ShotModelDataProvider();
-            PmxModel = new CurtainFireModel(this);
-            KeyFrames = new CurtainFireMotion(this);
-
             ExportFileName = fileName;
             ModelName = ExportFileName;
+
+            ShotModelProvider = new ShotModelDataProvider();
+            PmxModel = new CurtainFireModel(this);
+            KeyFrames = new CurtainFireMotion(this);
         }
 
         private void OnExport(EventArgs e)
@@ -64,7 +64,7 @@ namespace CurtainFireMakerPlugin
 
         internal ShotModelData AddShot(EntityShot entity)
         {
-            if (ShotManager.AddEntity(entity, out ShotModelData data))
+            if (ShotModelProvider.AddEntity(entity, out ShotModelData data))
             {
                 PmxModel.InitShotModelData(data);
             }
@@ -104,6 +104,7 @@ namespace CurtainFireMakerPlugin
 
         internal void Frame()
         {
+            ShotModelProvider.Frame();
             TaskManager.Frame();
 
             EntityList.AddRange(AddEntityList);
