@@ -6,7 +6,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public abstract class EntityShotBase : Entity
+    public abstract class EntityShootable : Entity
     {
         public bool IsUpdatedVelocity { get; protected set; } = true;
         public bool IsUpdatedLocalMat { get; protected set; } = true;
@@ -47,7 +47,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected MotionInterpolation MotionInterpolation { get; set; }
 
-        public EntityShotBase(World world, Entity parentEntity = null) : base(world, parentEntity) { }
+        public EntityShootable(World world, Entity parentEntity = null) : base(world, parentEntity) { }
 
         public override void Frame()
         {
@@ -77,6 +77,17 @@ namespace CurtainFireMakerPlugin.Entities
                 }
             }
             return interpolatedVelocity;
+        }
+
+        public override bool IsCollided(MeshTriangle mesh)
+        {
+            float dot = mesh.Normal * Velocity;
+
+            if (dot == 0) return false;
+
+            float time = -mesh.Normal * (Pos - mesh.Pos1) / dot;
+
+            return 0 <= time && time <= 1;
         }
 
         public virtual void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)

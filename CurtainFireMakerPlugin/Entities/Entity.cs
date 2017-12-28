@@ -38,6 +38,8 @@ namespace CurtainFireMakerPlugin.Entities
         public bool IsDeath { get; private set; }
         public bool IsSpawned { get; private set; }
 
+        public virtual bool IsCollisionable => false;
+
         private TaskManager TaskManager { get; } = new TaskManager();
 
         public World World { get; }
@@ -68,6 +70,13 @@ namespace CurtainFireMakerPlugin.Entities
         {
             TaskManager.Frame();
         }
+
+        public virtual bool IsCollided(MeshTriangle tri)
+        {
+            return false;
+        }
+
+        public virtual void OnCollision() { }
 
         public void __call__()
         {

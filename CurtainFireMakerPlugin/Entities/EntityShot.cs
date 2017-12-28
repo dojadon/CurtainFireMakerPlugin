@@ -7,7 +7,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class EntityShot : EntityShotBase
+    public class EntityShot : EntityShootable
     {
         public ShotProperty Property { get; }
 
@@ -15,9 +15,13 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBoneData RootBone => ModelData.Bones[0];
 
         public IMotionRecorder MotionRecorder { get; set; } = VmdMotionRecorder.Instance;
-        public IRecording Recording { get; set; } = Entities.Recording.Velocity;
+        public Recording Recording { get; set; } = Recording.Velocity;
 
         public int RecordedFrameTime { get; set; }
+
+        public CollisionType CollisionType { get; set; } = CollisionType.NONE;
+
+        public override bool IsCollisionable => CollisionType != CollisionType.NONE;
 
         public EntityShot(World world, ShotType type, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(type, color), parentEntity) { }
@@ -70,6 +74,24 @@ namespace CurtainFireMakerPlugin.Entities
             IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
+        public override void OnCollision()
+        {
+            switch (CollisionType)
+            {
+                case CollisionType.VANISH:
+                    OnDeath();
+                    break;
+
+                case CollisionType.STICK:
+                    Velocity = Vector3.Zero;
+                    break;
+
+                case CollisionType.NONE:
+                default:
+                    break;
+            }
+        }
+
         public virtual bool IsGroupable(EntityShot e)
         {
             return e.ParentEntity == ParentEntity && e.Property.IsGroupable(Property) && e.IsDeath && e.DeathFrameNo < World.FrameCount;
@@ -107,5 +129,12 @@ namespace CurtainFireMakerPlugin.Entities
         {
             return ModelData.CreateVertexMorph("V" + EntityId, func);
         }
+    }
+
+    public enum CollisionType
+    {
+        NONE,
+        VANISH,
+        STICK,
     }
 }
