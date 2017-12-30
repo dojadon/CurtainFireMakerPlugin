@@ -11,7 +11,7 @@ using CurtainFireMakerPlugin.Forms;
 
 namespace CurtainFireMakerPlugin
 {
-    public class Plugin : ICommandPlugin
+    public class Plugin : ICommandPlugin, IHaveUserControl, ICanSavePlugin
     {
         public static Plugin Instance { get; set; }
 
@@ -19,6 +19,8 @@ namespace CurtainFireMakerPlugin
         internal PythonExecutor PythonExecutor { get; }
 
         public dynamic Script { get; private set; }
+
+        private IronPythonControl IronPythonControl { get; }
 
         public Plugin()
         {
@@ -43,12 +45,22 @@ namespace CurtainFireMakerPlugin
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
             Image = Image.FromStream(stream);
+
+            IronPythonControl = new IronPythonControl
+            {
+                ScriptText =
+                "# -*- coding: utf-8 -*-\r\n" +
+                "WORLD.FrameCount = 0\r\n" +
+                "OWNER_BONE = Entity(WORLD)\r\n" +
+                "TARGET_BONE = Entity(WORLD)\r\n" +
+                "TARGET_BONE.Pos = Vector3(0, 0, -200)"
+            };
         }
 
         internal void InitIronPython()
         {
             PythonExecutor.Init(Config.ModullesDirPaths);
-            Script = PythonExecutor.ExecuteScriptOnRootScope(Configuration.SettingPythonFilePath);
+            Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
         }
 
         public Guid GUID => new Guid();
@@ -67,9 +79,26 @@ namespace CurtainFireMakerPlugin
             Config.Save();
         }
 
-        public void Run()
+        public UserControl CreateControl()
         {
-            Run(null);
+            return IronPythonControl;
+        }
+
+        public Stream OnSaveProject()
+        {
+            var bytes = Encoding.Unicode.GetBytes(IronPythonControl.ScriptText);
+
+            var stream = new MemoryStream();
+            var writer = new BinaryWriter(stream);
+            writer.Write(bytes.Length);
+            writer.Write(bytes);
+            return stream;
+        }
+
+        public void OnLoadProject(Stream stream)
+        {
+            var reader = new BinaryReader(stream);
+            IronPythonControl.ScriptText = Encoding.Unicode.GetString(reader.ReadBytes(reader.ReadInt32()));
         }
 
         public void Run(CommandArgs args)
@@ -153,7 +182,8 @@ namespace CurtainFireMakerPlugin
             world.InitPre();
 
             PythonExecutor.SetGlobalVariable(("WORLD", world));
-            PythonExecutor.ExecuteScriptOnNewScope(Config.ScriptPath);
+            PythonExecutor.ExecuteOnRootScope(IronPythonControl.ScriptText);
+            PythonExecutor.ExecuteFileOnNewScope(Config.ScriptPath);
 
             world.InitPost();
 
