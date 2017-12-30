@@ -22,7 +22,7 @@ namespace CurtainFireMakerPlugin
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
-        private List<Entity> EntityList { get; } = new List<Entity>();
+        public List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
         internal ShotModelDataProvider ShotModelProvider { get; }
@@ -113,7 +113,7 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            EntityList.ForEach(e => e.Frame());
+            foreach (var entity in EntityList.OrderByDescending(e => e.FramePriority)) entity.Frame();
 
             FrameCount++;
         }

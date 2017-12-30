@@ -44,6 +44,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         public World World { get; }
 
+        public virtual int FramePriority => 0;
+
         public int EntityId { get; }
         private static int nextEntityId;
 
@@ -76,7 +78,7 @@ namespace CurtainFireMakerPlugin.Entities
             return false;
         }
 
-        public virtual void OnCollision() { }
+        public virtual void OnCollided() { }
 
         public void __call__()
         {

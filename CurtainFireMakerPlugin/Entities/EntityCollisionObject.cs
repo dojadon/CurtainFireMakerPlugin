@@ -8,17 +8,33 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityCollisionObject : Entity
     {
-        public List<MeshTriangle> Meshes { get; } = new List<MeshTriangle>();
-        public List<MeshTriangle> SkinnedMeshes { get; set; } = new List<MeshTriangle>();
+        public Vector3[] Vertices { get; set; }
+        public int[] VertexIndices { get; set; }
+
+        public override int FramePriority => -1;
 
         public EntityCollisionObject(World world) : base(world) { }
 
         public override void Frame()
-        { 
+        {
             base.Frame();
 
             var worldMat = WorldMat;
-            SkinnedMeshes = Meshes.Select(m => MeshTriangle.Transform(m, v => (Vector4)v * worldMat)).ToList();
+            var skinnedVertices = Vertices.Select(v => (Vector3)((Vector4)v * worldMat)).ToArray();
+
+            for (int i = 0; i < VertexIndices.Length; i += 3)
+            {
+                var pos1 = skinnedVertices[VertexIndices[i + 0]];
+                var pos2 = skinnedVertices[VertexIndices[i + 1]];
+                var pos3 = skinnedVertices[VertexIndices[i + 2]];
+
+                var mesh = new MeshTriangle(pos1, pos2, pos3);
+
+                foreach (var entity in World.EntityList.Where(e => e.IsCollisionable && e.IsCollided(mesh)))
+                {
+                    entity.OnCollided();
+                }
+            }
         }
     }
 

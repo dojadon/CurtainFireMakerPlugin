@@ -74,7 +74,7 @@ namespace CurtainFireMakerPlugin.Entities
             IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
-        public override void OnCollision()
+        public override void OnCollided()
         {
             switch (CollisionType)
             {

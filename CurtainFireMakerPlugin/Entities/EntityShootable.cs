@@ -21,28 +21,22 @@ namespace CurtainFireMakerPlugin.Entities
             get => velocity;
             set
             {
-                IsUpdatedVelocity |= !Vector3.EpsilonEquals(velocity, (velocity = value), Epsilon);
-                if (Velocity != Vector3.Zero) LookAtVec = Velocity;
+                if (!Vector3.EpsilonEquals(velocity, (velocity = value), Epsilon)) OnVelocityCahnged();
             }
         }
 
-        private Vector3 upward = Vector3.UnitY;
-        public Vector3 Upward
-        {
-            get => upward;
-            set => IsUpdatedVelocity |= !Vector3.EpsilonEquals(upward, (upward = value), Epsilon);
-        }
+        public Vector3 Upward { get; set; } = Vector3.UnitY;
 
         public override Vector3 Pos
         {
             get => base.Pos;
-            set => IsUpdatedLocalMat |= !Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon);
+            set { if (!Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon)) OnLocalMatChanged(); }
         }
 
         public override Quaternion Rot
         {
             get => base.Rot;
-            set => IsUpdatedLocalMat |= !Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon);
+            set { if (!Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon)) OnLocalMatChanged(); }
         }
 
         protected MotionInterpolation MotionInterpolation { get; set; }
@@ -54,6 +48,20 @@ namespace CurtainFireMakerPlugin.Entities
             base.Frame();
 
             Pos += GetInterpolatedVelocity();
+        }
+
+        protected virtual void OnVelocityCahnged()
+        {
+            IsUpdatedVelocity = true;
+            if (Velocity != Vector3.Zero)
+            {
+                LookAtVec = +Velocity;
+            }
+        }
+
+        protected virtual void OnLocalMatChanged()
+        {
+            IsUpdatedLocalMat = true;
         }
 
         protected virtual Vector3 GetInterpolatedVelocity()
@@ -81,13 +89,31 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override bool IsCollided(MeshTriangle mesh)
         {
-            float dot = mesh.Normal * Velocity;
+            var pos = Pos;
 
-            if (dot == 0) return false;
+            if (Math.Abs(mesh.Normal * (Pos - mesh.Pos1)) > Epsilon)
+            {
+                float dot = mesh.Normal * Velocity;
 
-            float time = -mesh.Normal * (Pos - mesh.Pos1) / dot;
+                if (Math.Abs(dot) <= Epsilon) return false;
 
-            return 0 <= time && time <= 1;
+                float time = -mesh.Normal * (Pos - mesh.Pos1) / dot;
+
+                if (0 - Epsilon <= time && time <= 1 + Epsilon)
+                {
+                    pos += Velocity * time;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            var cross1 = (mesh.Pos2 - mesh.Pos1) ^ (pos - mesh.Pos2);
+            var cross2 = (mesh.Pos3 - mesh.Pos2) ^ (pos - mesh.Pos3);
+            var cross3 = (mesh.Pos1 - mesh.Pos3) ^ (pos - mesh.Pos1);
+
+            return cross1 * cross2 > -Epsilon && cross1 * cross3 > -Epsilon;
         }
 
         public virtual void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
