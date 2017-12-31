@@ -11,8 +11,6 @@ namespace CurtainFireMakerPlugin.Forms
 {
     public partial class ExportSettingForm : Form
     {
-        private string scriptPath;
-
         public string ScriptPath
         {
             get => TextBoxScriptPath.Text;
@@ -46,8 +44,12 @@ namespace CurtainFireMakerPlugin.Forms
         public bool DropPmxFile { get => CheckBoxDropPmxFile.Checked; set => CheckBoxDropPmxFile.Checked = value; }
         public bool DropVmdFile { get => CheckBoxDropVmdFile.Checked; set => CheckBoxDropVmdFile.Checked = value; }
 
-        public ExportSettingForm()
+        private Plugin Plugin { get; }
+
+        public ExportSettingForm(Plugin plugin)
         {
+            Plugin = plugin;
+
             InitializeComponent();
         }
 
@@ -95,7 +97,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void Click_InitIronPython(object sender, EventArgs e)
         {
-            Plugin.Instance.InitIronPython();
+            Plugin.InitIronPython();
         }
 
         private void LoadForm(object sender, EventArgs e)

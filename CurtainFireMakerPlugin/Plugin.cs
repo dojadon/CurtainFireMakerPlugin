@@ -13,8 +13,6 @@ namespace CurtainFireMakerPlugin
 {
     public class Plugin : ICommandPlugin, IHaveUserControl, ICanSavePlugin
     {
-        public static Plugin Instance { get; set; }
-
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
@@ -24,8 +22,6 @@ namespace CurtainFireMakerPlugin
 
         public Plugin()
         {
-            Instance = this;
-
             Config = new Configuration(Configuration.SettingXmlFilePath);
             PythonExecutor = new PythonExecutor();
 
@@ -46,15 +42,7 @@ namespace CurtainFireMakerPlugin
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
             Image = Image.FromStream(stream);
 
-            IronPythonControl = new IronPythonControl
-            {
-                ScriptText =
-                "# -*- coding: utf-8 -*-\r\n" +
-                "WORLD.FrameCount = 0\r\n" +
-                "OWNER_BONE = Entity(WORLD)\r\n" +
-                "TARGET_BONE = Entity(WORLD)\r\n" +
-                "TARGET_BONE.Pos = Vector3(0, 0, -200)"
-            };
+            IronPythonControl = new IronPythonControl { ScriptText = Script.default_script, };
         }
 
         internal void InitIronPython()
@@ -103,7 +91,7 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm()
+            var form = new ExportSettingForm(this)
             {
                 ScriptPath = Config.ScriptPath,
                 PmxExportDirPath = Config.PmxExportDirPath,
