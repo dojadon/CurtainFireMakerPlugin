@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }
 
-        public virtual Func<Entity, bool> DiedDecision { get; set; } = e => e.LivingLimit != 0 && e.FrameCount > e.LivingLimit;
+        public virtual Func<Entity, bool> DiedDecision { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
 
         public bool IsDeath { get; private set; }
         public bool IsSpawned { get; private set; }
@@ -70,7 +70,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected virtual void UpdateTasks()
         {
-            TaskManager.Frame();
+            TaskManager.Frame(World.FrameCount);
         }
 
         public virtual bool IsCollided(MeshTriangle tri)
@@ -104,7 +104,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
         {
-            AddTask(new Task(task, interval, executeTimes, waitTime));
+            AddTask(new Task(task, World.FrameCount, interval, executeTimes, waitTime));
         }
 
         public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)

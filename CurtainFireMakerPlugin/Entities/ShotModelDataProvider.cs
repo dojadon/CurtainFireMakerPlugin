@@ -7,12 +7,17 @@ namespace CurtainFireMakerPlugin.Entities
 {
     internal class ShotModelDataProvider
     {
-        private List<ShotGroup> GroupList { get; } = new List<ShotGroup>();
+        private HashSet<ShotGroup> GroupList { get; } = new HashSet<ShotGroup>();
         private Dictionary<int, ShotGroup[]> CurrentGroupDict { get; set; }
+
+        public ShotModelDataProvider()
+        {
+            CurrentGroupDict = new Dictionary<int, ShotGroup[]>();
+        }
 
         public void Frame()
         {
-            CurrentGroupDict = GroupList.Where(g => g.ShotList.All(e => e.IsDeath && e.DeathFrameNo < e.World.FrameCount))
+            CurrentGroupDict = GroupList.Where(g => g.ShotList.All(e => e.IsDeath))
             .ToLookup(g => GetPropertyHashCode(g.Data.Property)).ToDictionary(g => g.Key, g => g.ToArray());
         }
 
@@ -28,29 +33,19 @@ namespace CurtainFireMakerPlugin.Entities
         {
             int hash = GetPropertyHashCode(entity.Property);
 
+            ShotGroup group = null;
             if (CurrentGroupDict.ContainsKey(hash))
             {
-                foreach (ShotGroup group in CurrentGroupDict[hash])
-                {
-                    if (group.IsAddable(entity))
-                    {
-                        group.AddEntity(entity);
-                        data = group.Data;
-                        return false;
-                    }
-                }
+                group = CurrentGroupDict[hash].FirstOrDefault(g => g.IsAddable(entity));
             }
-            data = CreateGroup(entity);
-            return true;
-        }
-
-        private ShotModelData CreateGroup(EntityShot entity)
-        {
-            ShotGroup group = new ShotGroup(entity);
+            if (group == null)
+            {
+                group = new ShotGroup(entity);
+            }
+            data = group.Data;
             group.AddEntity(entity);
-            GroupList.Add(group);
 
-            return group.Data;
+            return GroupList.Add(group);
         }
     }
 

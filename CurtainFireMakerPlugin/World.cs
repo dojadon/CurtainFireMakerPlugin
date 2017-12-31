@@ -105,7 +105,7 @@ namespace CurtainFireMakerPlugin
         internal void Frame()
         {
             ShotModelProvider.Frame();
-            TaskManager.Frame();
+            TaskManager.Frame(FrameCount);
 
             EntityList.AddRange(AddEntityList);
             RemoveEntityList.ForEach(e => EntityList.Remove(e));
@@ -165,7 +165,7 @@ namespace CurtainFireMakerPlugin
 
         internal void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
         {
-            AddTask(new Task(task, interval, executeTimes, waitTime));
+            AddTask(new Task(task, FrameCount, interval, executeTimes, waitTime));
         }
 
         public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
@@ -183,7 +183,7 @@ namespace CurtainFireMakerPlugin
 
     public class Task
     {
-        private Action<Task> State { get; set; }
+        private Action<Task, int> State { get; set; }
         private Action<Task> Action { get; set; }
 
         public int Interval { get; set; }
@@ -192,35 +192,34 @@ namespace CurtainFireMakerPlugin
         public int ExecutionTimes { get; set; }
         public int RunCount { get; set; }
 
-        private int WaitTime { get; }
-        private int WaitCount { get; set; }
+        private int StartTime { get; }
 
-        public Task(Action<Task> task, int interval, int executionTimes, int waitTime)
+        public Task(Action<Task> task, int currentTime, int interval, int executionTimes, int waitTime)
         {
             Action = task;
             Interval = UpdateCount = interval;
             ExecutionTimes = executionTimes;
-            WaitTime = waitTime;
+            StartTime = currentTime + waitTime;
 
             State = waitTime > 0 ? WAITING : ACTIVE;
         }
 
-        public void Update() => State(this);
+        public void Update(int frame) => State(this, frame);
 
         private void Run() => Action(this);
 
         public Boolean IsFinished() => State == FINISHED;
 
-        private static Action<Task> WAITING = (task) =>
+        private static Action<Task, int> WAITING = (task, frame) =>
         {
-            if (++task.WaitCount >= task.WaitTime)
+            if (frame >= task.StartTime - 1)
             {
                 task.State = ACTIVE;
             }
         };
-        private static Action<Task> ACTIVE = (task) =>
+        private static Action<Task, int> ACTIVE = (task, frame) =>
         {
-            if (++task.UpdateCount > task.Interval)
+            if (++task.UpdateCount >= task.Interval)
             {
                 task.UpdateCount = 0;
 
@@ -235,7 +234,7 @@ namespace CurtainFireMakerPlugin
                 }
             }
         };
-        private static Action<Task> FINISHED = (task) => { };
+        private static Action<Task, int> FINISHED = (task, frame) => { };
     }
 
     internal class TaskManager
@@ -248,12 +247,12 @@ namespace CurtainFireMakerPlugin
             AddTaskList.Add(task);
         }
 
-        public void Frame()
+        public void Frame(int frame)
         {
             TaskList.AddRange(AddTaskList);
             AddTaskList.Clear();
 
-            TaskList.ForEach(task => task.Update());
+            TaskList.ForEach(task => task.Update(frame));
             TaskList.RemoveAll(task => task.IsFinished());
         }
 

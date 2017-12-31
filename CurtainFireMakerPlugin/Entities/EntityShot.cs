@@ -17,8 +17,6 @@ namespace CurtainFireMakerPlugin.Entities
         public IMotionRecorder MotionRecorder { get; set; } = VmdMotionRecorder.Instance;
         public Recording Recording { get; set; } = Recording.Velocity;
 
-        public int RecordedFrameTime { get; set; }
-
         public CollisionType CollisionType { get; set; } = CollisionType.NONE;
 
         public override bool IsCollisionable => CollisionType != CollisionType.NONE;
@@ -31,16 +29,23 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
-            Property = property;
-            RecordedFrameTime = World.FrameCount;
+            try
+            {
+                Property = property;
 
-            ModelData = World.AddShot(this);
-            ModelData.OwnerEntities.Add(this);
+                ModelData = World.AddShot(this);
+                ModelData.OwnerEntities.Add(this);
 
-            RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
+                RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
-            Property.Type.InitEntity(this);
-            Property.Type.InitModelData(ModelData);
+                Property.Type.InitEntity(this);
+                Property.Type.InitModelData(ModelData);
+            }
+            catch (Exception e)
+            {
+                try { Console.WriteLine(World.Executor.FormatException(e)); } catch { }
+                Console.WriteLine(e);
+            }
         }
 
         public override void OnSpawn()
@@ -59,15 +64,15 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.OnDeath();
 
-            AddRootBoneKeyFrame(frameOffset: -1, priority: 0);
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 0, -1);
+            AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
+            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
         }
 
         protected override void UpdateTasks()
         {
             base.UpdateTasks();
 
-            if (Recording.ShouldRecord(this) || RecordedFrameTime++ == 0)
+            if (World.FrameCount == 0 || Recording.ShouldRecord(this))
             {
                 AddRootBoneKeyFrame();
             }
@@ -94,7 +99,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual bool IsGroupable(EntityShot e)
         {
-            return e.ParentEntity == ParentEntity && e.Property.IsGroupable(Property) && e.IsDeath && e.DeathFrameNo < World.FrameCount;
+            return e.ParentEntity == ParentEntity && e.Property.IsGroupable(Property) && e.IsDeath;
         }
 
         public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
@@ -117,12 +122,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve curve, int frameOffset = 0, int priority = 0)
         {
-            MotionRecorder.AddBoneKeyFrame(World, bone, pos, rot, curve, RecordedFrameTime + frameOffset, priority);
+            MotionRecorder.AddBoneKeyFrame(World, bone, pos, rot, curve, World.FrameCount + frameOffset, priority);
         }
 
         public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, int priority = 0)
         {
-            MotionRecorder.AddMorphKeyFrame(World, morph, weight, RecordedFrameTime + frameOffset, priority);
+            MotionRecorder.AddMorphKeyFrame(World, morph, weight, World.FrameCount + frameOffset, priority);
         }
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
