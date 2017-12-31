@@ -91,7 +91,7 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm(this)
+            var form = new ExportSettingForm()
             {
                 ScriptPath = Config.ScriptPath,
                 PmxExportDirPath = Config.PmxExportDirPath,

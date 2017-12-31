@@ -44,12 +44,8 @@ namespace CurtainFireMakerPlugin.Forms
         public bool DropPmxFile { get => CheckBoxDropPmxFile.Checked; set => CheckBoxDropPmxFile.Checked = value; }
         public bool DropVmdFile { get => CheckBoxDropVmdFile.Checked; set => CheckBoxDropVmdFile.Checked = value; }
 
-        private Plugin Plugin { get; }
-
-        public ExportSettingForm(Plugin plugin)
+        public ExportSettingForm()
         {
-            Plugin = plugin;
-
             InitializeComponent();
         }
 
@@ -93,11 +89,6 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 VmdExportDirPath = FolderBrowserDialogVmd.SelectedPath;
             }
-        }
-
-        private void Click_InitIronPython(object sender, EventArgs e)
-        {
-            Plugin.InitIronPython();
         }
 
         private void LoadForm(object sender, EventArgs e)

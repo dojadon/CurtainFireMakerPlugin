@@ -40,7 +40,6 @@
             this.OpenFileDialogScript = new System.Windows.Forms.OpenFileDialog();
             this.CheckBoxKeepLog = new System.Windows.Forms.CheckBox();
             this.FolderBrowserDialogPmx = new System.Windows.Forms.FolderBrowserDialog();
-            this.button2 = new System.Windows.Forms.Button();
             this.CheckBoxDropPmxFile = new System.Windows.Forms.CheckBox();
             this.CheckBoxDropVmdFile = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -147,17 +146,6 @@
             this.CheckBoxKeepLog.Text = "ログを開いたままにする";
             this.CheckBoxKeepLog.UseVisualStyleBackColor = true;
             // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(404, 157);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 23);
-            this.button2.TabIndex = 23;
-            this.button2.Text = "IronPython初期化";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Click_InitIronPython);
-            // 
             // CheckBoxDropPmxFile
             // 
             this.CheckBoxDropPmxFile.AutoSize = true;
@@ -221,7 +209,6 @@
             this.Controls.Add(this.TextBoxPmxExportPath);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.CheckBoxDropPmxFile);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.CheckBoxKeepLog);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button5);
@@ -252,7 +239,6 @@
         private System.Windows.Forms.OpenFileDialog OpenFileDialogScript;
         private System.Windows.Forms.CheckBox CheckBoxKeepLog;
         private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialogPmx;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox CheckBoxDropPmxFile;
         private System.Windows.Forms.CheckBox CheckBoxDropVmdFile;
         private System.Windows.Forms.Label label2;

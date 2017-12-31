@@ -43,12 +43,17 @@
             // 
             // textBoxScript
             // 
+            this.textBoxScript.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBoxScript.Location = new System.Drawing.Point(5, 26);
             this.textBoxScript.Multiline = true;
             this.textBoxScript.Name = "textBoxScript";
-            this.textBoxScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxScript.Size = new System.Drawing.Size(480, 280);
+            this.textBoxScript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxScript.Size = new System.Drawing.Size(492, 291);
             this.textBoxScript.TabIndex = 2;
+            this.textBoxScript.WordWrap = false;
             // 
             // IronPythonControl
             // 
