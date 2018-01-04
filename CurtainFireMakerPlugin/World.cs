@@ -20,6 +20,8 @@ namespace CurtainFireMakerPlugin
         public Configuration Config { get; }
         internal PythonExecutor Executor { get; }
 
+        public List<EntityCollisionObject> CollisonObjectList { get; private set; }
+
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
         public List<Entity> EntityList { get; } = new List<Entity>();
@@ -105,7 +107,7 @@ namespace CurtainFireMakerPlugin
         internal void Frame()
         {
             ShotModelProvider.Frame();
-            TaskManager.Frame(FrameCount);
+            TaskManager.Frame();
 
             EntityList.AddRange(AddEntityList);
             RemoveEntityList.ForEach(e => EntityList.Remove(e));
@@ -113,7 +115,11 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            foreach (var entity in EntityList.OrderByDescending(e => e.FramePriority)) entity.Frame();
+            CollisonObjectList = EntityList.Where(e => e is EntityCollisionObject).Select(e => e as EntityCollisionObject).ToList();
+
+            EntityList.ForEach(e => e.PreFrame());
+            EntityList.ForEach(e => e.Frame());
+            EntityList.ForEach(e => e.PostFrame());
 
             FrameCount++;
         }
@@ -165,7 +171,7 @@ namespace CurtainFireMakerPlugin
 
         internal void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
         {
-            AddTask(new Task(task, FrameCount, interval, executeTimes, waitTime));
+            AddTask(new Task(task, interval, executeTimes, waitTime));
         }
 
         public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
@@ -183,7 +189,7 @@ namespace CurtainFireMakerPlugin
 
     public class Task
     {
-        private Action<Task, int> State { get; set; }
+        private Action<Task> State { get; set; }
         private Action<Task> Action { get; set; }
 
         public int Interval { get; set; }
@@ -192,32 +198,33 @@ namespace CurtainFireMakerPlugin
         public int ExecutionTimes { get; set; }
         public int RunCount { get; set; }
 
-        private int StartTime { get; }
+        public int WaitTime { get; }
+        public int WaitCount { get; set; }
 
-        public Task(Action<Task> task, int currentTime, int interval, int executionTimes, int waitTime)
+        public Task(Action<Task> task, int interval, int executionTimes, int waitTime)
         {
             Action = task;
             Interval = UpdateCount = interval;
             ExecutionTimes = executionTimes;
-            StartTime = currentTime + waitTime;
+            WaitTime = waitTime;
 
             State = waitTime > 0 ? WAITING : ACTIVE;
         }
 
-        public void Update(int frame) => State(this, frame);
+        public void Update() => State(this);
 
         private void Run() => Action(this);
 
         public Boolean IsFinished() => State == FINISHED;
 
-        private static Action<Task, int> WAITING = (task, frame) =>
+        private static Action<Task> WAITING = (task) =>
         {
-            if (frame >= task.StartTime - 1)
+            if (++task.WaitCount >= task.WaitTime - 1)
             {
                 task.State = ACTIVE;
             }
         };
-        private static Action<Task, int> ACTIVE = (task, frame) =>
+        private static Action<Task> ACTIVE = (task) =>
         {
             if (++task.UpdateCount >= task.Interval)
             {
@@ -234,7 +241,7 @@ namespace CurtainFireMakerPlugin
                 }
             }
         };
-        private static Action<Task, int> FINISHED = (task, frame) => { };
+        private static Action<Task> FINISHED = (task) => { };
     }
 
     internal class TaskManager
@@ -247,12 +254,12 @@ namespace CurtainFireMakerPlugin
             AddTaskList.Add(task);
         }
 
-        public void Frame(int frame)
+        public void Frame()
         {
             TaskList.AddRange(AddTaskList);
             AddTaskList.Clear();
 
-            TaskList.ForEach(task => task.Update(frame));
+            TaskList.ForEach(task => task.Update());
             TaskList.RemoveAll(task => task.IsFinished());
         }
 

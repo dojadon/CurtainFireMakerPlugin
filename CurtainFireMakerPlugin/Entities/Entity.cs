@@ -38,13 +38,9 @@ namespace CurtainFireMakerPlugin.Entities
         public bool IsDeath { get; private set; }
         public bool IsSpawned { get; private set; }
 
-        public virtual bool IsCollisionable => false;
-
         private TaskManager TaskManager { get; } = new TaskManager();
 
         public World World { get; }
-
-        public virtual int FramePriority => 0;
 
         public int EntityId { get; }
         private static int nextEntityId;
@@ -55,6 +51,10 @@ namespace CurtainFireMakerPlugin.Entities
             EntityId = nextEntityId++;
 
             ParentEntity = parentEntity;
+        }
+
+        public virtual void PreFrame()
+        {
         }
 
         public virtual void Frame()
@@ -68,17 +68,14 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
+        public virtual  void PostFrame()
+        {
+        }
+
         protected virtual void UpdateTasks()
         {
-            TaskManager.Frame(World.FrameCount);
+            TaskManager.Frame();
         }
-
-        public virtual bool IsCollided(MeshTriangle tri)
-        {
-            return false;
-        }
-
-        public virtual void OnCollided() { }
 
         public void __call__()
         {
@@ -104,7 +101,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
         {
-            AddTask(new Task(task, World.FrameCount, interval, executeTimes, waitTime));
+            AddTask(new Task(task, interval, executeTimes, waitTime));
         }
 
         public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)

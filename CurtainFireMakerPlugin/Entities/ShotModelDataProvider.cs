@@ -38,12 +38,10 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 group = CurrentGroupDict[hash].FirstOrDefault(g => g.IsAddable(entity));
             }
-            if (group == null)
-            {
-                group = new ShotGroup(entity);
-            }
-            data = group.Data;
+            group = group ?? new ShotGroup(entity);
+
             group.AddEntity(entity);
+            data = group.Data;
 
             return GroupList.Add(group);
         }

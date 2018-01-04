@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Entities\CubicBezierCurve.cs" />
     <Compile Include="Entities\EntityCollisionObject.cs" />
+    <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />
     <Compile Include="Entities\Recording.cs" />
     <Compile Include="Configuration.cs" />

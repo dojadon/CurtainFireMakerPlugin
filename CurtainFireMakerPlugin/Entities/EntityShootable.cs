@@ -21,7 +21,7 @@ namespace CurtainFireMakerPlugin.Entities
             get => velocity;
             set
             {
-                if (!Vector3.EpsilonEquals(velocity, (velocity = value), Epsilon)) OnVelocityCahnged();
+                if (!Vector3.EpsilonEquals(velocity, (velocity = value), Epsilon)) OnVelocityUpdated();
             }
         }
 
@@ -50,7 +50,7 @@ namespace CurtainFireMakerPlugin.Entities
             Pos += GetInterpolatedVelocity();
         }
 
-        protected virtual void OnVelocityCahnged()
+        protected virtual void OnVelocityUpdated()
         {
             IsUpdatedVelocity = true;
             if (Velocity != Vector3.Zero)
@@ -86,36 +86,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
             return interpolatedVelocity;
         }
-
-        public override bool IsCollided(MeshTriangle mesh)
-        {
-            var pos = Pos;
-
-            if (Math.Abs(mesh.Normal * (Pos - mesh.Pos1)) > Epsilon)
-            {
-                float dot = mesh.Normal * Velocity;
-
-                if (Math.Abs(dot) <= Epsilon) return false;
-
-                float time = -mesh.Normal * (Pos - mesh.Pos1) / dot;
-
-                if (0 - Epsilon <= time && time <= 1 + Epsilon)
-                {
-                    pos += Velocity * time;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            var cross1 = (mesh.Pos2 - mesh.Pos1) ^ (pos - mesh.Pos2);
-            var cross2 = (mesh.Pos3 - mesh.Pos2) ^ (pos - mesh.Pos3);
-            var cross3 = (mesh.Pos1 - mesh.Pos3) ^ (pos - mesh.Pos1);
-
-            return cross1 * cross2 > -Epsilon && cross1 * cross3 > -Epsilon;
-        }
-
+       
         public virtual void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
         {
             MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2, isSyncingVelocity);

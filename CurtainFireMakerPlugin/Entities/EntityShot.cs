@@ -7,7 +7,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class EntityShot : EntityShootable
+    public class EntityShot : EntityCollisonable
     {
         public ShotProperty Property { get; }
 
@@ -19,7 +19,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         public CollisionType CollisionType { get; set; } = CollisionType.NONE;
 
-        public override bool IsCollisionable => CollisionType != CollisionType.NONE;
+        protected override bool IsCollisionable
+        {
+            get => CollisionType != CollisionType.NONE;
+            set => CollisionType = value ? CollisionType : CollisionType.NONE;
+        }
 
         public EntityShot(World world, ShotType type, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(type, color), parentEntity) { }
@@ -79,7 +83,7 @@ namespace CurtainFireMakerPlugin.Entities
             IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
-        public override void OnCollided()
+        public override void OnCollided(float time)
         {
             switch (CollisionType)
             {
@@ -88,6 +92,7 @@ namespace CurtainFireMakerPlugin.Entities
                     break;
 
                 case CollisionType.STICK:
+                    Pos += Velocity * time;
                     Velocity = Vector3.Zero;
                     break;
 
