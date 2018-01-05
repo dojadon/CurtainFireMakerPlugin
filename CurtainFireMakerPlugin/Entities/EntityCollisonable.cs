@@ -65,7 +65,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 float time = CalcTimeToCollideWithPlane(tri.Pos1, tri.Normal);
 
-                if (0 <= time && time + FrameCount < minTime && IsCollidedWithTriangle(tri, Pos + Velocity * time))
+                if (0 <= time && time + FrameCount < minTime && IsCollidedWithTriangle(tri))
                 {
                     minTime = time + FrameCount;
                 }
@@ -81,7 +81,7 @@ namespace CurtainFireMakerPlugin.Entities
             return min <= Pos && Pos <= max;
         }
 
-        protected virtual bool IsCollidedWithTriangle(MeshTriangle tri, Vector3 pos)
+        protected virtual bool IsCollidedWithTriangle(MeshTriangle tri)
         {
             var cross1 = (tri.Pos2 - tri.Pos1) ^ (Pos - tri.Pos1);
             var cross2 = (tri.Pos3 - tri.Pos2) ^ (Pos - tri.Pos2);

@@ -67,7 +67,7 @@ namespace CurtainFireMakerPlugin.Entities
             Pos1 = pos1;
             Pos2 = pos2;
             Pos3 = pos3;
-            Normal = -+(Pos1 ^ Pos2);
+            Normal = (Pos3 - Pos1) ^ (Pos2 - Pos1);
         }
 
         public MeshTriangle(MeshTriangle mesh) : this(mesh.Pos1, mesh.Pos1, mesh.Pos3)
