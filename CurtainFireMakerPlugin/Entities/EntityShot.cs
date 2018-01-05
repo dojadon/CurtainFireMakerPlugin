@@ -172,12 +172,4 @@ namespace CurtainFireMakerPlugin.Entities
             }
         };
     }
-
-    public enum CollisionType
-    {
-        NONE,
-        VANISH,
-        REFLECT,
-        STICK,
-    }
 }
