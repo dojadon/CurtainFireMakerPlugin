@@ -20,7 +20,7 @@ namespace CurtainFireMakerPlugin
         public Configuration Config { get; }
         internal PythonExecutor Executor { get; }
 
-        public List<EntityCollisionObject> CollisonObjectList { get; private set; }
+        public List<StaticRigidObject> RigidObjectList { get; } = new List<StaticRigidObject>();
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
@@ -59,9 +59,9 @@ namespace CurtainFireMakerPlugin
             KeyFrames = new CurtainFireMotion(this);
         }
 
-        private void OnExport(EventArgs e)
+        public void AddRigidObject(StaticRigidObject rigid)
         {
-            ExportEvent?.Invoke(this, e);
+            RigidObjectList.Add(rigid);
         }
 
         internal ShotModelData AddShot(EntityShot entity)
@@ -115,8 +115,6 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            CollisonObjectList = EntityList.Where(e => e is EntityCollisionObject).Select(e => e as EntityCollisionObject).ToList();
-
             EntityList.ForEach(e => e.PreFrame());
             EntityList.ForEach(e => e.Frame());
             EntityList.ForEach(e => e.PostFrame());
@@ -134,7 +132,7 @@ namespace CurtainFireMakerPlugin
             PmxModel.Export();
             KeyFrames.Export();
 
-            OnExport(EventArgs.Empty);
+            ExportEvent?.Invoke(this, EventArgs.Empty);
         }
 
         internal void DropFileToMMM()

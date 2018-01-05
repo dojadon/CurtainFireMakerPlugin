@@ -6,34 +6,10 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class EntityCollisionObject : Entity
+    public class StaticRigidObject
     {
         public AABoundingBox AABB { get; protected set; }
-        public AABoundingBox TransformedAABB { get; protected set; }
-
         public MeshTriangle[] Meshes { get; protected set; }
-        public MeshTriangle[] TransformedMeshes { get; protected set; }
-
-        public bool IsUpdatedLocalMat { get; protected set; }
-
-        public EntityCollisionObject(World world) : base(world) { }
-
-        public override void PreFrame()
-        {
-            var worldMat = WorldMat;
-            TransformedAABB = AABB * worldMat;
-            TransformedMeshes = Meshes.Select(m => m * worldMat).ToArray();
-        }
-
-        public override void Frame()
-        {
-            base.Frame();
-        }
-
-        public override void PostFrame()
-        {
-            IsUpdatedLocalMat = false;
-        }
     }
 
     public struct AABoundingBox
