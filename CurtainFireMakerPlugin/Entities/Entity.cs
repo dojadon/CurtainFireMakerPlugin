@@ -53,10 +53,6 @@ namespace CurtainFireMakerPlugin.Entities
             ParentEntity = parentEntity;
         }
 
-        public virtual void PreFrame()
-        {
-        }
-
         public virtual void Frame()
         {
             UpdateTasks();
@@ -66,10 +62,6 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 OnDeath();
             }
-        }
-
-        public virtual  void PostFrame()
-        {
         }
 
         protected virtual void UpdateTasks()

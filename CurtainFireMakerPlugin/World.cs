@@ -115,9 +115,7 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            EntityList.ForEach(e => e.PreFrame());
             EntityList.ForEach(e => e.Frame());
-            EntityList.ForEach(e => e.PostFrame());
 
             FrameCount++;
         }
