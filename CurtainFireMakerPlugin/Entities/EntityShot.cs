@@ -25,23 +25,15 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
-            try
-            {
-                Property = property;
+            Property = property;
 
-                ModelData = World.AddShot(this);
-                ModelData.OwnerEntities.Add(this);
+            ModelData = World.AddShot(this);
+            ModelData.OwnerEntities.Add(this);
 
-                RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
+            RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
-                Property.Type.InitEntity(this);
-                Property.Type.InitModelData(ModelData);
-            }
-            catch (Exception e)
-            {
-                try { Console.WriteLine(World.Executor.FormatException(e)); } catch { }
-                Console.WriteLine(e);
-            }
+            Property.Type.InitEntity(this);
+            Property.Type.InitModelData(ModelData);
         }
 
         public override void OnSpawn()
@@ -72,7 +64,6 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 AddRootBoneKeyFrame();
             }
-            IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
         public override void OnCollided(MeshTriangle tri, float time)
