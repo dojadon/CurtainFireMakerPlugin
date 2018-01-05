@@ -13,7 +13,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public List<StaticRigidObject> ChildRigidObjectList { get; } = new List<StaticRigidObject>();
 
-        public StaticRigidObject(World world, MeshTriangle[] meshes, AABoundingBox aabb)
+        public StaticRigidObject(MeshTriangle[] meshes, AABoundingBox aabb)
         {
             Meshes = meshes;
             AABB = aabb;
