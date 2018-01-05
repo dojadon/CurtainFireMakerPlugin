@@ -10,6 +10,16 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public AABoundingBox AABB { get; protected set; }
         public MeshTriangle[] Meshes { get; protected set; }
+
+        public List<StaticRigidObject> ChildRigidObjectList { get; } = new List<StaticRigidObject>();
+
+        public StaticRigidObject(World world, MeshTriangle[] meshes, AABoundingBox aabb)
+        {
+            Meshes = meshes;
+            AABB = aabb;
+
+            world.AddRigidObject(this);
+        }
     }
 
     public struct AABoundingBox
@@ -22,13 +32,6 @@ namespace CurtainFireMakerPlugin.Entities
             Pos1 = pos1;
             Pos2 = pos2;
         }
-
-        public AABoundingBox Transform(Matrix4 mat)
-        {
-            return new AABoundingBox((Vector4)Pos1 * mat, (Vector4)Pos2 * mat);
-        }
-
-        public static AABoundingBox operator *(AABoundingBox box, Matrix4 m) => box.Transform(m);
     }
 
     public struct MeshTriangle
@@ -45,16 +48,5 @@ namespace CurtainFireMakerPlugin.Entities
             Pos3 = pos3;
             Normal = (Pos3 - Pos1) ^ (Pos2 - Pos1);
         }
-
-        public MeshTriangle(MeshTriangle mesh) : this(mesh.Pos1, mesh.Pos1, mesh.Pos3)
-        {
-        }
-
-        public MeshTriangle Transform(Matrix4 mat)
-        {
-            return new MeshTriangle((Vector4)Pos1 * mat, (Vector4)Pos2 * mat, (Vector4)Pos3 * mat);
-        }
-
-        public static MeshTriangle operator *(MeshTriangle mesh, Matrix4 m) => mesh.Transform(m);
     }
 }

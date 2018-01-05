@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
@@ -38,24 +39,32 @@ namespace CurtainFireMakerPlugin.Entities
 
             if (IsCollisionable && ShouldUpdateTimeToCollide)
             {
-                UpdateMinTimeToCollideWithObject();
+                UpdateMinTimeToCollideWithObject(World.RigidObjectList);
                 ShouldUpdateTimeToCollide = false;
             }
         }
 
         public virtual void OnCollided(float time) { }
 
-        private void UpdateMinTimeToCollideWithObject()
+        private void UpdateMinTimeToCollideWithObject(IEnumerable<StaticRigidObject> rigidObjectList)
         {
-            foreach (var tri in World.RigidObjectList.Where(c => IsIntersectWithAABB(c.AABB)).SelectMany(c => c.Meshes))
+            foreach (var rigidObject in rigidObjectList.Where(c => IsIntersectWithAABB(c.AABB)))
+            {
+                UpdateMinTimeToCollideWithObject(rigidObject);
+            }
+        }
+
+        private void UpdateMinTimeToCollideWithObject(StaticRigidObject rigidObject)
+        {
+            foreach (var tri in rigidObject.Meshes)
             {
                 float time = CalculateTimeToIntersectWithPlane(tri.Pos1, tri.Normal);
-
                 if (0 <= time && time + FrameCount < TimeToCollide && IsIntersectWithTriangle(tri))
                 {
                     TimeToCollide = time + FrameCount;
                 }
             }
+            UpdateMinTimeToCollideWithObject(rigidObject.ChildRigidObjectList);
         }
 
         protected virtual bool IsIntersectWithAABB(AABoundingBox box)
