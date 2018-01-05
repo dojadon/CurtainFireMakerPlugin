@@ -17,8 +17,6 @@ namespace CurtainFireMakerPlugin.Entities
         {
             Meshes = meshes;
             AABB = aabb;
-
-            world.AddRigidObject(this);
         }
     }
 
