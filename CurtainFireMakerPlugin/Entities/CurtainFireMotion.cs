@@ -53,14 +53,6 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public int GetKeyFrameHashCode<T>(T obj) where T : IElementKeyFrame
-        {
-            int result = 17;
-            result = result * 23 + obj.FrameTime;
-            result = result * 23 + obj.Name.GetHashCode();
-            return result;
-        }
-
         public void FinalizeKeyFrame(IEnumerable<PmxMorphData> morphs)
         {
             var morphNames = morphs.Select(m => m.MorphName);

@@ -71,7 +71,6 @@
     <Compile Include="Entities\StaticRigidObject.cs" />
     <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />
-    <Compile Include="Entities\Recording.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
@@ -99,7 +98,6 @@
     <Compile Include="Forms\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Entities\MotionRecorder.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />

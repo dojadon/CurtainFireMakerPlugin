@@ -7,7 +7,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public abstract class EntityCollisonable : EntityShootable
     {
-        protected abstract bool IsCollisionable { get; set; }
+        protected bool IsCollisionable => NumberOfCollide > 0;
 
         public int NumberOfCollide { get; set; } = 1;
 
@@ -35,10 +35,7 @@ namespace CurtainFireMakerPlugin.Entities
             if (IsCollisionable && FrameCount >= Math.Floor(TimeToCollide))
             {
                 OnCollided(MeshToCollide, TimeToCollide - (float)Math.Floor(TimeToCollide));
-                if(--NumberOfCollide <= 0)
-                {
-                    IsCollisionable = false;
-                }
+                NumberOfCollide--;
             }
 
             base.Frame();
