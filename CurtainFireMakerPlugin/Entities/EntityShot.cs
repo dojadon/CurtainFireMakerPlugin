@@ -83,7 +83,7 @@ namespace CurtainFireMakerPlugin.Entities
             IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
-        public override void OnCollided(float time)
+        public override void OnCollided(MeshTriangle tri, float time)
         {
             switch (CollisionType)
             {
@@ -94,6 +94,11 @@ namespace CurtainFireMakerPlugin.Entities
                 case CollisionType.STICK:
                     Pos += Velocity * time;
                     Velocity = Vector3.Zero;
+                    break;
+
+                case CollisionType.REFLECT:
+                    Pos += Velocity * time + tri.Normal * 2.0F;
+                    Velocity = tri.Normal * (Velocity * tri.Normal * -2) + Velocity;
                     break;
 
                 case CollisionType.NONE:
@@ -145,6 +150,7 @@ namespace CurtainFireMakerPlugin.Entities
     {
         NONE,
         VANISH,
+        REFLECT,
         STICK,
     }
 }

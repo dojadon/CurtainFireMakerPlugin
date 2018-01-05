@@ -44,7 +44,7 @@ namespace CurtainFireMakerPlugin.Entities
             Pos1 = pos1;
             Pos2 = pos2;
             Pos3 = pos3;
-            Normal = (Pos3 - Pos1) ^ (Pos2 - Pos1);
+            Normal = +((Pos3 - Pos1) ^ (Pos2 - Pos1));
         }
     }
 }

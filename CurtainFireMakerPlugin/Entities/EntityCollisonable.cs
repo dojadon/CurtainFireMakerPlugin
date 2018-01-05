@@ -9,6 +9,9 @@ namespace CurtainFireMakerPlugin.Entities
     {
         protected abstract bool IsCollisionable { get; set; }
 
+        public int NumberOfCollide { get; set; } = 1;
+
+        private MeshTriangle MeshToCollide { get; set; }
         private float TimeToCollide { get; set; }
 
         private bool ShouldUpdateTimeToCollide { get; set; } = true;
@@ -31,8 +34,11 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (IsCollisionable && FrameCount >= Math.Floor(TimeToCollide))
             {
-                OnCollided(TimeToCollide - (float)Math.Floor(TimeToCollide));
-                IsCollisionable = false;
+                OnCollided(MeshToCollide, TimeToCollide - (float)Math.Floor(TimeToCollide));
+                if(--NumberOfCollide <= 0)
+                {
+                    IsCollisionable = false;
+                }
             }
 
             base.Frame();
@@ -44,7 +50,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public virtual void OnCollided(float time) { }
+        public virtual void OnCollided(MeshTriangle tri, float time) { }
 
         private void UpdateMinTimeToCollideWithObject(IEnumerable<StaticRigidObject> rigidObjectList)
         {
@@ -62,6 +68,7 @@ namespace CurtainFireMakerPlugin.Entities
                 if (0 <= time && time + FrameCount < TimeToCollide && IsIntersectWithTriangle(tri))
                 {
                     TimeToCollide = time + FrameCount;
+                    MeshToCollide = tri;
                 }
             }
             UpdateMinTimeToCollideWithObject(rigidObject.ChildRigidObjectList);
