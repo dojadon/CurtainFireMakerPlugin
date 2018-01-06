@@ -186,6 +186,7 @@ namespace CurtainFireMakerPlugin
                 form.ProgressBar.PerformStep();
                 TaskbarManager.Instance.SetProgressValue(i, world.MaxFrame);
             }
+            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Paused);
 
             if ((isNeededDroping = form.DialogResult != DialogResult.Cancel))
             {
