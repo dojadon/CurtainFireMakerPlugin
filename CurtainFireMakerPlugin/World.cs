@@ -5,7 +5,6 @@ using System.Text;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Forms;
-using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
 using CurtainFireMakerPlugin.Forms;
 using IronPython.Runtime;
@@ -264,6 +263,4 @@ namespace CurtainFireMakerPlugin
             }
         }
     }
-
-
 }
