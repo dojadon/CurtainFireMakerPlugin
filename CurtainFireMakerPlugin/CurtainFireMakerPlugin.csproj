@@ -80,6 +80,7 @@
     <Compile Include="Entities\ModelVertexCollection.cs" />
     <Compile Include="Entities\ShotModelDataProvider.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
+    <Compile Include="Entities\Task.cs" />
     <Compile Include="Forms\ExportSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>

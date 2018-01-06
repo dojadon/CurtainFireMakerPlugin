@@ -111,89 +111,12 @@ namespace CurtainFireMakerPlugin
 
             if (form.DialogResult == DialogResult.OK)
             {
-                GenerateCurainFire();
-            }
-        }
-
-        private void GenerateCurainFire()
-        {
-            ProgressForm progressForm = new ProgressForm();
-
-            System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
-
-            using (var sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
-            {
-                Console.SetOut(sw);
-                PythonExecutor.SetOut(sw.BaseStream);
-
-                try
+                var world = new World(PythonExecutor, Config, ApplicationForm.Handle, Path.GetFileNameWithoutExtension(Config.ScriptPath))
                 {
-                    var world = new World(this, Path.GetFileNameWithoutExtension(Config.ScriptPath));
-                    long time = Environment.TickCount;
-
-                    if (RunWorld(world, progressForm))
-                    {
-                        Console.WriteLine((Environment.TickCount - time) + "ms");
-                        Finalize();
-
-                        try { world.DropFileToMMM(); } catch { }
-                    }
-                }
-                catch (Exception e)
-                {
-                    try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
-                    sw.WriteLine(e);
-
-                    Finalize();
-                }
-
-                void Finalize()
-                {
-                    sw.Flush();
-                    sw.Dispose();
-
-                    if (!progressForm.IsDisposed)
-                        progressForm.LogText = File.ReadAllText(Config.LogPath);
-                }
+                    Script = Script
+                };
+                world.GenerateCurainFire(IronPythonControl.ScriptText);
             }
-
-            if (!Config.KeepLogOpen)
-            {
-                progressForm.Dispose();
-            }
-        }
-
-        private bool RunWorld(World world, ProgressForm form)
-        {
-            bool isNeededDroping = false;
-
-            world.InitPre();
-
-            PythonExecutor.SetGlobalVariable(("WORLD", world));
-            PythonExecutor.ExecuteOnRootScope(IronPythonControl.ScriptText);
-            PythonExecutor.ExecuteFileOnNewScope(Config.ScriptPath);
-
-            world.InitPost();
-
-            form.ProgressBar.Minimum = 0;
-            form.ProgressBar.Maximum = world.MaxFrame;
-            form.ProgressBar.Step = 1;
-            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal);
-
-            for (int i = 0; i < world.MaxFrame && form.DialogResult != DialogResult.Cancel; i++)
-            {
-                world.Frame();
-                form.ProgressBar.PerformStep();
-                TaskbarManager.Instance.SetProgressValue(i, world.MaxFrame);
-            }
-            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Paused);
-
-            if ((isNeededDroping = form.DialogResult != DialogResult.Cancel))
-            {
-                world.Export();
-            }
-
-            return isNeededDroping;
         }
     }
 }

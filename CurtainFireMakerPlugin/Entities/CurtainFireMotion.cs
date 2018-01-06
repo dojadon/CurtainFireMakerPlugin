@@ -82,7 +82,7 @@ namespace CurtainFireMakerPlugin.Entities
                 var data = CreateVmdMotionData();
                 data.Write(new BinaryWriter(stream));
 
-                World.Plugin.Script.output_vmd_log(data);
+                World.Script.output_vmd_log(data);
             }
         }
     }

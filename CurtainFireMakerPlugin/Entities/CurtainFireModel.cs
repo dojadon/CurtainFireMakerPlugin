@@ -111,7 +111,7 @@ namespace CurtainFireMakerPlugin.Entities
                 var data = CreatePmxModelData();
                 data.Write(new BinaryWriter(stream));
 
-                World.Plugin.Script.output_pmx_log(data);
+                World.Script.output_pmx_log(data);
             }
         }
     }
