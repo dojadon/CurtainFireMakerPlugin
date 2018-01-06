@@ -17,6 +17,8 @@ namespace CurtainFireMakerPlugin.Entities
         public Recording Recording { get; set; } = Recording.Velocity;
         public Colliding Colliding { get; set; } = Colliding.None;
 
+        protected override bool IsCollisionable { get => Colliding != Colliding.None; set => Colliding = value ? Colliding : Colliding.None; }
+
         public EntityShot(World world, ShotType type, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(type, color), parentEntity) { }
 
@@ -159,7 +161,7 @@ namespace CurtainFireMakerPlugin.Entities
             OnCollide = (e, tri, time) =>
             {
                 e.Pos += e.Velocity * time + tri.Normal * 2.0F;
-                e.Velocity = tri.Normal * -(e.Velocity * tri.Normal * 2) + e.Velocity;
+                e.Velocity = tri.Normal * (e.Velocity * tri.Normal * -2) + e.Velocity;
             }
         };
     }
