@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Forms;
-using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Entities;
+using CurtainFireMakerPlugin.Forms;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using CsMmdDataIO.Vmd;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace CurtainFireMakerPlugin
 {
@@ -15,10 +18,11 @@ namespace CurtainFireMakerPlugin
     {
         public int MaxFrame { get; set; } = 1000;
 
-        public Plugin Plugin { get; }
-        public Scene Scene { get; }
         public Configuration Config { get; }
         internal PythonExecutor Executor { get; }
+        internal IntPtr HandleToDrop { get; }
+
+        public dynamic Script { get; internal set; }
 
         public List<StaticRigidObject> RigidObjectList { get; } = new List<StaticRigidObject>();
 
@@ -27,13 +31,15 @@ namespace CurtainFireMakerPlugin
         public List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
+        public ShotTypeProvider ShotTypeProvider { get; }
+
         internal ShotModelDataProvider ShotModelProvider { get; }
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion KeyFrames { get; }
 
         private TaskManager TaskManager { get; } = new TaskManager();
 
-        internal String ExportFileName { get; set; }
+        internal string ExportFileName { get; set; }
 
         public event EventHandler ExportEvent;
 
@@ -43,16 +49,14 @@ namespace CurtainFireMakerPlugin
         public string ModelName { get; set; }
         public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";
 
-        internal World(Plugin plugin, string fileName)
+        internal World(ShotTypeProvider typeProvider, PythonExecutor executor, Configuration config, IntPtr handle, string fileName)
         {
-            Plugin = plugin;
+            ShotTypeProvider = typeProvider;
+            Executor = executor;
+            Config = config;
+            HandleToDrop = handle;
 
-            Scene = Plugin.Scene;
-            Config = Plugin.Config;
-            Executor = Plugin.PythonExecutor;
-
-            ExportFileName = fileName;
-            ModelName = ExportFileName;
+            ExportFileName = ModelName = fileName;
 
             ShotModelProvider = new ShotModelDataProvider();
             PmxModel = new CurtainFireModel(this);
@@ -89,7 +93,7 @@ namespace CurtainFireMakerPlugin
 
         internal void InitPre()
         {
-            foreach (var type in ShotType.ShotTypeList)
+            foreach (var type in ShotTypeProvider.ShotTypeDict.Values)
             {
                 type.InitWorld(this);
             }
@@ -115,11 +119,89 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            EntityList.ForEach(e => e.PreFrame());
             EntityList.ForEach(e => e.Frame());
-            EntityList.ForEach(e => e.PostFrame());
 
             FrameCount++;
+        }
+
+        public void GenerateCurainFire(string script)
+        {
+            ProgressForm progressForm = new ProgressForm();
+
+            System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
+
+            using (var sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
+            {
+                Console.SetOut(sw);
+                Executor.SetOut(sw.BaseStream);
+
+                bool isNeededDroping = false;
+                try
+                {
+                    long time = Environment.TickCount;
+
+                    if (isNeededDroping = RunWorld(script, progressForm))
+                    {
+                        Console.WriteLine((Environment.TickCount - time) + "ms");
+                    }
+                }
+                catch (Exception e)
+                {
+                    try { sw.WriteLine(Executor.FormatException(e)); } catch { }
+                    sw.WriteLine(e);
+                }
+                finally
+                {
+                    sw.Flush();
+                    sw.Dispose();
+
+                    if (!progressForm.IsDisposed)
+                    {
+                        try { progressForm.LogText = File.ReadAllText(Config.LogPath); } catch { }
+
+                        if (isNeededDroping)
+                            try { DropFileToHandle(); } catch { }
+                    }
+                }
+            }
+
+            if (!Config.KeepLogOpen)
+            {
+                progressForm.Dispose();
+            }
+        }
+
+        public bool RunWorld(string script, ProgressForm form)
+        {
+            bool isNeededDroping = false;
+
+            InitPre();
+
+            Executor.SetGlobalVariable(("WORLD", this));
+            Executor.ExecuteOnRootScope(script);
+            Executor.ExecuteFileOnNewScope(Config.ScriptPath);
+
+            InitPost();
+
+            form.ProgressBar.Minimum = 0;
+            form.ProgressBar.Maximum = MaxFrame;
+            form.ProgressBar.Step = 1;
+            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal);
+
+            for (int i = 0; i < MaxFrame && form.DialogResult != DialogResult.Cancel; i++)
+            {
+                Frame();
+                form.ProgressBar.PerformStep();
+                TaskbarManager.Instance.SetProgressValue(i, MaxFrame);
+            }
+            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Paused);
+
+            if (isNeededDroping = form.DialogResult != DialogResult.Cancel)
+            {
+                Export();
+            }
+
+            return isNeededDroping;
         }
 
         internal void Export()
@@ -135,16 +217,16 @@ namespace CurtainFireMakerPlugin
             ExportEvent?.Invoke(this, EventArgs.Empty);
         }
 
-        internal void DropFileToMMM()
+        internal void DropFileToHandle()
         {
             if (Config.DropPmxFile)
             {
-                Drop(Plugin.ApplicationForm.Handle, new StringCollection() { PmxExportPath });
+                Drop(HandleToDrop, new StringCollection() { PmxExportPath });
             }
 
-            if (Config.DropVmdFile && (Config.DropPmxFile || Scene.Models.Count > 0))
+            if (Config.DropVmdFile && Config.DropPmxFile)
             {
-                Drop(Plugin.ApplicationForm.Handle, new StringCollection() { VmdExportPath });
+                Drop(HandleToDrop, new StringCollection() { VmdExportPath });
             }
 
             void Drop(IntPtr hWnd, StringCollection filePaths)
@@ -183,84 +265,5 @@ namespace CurtainFireMakerPlugin
                 AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
             }
         }
-    }
-
-    public class Task
-    {
-        private Action<Task> State { get; set; }
-        private Action<Task> Action { get; set; }
-
-        public int Interval { get; set; }
-        public int UpdateCount { get; set; }
-
-        public int ExecutionTimes { get; set; }
-        public int RunCount { get; set; }
-
-        public int WaitTime { get; }
-        public int WaitCount { get; set; }
-
-        public Task(Action<Task> task, int interval, int executionTimes, int waitTime)
-        {
-            Action = task;
-            Interval = UpdateCount = interval;
-            ExecutionTimes = executionTimes;
-            WaitTime = waitTime;
-
-            State = waitTime > 0 ? WAITING : ACTIVE;
-        }
-
-        public void Update() => State(this);
-
-        private void Run() => Action(this);
-
-        public Boolean IsFinished() => State == FINISHED;
-
-        private static Action<Task> WAITING = (task) =>
-        {
-            if (++task.WaitCount >= task.WaitTime - 1)
-            {
-                task.State = ACTIVE;
-            }
-        };
-        private static Action<Task> ACTIVE = (task) =>
-        {
-            if (++task.UpdateCount >= task.Interval)
-            {
-                task.UpdateCount = 0;
-
-                if (task.RunCount + 1 > task.ExecutionTimes && task.ExecutionTimes != 0)
-                {
-                    task.State = FINISHED;
-                }
-                else
-                {
-                    task.Run();
-                    task.RunCount++;
-                }
-            }
-        };
-        private static Action<Task> FINISHED = (task) => { };
-    }
-
-    internal class TaskManager
-    {
-        private List<Task> TaskList { get; } = new List<Task>();
-        private List<Task> AddTaskList { get; } = new List<Task>();
-
-        public void AddTask(Task task)
-        {
-            AddTaskList.Add(task);
-        }
-
-        public void Frame()
-        {
-            TaskList.AddRange(AddTaskList);
-            AddTaskList.Clear();
-
-            TaskList.ForEach(task => task.Update());
-            TaskList.RemoveAll(task => task.IsFinished());
-        }
-
-        public bool IsEmpty() => TaskList.Count == 0 && AddTaskList.Count == 0;
     }
 }

@@ -10,9 +10,9 @@ namespace CurtainFireMakerPlugin.Entities
     {
         private PmxModelData Data { get; } = new PmxModelData();
 
-        public ShotTypePmx(string path, float size) : this(path, new Vector3(size, size, size)) { }
+        public ShotTypePmx(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
 
-        public ShotTypePmx(string path, Vector3 size) : base()
+        public ShotTypePmx(string name, string path, Vector3 size) : base(name)
         {
             path = Configuration.ResourceDirPath + path;
 

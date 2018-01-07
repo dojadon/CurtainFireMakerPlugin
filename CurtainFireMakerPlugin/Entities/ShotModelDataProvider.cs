@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             int result = 17;
             result = result * 23 + property.Color;
-            result = result * 23 + property.Type.Id;
+            result = result * 23 + property.Type.Name.GetHashCode();
             return result;
         }
 

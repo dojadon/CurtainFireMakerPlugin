@@ -46,13 +46,17 @@
             this.textBoxScript.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxScript.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.textBoxScript.ForeColor = System.Drawing.SystemColors.WindowText;
             this.textBoxScript.Location = new System.Drawing.Point(5, 26);
+            this.textBoxScript.Margin = new System.Windows.Forms.Padding(3, 3, 80, 60);
             this.textBoxScript.Multiline = true;
             this.textBoxScript.Name = "textBoxScript";
-            this.textBoxScript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxScript.Size = new System.Drawing.Size(492, 291);
+            this.textBoxScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxScript.Size = new System.Drawing.Size(495, 274);
             this.textBoxScript.TabIndex = 2;
+            this.textBoxScript.TabStop = false;
             this.textBoxScript.WordWrap = false;
             // 
             // IronPythonControl
@@ -62,7 +66,7 @@
             this.Controls.Add(this.textBoxScript);
             this.Controls.Add(this.label1);
             this.Name = "IronPythonControl";
-            this.Size = new System.Drawing.Size(500, 320);
+            this.Size = new System.Drawing.Size(580, 360);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.Entities
         public override int GetHashCode()
         {
             int result = 17;
-            result = result * 23 + Type.Id;
+            result = result * 23 + Type.Name.GetHashCode();
             result = result * 23 + Color;
             result = result * 23 + ShotGroup;
             return result;

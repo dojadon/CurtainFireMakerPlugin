@@ -48,6 +48,7 @@ namespace CurtainFireMakerPlugin.Entities
             base.Frame();
 
             Pos += GetInterpolatedVelocity();
+            IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
         protected virtual void OnVelocityUpdated()
@@ -86,7 +87,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
             return interpolatedVelocity;
         }
-       
+
         public virtual void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
         {
             MotionInterpolation = new MotionInterpolation(World.FrameCount, length, pos1, pos2, isSyncingVelocity);

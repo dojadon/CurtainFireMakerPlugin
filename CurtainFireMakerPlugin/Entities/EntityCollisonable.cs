@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.Entities
             if (IsCollisionable && FrameCount >= Math.Floor(TimeToCollide))
             {
                 OnCollided(MeshToCollide, TimeToCollide - (float)Math.Floor(TimeToCollide));
-                if(--NumberOfCollide <= 0)
+                if (--NumberOfCollide <= 0)
                 {
                     IsCollisionable = false;
                 }
