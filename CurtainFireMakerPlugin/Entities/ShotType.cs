@@ -7,17 +7,25 @@ using CsMmdDataIO.Pmx;
 
 namespace CurtainFireMakerPlugin.Entities
 {
+    public class ShotTypeProvider
+    {
+        public Dictionary<string, ShotType> ShotTypeDict { get; } = new Dictionary<string, ShotType>();
+
+        public void RegisterShotType(params ShotType[] types)
+        {
+            Array.ForEach(types, t => ShotTypeDict.Add(t.Name, t));
+        }
+
+        public ShotType GetShotType(string name) => ShotTypeDict[name];
+    }
+
     public abstract class ShotType
     {
-        public static List<ShotType> ShotTypeList { get; } = new List<ShotType>();
+        public string Name { get; }
 
-        public int Id { get; }
-        private static int NextId { get; set; }
-
-        public ShotType()
+        public ShotType(string name)
         {
-            Id = NextId++;
-            ShotTypeList.Add(this);
+            Name = name;
         }
 
         public virtual bool HasMesh { get; } = false;

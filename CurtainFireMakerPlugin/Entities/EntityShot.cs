@@ -19,6 +19,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override bool IsCollisionable { get => Colliding != Colliding.None; set => Colliding = value ? Colliding : Colliding.None; }
 
+        public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
+        : this(world, world.ShotTypeProvider.GetShotType(typeName), color, parentEntity) { }
+
+        public EntityShot(World world, string typeName, int color, short group, EntityShot parentEntity = null)
+        : this(world, world.ShotTypeProvider.GetShotType(typeName), color, group, parentEntity) { }
+
         public EntityShot(World world, ShotType type, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(type, color), parentEntity) { }
 

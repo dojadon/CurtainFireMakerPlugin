@@ -31,6 +31,8 @@ namespace CurtainFireMakerPlugin
         public List<Entity> EntityList { get; } = new List<Entity>();
         public int FrameCount { get; set; }
 
+        public ShotTypeProvider ShotTypeProvider { get; }
+
         internal ShotModelDataProvider ShotModelProvider { get; }
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion KeyFrames { get; }
@@ -47,8 +49,9 @@ namespace CurtainFireMakerPlugin
         public string ModelName { get; set; }
         public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";
 
-        internal World(PythonExecutor executor, Configuration config, IntPtr handle, string fileName)
+        internal World(ShotTypeProvider typeProvider, PythonExecutor executor, Configuration config, IntPtr handle, string fileName)
         {
+            ShotTypeProvider = typeProvider;
             Executor = executor;
             Config = config;
             HandleToDrop = handle;
@@ -90,7 +93,7 @@ namespace CurtainFireMakerPlugin
 
         internal void InitPre()
         {
-            foreach (var type in ShotType.ShotTypeList)
+            foreach (var type in ShotTypeProvider.ShotTypeDict.Values)
             {
                 type.InitWorld(this);
             }

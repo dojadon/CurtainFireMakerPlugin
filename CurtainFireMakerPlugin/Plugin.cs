@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
+using CurtainFireMakerPlugin.Entities;
 
 namespace CurtainFireMakerPlugin
 {
@@ -19,6 +20,8 @@ namespace CurtainFireMakerPlugin
 
         private IronPythonControl IronPythonControl { get; }
 
+        private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
+
         public Plugin()
         {
             Config = new Configuration(Configuration.SettingXmlFilePath);
@@ -27,7 +30,9 @@ namespace CurtainFireMakerPlugin
             try
             {
                 Config.Load();
-                InitIronPython();
+
+                PythonExecutor.Init(Config.ModullesDirPaths);
+                Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
             }
             catch (Exception e)
             {
@@ -42,12 +47,7 @@ namespace CurtainFireMakerPlugin
             Image = Image.FromStream(stream);
 
             IronPythonControl = new IronPythonControl { ScriptText = Script.default_script, };
-        }
-
-        internal void InitIronPython()
-        {
-            PythonExecutor.Init(Config.ModullesDirPaths);
-            Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
+            Script.init_shottype(ShotTypeProvider);
         }
 
         public Guid GUID => new Guid();
@@ -110,7 +110,9 @@ namespace CurtainFireMakerPlugin
 
             if (form.DialogResult == DialogResult.OK)
             {
-                var world = new World(PythonExecutor, Config, ApplicationForm.Handle, Path.GetFileNameWithoutExtension(Config.ScriptPath))
+                PythonExecutor.SetGlobalVariable(("SCENE", Scene));
+
+                var world = new World(ShotTypeProvider, PythonExecutor, Config, ApplicationForm.Handle, Path.GetFileNameWithoutExtension(Config.ScriptPath))
                 {
                     Script = Script
                 };
