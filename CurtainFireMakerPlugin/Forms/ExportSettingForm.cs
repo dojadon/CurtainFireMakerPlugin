@@ -40,13 +40,33 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        public bool KeepLogOpen { get => CheckBoxKeepLog.Checked; set => CheckBoxKeepLog.Checked = value; }
         public bool DropPmxFile { get => CheckBoxDropPmxFile.Checked; set => CheckBoxDropPmxFile.Checked = value; }
         public bool DropVmdFile { get => CheckBoxDropVmdFile.Checked; set => CheckBoxDropVmdFile.Checked = value; }
 
-        public ExportSettingForm()
+        private Configuration Config { get; }
+
+        public ExportSettingForm(Configuration config)
         {
+            Config = config;
+
             InitializeComponent();
+
+            ScriptPath = Config.ScriptPath;
+            PmxExportDirPath = Config.PmxExportDirPath;
+            VmdExportDirPath = Config.VmdExportDirPath;
+            DropPmxFile = Config.ShouldDropPmxFile;
+            DropVmdFile = Config.ShouldDropVmdFile;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Config.ScriptPath = ScriptPath;
+            Config.PmxExportDirPath = PmxExportDirPath;
+            Config.VmdExportDirPath = VmdExportDirPath;
+            Config.ShouldDropPmxFile = DropPmxFile;
+            Config.ShouldDropVmdFile = DropVmdFile;
         }
 
         private void Click_OK(object sender, EventArgs e)

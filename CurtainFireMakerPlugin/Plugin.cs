@@ -90,23 +90,8 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm()
-            {
-                ScriptPath = Config.ScriptPath,
-                PmxExportDirPath = Config.PmxExportDirPath,
-                VmdExportDirPath = Config.VmdExportDirPath,
-                KeepLogOpen = Config.KeepLogOpen,
-                DropPmxFile = Config.DropPmxFile,
-                DropVmdFile = Config.DropVmdFile,
-            };
+            var form = new ExportSettingForm(Config);
             form.ShowDialog(ApplicationForm);
-
-            Config.ScriptPath = form.ScriptPath;
-            Config.PmxExportDirPath = form.PmxExportDirPath;
-            Config.VmdExportDirPath = form.VmdExportDirPath;
-            Config.KeepLogOpen = form.KeepLogOpen;
-            Config.DropPmxFile = form.DropPmxFile;
-            Config.DropVmdFile = form.DropVmdFile;
 
             if (form.DialogResult == DialogResult.OK)
             {

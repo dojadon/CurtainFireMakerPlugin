@@ -147,8 +147,8 @@ namespace CurtainFireMakerPlugin
                 }
                 catch (Exception e)
                 {
-                    try { sw.WriteLine(Executor.FormatException(e)); } catch { }
-                    sw.WriteLine(e);
+                    try { Console.WriteLine(Executor.FormatException(e)); } catch { }
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -163,11 +163,6 @@ namespace CurtainFireMakerPlugin
                             try { DropFileToHandle(); } catch { }
                     }
                 }
-            }
-
-            if (!Config.KeepLogOpen)
-            {
-                progressForm.Dispose();
             }
         }
 
@@ -219,12 +214,12 @@ namespace CurtainFireMakerPlugin
 
         internal void DropFileToHandle()
         {
-            if (Config.DropPmxFile)
+            if (Config.ShouldDropPmxFile)
             {
                 Drop(HandleToDrop, new StringCollection() { PmxExportPath });
             }
 
-            if (Config.DropVmdFile && Config.DropPmxFile)
+            if (Config.ShouldDropVmdFile && Config.ShouldDropPmxFile)
             {
                 Drop(HandleToDrop, new StringCollection() { VmdExportPath });
             }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBoxScript = new System.Windows.Forms.TextBox();
+            this.textBoxScript = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -43,20 +43,17 @@
             // 
             // textBoxScript
             // 
-            this.textBoxScript.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxScript.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxScript.AcceptsTab = true;
+            this.textBoxScript.DetectUrls = false;
             this.textBoxScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.textBoxScript.ForeColor = System.Drawing.SystemColors.WindowText;
             this.textBoxScript.Location = new System.Drawing.Point(5, 26);
             this.textBoxScript.Margin = new System.Windows.Forms.Padding(3, 3, 80, 60);
-            this.textBoxScript.Multiline = true;
             this.textBoxScript.Name = "textBoxScript";
-            this.textBoxScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxScript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.textBoxScript.Size = new System.Drawing.Size(495, 274);
-            this.textBoxScript.TabIndex = 2;
+            this.textBoxScript.TabIndex = 3;
             this.textBoxScript.TabStop = false;
+            this.textBoxScript.Text = "";
             this.textBoxScript.WordWrap = false;
             // 
             // IronPythonControl
@@ -74,6 +71,6 @@
 
         #endregion
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxScript;
+        private System.Windows.Forms.RichTextBox textBoxScript;
     }
 }
