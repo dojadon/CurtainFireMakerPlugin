@@ -172,13 +172,16 @@ namespace CurtainFireMakerPlugin
             InitPost();
 
             form.ProgressBar.Maximum = MaxFrame;
+            form.ProgressBar.Step = 1;
 
             for (int i = 0; i < MaxFrame && form.DialogResult != DialogResult.Cancel; i++)
             {
                 Frame();
                 form.ProgressBar.PerformStep();
+                form.Text = "生成中［" + i + " / " + MaxFrame + "］";
                 Console.Out.Flush();
             }
+            form.Text = "生成完了";
 
             if (form.DialogResult != DialogResult.Cancel)
             {
