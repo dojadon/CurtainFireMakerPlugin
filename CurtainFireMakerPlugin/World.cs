@@ -10,7 +10,6 @@ using CurtainFireMakerPlugin.Forms;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using CsMmdDataIO.Vmd;
-using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace CurtainFireMakerPlugin
 {
@@ -145,6 +144,8 @@ namespace CurtainFireMakerPlugin
                         Console.Out.Flush();
 
                         try { DropFileToHandle(); } catch { }
+
+                        File.WriteAllText(Config.LogPath, progressForm.LogText);
                     }
                 }
                 catch (Exception e)
@@ -154,7 +155,6 @@ namespace CurtainFireMakerPlugin
                 }
                 finally
                 {
-                    File.WriteAllText(Config.LogPath, progressForm.LogText);
                     Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
                     Executor.SetOut(Console.OpenStandardOutput());
                 }
