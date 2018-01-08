@@ -154,6 +154,7 @@ namespace CurtainFireMakerPlugin
                 }
                 finally
                 {
+                    File.WriteAllText(Config.LogPath, progressForm.LogText);
                     Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
                     Executor.SetOut(Console.OpenStandardOutput());
                 }

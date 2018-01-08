@@ -11,7 +11,6 @@ namespace CurtainFireMakerPlugin.Forms
     public partial class ProgressForm : Form
     {
         public ProgressBar ProgressBar => progressBar;
-        public RichTextBox LogTextBox => richTextBoxLog;
 
         public string LogText => richTextBoxLog.Text;
 
