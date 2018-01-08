@@ -130,19 +130,21 @@ namespace CurtainFireMakerPlugin
 
             System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
 
-            using (var sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
+            using (var writer = progressForm.CreateLogWriter())
             {
-                Console.SetOut(sw);
-                Executor.SetOut(sw.BaseStream);
+                Console.SetOut(writer);
+                Executor.SetOut(writer);
 
-                bool isNeededDroping = false;
                 try
                 {
                     long time = Environment.TickCount;
 
-                    if (isNeededDroping = RunWorld(script, progressForm))
+                    if (RunWorld(script, progressForm))
                     {
                         Console.WriteLine((Environment.TickCount - time) + "ms");
+                        Console.Out.Flush();
+
+                        try { DropFileToHandle(); } catch { }
                     }
                 }
                 catch (Exception e)
@@ -152,24 +154,14 @@ namespace CurtainFireMakerPlugin
                 }
                 finally
                 {
-                    sw.Flush();
-                    sw.Dispose();
-
-                    if (!progressForm.IsDisposed)
-                    {
-                        try { progressForm.LogText = File.ReadAllText(Config.LogPath); } catch { }
-
-                        if (isNeededDroping)
-                            try { DropFileToHandle(); } catch { }
-                    }
+                    Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
+                    Executor.SetOut(Console.OpenStandardOutput());
                 }
             }
         }
 
         public bool RunWorld(string script, ProgressForm form)
         {
-            bool isNeededDroping = false;
-
             InitPre();
 
             Executor.SetGlobalVariable(("WORLD", this));
@@ -178,25 +170,21 @@ namespace CurtainFireMakerPlugin
 
             InitPost();
 
-            form.ProgressBar.Minimum = 0;
             form.ProgressBar.Maximum = MaxFrame;
-            form.ProgressBar.Step = 1;
-            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal);
 
             for (int i = 0; i < MaxFrame && form.DialogResult != DialogResult.Cancel; i++)
             {
                 Frame();
                 form.ProgressBar.PerformStep();
-                TaskbarManager.Instance.SetProgressValue(i, MaxFrame);
+                Console.Out.Flush();
             }
-            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Paused);
 
-            if (isNeededDroping = form.DialogResult != DialogResult.Cancel)
+            if (form.DialogResult != DialogResult.Cancel)
             {
                 Export();
+                return true;
             }
-
-            return isNeededDroping;
+            return false;
         }
 
         internal void Export()

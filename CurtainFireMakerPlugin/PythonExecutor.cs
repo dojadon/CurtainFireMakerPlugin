@@ -65,9 +65,51 @@ namespace CurtainFireMakerPlugin
 
         public void SetOut(Stream stream)
         {
+            Engine.Runtime.IO.OutputStream.Dispose();
             Engine.Runtime.IO.SetOutput(stream, Encoding.UTF8);
         }
 
+        public void SetOut(TextWriter writer)
+        {
+            var ms = new MemoryStream();
+            Engine.Runtime.IO.SetOutput(ms, writer);
+        }
+
         public string FormatException(Exception e) => Engine.GetService<ExceptionOperations>().FormatException(e);
+    }
+
+    public class MyEvtArgs<T> : EventArgs
+    {
+        public T Value { get; private set; }
+
+        public MyEvtArgs(T value)
+        {
+            Value = value;
+        }
+    }
+
+    public class EventRaisingStreamWriter : StreamWriter
+    {
+        public event EventHandler<MyEvtArgs<string>> StringWritten;
+
+        public EventRaisingStreamWriter(Stream s) : base(s)
+        { }
+
+        private void LaunchEvent(string txtWritten)
+        {
+            StringWritten?.Invoke(this, new MyEvtArgs<string>(txtWritten));
+        }
+
+        public override void Write(string value)
+        {
+            base.Write(value);
+            LaunchEvent(value);
+        }
+
+        public override void Write(bool value)
+        {
+            base.Write(value);
+            LaunchEvent(value.ToString());
+        }
     }
 }

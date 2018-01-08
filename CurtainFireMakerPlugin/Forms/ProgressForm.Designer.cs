@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressForm));
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.label = new System.Windows.Forms.Label();
-            this.logTextBox = new System.Windows.Forms.TextBox();
+            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // progressBar
@@ -51,29 +51,25 @@
             this.label.Size = new System.Drawing.Size(0, 12);
             this.label.TabIndex = 2;
             // 
-            // logTextBox
+            // richTextBoxLog
             // 
-            this.logTextBox.AcceptsReturn = true;
-            this.logTextBox.AcceptsTab = true;
-            this.logTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.richTextBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.logTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.logTextBox.Location = new System.Drawing.Point(12, 41);
-            this.logTextBox.Multiline = true;
-            this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(500, 228);
-            this.logTextBox.TabIndex = 1;
+            this.richTextBoxLog.Location = new System.Drawing.Point(12, 41);
+            this.richTextBoxLog.Name = "richTextBoxLog";
+            this.richTextBoxLog.ReadOnly = true;
+            this.richTextBoxLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.richTextBoxLog.Size = new System.Drawing.Size(500, 228);
+            this.richTextBoxLog.TabIndex = 3;
+            this.richTextBoxLog.Text = "";
             // 
             // ProgressForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(524, 281);
+            this.Controls.Add(this.richTextBoxLog);
             this.Controls.Add(this.label);
-            this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.progressBar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -91,6 +87,6 @@
 
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label label;
-        private System.Windows.Forms.TextBox logTextBox;
+        private System.Windows.Forms.RichTextBox richTextBoxLog;
     }
 }
