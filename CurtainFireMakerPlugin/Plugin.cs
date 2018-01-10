@@ -97,11 +97,32 @@ namespace CurtainFireMakerPlugin
             {
                 PythonExecutor.SetGlobalVariable(("SCENE", Scene));
 
+                var progressForm = new ProgressForm();
+
                 var world = new World(ShotTypeProvider, PythonExecutor, Config, ApplicationForm.Handle, Path.GetFileNameWithoutExtension(Config.ScriptPath))
                 {
                     Script = Script
                 };
-                world.GenerateCurainFire(IronPythonControl.ScriptText);
+
+                System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
+
+                using (var writer = progressForm.CreateLogWriter())
+                {
+                    Console.SetOut(writer);
+                    PythonExecutor.SetOut(writer);
+
+                    world.GenerateCurainFire((max, i) =>
+                    {
+                        progressForm.ProgressBar.Maximum = max;
+                        progressForm.ProgressBar.PerformStep();
+                        return progressForm.DialogResult == DialogResult.Cancel;
+
+                    }, IronPythonControl.ScriptText);
+
+                    Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
+                    PythonExecutor.SetOut(Console.OpenStandardOutput());
+                }
+                File.WriteAllText(Config.LogPath, progressForm.LogText);
             }
         }
     }

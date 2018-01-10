@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Forms;
 using CurtainFireMakerPlugin.Entities;
-using CurtainFireMakerPlugin.Forms;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using CsMmdDataIO.Vmd;
@@ -123,45 +122,28 @@ namespace CurtainFireMakerPlugin
             FrameCount++;
         }
 
-        public void GenerateCurainFire(string script)
+        public void GenerateCurainFire(Func<int, int, bool> isEnd, string script)
         {
-            ProgressForm progressForm = new ProgressForm();
-
-            System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
-
-            using (var writer = progressForm.CreateLogWriter())
+            try
             {
-                Console.SetOut(writer);
-                Executor.SetOut(writer);
+                long time = Environment.TickCount;
 
-                try
+                if (RunWorld(script, isEnd))
                 {
-                    long time = Environment.TickCount;
+                    Console.WriteLine((Environment.TickCount - time) + "ms");
+                    Console.Out.Flush();
 
-                    if (RunWorld(script, progressForm))
-                    {
-                        Console.WriteLine((Environment.TickCount - time) + "ms");
-                        Console.Out.Flush();
-
-                        try { DropFileToHandle(); } catch { }
-
-                        File.WriteAllText(Config.LogPath, progressForm.LogText);
-                    }
+                    try { DropFileToHandle(); } catch { }
                 }
-                catch (Exception e)
-                {
-                    try { Console.WriteLine(Executor.FormatException(e)); } catch { }
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
-                    Executor.SetOut(Console.OpenStandardOutput());
-                }
+            }
+            catch (Exception e)
+            {
+                try { Console.WriteLine(Executor.FormatException(e)); } catch { }
+                Console.WriteLine(e);
             }
         }
 
-        public bool RunWorld(string script, ProgressForm form)
+        public bool RunWorld(string script, Func<int, int, bool> isEnd)
         {
             InitPre();
 
@@ -171,24 +153,15 @@ namespace CurtainFireMakerPlugin
 
             InitPost();
 
-            form.ProgressBar.Maximum = MaxFrame;
-            form.ProgressBar.Step = 1;
-
-            for (int i = 0; i < MaxFrame && form.DialogResult != DialogResult.Cancel; i++)
+            for (int i = 0; i < MaxFrame; i++)
             {
                 Frame();
-                form.ProgressBar.PerformStep();
-                form.Text = "生成中［" + i + " / " + MaxFrame + "］";
                 Console.Out.Flush();
-            }
-            form.Text = "生成完了";
 
-            if (form.DialogResult != DialogResult.Cancel)
-            {
-                Export();
-                return true;
+                if (isEnd(MaxFrame, i)) { return false; }
             }
-            return false;
+            Export();
+            return true;
         }
 
         internal void Export()
