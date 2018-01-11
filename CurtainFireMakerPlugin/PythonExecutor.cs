@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin
 {
-    internal class PythonExecutor
+    public class PythonExecutor
     {
-        public ScriptEngine Engine { get; set; }
-        public ScriptScope RootScope { get; set; }
+        public ScriptEngine Engine { get; private set; }
+        public ScriptScope RootScope { get; private set; }
 
         public PythonExecutor()
         {
