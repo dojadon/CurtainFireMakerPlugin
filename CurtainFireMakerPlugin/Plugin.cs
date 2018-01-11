@@ -46,7 +46,7 @@ namespace CurtainFireMakerPlugin
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
             Image = Image.FromStream(stream);
 
-            IronPythonControl = new IronPythonControl { ScriptText = Script.default_script, };
+            IronPythonControl = new IronPythonControl { ScriptText = File.ReadAllText(Config.CommonScriptPath), };
             Script.init_shottype(ShotTypeProvider);
         }
 
@@ -119,6 +119,7 @@ namespace CurtainFireMakerPlugin
 
                     }, IronPythonControl.ScriptText);
 
+                    Console.Out.Flush();
                     Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
                     PythonExecutor.SetOut(Console.OpenStandardOutput());
                 }

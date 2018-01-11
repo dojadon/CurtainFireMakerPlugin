@@ -14,6 +14,7 @@ namespace CurtainFireMakerPlugin
         private XmlNode RootNode => XmlDoc.SelectSingleNode(@"//Configuration");
 
         public string ScriptPath { get => GetPath("Script"); set => SetPath("Script", value); }
+        public string CommonScriptPath { get => GetPath("CommonScript"); set => SetPath("CommonScript", value); }
 
         public string[] ModullesDirPaths { get => GetPaths("Libs/Dir"); set => SetPaths("Libs/Dir", value); }
 
