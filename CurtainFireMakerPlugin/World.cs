@@ -148,7 +148,6 @@ namespace CurtainFireMakerPlugin
             {
                 Frame();
                 onFrame(i);
-                Console.Out.Flush();
 
                 if (isEnd()) { return false; }
             }

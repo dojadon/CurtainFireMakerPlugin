@@ -133,7 +133,11 @@ namespace CurtainFireMakerPlugin
 
             bar.Maximum = world.MaxFrame;
 
-            world.GenerateCurainFire(i => bar.Value = i, isEnd);
+            world.GenerateCurainFire(i =>
+            {
+                bar.Value = i;
+                Console.Out.Flush();
+            }, isEnd);
         }
     }
 }
