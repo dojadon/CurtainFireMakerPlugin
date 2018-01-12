@@ -70,6 +70,7 @@
             // 
             // TextBoxScriptPath
             // 
+            this.TextBoxScriptPath.AllowDrop = true;
             this.TextBoxScriptPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxScriptPath.BackColor = System.Drawing.SystemColors.Window;

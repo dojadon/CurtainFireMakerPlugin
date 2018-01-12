@@ -25,13 +25,11 @@ namespace CurtainFireMakerPlugin
         public Plugin()
         {
             Config = new Configuration(Configuration.SettingXmlFilePath);
-            PythonExecutor = new PythonExecutor();
+            Config.Load();
 
             try
             {
-                Config.Load();
-
-                PythonExecutor.Init(Config.ModullesDirPaths);
+                PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
                 Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
             }
             catch (Exception e)
@@ -95,36 +93,47 @@ namespace CurtainFireMakerPlugin
 
             if (form.DialogResult == DialogResult.OK)
             {
-                PythonExecutor.SetGlobalVariable(("SCENE", Scene));
-
                 var progressForm = new ProgressForm();
-
-                var world = new World(ShotTypeProvider, PythonExecutor, Config, ApplicationForm.Handle, Path.GetFileNameWithoutExtension(Config.ScriptPath))
-                {
-                    Script = Script
-                };
-
-                System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
 
                 using (var writer = progressForm.CreateLogWriter())
                 {
                     Console.SetOut(writer);
                     PythonExecutor.SetOut(writer);
 
-                    world.GenerateCurainFire((max, i) =>
+                    try
                     {
-                        progressForm.ProgressBar.Maximum = max;
-                        progressForm.ProgressBar.PerformStep();
-                        return progressForm.DialogResult == DialogResult.Cancel;
-
-                    }, IronPythonControl.ScriptText);
-
+                        System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
+                        RunWorld(progressForm.ProgressBar, () => progressForm.DialogResult == DialogResult.Cancel);
+                    }
+                    catch (Exception e)
+                    {
+                        try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                        Console.WriteLine(e);
+                    }
                     Console.Out.Flush();
                     Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
                     PythonExecutor.SetOut(Console.OpenStandardOutput());
                 }
                 File.WriteAllText(Config.LogPath, progressForm.LogText);
             }
+        }
+
+        private void RunWorld(ProgressBar bar, Func<bool> isEnd)
+        {
+            var world = new World(ShotTypeProvider, PythonExecutor, Config, ApplicationForm.Handle, Path.GetFileNameWithoutExtension(Config.ScriptPath))
+            {
+                Script = Script
+            };
+
+            PythonExecutor.SetGlobalVariable(("SCENE", Scene));
+            PythonExecutor.SetGlobalVariable(("WORLD", world));
+            PythonExecutor.ExecuteOnRootScope(IronPythonControl.ScriptText);
+
+            world.Init();
+
+            bar.Maximum = world.MaxFrame;
+
+            world.GenerateCurainFire(i => bar.Value = i, isEnd);
         }
     }
 }

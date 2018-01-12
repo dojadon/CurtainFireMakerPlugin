@@ -122,43 +122,35 @@ namespace CurtainFireMakerPlugin
             FrameCount++;
         }
 
-        public void GenerateCurainFire(Func<int, int, bool> isEnd, string script)
+        public void Init()
         {
-            try
-            {
-                long time = Environment.TickCount;
+            InitPre();
+            Executor.ExecuteFileOnNewScope(Config.ScriptPath);
+            InitPost();
+        }
 
-                if (RunWorld(script, isEnd))
-                {
-                    Console.WriteLine((Environment.TickCount - time) + "ms");
-                    Console.Out.Flush();
+        public void GenerateCurainFire(Action<int> onFrame, Func<bool> isEnd)
+        {
+            long time = Environment.TickCount;
 
-                    try { DropFileToHandle(); } catch { }
-                }
-            }
-            catch (Exception e)
+            if (RunWorld(onFrame, isEnd))
             {
-                try { Console.WriteLine(Executor.FormatException(e)); } catch { }
-                Console.WriteLine(e);
+                Console.WriteLine((Environment.TickCount - time) + "ms");
+                Console.Out.Flush();
+
+                try { DropFileToHandle(); } catch { }
             }
         }
 
-        public bool RunWorld(string script, Func<int, int, bool> isEnd)
+        public bool RunWorld(Action<int> onFrame, Func<bool> isEnd)
         {
-            InitPre();
-
-            Executor.SetGlobalVariable(("WORLD", this));
-            Executor.ExecuteOnRootScope(script);
-            Executor.ExecuteFileOnNewScope(Config.ScriptPath);
-
-            InitPost();
-
             for (int i = 0; i < MaxFrame; i++)
             {
                 Frame();
+                onFrame(i);
                 Console.Out.Flush();
 
-                if (isEnd(MaxFrame, i)) { return false; }
+                if (isEnd()) { return false; }
             }
             Export();
             return true;

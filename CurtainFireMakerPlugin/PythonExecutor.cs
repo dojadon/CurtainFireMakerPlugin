@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using IronPython.Hosting;
-using IronPython.Runtime;
+using IronPython.Compiler;
 using Microsoft.Scripting.Hosting;
 using System.Windows.Forms;
 
@@ -12,14 +12,10 @@ namespace CurtainFireMakerPlugin
 {
     public class PythonExecutor
     {
-        public ScriptEngine Engine { get; private set; }
-        public ScriptScope RootScope { get; private set; }
+        public ScriptEngine Engine { get; }
+        public ScriptScope RootScope { get; }
 
-        public PythonExecutor()
-        {
-        }
-
-        public void Init(IEnumerable<string> modullesDirPaths)
+        public PythonExecutor(IEnumerable<string> modullesDirPaths)
         {
             Engine = Python.CreateEngine();
             RootScope = Engine.CreateScope();
@@ -76,40 +72,5 @@ namespace CurtainFireMakerPlugin
         }
 
         public string FormatException(Exception e) => Engine.GetService<ExceptionOperations>().FormatException(e);
-    }
-
-    public class MyEvtArgs<T> : EventArgs
-    {
-        public T Value { get; private set; }
-
-        public MyEvtArgs(T value)
-        {
-            Value = value;
-        }
-    }
-
-    public class EventRaisingStreamWriter : StreamWriter
-    {
-        public event EventHandler<MyEvtArgs<string>> StringWritten;
-
-        public EventRaisingStreamWriter(Stream s) : base(s)
-        { }
-
-        private void LaunchEvent(string txtWritten)
-        {
-            StringWritten?.Invoke(this, new MyEvtArgs<string>(txtWritten));
-        }
-
-        public override void Write(string value)
-        {
-            base.Write(value);
-            LaunchEvent(value);
-        }
-
-        public override void Write(bool value)
-        {
-            base.Write(value);
-            LaunchEvent(value.ToString());
-        }
     }
 }
