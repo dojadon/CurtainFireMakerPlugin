@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Linq;
-using CsMmdDataIO.Pmx;
-using CsMmdDataIO.Vmd;
+using MMDataIO.Pmx;
+using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {

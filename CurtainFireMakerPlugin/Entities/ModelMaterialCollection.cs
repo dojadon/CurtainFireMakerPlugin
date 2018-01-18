@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
-using CsMmdDataIO.Pmx;
+using MMDataIO.Pmx;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     public class ModelMaterialCollection
     {
         public List<PmxMaterialData> MaterialList { get; } = new List<PmxMaterialData>();
-        public List<string> TextureList { get; } = new List<string>();
+        public Dictionary<PmxMaterialData, string[]> TexturesEachMaterialDict { get; } = new Dictionary<PmxMaterialData, string[]>();
+
+        public PmxMaterialData[] MaterialArray => MaterialList.ToArray();
+        public string[] TextureArray { get; private set; }
 
         public World World { get; }
 
@@ -21,23 +24,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void SetupMaterials(PmxMaterialData[] materials, string[] textures)
         {
-            foreach (var texture in textures)
-            {
-                if (!TextureList.Contains(texture))
-                {
-                    TextureList.Add(texture);
-                }
-            }
-
-            int GetTextureId(int i) => (0 <= i && i < textures.Length) ? TextureList.IndexOf(textures[i]) : -1;
-
             foreach (PmxMaterialData material in materials)
             {
                 material.MaterialName = "MA" + MaterialList.Count;
-                material.TextureId = GetTextureId(material.TextureId);
-                material.SphereId = GetTextureId(material.SphereId);
 
                 MaterialList.Add(material);
+                TexturesEachMaterialDict.Add(material, textures);
             }
         }
 
@@ -97,6 +89,21 @@ namespace CurtainFireMakerPlugin.Entities
                 total += material.FaceCount;
             }
             return vertexIndicesEachMaterial;
+        }
+
+        public void FinalizeTextures()
+        {
+            var textureList = TexturesEachMaterialDict.Values.SelectMany(s => s).Distinct().ToList();
+
+            foreach (var material in MaterialList)
+            {
+                var textures = TexturesEachMaterialDict[material];
+                int GetTextureId(int i) => (0 <= i && i < textures.Length) ? textureList.IndexOf(textures[i]) : -1;
+
+                material.TextureId = GetTextureId(material.TextureId);
+                material.SphereId = GetTextureId(material.SphereId);
+            }
+            TextureArray = textureList.ToArray();
         }
     }
 }

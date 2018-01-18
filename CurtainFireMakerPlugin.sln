@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurtainFireMakerPlugin", "CurtainFireMakerPlugin\CurtainFireMakerPlugin.csproj", "{CC28360B-AB53-4D9F-BED6-74E652C9CED0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsMmdDataIO", "..\CsMmdDataIO\CsMmdDataIO\CsMmdDataIO.csproj", "{1AEF787F-B0ED-44B4-B091-6570888A91F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDataIO", "..\MMDataIO\MMDataIO\MMDataIO.csproj", "{1AEF787F-B0ED-44B4-B091-6570888A91F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VecMath", "..\VecMath\VecMath\VecMath.csproj", "{008F0133-2636-42A3-B17B-D0631C5132D6}"
 EndProject

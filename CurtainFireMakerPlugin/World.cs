@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using CurtainFireMakerPlugin.Entities;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
-using CsMmdDataIO.Vmd;
+using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin
 {

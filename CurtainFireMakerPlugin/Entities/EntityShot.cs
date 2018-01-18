@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CsMmdDataIO.Pmx;
-using CsMmdDataIO.Vmd;
+using MMDataIO.Pmx;
+using MMDataIO.Vmd;
 using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities

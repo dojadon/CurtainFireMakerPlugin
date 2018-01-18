@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CsMmdDataIO.Pmx;
+using MMDataIO.Pmx;
 
 namespace CurtainFireMakerPlugin.Entities
 {

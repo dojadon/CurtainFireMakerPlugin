@@ -21,8 +21,6 @@ namespace CurtainFireMakerPlugin
         public string PmxExportDirPath { get => GetPath("Export/Pmx"); set => SetPath("Export/Pmx", value); }
         public string VmdExportDirPath { get => GetPath("Export/Vmd"); set => SetPath("Export/Vmd", value); }
 
-        public string LogPath { get => GetPath("Export/Log"); set => SetPath("Export/Log", value); }
-
         public bool ShouldDropPmxFile { get => GetBool("ShouldDropFile/Pmx"); set => SetBool("ShouldDropFile/Pmx", value); }
         public bool ShouldDropVmdFile { get => GetBool("ShouldDropFile/Vmd"); set => SetBool("ShouldDropFile/Vmd", value); }
 
@@ -30,6 +28,7 @@ namespace CurtainFireMakerPlugin
         public static string SettingXmlFilePath => PluginRootPath + "config.xml";
         public static string SettingPythonFilePath => PluginRootPath + "config.py";
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
+        public static string LogPath => PluginRootPath + "lastest.log";
 
         public static Uri PluginRootUri { get; } = new Uri(PluginRootPath);
 

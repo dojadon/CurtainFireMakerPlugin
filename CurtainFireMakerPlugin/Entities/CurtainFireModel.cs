@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using CsMmdDataIO.Pmx;
-using CsMmdDataIO.Vmd;
+using MMDataIO.Pmx;
+using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -59,6 +59,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             Materials.CompressMaterial(Vertices.Indices);
             Morphs.CompressMorph(morphFrames);
+
+            Materials.FinalizeTextures();
         }
 
         public PmxModelData CreatePmxModelData()
@@ -93,9 +95,9 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 Header = Header,
                 VertexIndices = Vertices.Indices.ToArray(),
-                TextureFiles = Materials.TextureList.ToArray(),
+                TextureFiles = Materials.TextureArray,
                 VertexArray = Vertices.VertexList.ToArray(),
-                MaterialArray = Materials.MaterialList.ToArray(),
+                MaterialArray = Materials.MaterialArray,
                 BoneArray = Bones.BoneList.ToArray(),
                 MorphArray = Morphs.MorphList.ToArray(),
                 SlotArray = slotList.ToArray(),

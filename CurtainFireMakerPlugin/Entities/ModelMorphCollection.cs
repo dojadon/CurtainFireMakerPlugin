@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CsMmdDataIO.Pmx;
-using CsMmdDataIO.Vmd;
+using MMDataIO.Pmx;
+using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {

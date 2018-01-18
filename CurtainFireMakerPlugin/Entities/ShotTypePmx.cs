@@ -1,8 +1,8 @@
 ﻿using System;
-using CsMmdDataIO.Pmx;
+using MMDataIO.Pmx;
 using VecMath;
 using System.IO;
-using CsMmdDataIO;
+using MMDataIO;
 
 namespace CurtainFireMakerPlugin.Entities
 {

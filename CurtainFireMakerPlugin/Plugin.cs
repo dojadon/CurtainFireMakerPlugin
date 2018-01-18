@@ -31,10 +31,13 @@ namespace CurtainFireMakerPlugin
             {
                 PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
                 Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
+
+                IronPythonControl = new IronPythonControl { ScriptText = File.ReadAllText(Config.CommonScriptPath), };
+                Script.init_shottype(ShotTypeProvider);
             }
             catch (Exception e)
             {
-                using (var sw = new StreamWriter(Config.LogPath, false, Encoding.UTF8) { AutoFlush = false })
+                using (var sw = new StreamWriter(Configuration.LogPath, false, Encoding.UTF8) { AutoFlush = false })
                 {
                     try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
                     sw.WriteLine(e);
@@ -43,9 +46,6 @@ namespace CurtainFireMakerPlugin
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
             Image = Image.FromStream(stream);
-
-            IronPythonControl = new IronPythonControl { ScriptText = File.ReadAllText(Config.CommonScriptPath), };
-            Script.init_shottype(ShotTypeProvider);
         }
 
         public Guid GUID => new Guid();
@@ -61,7 +61,7 @@ namespace CurtainFireMakerPlugin
 
         public void Dispose()
         {
-            Config.Save();
+            Config?.Save();
         }
 
         public UserControl CreateControl()
@@ -114,7 +114,7 @@ namespace CurtainFireMakerPlugin
                     Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
                     PythonExecutor.SetOut(Console.OpenStandardOutput());
                 }
-                File.WriteAllText(Config.LogPath, progressForm.LogText);
+                File.WriteAllText(Configuration.LogPath, progressForm.LogText);
             }
         }
 

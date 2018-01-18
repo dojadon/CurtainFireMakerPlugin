@@ -44,12 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\IronPython 2.7\Microsoft.Scripting.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
-    </Reference>
     <Reference Include="MikuMikuPlugin">
       <HintPath>..\..\..\..\tool\model\MikuMikuMoving64_v1275\System\x64\MikuMikuPlugin.dll</HintPath>
     </Reference>
@@ -124,9 +118,9 @@
     <EmbeddedResource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CsMmdDataIO\CsMmdDataIO\CsMmdDataIO.csproj">
+    <ProjectReference Include="..\..\MMDataIO\MMDataIO\MMDataIO.csproj">
       <Project>{1aef787f-b0ed-44b4-b091-6570888a91f7}</Project>
-      <Name>CsMmdDataIO</Name>
+      <Name>MMDataIO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\VecMath\VecMath\VecMath.csproj">
       <Project>{008f0133-2636-42a3-b17b-d0631c5132d6}</Project>
@@ -138,7 +132,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy CurtainFireMakerPlugin.* C:\tool\model\MikuMikuMoving64_v1275\Plugins
-copy CurtainFireMakerPlugin.dll C:\tool\model\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetFileName) C:\tool\CG_Animation\MikuMikuMoving64_v1275\Plugins
+copy $(TargetFileName) C:\tool\CG_Animation\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins</PostBuildEvent>
   </PropertyGroup>
 </Project>
