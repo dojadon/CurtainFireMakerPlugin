@@ -37,7 +37,7 @@ namespace CurtainFireMakerPlugin
             }
             catch (Exception e)
             {
-                using (var sw = new StreamWriter(Configuration.LogPath, false, Encoding.UTF8) { AutoFlush = false })
+                using (var sw = new StreamWriter(Configuration.ErrorLogPath, false, Encoding.UTF8))
                 {
                     try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
                     sw.WriteLine(e);
