@@ -22,14 +22,8 @@ namespace CurtainFireMakerPlugin.Entities
         public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
         : this(world, world.ShotTypeProvider.GetShotType(typeName), color, parentEntity) { }
 
-        public EntityShot(World world, string typeName, int color, short group, EntityShot parentEntity = null)
-        : this(world, world.ShotTypeProvider.GetShotType(typeName), color, group, parentEntity) { }
-
         public EntityShot(World world, ShotType type, int color, EntityShot parentEntity = null)
         : this(world, new ShotProperty(type, color), parentEntity) { }
-
-        public EntityShot(World world, ShotType type, int color, short group, EntityShot parentEntity = null)
-        : this(world, new ShotProperty(type, color, group), parentEntity) { }
 
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
@@ -81,7 +75,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual bool IsGroupable(EntityShot e)
         {
-            return e.ParentEntity == ParentEntity && e.Property.IsGroupable(Property) && e.IsDeath;
+            return ParentEntity == e.ParentEntity && Property == e.Property && e.IsDeath;
         }
 
         public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)

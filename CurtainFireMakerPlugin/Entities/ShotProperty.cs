@@ -14,31 +14,25 @@ namespace CurtainFireMakerPlugin.Entities
 
         public ShotType Type { get; }
 
-        public short ShotGroup { get; }
-
-        public ShotProperty(ShotType type, int color) : this(type, color, short.MaxValue) { }
-
-        public ShotProperty(ShotType type, int color, short group)
+        public ShotProperty(ShotType type, int color)
         {
             Color = color;
-            ShotGroup = group;
-
             Type = type;
         }
 
         public override bool Equals(object obj) => obj is ShotProperty prop && Equals(prop);
 
-        public bool Equals(ShotProperty p) => p.Color == Color && Type == p.Type && ShotGroup == p.ShotGroup;
-
-        public bool IsGroupable(ShotProperty p) => p.Color == Color && Type == p.Type && (ShotGroup & p.ShotGroup) > 0;
+        public bool Equals(ShotProperty p) => p.Color == Color && Type == p.Type;
 
         public override int GetHashCode()
         {
             int result = 17;
             result = result * 23 + Type.Name.GetHashCode();
             result = result * 23 + Color;
-            result = result * 23 + ShotGroup;
             return result;
         }
+
+        public static bool operator ==(ShotProperty p1, ShotProperty p2) => p1.Color == p2.Color && p1.Type == p2.Type;
+        public static bool operator !=(ShotProperty p1, ShotProperty p2) => p1.Color != p2.Color && p1.Type != p2.Type;
     }
 }
