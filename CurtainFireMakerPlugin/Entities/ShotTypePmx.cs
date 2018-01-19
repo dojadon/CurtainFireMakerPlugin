@@ -8,32 +8,35 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class ShotTypePmx : ShotType
     {
-        private PmxModelData Data { get; set; } = new PmxModelData();
+        private string PmxFilePath { get; }
 
-        private FileSystemWatcher FileWatcher { get; }
+        private PmxModelData Data { get; } = new PmxModelData();
+
+        private DateTime LastWriteTime { get; set; } = DateTime.MinValue;
 
         public ShotTypePmx(string name, string path) : base(name)
         {
-            path = Configuration.ResourceDirPath + path;
+            PmxFilePath = Configuration.ResourceDirPath + path;
 
-            FileWatcher = new FileSystemWatcher()
-            {
-                Path = Path.GetDirectoryName(path),
-                Filter = Path.GetFileName(path),
-                NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite,
-                EnableRaisingEvents = true,
-            };
-            FileWatcher.Changed += (sender, e) => ReadPmxData(path);
-
-            ReadPmxData(path);
+            ReadPmxData();
         }
 
-        private void ReadPmxData(string path)
+        private void ReadPmxData()
         {
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            if (LastWriteTime != (LastWriteTime = File.GetLastWriteTime(PmxFilePath)))
             {
-                Data.Read(new BinaryReader(stream));
+                using (var stream = new FileStream(PmxFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    Data.Read(new BinaryReader(stream));
+                }
             }
+        }
+
+        public override void InitWorld(World world)
+        {
+            base.InitWorld(world);
+
+            ReadPmxData();
         }
 
         public override bool HasMesh => Data.VertexArray.Length > 0;
