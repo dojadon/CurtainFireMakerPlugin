@@ -46,7 +46,8 @@ namespace CurtainFireMakerPlugin.Entities
             PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = CloneUtil.Clone(Data.VertexArray[i]);
+                var clone = result[i] = CloneUtil.Clone(Data.VertexArray[i]);
+                clone.Pos = (Vector4)clone.Pos * prop.Scale;
             }
             return result;
         }
