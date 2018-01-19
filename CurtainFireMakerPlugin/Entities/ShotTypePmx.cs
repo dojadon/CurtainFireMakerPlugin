@@ -8,27 +8,35 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class ShotTypePmx : ShotType
     {
-        private PmxModelData Data { get; } = new PmxModelData();
+        private PmxModelData Data { get; set; } = new PmxModelData();
 
-        public ShotTypePmx(string name, string path, float size) : this(name, path, new Vector3(size, size, size)) { }
+        private FileSystemWatcher FileWatcher { get; }
 
-        public ShotTypePmx(string name, string path, Vector3 size) : base(name)
+        public ShotTypePmx(string name, string path) : base(name)
         {
             path = Configuration.ResourceDirPath + path;
 
+            FileWatcher = new FileSystemWatcher()
+            {
+                Path = Path.GetDirectoryName(path),
+                Filter = Path.GetFileName(path),
+                NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite,
+                EnableRaisingEvents = true,
+            };
+            FileWatcher.Changed += (sender, e) => ReadPmxData(path);
+
+            ReadPmxData(path);
+        }
+
+        private void ReadPmxData(string path)
+        {
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 Data.Read(new BinaryReader(stream));
             }
-
-            for (int i = 0; i < Data.VertexArray.Length; i++)
-            {
-                var vertex = Data.VertexArray[i];
-                vertex.Pos = Vector3.Scale(vertex.Pos, size);
-            }
         }
 
-        public override bool HasMesh => true;
+        public override bool HasMesh => Data.VertexArray.Length > 0;
 
         public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
         {
