@@ -39,7 +39,6 @@ namespace CurtainFireMakerPlugin.Entities
             Property = property;
 
             ModelData = World.AddShot(this);
-            ModelData.OwnerEntities.Add(this);
 
             RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
