@@ -51,7 +51,7 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 VertexMorph = new PmxMorphData()
                 {
-                    MorphName = "V" + morphName,
+                    MorphName = morphName,
                     SlotType = MorphSlotType.RIP,
                     MorphType = MorphType.VERTEX,
                     MorphArray = new IPmxMorphTypeData[Vertices.Length]
