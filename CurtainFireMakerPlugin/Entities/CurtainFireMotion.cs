@@ -75,9 +75,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void Export()
         {
-            string exportPath = World.VmdExportPath;
-
-            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
+            using (var stream = new FileStream(World.VmdExportPath, FileMode.Create, FileAccess.Write))
             {
                 var data = CreateVmdMotionData();
                 data.Write(new BinaryWriter(stream));

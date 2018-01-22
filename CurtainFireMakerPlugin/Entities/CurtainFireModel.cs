@@ -106,9 +106,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void Export()
         {
-            string exportPath = World.PmxExportPath;
-
-            using (var stream = new FileStream(exportPath, FileMode.Create, FileAccess.Write))
+            using (var stream = new FileStream(World.PmxExportPath, FileMode.Create, FileAccess.Write))
             {
                 var data = CreatePmxModelData();
                 data.Write(new BinaryWriter(stream));
