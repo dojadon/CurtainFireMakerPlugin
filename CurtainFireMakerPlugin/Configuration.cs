@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin
         public bool ShouldDropPmxFile { get => GetBool("ShouldDropFile/Pmx"); set => SetBool("ShouldDropFile/Pmx", value); }
         public bool ShouldDropVmdFile { get => GetBool("ShouldDropFile/Vmd"); set => SetBool("ShouldDropFile/Vmd", value); }
 
-        public static string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker\\";
+        public static string PluginRootPath => Application.StartupPath + (Application.StartupPath.Contains("CurtainFireMaker") ? "\\" : "\\CurtainFireMaker\\");
         public static string SettingXmlFilePath => PluginRootPath + "config.xml";
         public static string SettingPythonFilePath => PluginRootPath + "config.py";
         public static string ResourceDirPath => PluginRootPath + "Resource\\";

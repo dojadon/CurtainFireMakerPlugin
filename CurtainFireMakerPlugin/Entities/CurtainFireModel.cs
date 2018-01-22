@@ -69,9 +69,17 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 new PmxSlotData
                 {
-                    SlotName = "センター",
+                    SlotName = "Root",
                     Type = SlotType.BONE,
-                    Indices = new[] { 0 },
+                    Indices = new int[]{ 0 },
+                    NormalSlot = false,
+                },
+                new PmxSlotData
+                {
+                    SlotName = "表情",
+                    Type = SlotType.MORPH,
+                    Indices =Enumerable.Range(0, Morphs.MorphList.Count).ToArray(),
+                    NormalSlot = false,
                 },
                 new PmxSlotData
                 {
@@ -80,16 +88,6 @@ namespace CurtainFireMakerPlugin.Entities
                     Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
                 }
             };
-
-            if (Morphs.MorphList.Count > 0)
-            {
-                slotList.Add(new PmxSlotData
-                {
-                    SlotName = "弾モーフ",
-                    Type = SlotType.MORPH,
-                    Indices = Enumerable.Range(0, Morphs.MorphList.Count).ToArray()
-                });
-            }
 
             return new PmxModelData
             {
