@@ -23,7 +23,7 @@ namespace CurtainFireMakerPlugin.Entities
             set
             {
                 base.Velocity = value;
-                if (value != Vector3.Zero) LookAtVec = value;
+                if (value != Vector3.Zero) LookAtVec = +value;
             }
         }
 
@@ -61,7 +61,11 @@ namespace CurtainFireMakerPlugin.Entities
             Property.Type.InitModelData(ModelData);
         }
 
-        protected override void Record() => AddRootBoneKeyFrame();
+        protected override void Record()
+        {
+            base.Record();
+            AddRootBoneKeyFrame();
+        }
 
         protected override bool ShouldRecord() => World.FrameCount == 0 || base.ShouldRecord();
 

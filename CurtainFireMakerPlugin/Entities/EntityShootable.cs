@@ -8,12 +8,13 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public abstract class EntityShootable : Entity
     {
-        public bool IsUpdatedVelocity { get; protected set; } = true;
-        public bool IsUpdatedLocalMat { get; protected set; } = true;
-
-        private static float Epsilon { get; set; } = 0.00001F;
-
         public virtual Vector3 Velocity { get; set; }
+
+        public Vector3 PrevPos { get; private set; }
+        public Quaternion PrevRot { get; private set; }
+        public Vector3 PrevVelocity { get; private set; }
+
+        public static float Epsilon = 1E-4F;
 
         protected MotionInterpolation MotionInterpolation { get; set; }
 
@@ -23,13 +24,23 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.Frame();
 
-            UpdatePos();
+            if (ShouldRecord())
+            {
+                Record();
+            }
+
+            Pos += GetInterpolatedVelocity();
+
+            PrevPos = Pos;
+            PrevRot = Rot;
+            PrevVelocity = Velocity;
         }
 
-        protected virtual void UpdatePos()
-        {
-            Pos += GetInterpolatedVelocity();
-        }
+        protected virtual bool ShouldRecord() => !(Vector3.EpsilonEquals(Pos, PrevPos, Epsilon) &&
+           Quaternion.EpsilonEquals(Rot, PrevRot, Epsilon) &&
+           Vector3.EpsilonEquals(Velocity, PrevVelocity, Epsilon));
+
+        protected abstract void Record();
 
         protected Vector3 GetInterpolatedVelocity()
         {

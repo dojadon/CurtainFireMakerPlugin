@@ -5,7 +5,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public abstract class EntityCollisonable : EntityRecordable
+    public abstract class EntityCollisonable : EntityShootable
     {
         protected abstract bool IsCollisionable { get; set; }
 
@@ -39,6 +39,11 @@ namespace CurtainFireMakerPlugin.Entities
                 UpdateMinTimeToCollideWithObject(World.RigidObjectList);
                 ShouldUpdateTimeToCollide = false;
             }
+        }
+
+        protected override void Record()
+        {
+            ShouldUpdateTimeToCollide = true;
         }
 
         public virtual void OnCollided(MeshTriangle tri, float time) { }
