@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CubicBezierCurve.cs" />
+    <Compile Include="Entities\EntityRecordable.cs" />
     <Compile Include="Entities\StaticRigidObject.cs" />
     <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />

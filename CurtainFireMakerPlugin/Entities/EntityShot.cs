@@ -14,8 +14,23 @@ namespace CurtainFireMakerPlugin.Entities
         public ShotModelData ModelData { get; }
         public PmxBoneData RootBone => ModelData.Bones[0];
 
-        public Recording Recording { get; set; } = Recording.Velocity;
+        public Vector3 Upward { get; set; } = Vector3.UnitY;
+        public Vector3 LookAtVec { get; set; }
+
+        public override Vector3 Velocity
+        {
+            get => base.Velocity;
+            set
+            {
+                base.Velocity = value;
+                if (value != Vector3.Zero) LookAtVec = value;
+            }
+        }
+
         public Colliding Colliding { get; set; } = Colliding.None;
+
+        public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
+        public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.LookAtVec, e.Upward);
 
         protected override bool IsCollisionable { get => Colliding != Colliding.None; set => Colliding = value ? Colliding : Colliding.None; }
 
@@ -36,15 +51,19 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
-                Property = property;
+            Property = property;
 
-                ModelData = World.AddShot(this);
+            ModelData = World.AddShot(this);
 
-                RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
+            RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
-                Property.Type.InitEntity(this);
-                Property.Type.InitModelData(ModelData);
+            Property.Type.InitEntity(this);
+            Property.Type.InitModelData(ModelData);
         }
+
+        protected override void Record() => AddRootBoneKeyFrame();
+
+        protected override bool ShouldRecord() => World.FrameCount == 0 || base.ShouldRecord();
 
         public override void OnSpawn()
         {
@@ -64,16 +83,6 @@ namespace CurtainFireMakerPlugin.Entities
 
             AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
-        }
-
-        protected override void UpdateTasks()
-        {
-            base.UpdateTasks();
-
-            if (World.FrameCount == 0 || Recording.ShouldRecord(this))
-            {
-                AddRootBoneKeyFrame();
-            }
         }
 
         public override void OnCollided(MeshTriangle tri, float time)
@@ -101,7 +110,7 @@ namespace CurtainFireMakerPlugin.Entities
         public void AddRootBoneKeyFrame(int frameOffset = 0, int priority = 0)
         {
             var curve = MotionInterpolation?.StartFrame < World.FrameCount ? MotionInterpolation.Curve : CubicBezierCurve.Line;
-            AddBoneKeyFrame(RootBone, Recording.GetRecordedPos(this), Recording.GetRecordedRot(this), curve, frameOffset, priority);
+            AddBoneKeyFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), curve, frameOffset, priority);
         }
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve curve, int frameOffset = 0, int priority = 0)
@@ -122,32 +131,6 @@ namespace CurtainFireMakerPlugin.Entities
         {
             return ModelData.CreateVertexMorph("V" + EntityId, func);
         }
-    }
-
-    public class Recording
-    {
-        public Func<EntityShot, bool> ShouldRecord { get; private set; }
-        public Func<EntityShot, Vector3> GetRecordedPos { get; private set; }
-        public Func<EntityShot, Quaternion> GetRecordedRot { get; private set; }
-
-        public static readonly Recording None = new Recording()
-        {
-            ShouldRecord = e => false,
-            GetRecordedPos = e => e.Pos,
-            GetRecordedRot = e => e.Rot,
-        };
-        public static readonly Recording Velocity = new Recording()
-        {
-            ShouldRecord = e => e.IsUpdatedVelocity,
-            GetRecordedPos = e => e.Pos,
-            GetRecordedRot = e => Matrix3.LookAt(e.LookAtVec, e.Upward),
-        };
-        public static readonly Recording LocalMat = new Recording()
-        {
-            ShouldRecord = e => e.IsUpdatedLocalMat,
-            GetRecordedPos = e => e.Pos,
-            GetRecordedRot = e => e.Rot,
-        };
     }
 
     public class Colliding

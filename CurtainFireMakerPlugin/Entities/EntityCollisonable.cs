@@ -5,7 +5,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public abstract class EntityCollisonable : EntityShootable
+    public abstract class EntityCollisonable : EntityRecordable
     {
         protected abstract bool IsCollisionable { get; set; }
 
@@ -16,18 +16,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         private bool ShouldUpdateTimeToCollide { get; set; } = true;
 
-        private static float Epsilon { get; set; } = 1E-4F;
-
         public EntityCollisonable(World world, Entity parentEntity = null) : base(world, parentEntity)
         {
             TimeToCollide = world.MaxFrame;
-        }
-
-        protected override void OnVelocityUpdated()
-        {
-            base.OnVelocityUpdated();
-
-            ShouldUpdateTimeToCollide = true;
         }
 
         public override void Frame()

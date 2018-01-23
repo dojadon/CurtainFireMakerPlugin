@@ -13,31 +13,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private static float Epsilon { get; set; } = 0.00001F;
 
-        public Vector3 LookAtVec { get; set; }
-
-        private Vector3 velocity;
-        public Vector3 Velocity
-        {
-            get => velocity;
-            set
-            {
-                if (!Vector3.EpsilonEquals(velocity, (velocity = value), Epsilon)) OnVelocityUpdated();
-            }
-        }
-
-        public Vector3 Upward { get; set; } = Vector3.UnitY;
-
-        public override Vector3 Pos
-        {
-            get => base.Pos;
-            set { if (!Vector3.EpsilonEquals(base.Pos, (base.Pos = value), Epsilon)) OnLocalMatChanged(); }
-        }
-
-        public override Quaternion Rot
-        {
-            get => base.Rot;
-            set { if (!Quaternion.EpsilonEquals(base.Rot, (base.Rot = value), Epsilon)) OnLocalMatChanged(); }
-        }
+        public virtual Vector3 Velocity { get; set; }
 
         protected MotionInterpolation MotionInterpolation { get; set; }
 
@@ -47,25 +23,15 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.Frame();
 
+            UpdatePos();
+        }
+
+        protected virtual void UpdatePos()
+        {
             Pos += GetInterpolatedVelocity();
-            IsUpdatedVelocity = IsUpdatedLocalMat = false;
         }
 
-        protected virtual void OnVelocityUpdated()
-        {
-            IsUpdatedVelocity = true;
-            if (Velocity != Vector3.Zero)
-            {
-                LookAtVec = +Velocity;
-            }
-        }
-
-        protected virtual void OnLocalMatChanged()
-        {
-            IsUpdatedLocalMat = true;
-        }
-
-        protected virtual Vector3 GetInterpolatedVelocity()
+        protected Vector3 GetInterpolatedVelocity()
         {
             Vector3 interpolatedVelocity = Velocity;
 
