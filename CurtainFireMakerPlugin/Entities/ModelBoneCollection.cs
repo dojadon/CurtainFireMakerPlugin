@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MMDataIO.Pmx;
+using MMDataIO.Vmd;
+using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -10,6 +12,8 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public List<PmxBoneData> BoneList { get; } = new List<PmxBoneData>();
         public World World { get; }
+
+        public PmxBoneData[] BoneArray => BoneList.ToArray();
 
         public ModelBoneCollection(World world)
         {

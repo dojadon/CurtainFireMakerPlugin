@@ -13,6 +13,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         public World World { get; }
 
+        public PmxVertexData[] VertexArray => VertexList.ToArray();
+        public int[] VertexIndexArray => Indices.ToArray();
+
         public ModelVertexCollection(World world)
         {
             World = world;

@@ -52,7 +52,7 @@ namespace CurtainFireMakerPlugin.Entities
         private void SetupMeshData(ShotModelData data)
         {
             Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
-            Materials.SetupMaterials(data.Materials, data.Textures);
+            Materials.SetupMaterials(data.Property.Type, data.Materials, data.Textures);
         }
 
         public void FinalizeModel(IEnumerable<VmdMorphFrameData> morphFrames)
@@ -65,8 +65,17 @@ namespace CurtainFireMakerPlugin.Entities
 
         public PmxModelData CreatePmxModelData()
         {
-            var slotList = new List<PmxSlotData>
+            return new PmxModelData
             {
+                Header = Header,
+                VertexIndices = Vertices.VertexIndexArray,
+                TextureFiles = Materials.TextureArray,
+                VertexArray = Vertices.VertexArray,
+                MaterialArray = Materials.MaterialArray,
+                BoneArray = Bones.BoneArray,
+                MorphArray = Morphs.MorphArray,
+                SlotArray = new[]
+                {
                 new PmxSlotData
                 {
                     SlotName = "Root",
@@ -87,18 +96,7 @@ namespace CurtainFireMakerPlugin.Entities
                     Type = SlotType.BONE,
                     Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
                 }
-            };
-
-            return new PmxModelData
-            {
-                Header = Header,
-                VertexIndices = Vertices.Indices.ToArray(),
-                TextureFiles = Materials.TextureArray,
-                VertexArray = Vertices.VertexList.ToArray(),
-                MaterialArray = Materials.MaterialArray,
-                BoneArray = Bones.BoneList.ToArray(),
-                MorphArray = Morphs.MorphList.ToArray(),
-                SlotArray = slotList.ToArray(),
+                },
             };
         }
 

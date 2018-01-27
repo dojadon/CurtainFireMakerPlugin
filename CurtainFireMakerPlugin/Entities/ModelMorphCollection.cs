@@ -12,6 +12,8 @@ namespace CurtainFireMakerPlugin.Entities
         public List<PmxMorphData> MorphList { get; } = new List<PmxMorphData>();
         public World World { get; }
 
+        public PmxMorphData[] MorphArray => MorphList.ToArray();
+
         public ModelMorphCollection(World world)
         {
             World = world;

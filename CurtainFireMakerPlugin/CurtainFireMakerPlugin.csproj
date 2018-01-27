@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CollectionUtil.cs" />
     <Compile Include="Entities\CubicBezierCurve.cs" />
     <Compile Include="Entities\StaticRigidObject.cs" />
     <Compile Include="Entities\EntityCollisonable.cs" />
