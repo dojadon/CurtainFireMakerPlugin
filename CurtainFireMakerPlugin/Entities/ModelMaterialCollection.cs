@@ -22,11 +22,11 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void SetupMaterials(ShotType type, PmxMaterialData[] materials, string[] textures)
+        public void SetupMaterials(ShotProperty prop, PmxMaterialData[] materials, string[] textures)
         {
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = type.Name + "_M" + MaterialList.Count.ToString("X");
+                material.MaterialName = prop.Type.Name + "_" + prop.Color.ToString("X") + "_" + MaterialList.Count.ToString("X");
                 MaterialList.Add(material);
                 TexturesEachMaterialDict.Add(material, textures);
             }

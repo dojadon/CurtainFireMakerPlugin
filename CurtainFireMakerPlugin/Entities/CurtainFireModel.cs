@@ -52,7 +52,7 @@ namespace CurtainFireMakerPlugin.Entities
         private void SetupMeshData(ShotModelData data)
         {
             Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
-            Materials.SetupMaterials(data.Property.Type, data.Materials, data.Textures);
+            Materials.SetupMaterials(data.Property, data.Materials, data.Textures);
         }
 
         public void FinalizeModel(IEnumerable<VmdMorphFrameData> morphFrames)
