@@ -57,10 +57,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void FinalizeModel(IEnumerable<VmdMorphFrameData> morphFrames)
         {
+            Materials.FinalizeTextures();
+
             Materials.CompressMaterial(Vertices.Indices);
             Morphs.CompressMorph(morphFrames);
-
-            Materials.FinalizeTextures();
         }
 
         public PmxModelData CreatePmxModelData()
