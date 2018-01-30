@@ -9,13 +9,13 @@ namespace CurtainFireMakerPlugin.Entities
     public class StaticRigidObject
     {
         public AABoundingBox AABB { get; protected set; }
-        public MeshTriangle[] Meshes { get; protected set; }
+        public Triangle[] Mesh { get; protected set; }
 
         public List<StaticRigidObject> ChildRigidObjectList { get; } = new List<StaticRigidObject>();
 
-        public StaticRigidObject(MeshTriangle[] meshes, AABoundingBox aabb)
+        public StaticRigidObject(Triangle[] mesh, AABoundingBox aabb)
         {
-            Meshes = meshes;
+            Mesh = mesh;
             AABB = aabb;
         }
     }
@@ -32,14 +32,14 @@ namespace CurtainFireMakerPlugin.Entities
         }
     }
 
-    public struct MeshTriangle
+    public struct Triangle
     {
         public Vector3 Pos1 { get; set; }
         public Vector3 Pos2 { get; set; }
         public Vector3 Pos3 { get; set; }
         public Vector3 Normal { get; set; }
 
-        public MeshTriangle(Vector3 pos1, Vector3 pos2, Vector3 pos3)
+        public Triangle(Vector3 pos1, Vector3 pos2, Vector3 pos3)
         {
             Pos1 = pos1;
             Pos2 = pos2;

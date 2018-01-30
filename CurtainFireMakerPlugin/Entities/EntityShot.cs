@@ -89,7 +89,7 @@ namespace CurtainFireMakerPlugin.Entities
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
         }
 
-        public override void OnCollided(MeshTriangle tri, float time)
+        public override void OnCollided(Triangle tri, float time)
         {
             Colliding.OnCollide(this, tri, time);
         }
@@ -139,7 +139,7 @@ namespace CurtainFireMakerPlugin.Entities
 
     public class Colliding
     {
-        public Action<EntityShot, MeshTriangle, float> OnCollide { get; private set; }
+        public Action<EntityShot, Triangle, float> OnCollide { get; private set; }
 
         public static readonly Colliding None = new Colliding() { OnCollide = (e, tri, time) => { } };
         public static readonly Colliding Vanish = new Colliding() { OnCollide = (e, tri, time) => e.OnDeath() };

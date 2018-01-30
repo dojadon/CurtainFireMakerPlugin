@@ -26,9 +26,15 @@ namespace CurtainFireMakerPlugin.Entities
         {
             foreach (PmxMaterialData material in materials)
             {
-                material.MaterialName = prop.Type.Name + "_" + prop.Color.ToString("X") + "_" + MaterialList.Count.ToString("X");
+                material.MaterialName = prop.Type.Name + "_" + GetHexColorCode(prop.Color);
                 MaterialList.Add(material);
                 TexturesEachMaterialDict.Add(material, textures);
+            }
+
+            string GetHexColorCode(int i)
+            {
+                string hex = i.ToString("X");
+                return "0x" + (hex.Length == 6 ? hex : new string('0', 6 - hex.Length) + hex);
             }
         }
 
@@ -40,6 +46,11 @@ namespace CurtainFireMakerPlugin.Entities
             foreach (int removedMaterialIndex in removedMaterialIndices.OrderByDescending(i => i))
             {
                 MaterialList.RemoveAt(removedMaterialIndex);
+            }
+
+            for (int i = 0; i < MaterialList.Count; i++)
+            {
+                MaterialList[i].MaterialName += "_" + i;
             }
 
             int GetMaterialHashCode(PmxMaterialData obj)

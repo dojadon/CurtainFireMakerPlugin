@@ -11,7 +11,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public int NumberOfCollide { get; set; } = 1;
 
-        private MeshTriangle MeshToCollide { get; set; }
+        private Triangle MeshToCollide { get; set; }
         private float TimeToCollide { get; set; }
 
         private bool ShouldUpdateTimeToCollide { get; set; } = true;
@@ -46,7 +46,7 @@ namespace CurtainFireMakerPlugin.Entities
             ShouldUpdateTimeToCollide = true;
         }
 
-        public virtual void OnCollided(MeshTriangle tri, float time) { }
+        public virtual void OnCollided(Triangle tri, float time) { }
 
         private void UpdateMinTimeToCollideWithObject(IEnumerable<StaticRigidObject> rigidObjectList)
         {
@@ -58,7 +58,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void UpdateMinTimeToCollideWithObject(StaticRigidObject rigidObject)
         {
-            foreach (var tri in rigidObject.Meshes)
+            foreach (var tri in rigidObject.Mesh)
             {
                 float time = CalculateTimeToIntersectWithPlane(tri.Pos1, tri.Normal);
                 if (0 <= time && time + FrameCount < TimeToCollide && IsIntersectWithTriangle(tri))
@@ -92,7 +92,7 @@ namespace CurtainFireMakerPlugin.Entities
             return true;
         }
 
-        protected virtual bool IsIntersectWithTriangle(MeshTriangle tri)
+        protected virtual bool IsIntersectWithTriangle(Triangle tri)
         {
             var cross1 = (tri.Pos2 - tri.Pos1) ^ (Pos - tri.Pos1);
             var cross2 = (tri.Pos3 - tri.Pos2) ^ (Pos - tri.Pos2);
