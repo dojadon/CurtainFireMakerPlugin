@@ -231,7 +231,7 @@ namespace CurtainFireMakerPlugin
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            AttributeDict.Add(binder.Name, value);
+            AttributeDict[binder.Name] = value;
             return true;
         }
     }
