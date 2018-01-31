@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void Run() => Action(this);
 
-        public Boolean IsFinished() => State == FINISHED;
+        public bool IsFinished() => State == FINISHED;
 
         private static Action<Task> WAITING = (task) =>
         {

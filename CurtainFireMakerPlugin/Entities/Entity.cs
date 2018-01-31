@@ -40,6 +40,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         private TaskManager TaskManager { get; } = new TaskManager();
 
+        private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
+
         public World World { get; }
 
         public int EntityId { get; }
@@ -98,6 +100,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
         {
+
             if (withArg)
             {
                 AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
@@ -111,5 +114,18 @@ namespace CurtainFireMakerPlugin.Entities
         public override bool Equals(object obj) => obj is Entity e && EntityId == e.EntityId;
 
         public override int GetHashCode() => EntityId;
+
+        public object __getattr__(string key)
+        {
+            if (!AttributeDict.ContainsKey(key))
+            {
+                throw new KeyNotFoundException("Not found key : " + key);
+            }
+            return AttributeDict[key];
+        }
+
+        public void __setattr__(string key, object value) => AttributeDict.Add(key, value);
+
+        public void __delattr__(string key) => AttributeDict.Remove(key);
     }
 }

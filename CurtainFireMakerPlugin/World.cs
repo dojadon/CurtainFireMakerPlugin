@@ -41,6 +41,8 @@ namespace CurtainFireMakerPlugin
 
         public event EventHandler ExportEvent;
 
+        private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
+
         public string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
         public string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
 
@@ -216,5 +218,18 @@ namespace CurtainFireMakerPlugin
                 AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
             }
         }
+
+        public object __getattr__(string key)
+        {
+            if (!AttributeDict.ContainsKey(key))
+            {
+                throw new KeyNotFoundException("Not found key : " + key);
+            }
+            return AttributeDict[key];
+        }
+
+        public void __setattr__(string key, object value) => AttributeDict.Add(key, value);
+
+        public void __delattr__(string key) => AttributeDict.Remove(key);
     }
 }
