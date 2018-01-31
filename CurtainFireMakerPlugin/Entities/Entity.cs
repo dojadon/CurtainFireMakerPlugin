@@ -11,19 +11,11 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity : DynamicObject
     {
-        public virtual Matrix4 WorldMat => ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
+        public virtual Matrix4 WorldMat { get; private set; }
         public Vector3 WorldPos => WorldMat.Translation;
         public Matrix3 WorldRot => WorldMat;
 
-        public virtual Matrix4 LocalMat
-        {
-            get => new Matrix4(Rot, Pos);
-            set
-            {
-                Pos = value.Translation;
-                Rot = value;
-            }
-        }
+        public virtual Matrix4 LocalMat { get; private set; }
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
@@ -58,18 +50,16 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void Frame()
         {
-            UpdateTasks();
+            TaskManager.Frame();
 
             FrameCount++;
             if (DiedDecision(this))
             {
                 OnDeath();
             }
-        }
 
-        protected virtual void UpdateTasks()
-        {
-            TaskManager.Frame();
+            LocalMat = new Matrix4(Rot, Pos);
+            WorldMat = ParentEntity != null ? ParentEntity.WorldMat * LocalMat : LocalMat;
         }
 
         public void __call__()
