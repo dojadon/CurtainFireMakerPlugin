@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
-using System.Text;
+using System.Dynamic;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Forms;
@@ -12,7 +12,7 @@ using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin
 {
-    public class World
+    public class World : DynamicObject
     {
         public int MaxFrame { get; set; } = 1000;
 
@@ -219,17 +219,20 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public object __getattr__(string key)
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (!AttributeDict.ContainsKey(key))
+            if (!AttributeDict.ContainsKey(binder.Name))
             {
-                throw new KeyNotFoundException("Not found key : " + key);
+                throw new KeyNotFoundException("Not found key : " + binder.Name);
             }
-            return AttributeDict[key];
+            result = AttributeDict[binder.Name];
+            return true;
         }
 
-        public void __setattr__(string key, object value) => AttributeDict.Add(key, value);
-
-        public void __delattr__(string key) => AttributeDict.Remove(key);
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            AttributeDict.Add(binder.Name, value);
+            return true;
+        }
     }
 }

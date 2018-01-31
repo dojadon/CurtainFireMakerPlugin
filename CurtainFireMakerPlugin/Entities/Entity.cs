@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Dynamic;
 using VecMath;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class Entity
+    public class Entity : DynamicObject
     {
         public virtual Matrix4 WorldMat => ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
         public Vector3 WorldPos => WorldMat.Translation;
@@ -115,17 +116,20 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override int GetHashCode() => EntityId;
 
-        public object __getattr__(string key)
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (!AttributeDict.ContainsKey(key))
+            if (!AttributeDict.ContainsKey(binder.Name))
             {
-                throw new KeyNotFoundException("Not found key : " + key);
+                throw new KeyNotFoundException("Not found key : " + binder.Name);
             }
-            return AttributeDict[key];
+            result = AttributeDict[binder.Name];
+            return true;
         }
 
-        public void __setattr__(string key, object value) => AttributeDict.Add(key, value);
-
-        public void __delattr__(string key) => AttributeDict.Remove(key);
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            AttributeDict.Add(binder.Name, value);
+            return true;
+        }
     }
 }
