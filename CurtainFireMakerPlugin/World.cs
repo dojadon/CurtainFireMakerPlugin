@@ -161,6 +161,8 @@ namespace CurtainFireMakerPlugin
         {
             EntityList.ForEach(e => e.OnDeath());
 
+            KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount + 1, false));
+
             PmxModel.FinalizeModel(KeyFrames.MorphFrameDict.Values.Select(t => t.frame));
             KeyFrames.FinalizeKeyFrame(PmxModel.Morphs.MorphList);
 
