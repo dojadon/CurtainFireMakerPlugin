@@ -34,7 +34,7 @@ namespace CurtainFireMakerPlugin.Entities
                 VertexIndexSize = 4,
                 TextureIndexSize = 1,
                 MaterialIndexSize = 1,
-                BoneIndexSize = 2,
+                BoneIndexSize = 4,
                 MorphIndexSize = 1,
                 RigidIndexSize = 1,
             };

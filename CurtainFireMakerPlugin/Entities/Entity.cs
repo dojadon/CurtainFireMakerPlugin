@@ -31,6 +31,8 @@ namespace CurtainFireMakerPlugin.Entities
         public bool IsDeath { get; private set; }
         public bool IsSpawned { get; private set; }
 
+        public int FramePriority => ParentEntity != null ? ParentEntity.FramePriority + 1 : 0;
+
         private TaskManager TaskManager { get; } = new TaskManager();
 
         private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
@@ -59,7 +61,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
 
             LocalMat = new Matrix4(Rot, Pos);
-            WorldMat = ParentEntity != null ? ParentEntity.WorldMat * LocalMat : LocalMat;
+            WorldMat = ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
         }
 
         public void __call__()
@@ -69,6 +71,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void OnSpawn()
         {
+            LocalMat = new Matrix4(Rot, Pos);
+            WorldMat = ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
+
             SpawnFrameNo = World.AddEntity(this);
             IsSpawned = true;
         }

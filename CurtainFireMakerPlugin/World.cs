@@ -9,6 +9,7 @@ using CurtainFireMakerPlugin.Entities;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using MMDataIO.Vmd;
+using Alea.Parallel;
 
 namespace CurtainFireMakerPlugin
 {
@@ -118,6 +119,11 @@ namespace CurtainFireMakerPlugin
 
             AddEntityList.Clear();
             RemoveEntityList.Clear();
+
+            //foreach(var entities in EntityList.ToLookup(e=>e.FramePriority).OrderBy(g=>g.Key).Select(g=>g.ToArray()))
+            //{
+            //    Alea.Gpu.Default.For(0, entities.Length, i => entities[i].Frame());
+            //}
 
             EntityList.ForEach(e => e.Frame());
 
