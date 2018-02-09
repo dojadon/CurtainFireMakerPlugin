@@ -9,7 +9,6 @@ using CurtainFireMakerPlugin.Entities;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using MMDataIO.Vmd;
-using Alea.Parallel;
 
 namespace CurtainFireMakerPlugin
 {
