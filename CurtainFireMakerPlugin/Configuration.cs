@@ -24,7 +24,8 @@ namespace CurtainFireMakerPlugin
         public bool ShouldDropPmxFile { get => GetBool("ShouldDropFile/Pmx"); set => SetBool("ShouldDropFile/Pmx", value); }
         public bool ShouldDropVmdFile { get => GetBool("ShouldDropFile/Vmd"); set => SetBool("ShouldDropFile/Vmd", value); }
 
-        public static string PluginRootPath => Application.StartupPath + (Application.StartupPath.Contains("CurtainFireMaker") ? "\\" : "\\CurtainFireMaker\\");
+        public static string PluginRootPath => (Application.StartupPath.Contains("CurtainFireMaker") ? Application.StartupPath : Directory.GetDirectories(Application.StartupPath).First(s => s.Contains("CurtainFireMaker"))) + "\\";
+
         public static string SettingXmlFilePath => PluginRootPath + "config.xml";
         public static string SettingPythonFilePath => PluginRootPath + "config.py";
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
@@ -86,7 +87,7 @@ namespace CurtainFireMakerPlugin
 
         private static string GetAbsolutePath(string path)
         {
-            if (path.StartsWith("C:"))
+            if (Path.IsPathRooted(path))
             {
                 return path;
             }
