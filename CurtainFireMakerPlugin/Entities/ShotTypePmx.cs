@@ -14,9 +14,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         private DateTime LastWriteTime { get; set; } = DateTime.MinValue;
 
-        public ShotTypePmx(string name, string path) : base(name)
+        private float VertexScale { get; }
+
+        public ShotTypePmx(string name, string path, float scale) : base(name)
         {
             PmxFilePath = Configuration.ResourceDirPath + path;
+            VertexScale = scale;
 
             ReadPmxData();
         }
@@ -47,7 +50,7 @@ namespace CurtainFireMakerPlugin.Entities
             for (int i = 0; i < result.Length; i++)
             {
                 var clone = result[i] = CloneUtil.Clone(Data.VertexArray[i]);
-                clone.Pos = (Vector4)clone.Pos * prop.Scale;
+                clone.Pos = (Vector4)clone.Pos * VertexScale * prop.Scale;
             }
             return result;
         }
