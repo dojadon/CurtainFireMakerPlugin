@@ -31,7 +31,7 @@ namespace CurtainFireMakerPlugin
 
         public void Update()
         {
-            if (--LatencyTime > 0)
+            if (LatencyTime-- > 0)
             {
                 return;
             }
