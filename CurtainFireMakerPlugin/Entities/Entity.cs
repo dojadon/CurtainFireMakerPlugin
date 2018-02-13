@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public int FramePriority => ParentEntity != null ? ParentEntity.FramePriority + 1 : 0;
 
-        private TaskScheduler TaskScheduler { get; } = new TaskScheduler();
+        private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
 
         private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
 
@@ -50,10 +50,13 @@ namespace CurtainFireMakerPlugin.Entities
             ParentEntity = parentEntity;
         }
 
-        public virtual void Frame()
+        public void UpdateTask()
         {
             TaskScheduler.Frame();
+        }
 
+        public virtual void Frame()
+        {
             FrameCount++;
             if (DecideToDie(this))
             {

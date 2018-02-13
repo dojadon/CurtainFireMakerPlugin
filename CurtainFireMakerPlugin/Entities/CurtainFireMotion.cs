@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin.Entities
             PropertyFrames = new List<VmdPropertyFrameData>();
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, VmdMotionFrameData frame, int priority)
+        public void AddBoneKeyFrame(VmdMotionFrameData frame, int priority)
         {
             (string, int) key = (frame.Name, frame.FrameTime);
 
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public void AddMorphKeyFrame(PmxMorphData morph, VmdMorphFrameData frame, int priority)
+        public void AddMorphKeyFrame(VmdMorphFrameData frame, int priority)
         {
             (string, int) key = (frame.Name, frame.FrameTime);
 

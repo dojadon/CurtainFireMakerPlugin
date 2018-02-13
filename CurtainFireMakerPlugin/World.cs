@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 using CurtainFireMakerPlugin.Entities;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
@@ -35,7 +36,10 @@ namespace CurtainFireMakerPlugin
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion KeyFrames { get; }
 
-        private TaskScheduler TaskScheduler { get; } = new TaskScheduler();
+        private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
+
+        public SynchronizedCollection<(VmdMotionFrameData frame, int priority)> CurrentMotions { get; private set; } = new SynchronizedCollection<(VmdMotionFrameData, int)>();
+        public SynchronizedCollection<(VmdMorphFrameData frame, int priority)> CurrentMorphs { get; private set; } = new SynchronizedCollection<(VmdMorphFrameData, int)>();
 
         internal string ExportFileName { get; set; }
 
@@ -48,6 +52,8 @@ namespace CurtainFireMakerPlugin
 
         public string ModelName { get; set; }
         public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";
+
+        private static ParallelOptions ParallelOptions { get; } = new ParallelOptions() { MaxDegreeOfParallelism = 4 };
 
         public World(ShotTypeProvider typeProvider, PythonExecutor executor, Configuration config, IntPtr handle, string fileName)
         {
@@ -119,7 +125,25 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            EntityList.ForEach(e => e.Frame());
+            EntityList.ForEach(e => e.UpdateTask());
+
+            foreach (var entities in EntityList.ToLookup(e => e.FramePriority).OrderBy(g => g.Key))
+            {
+                Parallel.ForEach(entities, ParallelOptions, e => e.Frame());
+            }
+
+            foreach (var (frame, priority) in CurrentMotions)
+            {
+                KeyFrames.AddBoneKeyFrame(frame, priority);
+            }
+
+            foreach (var (frame, priority) in CurrentMorphs)
+            {
+                KeyFrames.AddMorphKeyFrame(frame, priority);
+            }
+
+            CurrentMotions.Clear();
+            CurrentMorphs.Clear();
 
             FrameCount++;
         }
