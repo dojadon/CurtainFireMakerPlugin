@@ -12,7 +12,7 @@ using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin
 {
-    public class World : DynamicObject
+    public class World
     {
         public int MaxFrame { get; set; } = 1000;
 
@@ -35,7 +35,7 @@ namespace CurtainFireMakerPlugin
         internal CurtainFireModel PmxModel { get; }
         internal CurtainFireMotion KeyFrames { get; }
 
-        private TaskManager TaskManager { get; } = new TaskManager();
+        private TaskScheduler TaskScheduler { get; } = new TaskScheduler();
 
         internal string ExportFileName { get; set; }
 
@@ -111,18 +111,13 @@ namespace CurtainFireMakerPlugin
         internal void Frame()
         {
             ShotModelProvider.Frame();
-            TaskManager.Frame();
+            TaskScheduler.Frame();
 
             EntityList.AddRange(AddEntityList);
             RemoveEntityList.ForEach(e => EntityList.Remove(e));
 
             AddEntityList.Clear();
             RemoveEntityList.Clear();
-
-            //foreach(var entities in EntityList.ToLookup(e=>e.FramePriority).OrderBy(g=>g.Key).Select(g=>g.ToArray()))
-            //{
-            //    Alea.Gpu.Default.For(0, entities.Length, i => entities[i].Frame());
-            //}
 
             EntityList.ForEach(e => e.Frame());
 
@@ -204,42 +199,19 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        internal void AddTask(Task task)
+        public void AddTask(ScheduledTask task)
         {
-            TaskManager.AddTask(task);
+            TaskScheduler.AddTask(task);
         }
 
-        internal void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
+        public void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
         {
-            AddTask(new Task(task, interval, executeTimes, waitTime));
+            AddTask(new ScheduledTask(t => withArg ? PythonCalls.Call(task, t) : PythonCalls.Call(task), interval, executeTimes, waitTime));
         }
 
-        public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
+        public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)
         {
-            if (withArg)
-            {
-                AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
-            }
-            else
-            {
-                AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
-            }
-        }
-
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-            if (!AttributeDict.ContainsKey(binder.Name))
-            {
-                throw new KeyNotFoundException("Not found key : " + binder.Name);
-            }
-            result = AttributeDict[binder.Name];
-            return true;
-        }
-
-        public override bool TrySetMember(SetMemberBinder binder, object value)
-        {
-            AttributeDict[binder.Name] = value;
-            return true;
+            AddTask(task, i => interval, executeTimes, waitTime, withArg);
         }
     }
 }

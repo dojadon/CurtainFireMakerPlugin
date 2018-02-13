@@ -26,14 +26,14 @@ namespace CurtainFireMakerPlugin.Entities
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }
 
-        public virtual Func<Entity, bool> DiedDecision { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
+        public virtual Func<Entity, bool> DecideToDie { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
 
         public bool IsDeath { get; private set; }
         public bool IsSpawned { get; private set; }
 
         public int FramePriority => ParentEntity != null ? ParentEntity.FramePriority + 1 : 0;
 
-        private TaskManager TaskManager { get; } = new TaskManager();
+        private TaskScheduler TaskScheduler { get; } = new TaskScheduler();
 
         private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
 
@@ -52,10 +52,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void Frame()
         {
-            TaskManager.Frame();
+            TaskScheduler.Frame();
 
             FrameCount++;
-            if (DiedDecision(this))
+            if (DecideToDie(this))
             {
                 OnDeath();
             }
@@ -84,27 +84,26 @@ namespace CurtainFireMakerPlugin.Entities
             IsDeath = true;
         }
 
-        public void AddTask(Task task)
+        public void AddTask(ScheduledTask task)
         {
-            TaskManager.AddTask(task);
+            TaskScheduler.AddTask(task);
         }
 
-        public void AddTask(Action<Task> task, int interval, int executeTimes, int waitTime)
+        public void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
         {
-            AddTask(new Task(task, interval, executeTimes, waitTime));
-        }
-
-        public void AddTask(PythonFunction func, int interval, int executeTimes, int waitTime, bool withArg = false)
-        {
-
             if (withArg)
             {
-                AddTask(task => PythonCalls.Call(func, task), interval, executeTimes, waitTime);
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task, t), interval, executeTimes, waitTime));
             }
             else
             {
-                AddTask(task => PythonCalls.Call(func), interval, executeTimes, waitTime);
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task), interval, executeTimes, waitTime));
             }
+        }
+
+        public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)
+        {
+            AddTask(task, i => interval, executeTimes, waitTime, withArg);
         }
 
         public override bool Equals(object obj) => obj is Entity e && EntityId == e.EntityId;
