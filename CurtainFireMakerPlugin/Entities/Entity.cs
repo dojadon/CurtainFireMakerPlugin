@@ -84,12 +84,12 @@ namespace CurtainFireMakerPlugin.Entities
             IsDeath = true;
         }
 
-        public void AddTask(ScheduledTask task)
+        private void AddTask(ScheduledTask task)
         {
             TaskScheduler.AddTask(task);
         }
 
-        public void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
+        private void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
         {
             if (withArg)
             {
@@ -99,6 +99,11 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 AddTask(new ScheduledTask(t => PythonCalls.Call(task), interval, executeTimes, waitTime));
             }
+        }
+
+        public void AddTask(PythonFunction task, PythonFunction interval, int executeTimes, int waitTime, bool withArg = false)
+        {
+            AddTask(task, i => (int)PythonCalls.Call(interval, i), executeTimes, waitTime);
         }
 
         public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)

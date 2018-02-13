@@ -199,14 +199,26 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public void AddTask(ScheduledTask task)
+        private void AddTask(ScheduledTask task)
         {
             TaskScheduler.AddTask(task);
         }
 
-        public void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
+        private void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
         {
-            AddTask(new ScheduledTask(t => withArg ? PythonCalls.Call(task, t) : PythonCalls.Call(task), interval, executeTimes, waitTime));
+            if (withArg)
+            {
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task, t), interval, executeTimes, waitTime));
+            }
+            else
+            {
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task), interval, executeTimes, waitTime));
+            }
+        }
+
+        public void AddTask(PythonFunction task, PythonFunction interval, int executeTimes, int waitTime, bool withArg = false)
+        {
+            AddTask(task, i => (int)PythonCalls.Call(interval, i), executeTimes, waitTime);
         }
 
         public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)
