@@ -54,7 +54,7 @@ namespace CurtainFireMakerPlugin
         public bool IsCompleted => ExecutedCount >= ExecuteToTime;
     }
 
-    public class TaskScheduler
+    public class ScheduledTaskManager
     {
         private List<ScheduledTask> TaskList { get; } = new List<ScheduledTask>();
         private List<ScheduledTask> AddTaskList { get; } = new List<ScheduledTask>();
