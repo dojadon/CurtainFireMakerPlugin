@@ -8,63 +8,85 @@ namespace CurtainFireMakerPlugin.Entities
     internal class ShotModelDataProvider
     {
         private HashSet<ShotGroup> GroupList { get; } = new HashSet<ShotGroup>();
-        private Dictionary<int, ShotGroup[]> CurrentGroupDict { get; set; }
+
+        private Dictionary<int, List<ShotGroup>> ReusableGroupDict { get; set; } = new Dictionary<int, List<ShotGroup>>();
 
         public ShotModelDataProvider()
         {
-            CurrentGroupDict = new Dictionary<int, ShotGroup[]>();
         }
 
         public void Frame()
         {
-            CurrentGroupDict = GroupList.Where(g => g.ShotList.All(e => e.IsDeath))
-            .ToLookup(g => GetPropertyHashCode(g.Data.Property)).ToDictionary(g => g.Key, g => g.ToArray());
+            GroupList.RemoveWhere(g =>
+            {
+                if (g.CurrentEntity.IsDeath)
+                {
+                    int hash = GetPropertyHashCode(g.Data.Property, g.ParentEntity);
+
+                    if (!ReusableGroupDict.ContainsKey(hash))
+                    {
+                        ReusableGroupDict[hash] = new List<ShotGroup>();
+                    }
+                    ReusableGroupDict[hash].Add(g);
+                }
+                return g.CurrentEntity.IsDeath;
+            });
         }
 
-        private int GetPropertyHashCode(ShotProperty property)
+        private int GetPropertyHashCode(ShotProperty prop, Entity entity)
         {
-            int result = 17;
-            result = result * 23 + property.Color;
-            result = result * 23 + property.Type.Name.GetHashCode();
-            return result;
+            return prop.GetHashCode() * 23 + (entity != null ? entity.EntityId : -1);
         }
 
-        public bool AddEntity(EntityShot entity, out ShotModelData data)
+        public void AddEntity(EntityShot entity, out ShotModelData data)
         {
-            int hash = GetPropertyHashCode(entity.Property);
+            int hash = GetPropertyHashCode(entity.Property, entity.ParentEntity);
 
             ShotGroup group = null;
-            if (CurrentGroupDict.ContainsKey(hash))
+            if (ReusableGroupDict.ContainsKey(hash))
             {
-                group = CurrentGroupDict[hash].FirstOrDefault(g => g.IsAddable(entity));
+                var groupList = ReusableGroupDict[hash];
+
+                group = groupList.FirstOrDefault();
+
+                if (groupList.Count == 1)
+                {
+                    ReusableGroupDict.Remove(hash);
+                }
+                else
+                {
+                    groupList.RemoveAt(0);
+                }
             }
             group = group ?? new ShotGroup(entity);
 
-            group.AddEntity(entity);
+            group.SetEntity(entity);
             data = group.Data;
 
-            return GroupList.Add(group);
+            GroupList.Add(group);
         }
     }
 
     internal class ShotGroup
     {
-        public List<EntityShot> ShotList { get; } = new List<EntityShot>();
+        public EntityShot CurrentEntity { get; set; }
         public ShotModelData Data { get; }
+        public Entity ParentEntity { get; }
 
         public ShotGroup(EntityShot entity)
         {
             Data = new ShotModelData(entity.World, entity.Property);
+            ParentEntity = entity.ParentEntity;
         }
 
-        public bool IsAddable(EntityShot entity)
+        public void SetEntity(EntityShot entity)
         {
-            return ShotList.All(entity.IsGroupable);
+            CurrentEntity = entity;
         }
 
-        public void AddEntity(EntityShot entity)
+        public override int GetHashCode()
         {
-            ShotList.Add(entity);
+            return CurrentEntity.GetHashCode();
         }
     }
 }

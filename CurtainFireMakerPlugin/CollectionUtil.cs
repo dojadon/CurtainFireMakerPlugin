@@ -7,7 +7,10 @@ namespace CurtainFireMakerPlugin
 {
     public static class CollectionUtil
     {
-
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            foreach (var t in collection) action(t);
+        }
     }
 
     public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>
@@ -20,7 +23,7 @@ namespace CurtainFireMakerPlugin
         public int GetHashCode(T[] obj)
         {
             int result = 17;
-            foreach(var o in obj)
+            foreach (var o in obj)
             {
                 result = result * 23 + o.GetHashCode();
             }

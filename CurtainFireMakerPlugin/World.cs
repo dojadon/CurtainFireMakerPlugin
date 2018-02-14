@@ -27,7 +27,7 @@ namespace CurtainFireMakerPlugin
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
-        public List<Entity> EntityList { get; } = new List<Entity>();
+        public HashSet<Entity> EntityList { get; } = new HashSet<Entity>();
         public int FrameCount { get; set; }
 
         public ShotTypeProvider ShotTypeProvider { get; }
@@ -73,7 +73,9 @@ namespace CurtainFireMakerPlugin
 
         internal ShotModelData AddShot(EntityShot entity)
         {
-            if (ShotModelProvider.AddEntity(entity, out ShotModelData data))
+            ShotModelProvider.AddEntity(entity, out ShotModelData data);
+
+            if (!data.IsInitialized)
             {
                 PmxModel.InitShotModelData(data);
             }
@@ -111,20 +113,33 @@ namespace CurtainFireMakerPlugin
             }
         }
 
+        private System.Diagnostics.Stopwatch Stopwatch { get; } = new System.Diagnostics.Stopwatch();
+
         internal void Frame()
         {
             ShotModelProvider.Frame();
             TaskScheduler.Frame();
 
-            EntityList.AddRange(AddEntityList);
+            AddEntityList.ForEach(e => EntityList.Add(e));
             RemoveEntityList.ForEach(e => EntityList.Remove(e));
 
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            EntityList.ForEach(e => e.Frame());
+            EntityList.OrderBy(e => e.FramePriority).ForEach(e => e.Frame());
 
             FrameCount++;
+        }
+
+        public void Run(Action action, string msg)
+        {
+            Stopwatch.Reset();
+            Stopwatch.Start();
+
+            action();
+
+            Stopwatch.Stop();
+            Console.WriteLine(msg + " : {0:#,0}ns", Stopwatch.ElapsedTicks / (double)System.Diagnostics.Stopwatch.Frequency * 1E+06);
         }
 
         public void Init()
@@ -202,14 +217,26 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public void AddTask(ScheduledTask task)
+        private void AddTask(ScheduledTask task)
         {
             TaskScheduler.AddTask(task);
         }
 
-        public void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
+        private void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
         {
-            AddTask(new ScheduledTask(t => withArg ? PythonCalls.Call(task, t) : PythonCalls.Call(task), interval, executeTimes, waitTime));
+            if (withArg)
+            {
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task, t), interval, executeTimes, waitTime));
+            }
+            else
+            {
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task), interval, executeTimes, waitTime));
+            }
+        }
+
+        public void AddTask(PythonFunction task, PythonFunction interval, int executeTimes, int waitTime, bool withArg = false)
+        {
+            AddTask(task, i => (int)PythonCalls.Call(interval, i), executeTimes, waitTime, withArg);
         }
 
         public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)

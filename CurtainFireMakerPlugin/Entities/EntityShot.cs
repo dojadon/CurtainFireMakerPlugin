@@ -94,11 +94,6 @@ namespace CurtainFireMakerPlugin.Entities
             Colliding.OnCollide(this, tri, time);
         }
 
-        public virtual bool IsGroupable(EntityShot e)
-        {
-            return ParentEntity == e.ParentEntity && e.IsDeath && ShotProperty.EplisionEquals(Property, e.Property, 1E-4F);
-        }
-
         public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
         {
             AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
@@ -122,13 +117,13 @@ namespace CurtainFireMakerPlugin.Entities
             var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot);
             frame.InterpolationPointX1 = frame.InterpolationPointY1 = frame.InterpolationPointZ1 = curve.P1;
             frame.InterpolationPointX2 = frame.InterpolationPointY2 = frame.InterpolationPointZ2 = curve.P2;
-           World.KeyFrames.AddBoneKeyFrame(frame, priority);
+            World.KeyFrames.AddBoneKeyFrame(frame, priority);
         }
 
         public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, int priority = 0)
         {
             var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + frameOffset, weight);
-           World.KeyFrames.AddMorphKeyFrame(frame, priority);
+            World.KeyFrames.AddMorphKeyFrame(frame, priority);
         }
 
         public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)

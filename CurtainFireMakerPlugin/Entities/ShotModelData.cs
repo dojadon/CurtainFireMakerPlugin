@@ -20,6 +20,8 @@ namespace CurtainFireMakerPlugin.Entities
         public ShotProperty Property { get; }
         public World World { get; }
 
+        public bool IsInitialized { get; set; } = false;
+
         public ShotModelData(World world, ShotProperty property)
         {
             Property = property;

@@ -47,6 +47,8 @@ namespace CurtainFireMakerPlugin.Entities
                 SetupMeshData(data);
             }
             Bones.SetupBone(data.Bones);
+
+            data.IsInitialized = true;
         }
 
         private void SetupMeshData(ShotModelData data)
