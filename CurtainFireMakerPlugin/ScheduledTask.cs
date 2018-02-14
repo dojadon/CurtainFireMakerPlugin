@@ -51,7 +51,7 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public bool IsCompleted => ExecutedCount >= ExecuteToTime;
+        public bool IsCompleted => ExecutedCount >= ExecuteToTime && ExecuteToTime != 0;
     }
 
     public class ScheduledTaskManager
