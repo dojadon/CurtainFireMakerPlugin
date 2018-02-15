@@ -24,21 +24,21 @@ namespace CurtainFireMakerPlugin.Entities
         {
             base.Frame();
 
+            Vector3 interpolatedVelocity = GetInterpolatedVelocity();
+
             if (ShouldRecord())
             {
                 Record();
             }
 
-            Pos += GetInterpolatedVelocity();
+            Pos += interpolatedVelocity;
 
             PrevPos = Pos;
             PrevRot = Rot;
             PrevVelocity = Velocity;
         }
 
-        protected virtual bool ShouldRecord() => !(Vector3.EpsilonEquals(Pos, PrevPos, Epsilon) &&
-           Quaternion.EpsilonEquals(Rot, PrevRot, Epsilon) &&
-           Vector3.EpsilonEquals(Velocity, PrevVelocity, Epsilon));
+        protected virtual bool ShouldRecord() => !(Vector3.EpsilonEquals(Pos, PrevPos, Epsilon) && Quaternion.EpsilonEquals(Rot, PrevRot, Epsilon) && Vector3.EpsilonEquals(Velocity, PrevVelocity, Epsilon));
 
         protected abstract void Record();
 
@@ -51,11 +51,6 @@ namespace CurtainFireMakerPlugin.Entities
                 if (World.FrameCount < MotionInterpolation.EndFrame)
                 {
                     interpolatedVelocity *= MotionInterpolation.GetChangeAmount(World.FrameCount);
-
-                    if (MotionInterpolation.EndFrame < World.FrameCount + 1 && MotionInterpolation.IsSyncVelocity)
-                    {
-                        Velocity = interpolatedVelocity;
-                    }
                 }
                 else
                 {
@@ -72,6 +67,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void RemoveMotionInterpolationCurve()
         {
+            if (MotionInterpolation.IsSyncVelocity)
+            {
+                Velocity *= (1.0F - MotionInterpolation.Curve.P2.y) / (1.0F - MotionInterpolation.Curve.P2.x);
+            }
+
             MotionInterpolation = null;
         }
     }
