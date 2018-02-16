@@ -9,12 +9,6 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class ModelMaterialCollection
     {
-        public List<PmxMaterialData> MaterialList { get; } = new List<PmxMaterialData>();
-        public Dictionary<PmxMaterialData, string[]> TexturesEachMaterialDict { get; } = new Dictionary<PmxMaterialData, string[]>();
-
-        public PmxMaterialData[] MaterialArray => MaterialList.ToArray();
-        public string[] TextureArray { get; private set; }
-
         public World World { get; }
 
         public ModelMaterialCollection(World world)
@@ -22,13 +16,20 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void SetupMaterials(ShotProperty prop, PmxMaterialData[] materials, string[] textures)
+        public void CreateMaterials(ShotProperty prop, string[] textures, int propCount, out PmxMaterialData[] materials)
         {
-            foreach (PmxMaterialData material in materials)
+            materials = prop.Type.CreateMaterials(World, prop);
+            prop.Type.InitModelData(prop, materials);
+
+            int GetTextureId(int id) => (0 <= id && id < prop.Type.OriginalData.TextureFiles.Length) ? Array.IndexOf(textures, prop.Type.OriginalData.TextureFiles[id]) : -1;
+
+            foreach (var (material, i) in materials.Select((item, idx) => (item, idx)))
             {
-                material.MaterialName = prop.Type.Name + "_" + GetHexColorCode(prop.Color);
-                MaterialList.Add(material);
-                TexturesEachMaterialDict.Add(material, textures);
+                material.MaterialName = prop.Type.Name + "_" + GetHexColorCode(prop.Color) + (materials.Length != 0 ? "_" + i : "");
+
+                material.TextureId = GetTextureId(material.TextureId);
+                material.SphereId = GetTextureId(material.SphereId);
+                material.FaceCount *= propCount;
             }
 
             string GetHexColorCode(int i)
@@ -36,84 +37,6 @@ namespace CurtainFireMakerPlugin.Entities
                 string hex = i.ToString("X");
                 return "0x" + (hex.Length == 6 ? hex : new string('0', 6 - hex.Length) + hex);
             }
-        }
-
-        public void CompressMaterial(List<int> vertexIndices)
-        {
-            var grouptedMaterialIndices = Enumerable.Range(0, MaterialList.Count).ToLookup(i => GetMaterialHashCode(MaterialList[i]));
-            var removedMaterialIndices = CompressGroupedMaterial(grouptedMaterialIndices, vertexIndices);
-
-            foreach (int removedMaterialIndex in removedMaterialIndices.OrderByDescending(i => i))
-            {
-                MaterialList.RemoveAt(removedMaterialIndex);
-            }
-
-            for (int i = 0; i < MaterialList.Count; i++)
-            {
-                MaterialList[i].MaterialName += "_" + i;
-            }
-
-            int GetMaterialHashCode(PmxMaterialData obj)
-            {
-                int result = 17;
-
-                result = result * 31 + obj.Ambient.GetHashCode();
-                result = result * 31 + obj.Diffuse.GetHashCode();
-                result = result * 31 + obj.Specular.GetHashCode();
-                result = result * 31 + obj.Shininess.GetHashCode();
-                result = result * 31 + obj.TextureId;
-                result = result * 31 + obj.SphereId;
-
-                return result;
-            }
-        }
-
-        private IEnumerable<int> CompressGroupedMaterial(IEnumerable<IEnumerable<int>> groupedMaterialIndices, List<int> vertexIndices)
-        {
-            var vertexIndicesEachMaterial = CreateVertexIndicesEachMaterial(vertexIndices);
-            vertexIndices.Clear();
-
-            var removedMaterialIndices = new List<int>();
-
-            foreach (var materialIndices in groupedMaterialIndices)
-            {
-                vertexIndices.AddRange(materialIndices.SelectMany(i => vertexIndicesEachMaterial[i]));
-
-                if (materialIndices.Skip(1).Any())
-                {
-                    removedMaterialIndices.AddRange(materialIndices.Skip(1));
-                    MaterialList[materialIndices.First()].FaceCount = materialIndices.Sum(i => MaterialList[i].FaceCount);
-                }
-            }
-            return removedMaterialIndices;
-        }
-
-        private List<List<int>> CreateVertexIndicesEachMaterial(List<int> vertexIndices)
-        {
-            var vertexIndicesEachMaterial = new List<List<int>>();
-
-            int total = 0;
-            foreach (var material in MaterialList)
-            {
-                vertexIndicesEachMaterial.Add(vertexIndices.GetRange(total, material.FaceCount));
-                total += material.FaceCount;
-            }
-            return vertexIndicesEachMaterial;
-        }
-
-        public void FinalizeTextures()
-        {
-            var textureList = TexturesEachMaterialDict.Values.SelectMany(s => s).Distinct().ToList();
-
-            foreach (var material in MaterialList)
-            {
-                var textures = TexturesEachMaterialDict[material];
-                int GetTextureId(int i) => (0 <= i && i < textures.Length) ? textureList.IndexOf(textures[i]) : -1;
-
-                material.TextureId = GetTextureId(material.TextureId);
-                material.SphereId = GetTextureId(material.SphereId);
-            }
-            TextureArray = textureList.ToArray();
         }
     }
 }

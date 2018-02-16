@@ -147,7 +147,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetFileName) C:\Tool\CG\MikuMikuMoving64_v1275\Plugins
+    <PostBuildEvent>copy $(TargetName).* C:\Tool\CG\MikuMikuMoving64_v1275\Plugins
 copy $(TargetFileName) C:\Tool\CG\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins</PostBuildEvent>
   </PropertyGroup>
 </Project>

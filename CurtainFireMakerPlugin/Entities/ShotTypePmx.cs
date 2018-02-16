@@ -10,7 +10,7 @@ namespace CurtainFireMakerPlugin.Entities
     {
         private string PmxFilePath { get; }
 
-        private PmxModelData Data { get; } = new PmxModelData();
+        public override PmxModelData OriginalData { get; } = new PmxModelData();
 
         private DateTime LastWriteTime { get; set; } = DateTime.MinValue;
 
@@ -30,8 +30,9 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 using (var stream = new FileStream(PmxFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    Data.Read(new BinaryReader(stream));
+                    OriginalData.Read(new BinaryReader(stream));
                 }
+                Array.ForEach(OriginalData.VertexArray, v => v.Pos *= VertexScale);
             }
         }
 
@@ -42,51 +43,51 @@ namespace CurtainFireMakerPlugin.Entities
             ReadPmxData();
         }
 
-        public override bool HasMesh => Data.VertexArray.Length > 0;
+        public override bool HasMesh => OriginalData.VertexArray.Length > 0;
 
         public override PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop)
         {
-            PmxVertexData[] result = new PmxVertexData[Data.VertexArray.Length];
+            PmxVertexData[] result = new PmxVertexData[OriginalData.VertexArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
-                var clone = result[i] = CloneUtil.Clone(Data.VertexArray[i]);
-                clone.Pos = (Vector4)clone.Pos * VertexScale * prop.Scale;
+                var clone = result[i] = CloneUtil.Clone(OriginalData.VertexArray[i]);
+                clone.Pos = (Vector4)clone.Pos * prop.Scale;
             }
             return result;
         }
 
         public override int[] CreateVertexIndices(World wolrd, ShotProperty prop)
         {
-            int[] result = new int[Data.VertexIndices.Length];
-            Array.Copy(Data.VertexIndices, result, Data.VertexIndices.Length);
+            int[] result = new int[OriginalData.VertexIndices.Length];
+            Array.Copy(OriginalData.VertexIndices, result, OriginalData.VertexIndices.Length);
 
             return result;
         }
 
         public override PmxMaterialData[] CreateMaterials(World wolrd, ShotProperty prop)
         {
-            PmxMaterialData[] result = new PmxMaterialData[Data.MaterialArray.Length];
+            PmxMaterialData[] result = new PmxMaterialData[OriginalData.MaterialArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = CloneUtil.Clone(Data.MaterialArray[i]);
+                result[i] = CloneUtil.Clone(OriginalData.MaterialArray[i]);
             }
             return result;
         }
 
         public override string[] CreateTextures(World wolrd, ShotProperty prop)
         {
-            string[] result = new string[Data.TextureFiles.Length];
-            Array.Copy(Data.TextureFiles, result, Data.TextureFiles.Length);
+            string[] result = new string[OriginalData.TextureFiles.Length];
+            Array.Copy(OriginalData.TextureFiles, result, OriginalData.TextureFiles.Length);
 
             return result;
         }
 
         public override PmxBoneData[] CreateBones(World wolrd, ShotProperty prop)
         {
-            PmxBoneData[] result = new PmxBoneData[Data.BoneArray.Length];
+            PmxBoneData[] result = new PmxBoneData[OriginalData.BoneArray.Length];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = CloneUtil.Clone(Data.BoneArray[i]);
+                result[i] = CloneUtil.Clone(OriginalData.BoneArray[i]);
             }
             return result;
         }

@@ -23,6 +23,8 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public string Name { get; }
 
+        public abstract PmxModelData OriginalData { get; }
+
         public ShotType(string name)
         {
             Name = name;
@@ -32,12 +34,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void InitEntity(EntityShot entity) { }
 
-        public virtual void InitModelData(ShotModelData data)
+        public virtual void InitModelData(ShotProperty prop, PmxMaterialData[] materials)
         {
-            if (data.Materials != null)
+            if (materials != null)
             {
-                var prop = data.Property;
-                foreach (var material in data.Materials)
+                foreach (var material in materials)
                 {
                     material.Diffuse = new Vector4(prop.Red, prop.Green, prop.Blue, 1);
                     material.Ambient = new Vector3(prop.Red, prop.Green, prop.Blue);

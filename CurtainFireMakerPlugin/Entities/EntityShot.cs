@@ -51,14 +51,21 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
         {
-            Property = property;
+            try
+            {
+                Property = property;
 
-            ModelData = World.AddShot(this);
+                ModelData = World.AddShot(this);
 
-            RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
+                RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
-            Property.Type.InitEntity(this);
-            Property.Type.InitModelData(ModelData);
+                Property.Type.InitEntity(this);
+            }
+            catch (Exception e)
+            {
+                try { Console.WriteLine(World.Executor.FormatException(e)); } catch { }
+                Console.WriteLine(e);
+            }
         }
 
         protected override void Record()

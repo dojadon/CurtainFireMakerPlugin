@@ -10,7 +10,16 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class ModelBoneCollection
     {
-        public List<PmxBoneData> BoneList { get; } = new List<PmxBoneData>();
+        public List<PmxBoneData> BoneList { get; } = new List<PmxBoneData>()
+        {
+            new PmxBoneData()
+            {
+                BoneName = "センター",
+                ParentId = -1,
+                Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.VISIBLE | BoneFlags.OP,
+            },
+        };
+
         public World World { get; }
 
         public PmxBoneData[] BoneArray => BoneList.ToArray();
@@ -18,14 +27,6 @@ namespace CurtainFireMakerPlugin.Entities
         public ModelBoneCollection(World world)
         {
             World = world;
-
-            PmxBoneData centerBone = new PmxBoneData()
-            {
-                BoneName = "センター",
-                ParentId = -1,
-                Flag = BoneFlags.ROTATE | BoneFlags.MOVE | BoneFlags.VISIBLE | BoneFlags.OP,
-            };
-            BoneList.Add(centerBone);
         }
 
         public void SetupBone(params PmxBoneData[] bones)

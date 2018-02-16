@@ -15,6 +15,12 @@ namespace CurtainFireMakerPlugin.Entities
         public ModelMorphCollection Morphs { get; }
         public ModelBoneCollection Bones { get; }
 
+        private PmxModelData ModelData { get; set; }
+
+        public MultiDictionary<ShotProperty, ShotModelData> ModelDataEachPropertyDict { get; } = new MultiDictionary<ShotProperty, ShotModelData>();
+
+        public List<ShotProperty> PropertyList { get; } = new List<ShotProperty>();
+
         private World World { get; }
 
         public CurtainFireModel(World world)
@@ -44,36 +50,45 @@ namespace CurtainFireMakerPlugin.Entities
         {
             if (data.Property.Type.HasMesh)
             {
-                SetupMeshData(data);
+                data.BoneIndexOffset = Bones.BoneList.Count;
+                ModelDataEachPropertyDict[data.Property].Add(data);
+
+                if (!PropertyList.Contains(data.Property))
+                {
+                    PropertyList.Add(data.Property);
+                }
             }
             Bones.SetupBone(data.Bones);
 
             data.IsInitialized = true;
         }
 
-        private void SetupMeshData(ShotModelData data)
-        {
-            Vertices.SetupVertices(data.Vertices, data.Indices, Bones.BoneList.Count);
-            Materials.SetupMaterials(data.Property, data.Materials, data.Textures);
-        }
-
         public void FinalizeModel(IEnumerable<VmdMorphFrameData> morphFrames)
         {
-            Materials.FinalizeTextures();
+            var vertices = new List<PmxVertexData>();
+            var vertexIndices = new List<int>();
+            var materials = new List<PmxMaterialData>();
+            var textures = ModelDataEachPropertyDict.Keys.SelectMany(p => p.Type.CreateTextures(World, p)).Distinct().ToArray();
 
-            Materials.CompressMaterial(Vertices.Indices);
+            foreach (var prop in PropertyList)
+            {
+                Vertices.CreateVertices(prop, ModelDataEachPropertyDict[prop], vertices.Count, out var propVertices, out var propVertexIndeices);
+                Materials.CreateMaterials(prop, textures, ModelDataEachPropertyDict[prop].Count, out var propMaterials);
+
+                vertices.AddRange(propVertices);
+                vertexIndices.AddRange(propVertexIndeices);
+                materials.AddRange(propMaterials);
+            }
+
             Morphs.CompressMorph(morphFrames);
-        }
 
-        public PmxModelData CreatePmxModelData()
-        {
-            return new PmxModelData
+            ModelData = new PmxModelData
             {
                 Header = Header,
-                VertexIndices = Vertices.VertexIndexArray,
-                TextureFiles = Materials.TextureArray,
-                VertexArray = Vertices.VertexArray,
-                MaterialArray = Materials.MaterialArray,
+                VertexIndices = vertexIndices.ToArray(),
+                TextureFiles = textures.ToArray(),
+                VertexArray = vertices.ToArray(),
+                MaterialArray = materials.ToArray(),
                 BoneArray = Bones.BoneArray,
                 MorphArray = Morphs.MorphArray,
                 SlotArray = new[]
@@ -106,10 +121,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             using (var stream = new FileStream(World.PmxExportPath, FileMode.Create, FileAccess.Write))
             {
-                var data = CreatePmxModelData();
-                data.Write(new BinaryWriter(stream));
-
-                World.Script.output_pmx_log(data);
+                ModelData.Write(new BinaryWriter(stream));
+                World.Script.output_pmx_log(ModelData);
             }
         }
     }
