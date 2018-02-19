@@ -68,7 +68,7 @@ namespace CurtainFireMakerPlugin.Entities
             var vertices = new List<PmxVertexData>();
             var vertexIndices = new List<int>();
             var materials = new List<PmxMaterialData>();
-            var textures = ModelDataEachPropertyDict.Keys.SelectMany(p => p.Type.CreateTextures(World, p)).Distinct().ToArray();
+            var textures = PropertyList.SelectMany(p => p.Type.CreateTextures(World, p)).Distinct().ToArray();
 
             foreach (var prop in PropertyList)
             {

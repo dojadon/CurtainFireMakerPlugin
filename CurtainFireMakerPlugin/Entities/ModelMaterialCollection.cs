@@ -16,12 +16,13 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
         }
 
-        public void CreateMaterials(ShotProperty prop, string[] textures, int propCount, out PmxMaterialData[] materials)
+        public void CreateMaterials(ShotProperty prop, string[] modelTextures, int propCount, out PmxMaterialData[] materials)
         {
+            var textures = prop.Type.CreateTextures(World, prop);
             materials = prop.Type.CreateMaterials(World, prop);
             prop.Type.InitModelData(prop, materials);
 
-            int GetTextureId(int id) => (0 <= id && id < prop.Type.OriginalData.TextureFiles.Length) ? Array.IndexOf(textures, prop.Type.OriginalData.TextureFiles[id]) : -1;
+            int GetTextureId(int id) => (0 <= id && id < textures.Length) ? Array.IndexOf(modelTextures, textures[id]) : -1;
 
             foreach (var (material, i) in materials.Select((item, idx) => (item, idx)))
             {
