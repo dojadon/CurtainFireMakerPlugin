@@ -143,7 +143,49 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CurtainFireMaker\Resource\amulet.pmx" />
+    <None Include="CurtainFireMaker\Resource\bullet.pmx" />
+    <None Include="CurtainFireMaker\Resource\butterfly.pmx" />
+    <None Include="CurtainFireMaker\Resource\dia.pmx" />
+    <None Include="CurtainFireMaker\Resource\dia_bright.pmx" />
+    <None Include="CurtainFireMaker\Resource\knife.pmx" />
+    <None Include="CurtainFireMaker\Resource\laser_curve.pmx" />
+    <None Include="CurtainFireMaker\Resource\laser_line.pmx" />
+    <None Include="CurtainFireMaker\Resource\magic_circle.pmx" />
+    <None Include="CurtainFireMaker\Resource\rice.pmx" />
+    <None Include="CurtainFireMaker\Resource\scale.pmx" />
+    <None Include="CurtainFireMaker\Resource\shot.pmx" />
+    <None Include="CurtainFireMaker\Resource\shot_l.pmx" />
+    <None Include="CurtainFireMaker\Resource\star.pmx" />
+    <None Include="CurtainFireMaker\Resource\Wavefront\dod.obj" />
+    <None Include="CurtainFireMaker\Resource\Wavefront\ico.obj" />
+    <None Include="CurtainFireMaker\Resource\Wavefront\ico_dod.obj" />
+    <None Include="CurtainFireMaker\Resource\Wavefront\ico_y.obj" />
+    <None Include="CurtainFireMaker\Resource\Wavefront\snub_cube.obj" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CurtainFireMaker\common.py" />
+    <Content Include="CurtainFireMaker\config.py" />
+    <Content Include="CurtainFireMaker\config.xml" />
+    <Content Include="CurtainFireMaker\Export\Textures\Butterfly.png" />
+    <Content Include="CurtainFireMaker\Export\Textures\MagicCircle_FantasyHeaven.png" />
+    <Content Include="CurtainFireMaker\Export\Textures\MagicCircle_Simple.png" />
+    <Content Include="CurtainFireMaker\Lib\CurtainFireScript\Entities.py" />
+    <Content Include="CurtainFireMaker\Lib\CurtainFireScript\ShotTypes.py" />
+    <Content Include="CurtainFireMaker\Lib\CurtainFireScript\VectorUtil.py" />
+    <Content Include="CurtainFireMaker\Lib\CurtainFireScript\__init__.py" />
+    <Content Include="CurtainFireMaker\license.txt" />
+    <Content Include="CurtainFireMaker\Resource\Textures\Butterfly.png" />
+    <Content Include="CurtainFireMaker\Resource\Textures\MagicCircle_FantasyHeaven.png" />
+    <Content Include="CurtainFireMaker\Resource\Textures\MagicCircle_Simple.png" />
+    <Content Include="CurtainFireMaker\Resource\Textures\sp.png" />
+    <Content Include="CurtainFireMaker\Resource\Textures\Sphere.png" />
+    <Content Include="CurtainFireMaker\template.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CurtainFireMaker\Plugins\" />
+    <Folder Include="CurtainFireMaker\System\x64\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

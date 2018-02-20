@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Libs>
+    <Dir>Lib</Dir>
+    <Dir>C:\Python27\Lib</Dir>
+    <Dir>C:\Python27\Lib\site-packages</Dir>
+  </Libs>
+  <Script>template.py</Script>
+  <CommonScript>common.py</CommonScript>
+  <Export>
+    <Pmx>Export</Pmx>
+    <Vmd>Export</Vmd>
+  </Export>
+  <ShouldDropFile>
+    <Pmx>True</Pmx>
+    <Vmd>True</Vmd>
+  </ShouldDropFile>
+</Configuration>
