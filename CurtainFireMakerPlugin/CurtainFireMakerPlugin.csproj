@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Entities\CubicBezierCurve.cs" />
+    <Compile Include="Entities\EntityMMModel.cs" />
     <Compile Include="Entities\StaticRigidObject.cs" />
     <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />
@@ -99,6 +100,10 @@
     <ProjectReference Include="..\..\MMDataIO\MMDataIO\MMDataIO.csproj">
       <Project>{1aef787f-b0ed-44b4-b091-6570888a91f7}</Project>
       <Name>MMDataIO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MMTransform\MMTransform\MMTransform.csproj">
+      <Project>{aaace1cb-2ee7-4f6a-ba5c-68eb86b8d517}</Project>
+      <Name>MMTransform</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\VecMath\VecMath\VecMath.csproj">
       <Project>{008f0133-2636-42a3-b17b-d0631c5132d6}</Project>
@@ -190,6 +195,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(TargetName).* C:\Tool\CG\MikuMikuMoving64_v1275\Plugins
-copy $(TargetFileName) C:\Tool\CG\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins</PostBuildEvent>
+copy $(TargetFileName) C:\Tool\CG\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins
+xcopy "$(ProjectDir)CurtainFireMaker" "$(TargetDir)CurtainFireMaker" /E /I /R
+copy "C:\Tool\CG\MikuMikuMoving64_v1275\CurtainFireMaker\Plugins\*.dll" "$(TargetDir)CurtainFireMaker\Plugins"
+copy "C:\Tool\CG\MikuMikuMoving64_v1275\CurtainFireMaker\System\x64\*.dll" "$(TargetDir)CurtainFireMaker\System\x64"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

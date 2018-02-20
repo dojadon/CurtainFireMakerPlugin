@@ -11,11 +11,11 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity : DynamicObject
     {
-        public virtual Matrix4 WorldMat { get; private set; }
+        public virtual Matrix4 WorldMat { get; protected set; }
         public Vector3 WorldPos => WorldMat.Translation;
         public Matrix3 WorldRot => WorldMat;
 
-        public virtual Matrix4 LocalMat { get; private set; }
+        public virtual Matrix4 LocalMat { get; protected set; }
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
