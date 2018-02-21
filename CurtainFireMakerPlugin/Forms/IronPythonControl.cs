@@ -11,7 +11,7 @@ namespace CurtainFireMakerPlugin.Forms
 {
     public partial class IronPythonControl : UserControl
     {
-        public string ScriptText { get => textBoxScript.Text; set => textBoxScript.Text = value; }
+        public string ScriptText { get => textBoxScript.Text; set => textBoxScript.Text = value.Replace("\r\n", "\n").Replace("\n", "\r").Replace("\r", "\r\n"); }
 
         public IronPythonControl()
         {

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBoxScript = new System.Windows.Forms.RichTextBox();
+            this.textBoxScript = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -43,18 +43,12 @@
             // 
             // textBoxScript
             // 
-            this.textBoxScript.AcceptsTab = true;
-            this.textBoxScript.DetectUrls = false;
             this.textBoxScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBoxScript.Location = new System.Drawing.Point(5, 26);
-            this.textBoxScript.Margin = new System.Windows.Forms.Padding(3, 3, 80, 60);
+            this.textBoxScript.Multiline = true;
             this.textBoxScript.Name = "textBoxScript";
-            this.textBoxScript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.textBoxScript.Size = new System.Drawing.Size(495, 274);
-            this.textBoxScript.TabIndex = 3;
-            this.textBoxScript.TabStop = false;
-            this.textBoxScript.Text = "";
-            this.textBoxScript.WordWrap = false;
+            this.textBoxScript.Size = new System.Drawing.Size(700, 400);
+            this.textBoxScript.TabIndex = 2;
             // 
             // IronPythonControl
             // 
@@ -63,7 +57,7 @@
             this.Controls.Add(this.textBoxScript);
             this.Controls.Add(this.label1);
             this.Name = "IronPythonControl";
-            this.Size = new System.Drawing.Size(580, 360);
+            this.Size = new System.Drawing.Size(960, 540);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -71,6 +65,6 @@
 
         #endregion
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RichTextBox textBoxScript;
+        private System.Windows.Forms.TextBox textBoxScript;
     }
 }
