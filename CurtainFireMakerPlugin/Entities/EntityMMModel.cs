@@ -15,30 +15,51 @@ namespace CurtainFireMakerPlugin.Entities
         public Model Model { get; }
         public PmxModelData Data { get; } = new PmxModelData();
 
-        private PmxBones PmxBones { get; }
-        private List<EntityBone> EntityBones { get; }
+        private List<PmxBone> PmxBones { get; } = new List<PmxBone>();
+        private List<EntityBone> EntityBones { get; } = new List<EntityBone>();
 
-        public EntityBone this[string boneName] => EntityBones.First(b=>b.PmxBone.BoneName == boneName);
+        public EntityBone this[string boneName]
+        {
+            get
+            {
+                try
+                {
+                    return EntityBones.First(b => b.PmxBone.BoneName == boneName);
+                }
+                catch
+                {
+                    throw new ArgumentException($"Not found bone : {boneName}");
+                }
+            }
+        }
 
         public EntityMMModel(World world, Scene scene, string filePath) : base(world)
         {
-            PmxBones = new PmxBones();
-
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 Data.Read(new BinaryReader(stream));
             }
-            PmxBones.SetBoneData(Data.BoneArray);
 
-            Model = scene.Models.FirstOrDefault(m => m.Name == Data.Header.ModelName && m.EnglishName == Data.Header.ModelNameE);
-
-            if (Model == null)
+            try
             {
-                Console.WriteLine($"Not found model : {Data.Header.ModelName}");
-                return;
+                Model = scene.Models.First(m => m.Name == Data.Header.ModelName);
+            }
+            catch
+            {
+                throw new ArgumentException($"Not found model : {Data.Header.ModelName}");
             }
 
-            foreach(var pmxBone in PmxBones)
+            for (int i = 0; i < Data.BoneArray.Length; i++)
+            {
+                PmxBones.Add(new PmxBone(Data.BoneArray[i]) { BoneIndex = i });
+            }
+
+            for (int i = 0; i < Data.BoneArray.Length; i++)
+            {
+                PmxBones[i].Init(Data.BoneArray[i], PmxBones);
+            }
+
+            foreach (var pmxBone in PmxBones)
             {
                 var bone = new EntityBone(World, pmxBone, Model.Bones[pmxBone.BoneName]);
                 bone.OnSpawn();
@@ -49,7 +70,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override void Frame()
         {
-            PmxBones.UpdateMatries();
+            foreach (var bone in from bone in PmxBones orderby bone.Depth, bone.BoneIndex select bone)
+            {
+                bone.UpdateLocalMatrix();
+                bone.UpdateWorldMatrix();
+            }
+            PmxBones.ForEach(b => b.IK?.Update());
 
             EntityBones.ForEach(b => b.ApplyMatrix());
         }
@@ -80,6 +106,12 @@ namespace CurtainFireMakerPlugin.Entities
 
             PmxBone.Pos = Pos = pos;
             PmxBone.Rot = Rot = rot;
+        }
+
+        public void SetExtraParent(EntityBone bone)
+        {
+            PmxBone.Flag |= BoneFlags.EXTRA;
+            PmxBone.ParentBone = bone.PmxBone;
         }
 
         public void ApplyMatrix()
