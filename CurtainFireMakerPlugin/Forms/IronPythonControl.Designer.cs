@@ -47,8 +47,10 @@
             this.textBoxScript.Location = new System.Drawing.Point(5, 26);
             this.textBoxScript.Multiline = true;
             this.textBoxScript.Name = "textBoxScript";
+            this.textBoxScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxScript.Size = new System.Drawing.Size(700, 400);
             this.textBoxScript.TabIndex = 2;
+            this.textBoxScript.WordWrap = false;
             // 
             // IronPythonControl
             // 
