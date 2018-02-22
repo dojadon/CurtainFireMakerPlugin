@@ -21,7 +21,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual Entity ParentEntity { get; protected set; }
 
-        public int FrameCount { get; private set; }
+        public int FrameCount { get; protected set; }
         public int LivingLimit { get; set; }
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }

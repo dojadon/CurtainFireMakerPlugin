@@ -52,32 +52,18 @@ namespace CurtainFireMakerPlugin.Entities
             for (int i = 0; i < Data.BoneArray.Length; i++)
             {
                 PmxBones.Add(new PmxBone(Data.BoneArray[i]) { BoneIndex = i });
+                EntityBones.Add(new EntityBone(World, PmxBones[i], Model.Bones[Data.BoneArray[i].BoneName]));
             }
 
             for (int i = 0; i < Data.BoneArray.Length; i++)
             {
                 PmxBones[i].Init(Data.BoneArray[i], PmxBones);
+                EntityBones[i].Init(EntityBones);
             }
-
-            foreach (var pmxBone in PmxBones)
-            {
-                var bone = new EntityBone(World, pmxBone, Model.Bones[pmxBone.BoneName]);
-                bone.OnSpawn();
-                EntityBones.Add(bone);
-            }
-            OnSpawn();
         }
 
         public override void Frame()
         {
-            foreach (var bone in from bone in PmxBones orderby bone.Depth, bone.BoneIndex select bone)
-            {
-                bone.UpdateLocalMatrix();
-                bone.UpdateWorldMatrix();
-            }
-            PmxBones.ForEach(b => b.IK?.Update());
-
-            EntityBones.ForEach(b => b.ApplyMatrix());
         }
     }
 
@@ -86,10 +72,25 @@ namespace CurtainFireMakerPlugin.Entities
         public PmxBone PmxBone { get; }
         public Bone MMMBone { get; }
 
+        public List<EntityBone> ParentBones { get; } = new List<EntityBone>();
+
         public EntityBone(World world, PmxBone bone, Bone mmmBone) : base(world)
         {
             PmxBone = bone;
             MMMBone = mmmBone;
+        }
+
+        public void Init(List<EntityBone> bones)
+        {
+            if (PmxBone.ParentBone != null)
+            {
+                ParentBones.Add(bones[PmxBone.ParentBone.BoneIndex]);
+            }
+
+            if (PmxBone.LinkParent != null)
+            {
+                ParentBones.Add(bones[PmxBone.LinkParent.BoneIndex]);
+            }
         }
 
         public override void Frame()
@@ -106,18 +107,25 @@ namespace CurtainFireMakerPlugin.Entities
 
             PmxBone.Pos = Pos = pos;
             PmxBone.Rot = Rot = rot;
+
+            foreach (var bone in ParentBones.Where(b => b.FrameCount != World.FrameCount))
+            {
+                bone.Frame();
+            }
+
+            PmxBone.UpdateLocalMatrix();
+            PmxBone.UpdateWorldMatrix();
+
+            LocalMat = PmxBone.LocalMat;
+            WorldMat = PmxBone.WorldMat;
+
+            FrameCount = World.FrameCount;
         }
 
         public void SetExtraParent(EntityBone bone)
         {
             PmxBone.Flag |= BoneFlags.EXTRA;
             PmxBone.ParentBone = bone.PmxBone;
-        }
-
-        public void ApplyMatrix()
-        {
-            LocalMat = PmxBone.LocalMat;
-            WorldMat = PmxBone.WorldMat;
         }
     }
 }
