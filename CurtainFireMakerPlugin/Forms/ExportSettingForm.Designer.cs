@@ -45,6 +45,8 @@
             this.TextBoxVmdExportPath = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.FolderBrowserDialogVmd = new System.Windows.Forms.FolderBrowserDialog();
+            this.TextBoxProjectScript = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label5
@@ -60,7 +62,7 @@
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(488, 28);
+            this.button5.Location = new System.Drawing.Point(508, 28);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(44, 23);
             this.button5.TabIndex = 20;
@@ -76,7 +78,7 @@
             this.TextBoxScriptPath.BackColor = System.Drawing.SystemColors.Window;
             this.TextBoxScriptPath.Location = new System.Drawing.Point(14, 30);
             this.TextBoxScriptPath.Name = "TextBoxScriptPath";
-            this.TextBoxScriptPath.Size = new System.Drawing.Size(468, 19);
+            this.TextBoxScriptPath.Size = new System.Drawing.Size(487, 19);
             this.TextBoxScriptPath.TabIndex = 19;
             // 
             // label1
@@ -95,13 +97,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxPmxExportPath.Location = new System.Drawing.Point(14, 73);
             this.TextBoxPmxExportPath.Name = "TextBoxPmxExportPath";
-            this.TextBoxPmxExportPath.Size = new System.Drawing.Size(468, 19);
+            this.TextBoxPmxExportPath.Size = new System.Drawing.Size(487, 19);
             this.TextBoxPmxExportPath.TabIndex = 1;
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(487, 71);
+            this.button1.Location = new System.Drawing.Point(507, 71);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(45, 23);
             this.button1.TabIndex = 2;
@@ -112,7 +114,7 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(400, 211);
+            this.button4.Location = new System.Drawing.Point(400, 415);
             this.button4.Margin = new System.Windows.Forms.Padding(3, 3, 80, 3);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
@@ -124,7 +126,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(89, 211);
+            this.button3.Location = new System.Drawing.Point(89, 415);
             this.button3.Margin = new System.Windows.Forms.Padding(80, 3, 3, 3);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
@@ -174,13 +176,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxVmdExportPath.Location = new System.Drawing.Point(14, 115);
             this.TextBoxVmdExportPath.Name = "TextBoxVmdExportPath";
-            this.TextBoxVmdExportPath.Size = new System.Drawing.Size(468, 19);
+            this.TextBoxVmdExportPath.Size = new System.Drawing.Size(487, 19);
             this.TextBoxVmdExportPath.TabIndex = 27;
             // 
             // button6
             // 
             this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button6.Location = new System.Drawing.Point(487, 113);
+            this.button6.Location = new System.Drawing.Point(507, 113);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(45, 23);
             this.button6.TabIndex = 28;
@@ -188,11 +190,33 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.Click_VmdExportDir);
             // 
+            // TextBoxProjectScript
+            // 
+            this.TextBoxProjectScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.TextBoxProjectScript.Location = new System.Drawing.Point(14, 233);
+            this.TextBoxProjectScript.Multiline = true;
+            this.TextBoxProjectScript.Name = "TextBoxProjectScript";
+            this.TextBoxProjectScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TextBoxProjectScript.Size = new System.Drawing.Size(538, 176);
+            this.TextBoxProjectScript.TabIndex = 29;
+            this.TextBoxProjectScript.WordWrap = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 218);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(97, 12);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "プロジェクトスクリプト";
+            // 
             // ExportSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(564, 246);
+            this.ClientSize = new System.Drawing.Size(564, 450);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.TextBoxProjectScript);
             this.Controls.Add(this.CheckBoxDropPmxFile);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button4);
@@ -235,5 +259,7 @@
         private System.Windows.Forms.TextBox TextBoxVmdExportPath;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialogVmd;
+        private System.Windows.Forms.TextBox TextBoxProjectScript;
+        private System.Windows.Forms.Label label3;
     }
 }

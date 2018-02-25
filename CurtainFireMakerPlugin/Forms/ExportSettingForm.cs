@@ -19,12 +19,14 @@ namespace CurtainFireMakerPlugin.Forms
                 TextBoxScriptPath.Text = value;
                 OpenFileDialogScript.FileName = value;
                 OpenFileDialogScript.InitialDirectory = Path.GetDirectoryName(value);
+                TextBoxProjectScript.Text = ProjectScriptControl.GetScript(Path.GetFileNameWithoutExtension(TextBoxScriptPath.Text));
             }
         }
 
         public string PmxExportDirPath
         {
-            get => TextBoxPmxExportPath.Text; set
+            get => TextBoxPmxExportPath.Text;
+            set
             {
                 TextBoxPmxExportPath.Text = value;
                 FolderBrowserDialogPmx.SelectedPath = value;
@@ -33,7 +35,8 @@ namespace CurtainFireMakerPlugin.Forms
 
         public string VmdExportDirPath
         {
-            get => TextBoxVmdExportPath.Text; set
+            get => TextBoxVmdExportPath.Text;
+            set
             {
                 TextBoxVmdExportPath.Text = value;
                 FolderBrowserDialogVmd.SelectedPath = value;
@@ -45,9 +48,12 @@ namespace CurtainFireMakerPlugin.Forms
 
         private Configuration Config { get; }
 
-        public ExportSettingForm(Configuration config)
+        private ProjectScriptControl ProjectScriptControl { get; }
+
+        public ExportSettingForm(Configuration config, ProjectScriptControl projectScriptControl)
         {
             Config = config;
+            ProjectScriptControl = projectScriptControl;
 
             InitializeComponent();
 

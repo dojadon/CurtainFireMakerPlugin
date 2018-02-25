@@ -59,11 +59,11 @@
     <Compile Include="Forms\ExportSettingForm.Designer.cs">
       <DependentUpon>ExportSettingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\IronPythonControl.cs">
+    <Compile Include="Forms\ProjectScriptControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\IronPythonControl.Designer.cs">
-      <DependentUpon>IronPythonControl.cs</DependentUpon>
+    <Compile Include="Forms\ProjectScriptControl.Designer.cs">
+      <DependentUpon>ProjectScriptControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProgressForm.cs">
       <SubType>Form</SubType>
@@ -86,8 +86,8 @@
     <EmbeddedResource Include="Forms\ExportSettingForm.resx">
       <DependentUpon>ExportSettingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\IronPythonControl.resx">
-      <DependentUpon>IronPythonControl.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ProjectScriptControl.resx">
+      <DependentUpon>ProjectScriptControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>

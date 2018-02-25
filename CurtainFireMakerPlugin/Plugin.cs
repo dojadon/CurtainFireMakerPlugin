@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin
 
         public dynamic Script { get; private set; }
 
-        private IronPythonControl IronPythonControl { get; }
+        private ProjectScriptControl ProjectScriptControl { get; }
 
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
 
@@ -32,7 +32,8 @@ namespace CurtainFireMakerPlugin
                 PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
                 Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
 
-                IronPythonControl = new IronPythonControl { ScriptText = File.ReadAllText(Config.CommonScriptPath), };
+                ProjectScriptControl = new ProjectScriptControl(File.ReadAllText(Config.CommonScriptPath));
+
                 ShotTypeProvider.RegisterShotType(Script.init_shottype());
             }
             catch (Exception e)
@@ -66,29 +67,49 @@ namespace CurtainFireMakerPlugin
 
         public UserControl CreateControl()
         {
-            return IronPythonControl;
+            return ProjectScriptControl;
         }
 
         public Stream OnSaveProject()
         {
-            var bytes = Encoding.Unicode.GetBytes(IronPythonControl.ScriptText);
-
             var stream = new MemoryStream();
             var writer = new BinaryWriter(stream);
-            writer.Write(bytes.Length);
-            writer.Write(bytes);
+
+            writer.Write(ProjectScriptControl.ScriptDict.Count);
+            ProjectScriptControl.ScriptDict.ForEach(p =>
+            {
+                WriteString(p.Key);
+                WriteString(p.Value);
+            });
+
+            void WriteString(string s)
+            {
+                var bytes = Encoding.Unicode.GetBytes(s);
+                writer.Write(bytes.Length);
+                writer.Write(bytes);
+            }
+
             return stream;
         }
 
         public void OnLoadProject(Stream stream)
         {
             var reader = new BinaryReader(stream);
-            IronPythonControl.ScriptText = Encoding.Unicode.GetString(reader.ReadBytes(reader.ReadInt32()));
+
+            for (int i = 0, len = reader.ReadInt32(); i < len; i++)
+            {
+                ProjectScriptControl.ScriptDict.Add(ReadString(), ReadString());
+            }
+
+            string ReadString()
+            {
+                return Encoding.Unicode.GetString(reader.ReadBytes(reader.ReadInt32()));
+            }
         }
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm(Config);
+            var form = new ExportSettingForm(Config, ProjectScriptControl);
             form.ShowDialog(ApplicationForm);
 
             if (form.DialogResult == DialogResult.OK)
@@ -127,7 +148,8 @@ namespace CurtainFireMakerPlugin
 
             PythonExecutor.SetGlobalVariable(("SCENE", Scene));
             PythonExecutor.SetGlobalVariable(("WORLD", world));
-            PythonExecutor.ExecuteOnRootScope(IronPythonControl.ScriptText);
+            PythonExecutor.ExecuteOnRootScope(ProjectScriptControl.RootScript);
+            PythonExecutor.ExecuteOnRootScope(ProjectScriptControl.GetScript(Path.GetFileNameWithoutExtension(Config.ScriptPath)));
 
             world.Init();
 
