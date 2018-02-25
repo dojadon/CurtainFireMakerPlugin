@@ -13,6 +13,8 @@ namespace CurtainFireMakerPlugin
 {
     public class Plugin : ICommandPlugin, IHaveUserControl, ICanSavePlugin
     {
+        public static Version Version = new Version(1, 0);
+
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
@@ -32,7 +34,7 @@ namespace CurtainFireMakerPlugin
                 PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
                 Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
 
-                ProjectScriptControl = new ProjectScriptControl(File.ReadAllText(Config.CommonScriptPath));
+                ProjectScriptControl = new ProjectScriptControl(File.ReadAllText(Configuration.CommonRootScriptPath), File.ReadAllText(Configuration.CommonScriptPath));
 
                 ShotTypeProvider.RegisterShotType(Script.init_shottype());
             }
@@ -75,6 +77,8 @@ namespace CurtainFireMakerPlugin
             var stream = new MemoryStream();
             var writer = new BinaryWriter(stream);
 
+            WriteString(Version.ToString());
+
             writer.Write(ProjectScriptControl.ScriptDict.Count);
             ProjectScriptControl.ScriptDict.ForEach(p =>
             {
@@ -95,6 +99,11 @@ namespace CurtainFireMakerPlugin
         public void OnLoadProject(Stream stream)
         {
             var reader = new BinaryReader(stream);
+
+            if (Version.Parse(ReadString()) != Version)
+            {
+                return;
+            }
 
             for (int i = 0, len = reader.ReadInt32(); i < len; i++)
             {

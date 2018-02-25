@@ -79,6 +79,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             Close();
             DialogResult = DialogResult.OK;
+            ProjectScriptControl.AddScript(Path.GetFileNameWithoutExtension(TextBoxScriptPath.Text), TextBoxProjectScript.Text);
         }
 
         private void Click_Cancel(object sender, EventArgs e)

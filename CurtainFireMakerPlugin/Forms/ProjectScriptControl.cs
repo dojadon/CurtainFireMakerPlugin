@@ -16,11 +16,14 @@ namespace CurtainFireMakerPlugin.Forms
         public Dictionary<string, string> ScriptDict { get; } = new Dictionary<string, string>();
 
         public string SelectedScript => textBoxScript.Text;
+        public string DefaultScript { get; }
 
         public string RootScript => ScriptDict[RootKey];
 
-        public ProjectScriptControl(string rootScript)
+        public ProjectScriptControl(string rootScript, string defaultScript)
         {
+            DefaultScript = defaultScript;
+
             InitializeComponent();
 
             AddScript(RootKey, rootScript);
@@ -41,9 +44,12 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (!ScriptDict.ContainsKey(key))
             {
-                AddScript(key, RootScript);
+                return DefaultScript;
             }
-            return ScriptDict[key];
+            else
+            {
+                return ScriptDict[key];
+            }
         }
 
         private void TextChanges_ScriptKey(object sender, EventArgs e)

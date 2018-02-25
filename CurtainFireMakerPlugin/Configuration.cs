@@ -14,8 +14,6 @@ namespace CurtainFireMakerPlugin
         private XmlNode RootNode => XmlDoc.SelectSingleNode(@"//Configuration");
 
         public string ScriptPath { get => GetPath("Script"); set => SetPath("Script", value); }
-        public string CommonScriptPath { get => GetPath("CommonScript"); set => SetPath("CommonScript", value); }
-
         public string[] ModullesDirPaths { get => GetPaths("Libs/Dir"); set => SetPaths("Libs/Dir", value); }
 
         public string PmxExportDirPath { get => GetPath("Export/Pmx"); set => SetPath("Export/Pmx", value); }
@@ -28,6 +26,8 @@ namespace CurtainFireMakerPlugin
 
         public static string SettingXmlFilePath => PluginRootPath + "config.xml";
         public static string SettingPythonFilePath => PluginRootPath + "config.py";
+        public static string CommonRootScriptPath => PluginRootPath + "common_root.py";
+        public static string CommonScriptPath => PluginRootPath + "common.py";
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
         public static string LogPath => PluginRootPath + "lastest.log";
         public static string ErrorLogPath => PluginRootPath + "error.log";
