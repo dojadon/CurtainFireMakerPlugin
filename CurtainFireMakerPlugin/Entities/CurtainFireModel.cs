@@ -7,6 +7,22 @@ using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {
+    class ShotPropertyComparer : IEqualityComparer<ShotProperty>
+    {
+        public bool Equals(ShotProperty x, ShotProperty y)
+        {
+            return x.Type == y.Type && x.Color == y.Color;
+        }
+
+        public int GetHashCode(ShotProperty obj)
+        {
+            int result = 17;
+            result = result * 31 + obj.Type.Name.GetHashCode();
+            result = result * 31 + obj.Color;
+            return result;
+        }
+    }
+
     internal class CurtainFireModel
     {
         private PmxHeaderData Header { get; }
@@ -17,9 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private PmxModelData ModelData { get; set; }
 
-        public MultiDictionary<ShotProperty, ShotModelData> ModelDataEachPropertyDict { get; } = new MultiDictionary<ShotProperty, ShotModelData>();
-
-        public List<ShotProperty> PropertyList { get; } = new List<ShotProperty>();
+        public MultiDictionary<ShotProperty, ShotModelData> ModelDataEachPropertyDict { get; } = new MultiDictionary<ShotProperty, ShotModelData>(new ShotPropertyComparer());
 
         private World World { get; }
 
@@ -53,9 +67,9 @@ namespace CurtainFireMakerPlugin.Entities
                 data.BoneIndexOffset = Bones.BoneList.Count;
                 ModelDataEachPropertyDict[data.Property].Add(data);
 
-                if (!PropertyList.Contains(data.Property))
+                bool PropertyEquals(ShotProperty prop)
                 {
-                    PropertyList.Add(data.Property);
+                    return prop.Type == data.Property.Type && prop.Color == data.Property.Color;
                 }
             }
             Bones.SetupBone(data.Bones);
@@ -68,11 +82,11 @@ namespace CurtainFireMakerPlugin.Entities
             var vertices = new List<PmxVertexData>();
             var vertexIndices = new List<int>();
             var materials = new List<PmxMaterialData>();
-            var textures = PropertyList.SelectMany(p => p.Type.CreateTextures(World, p)).Distinct().ToArray();
+            var textures = ModelDataEachPropertyDict.Keys.SelectMany(p => p.Type.CreateTextures(World, p)).Distinct().ToArray();
 
-            foreach (var prop in PropertyList)
+            foreach (var prop in ModelDataEachPropertyDict.Keys)
             {
-                Vertices.CreateVertices(prop, ModelDataEachPropertyDict[prop], vertices.Count, out var propVertices, out var propVertexIndeices);
+                Vertices.CreateVertices(prop.Type, ModelDataEachPropertyDict[prop], vertices.Count, out var propVertices, out var propVertexIndeices);
                 Materials.CreateMaterials(prop, textures, ModelDataEachPropertyDict[prop].Count, out var propMaterials);
 
                 vertices.AddRange(propVertices);

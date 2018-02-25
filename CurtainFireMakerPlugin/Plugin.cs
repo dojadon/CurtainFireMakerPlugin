@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin
                 Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
 
                 IronPythonControl = new IronPythonControl { ScriptText = File.ReadAllText(Config.CommonScriptPath), };
-                Script.init_shottype(ShotTypeProvider);
+                ShotTypeProvider.RegisterShotType(Script.init_shottype());
             }
             catch (Exception e)
             {

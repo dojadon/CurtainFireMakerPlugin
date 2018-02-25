@@ -10,63 +10,6 @@ using MikuMikuPlugin;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class EntityMMModel : Entity
-    {
-        public Model Model { get; }
-        public PmxModelData Data { get; } = new PmxModelData();
-
-        private List<PmxBone> PmxBones { get; } = new List<PmxBone>();
-        private List<EntityBone> EntityBones { get; } = new List<EntityBone>();
-
-        public EntityBone this[string boneName]
-        {
-            get
-            {
-                try
-                {
-                    return EntityBones.First(b => b.PmxBone.BoneName == boneName);
-                }
-                catch
-                {
-                    throw new ArgumentException($"Not found bone : {boneName}");
-                }
-            }
-        }
-
-        public EntityMMModel(World world, Scene scene, string filePath) : base(world)
-        {
-            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                Data.Read(new BinaryReader(stream));
-            }
-
-            try
-            {
-                Model = scene.Models.First(m => m.Name == Data.Header.ModelName);
-            }
-            catch
-            {
-                throw new ArgumentException($"Not found model : {Data.Header.ModelName}");
-            }
-
-            for (int i = 0; i < Data.BoneArray.Length; i++)
-            {
-                PmxBones.Add(new PmxBone(Data.BoneArray[i]) { BoneIndex = i });
-                EntityBones.Add(new EntityBone(World, PmxBones[i], Model.Bones[Data.BoneArray[i].BoneName]));
-            }
-
-            for (int i = 0; i < Data.BoneArray.Length; i++)
-            {
-                PmxBones[i].Init(Data.BoneArray[i], PmxBones);
-                EntityBones[i].Init(EntityBones);
-            }
-        }
-
-        public override void Frame()
-        {
-        }
-    }
-
     public class EntityBone : Entity
     {
         public PmxBone PmxBone { get; }

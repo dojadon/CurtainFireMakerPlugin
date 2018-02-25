@@ -11,9 +11,9 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public Dictionary<string, ShotType> ShotTypeDict { get; } = new Dictionary<string, ShotType>();
 
-        public void RegisterShotType(params ShotType[] types)
+        public void RegisterShotType(IEnumerable<ShotType> types)
         {
-            Array.ForEach(types, t => ShotTypeDict.Add(t.Name, t));
+            types.ForEach(t => ShotTypeDict.Add(t.Name, t));
         }
 
         public ShotType GetShotType(string name) => ShotTypeDict[name];
