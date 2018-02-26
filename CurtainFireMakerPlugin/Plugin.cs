@@ -34,7 +34,10 @@ namespace CurtainFireMakerPlugin
                 PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
                 Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
 
-                ProjectScriptControl = new ProjectScriptControl(File.ReadAllText(Configuration.CommonRootScriptPath), File.ReadAllText(Configuration.CommonScriptPath));
+                ProjectScriptControl = new ProjectScriptControl(File.ReadAllText(Configuration.CommonScriptPath))
+                {
+                    RootScript = File.ReadAllText(Configuration.CommonRootScriptPath)
+                };
 
                 ShotTypeProvider.RegisterShotType(Script.init_shottype());
             }
@@ -78,6 +81,7 @@ namespace CurtainFireMakerPlugin
             var writer = new BinaryWriter(stream);
 
             WriteString(Version.ToString());
+            WriteString(ProjectScriptControl.RootScript);
 
             writer.Write(ProjectScriptControl.ScriptDict.Count);
             ProjectScriptControl.ScriptDict.ForEach(p =>
@@ -105,9 +109,11 @@ namespace CurtainFireMakerPlugin
                 return;
             }
 
+            ProjectScriptControl.RootScript = ReadString();
+
             for (int i = 0, len = reader.ReadInt32(); i < len; i++)
             {
-                ProjectScriptControl.ScriptDict.Add(ReadString(), ReadString());
+                ProjectScriptControl.AddScript(ReadString(), ReadString());
             }
 
             string ReadString()
