@@ -17,10 +17,19 @@ namespace CurtainFireMakerPlugin.Entities
 
         public List<EntityBone> ParentBones { get; } = new List<EntityBone>();
 
+        public Matrix3 LocalCoordinate { get; private set; }
+
         public EntityBone(World world, PmxBone bone, Bone mmmBone) : base(world)
         {
             PmxBone = bone;
             MMMBone = mmmBone;
+        }
+
+        public override void OnSpawn()
+        {
+            base.OnSpawn();
+
+            Frame();
         }
 
         public void Init(List<EntityBone> bones)
@@ -34,6 +43,8 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 ParentBones.Add(bones[PmxBone.LinkParent.BoneIndex]);
             }
+
+            LocalCoordinate = Matrix3.LookAt(PmxBone.ArrowVec, Vector3.UnitY);
         }
 
         public override void Frame()
@@ -51,7 +62,7 @@ namespace CurtainFireMakerPlugin.Entities
             PmxBone.Pos = Pos = pos;
             PmxBone.Rot = Rot = rot;
 
-            foreach (var bone in ParentBones.Where(b => b.FrameCount != World.FrameCount))
+            foreach (var bone in ParentBones)
             {
                 bone.Frame();
             }
@@ -60,9 +71,7 @@ namespace CurtainFireMakerPlugin.Entities
             PmxBone.UpdateWorldMatrix();
 
             LocalMat = PmxBone.LocalMat;
-            WorldMat = PmxBone.WorldMat;
-
-            FrameCount = World.FrameCount;
+            WorldMat = new Matrix4(LocalCoordinate * PmxBone.WorldMat.Rotation, PmxBone.WorldMat.Translation);
         }
 
         public void SetExtraParent(EntityBone bone)
