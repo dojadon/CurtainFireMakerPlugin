@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin.Forms
                 TextBoxScriptPath.Text = value;
                 OpenFileDialogScript.FileName = value;
                 OpenFileDialogScript.InitialDirectory = Path.GetDirectoryName(value);
-                TextBoxProjectScript.Text = ProjectScriptControl.GetScript(Path.GetFileNameWithoutExtension(TextBoxScriptPath.Text));
+                TextBoxProjectScript.Text = ProjectScriptControl.GetPreScript(TextBoxScriptPath.Text);
             }
         }
 
@@ -48,9 +48,9 @@ namespace CurtainFireMakerPlugin.Forms
 
         private Configuration Config { get; }
 
-        private ProjectScriptControl ProjectScriptControl { get; }
+        private ProjectEditorControl ProjectScriptControl { get; }
 
-        public ExportSettingForm(Configuration config, ProjectScriptControl projectScriptControl)
+        public ExportSettingForm(Configuration config, ProjectEditorControl projectScriptControl)
         {
             Config = config;
             ProjectScriptControl = projectScriptControl;
@@ -79,7 +79,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             Close();
             DialogResult = DialogResult.OK;
-            ProjectScriptControl.AddScript(Path.GetFileNameWithoutExtension(TextBoxScriptPath.Text), TextBoxProjectScript.Text);
+            ProjectScriptControl.UpdatePreScript(TextBoxScriptPath.Text, TextBoxProjectScript.Text);
         }
 
         private void Click_Cancel(object sender, EventArgs e)

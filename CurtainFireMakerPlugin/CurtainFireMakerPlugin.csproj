@@ -59,11 +59,17 @@
     <Compile Include="Forms\ExportSettingForm.Designer.cs">
       <DependentUpon>ExportSettingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProjectScriptControl.cs">
+    <Compile Include="Forms\PreScriptEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\ProjectScriptControl.Designer.cs">
-      <DependentUpon>ProjectScriptControl.cs</DependentUpon>
+    <Compile Include="Forms\PreScriptEditorControl.Designer.cs">
+      <DependentUpon>PreScriptEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProjectEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ProjectEditorControl.Designer.cs">
+      <DependentUpon>ProjectEditorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProgressForm.cs">
       <SubType>Form</SubType>
@@ -75,6 +81,7 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />
     <Compile Include="Entities\ShotProperty.cs" />
+    <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonExecutor.cs" />
     <Compile Include="Entities\ShotType.cs" />
@@ -86,8 +93,11 @@
     <EmbeddedResource Include="Forms\ExportSettingForm.resx">
       <DependentUpon>ExportSettingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProjectScriptControl.resx">
-      <DependentUpon>ProjectScriptControl.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\PreScriptEditorControl.resx">
+      <DependentUpon>PreScriptEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProjectEditorControl.resx">
+      <DependentUpon>ProjectEditorControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>

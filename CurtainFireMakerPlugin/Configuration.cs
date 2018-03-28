@@ -26,9 +26,9 @@ namespace CurtainFireMakerPlugin
 
         public static string SettingXmlFilePath => PluginRootPath + "config.xml";
         public static string SettingPythonFilePath => PluginRootPath + "config.py";
-        public static string CommonRootScriptPath => PluginRootPath + "common_root.py";
         public static string CommonScriptPath => PluginRootPath + "common.py";
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
+        public static string ProjectsDirPath => PluginRootPath + "Project\\";
         public static string LogPath => PluginRootPath + "lastest.log";
         public static string ErrorLogPath => PluginRootPath + "error.log";
 
@@ -85,7 +85,7 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        private static string GetAbsolutePath(string path)
+        public static string GetAbsolutePath(string path)
         {
             if (Path.IsPathRooted(path))
             {
@@ -98,7 +98,7 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        private static string GetRelativePath(string path)
+        public static string GetRelativePath(string path)
         {
             return path.Replace(PluginRootPath, "");
         }

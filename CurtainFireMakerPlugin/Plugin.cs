@@ -13,45 +13,45 @@ namespace CurtainFireMakerPlugin
 {
     public class Plugin : ICommandPlugin, IHaveUserControl, ICanSavePlugin
     {
-        public static Version Version = new Version(1, 0);
-
         internal Configuration Config { get; }
         internal PythonExecutor PythonExecutor { get; }
 
         public dynamic Script { get; private set; }
 
-        private ProjectScriptControl ProjectScriptControl { get; }
+        private ProjectEditorControl ProjectScriptControl { get; }
 
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
 
         public Plugin()
         {
-            Config = new Configuration(Configuration.SettingXmlFilePath);
-            Config.Load();
-
-            try
+            using (var writer = new StreamWriter(Configuration.LogPath, false, Encoding.UTF8))
             {
-                PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
-                Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
-
-                ProjectScriptControl = new ProjectScriptControl(File.ReadAllText(Configuration.CommonScriptPath))
+                using (var error_writer = new StreamWriter(Configuration.ErrorLogPath, false, Encoding.UTF8))
                 {
-                    RootScript = File.ReadAllText(Configuration.CommonRootScriptPath)
-                };
+                    Console.SetOut(writer);
+                    Console.SetError(error_writer);
 
-                ShotTypeProvider.RegisterShotType(Script.init_shottype());
-            }
-            catch (Exception e)
-            {
-                using (var sw = new StreamWriter(Configuration.ErrorLogPath, false, Encoding.UTF8))
-                {
-                    try { sw.WriteLine(PythonExecutor.FormatException(e)); } catch { }
-                    sw.WriteLine(e);
+                    try
+                    {
+                        Config = new Configuration(Configuration.SettingXmlFilePath);
+                        Config.Load();
+
+                        PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
+                        Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
+
+                        ProjectScriptControl = new ProjectEditorControl(this);
+
+                        ShotTypeProvider.RegisterShotType(Script.init_shottype());
+                    }
+                    catch (Exception e)
+                    {
+                        try { error_writer.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                        error_writer.WriteLine(e);
+                    }
+
+                    Image = Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico"));
                 }
             }
-
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico");
-            Image = Image.FromStream(stream);
         }
 
         public Guid GUID => new Guid();
@@ -68,6 +68,7 @@ namespace CurtainFireMakerPlugin
         public void Dispose()
         {
             Config?.Save();
+            ProjectScriptControl.Save();
         }
 
         public UserControl CreateControl()
@@ -77,49 +78,13 @@ namespace CurtainFireMakerPlugin
 
         public Stream OnSaveProject()
         {
-            var stream = new MemoryStream();
-            var writer = new BinaryWriter(stream);
-
-            WriteString(Version.ToString());
-            WriteString(ProjectScriptControl.RootScript);
-
-            writer.Write(ProjectScriptControl.ScriptDict.Count);
-            ProjectScriptControl.ScriptDict.ForEach(p =>
-            {
-                WriteString(p.Key);
-                WriteString(p.Value);
-            });
-
-            void WriteString(string s)
-            {
-                var bytes = Encoding.Unicode.GetBytes(s);
-                writer.Write(bytes.Length);
-                writer.Write(bytes);
-            }
-
-            return stream;
+            ProjectScriptControl.Save();
+            return new MemoryStream();
         }
 
         public void OnLoadProject(Stream stream)
         {
-            var reader = new BinaryReader(stream);
 
-            if (Version.Parse(ReadString()) != Version)
-            {
-                return;
-            }
-
-            ProjectScriptControl.RootScript = ReadString();
-
-            for (int i = 0, len = reader.ReadInt32(); i < len; i++)
-            {
-                ProjectScriptControl.AddScript(ReadString(), ReadString());
-            }
-
-            string ReadString()
-            {
-                return Encoding.Unicode.GetString(reader.ReadBytes(reader.ReadInt32()));
-            }
         }
 
         public void Run(CommandArgs args)
@@ -164,7 +129,7 @@ namespace CurtainFireMakerPlugin
             PythonExecutor.SetGlobalVariable(("SCENE", Scene));
             PythonExecutor.SetGlobalVariable(("WORLD", world));
             PythonExecutor.ExecuteOnRootScope(ProjectScriptControl.RootScript);
-            PythonExecutor.ExecuteOnRootScope(ProjectScriptControl.GetScript(Path.GetFileNameWithoutExtension(Config.ScriptPath)));
+            PythonExecutor.ExecuteOnRootScope(ProjectScriptControl.GetPreScript(Config.ScriptPath));
 
             world.Init();
 
