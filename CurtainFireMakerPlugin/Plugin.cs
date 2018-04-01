@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin
 
         public dynamic Script { get; private set; }
 
-        private ProjectEditorControl ProjectScriptControl { get; }
+        private ProjectEditorControl ProjectEditorControl { get; }
 
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
 
@@ -39,7 +39,7 @@ namespace CurtainFireMakerPlugin
                         PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
                         Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
 
-                        ProjectScriptControl = new ProjectEditorControl(this);
+                        ProjectEditorControl = new ProjectEditorControl(this);
 
                         ShotTypeProvider.RegisterShotType(Script.init_shottype());
                     }
@@ -68,17 +68,17 @@ namespace CurtainFireMakerPlugin
         public void Dispose()
         {
             Config?.Save();
-            ProjectScriptControl.Save();
+            ProjectEditorControl.Save();
         }
 
         public UserControl CreateControl()
         {
-            return ProjectScriptControl;
+            return ProjectEditorControl;
         }
 
         public Stream OnSaveProject()
         {
-            ProjectScriptControl.Save();
+            ProjectEditorControl.Save();
             return new MemoryStream();
         }
 
@@ -89,34 +89,33 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm(Config, ProjectScriptControl);
+            var form = new ExportSettingForm(Config, ProjectEditorControl);
             form.ShowDialog(ApplicationForm);
 
-            if (form.DialogResult == DialogResult.OK)
+            if (form.DialogResult != DialogResult.OK) return;
+
+            var progressForm = new ProgressForm();
+
+            using (var writer = progressForm.CreateLogWriter())
             {
-                var progressForm = new ProgressForm();
+                Console.SetOut(writer);
+                PythonExecutor.SetOut(writer);
 
-                using (var writer = progressForm.CreateLogWriter())
+                try
                 {
-                    Console.SetOut(writer);
-                    PythonExecutor.SetOut(writer);
-
-                    try
-                    {
-                        System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
-                        RunWorld(progressForm.ProgressBar, () => progressForm.DialogResult == DialogResult.Cancel);
-                    }
-                    catch (Exception e)
-                    {
-                        try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
-                        Console.WriteLine(e);
-                    }
-                    Console.Out.Flush();
-                    Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
-                    PythonExecutor.SetOut(Console.OpenStandardOutput());
+                    System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
+                    RunWorld(progressForm.ProgressBar, () => progressForm.DialogResult == DialogResult.Cancel);
                 }
-                File.WriteAllText(Configuration.LogPath, progressForm.LogText);
+                catch (Exception e)
+                {
+                    try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                    Console.WriteLine(e);
+                }
+                Console.Out.Flush();
+                Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
+                PythonExecutor.SetOut(Console.OpenStandardOutput());
             }
+            File.WriteAllText(Configuration.LogPath, progressForm.LogText);
         }
 
         private void RunWorld(ProgressBar bar, Func<bool> isEnd)
@@ -128,8 +127,16 @@ namespace CurtainFireMakerPlugin
 
             PythonExecutor.SetGlobalVariable(("SCENE", Scene));
             PythonExecutor.SetGlobalVariable(("WORLD", world));
-            PythonExecutor.ExecuteOnRootScope(ProjectScriptControl.RootScript);
-            PythonExecutor.ExecuteOnRootScope(ProjectScriptControl.GetPreScript(Config.ScriptPath));
+
+            if (ProjectEditorControl.IsProjectSelected)
+            {
+                PythonExecutor.ExecuteOnRootScope(ProjectEditorControl.RootScript);
+            }
+            else
+            {
+                PythonExecutor.ExecuteOnRootScope(File.ReadAllText(Configuration.CommonScriptPath));
+            }
+            PythonExecutor.ExecuteOnRootScope(ProjectEditorControl.GetPreScript(Config.ScriptPath));
 
             world.Init();
 
