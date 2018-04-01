@@ -58,8 +58,8 @@ namespace CurtainFireMakerPlugin.Forms
             InitializeComponent();
 
             ScriptPath = Config.ScriptPath;
-            PmxExportDirPath = Config.PmxExportDirPath;
-            VmdExportDirPath = Config.VmdExportDirPath;
+            PmxExportDirPath = ProjectScriptControl.IsProjectSelected ? ProjectScriptControl.SelectedProject.ExportDirPmx : Config.PmxExportDirPath;
+            VmdExportDirPath = ProjectScriptControl.IsProjectSelected ? ProjectScriptControl.SelectedProject.ExportDirVmd : Config.VmdExportDirPath;
             DropPmxFile = Config.ShouldDropPmxFile;
             DropVmdFile = Config.ShouldDropVmdFile;
         }

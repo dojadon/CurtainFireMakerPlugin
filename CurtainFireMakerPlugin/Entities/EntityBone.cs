@@ -25,9 +25,9 @@ namespace CurtainFireMakerPlugin.Entities
             MMMBone = mmmBone;
         }
 
-        public override void OnSpawn()
+        public override void Spawn()
         {
-            base.OnSpawn();
+            base.Spawn();
 
             Frame();
         }

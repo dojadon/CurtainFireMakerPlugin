@@ -177,7 +177,7 @@ namespace CurtainFireMakerPlugin
 
         internal void Export()
         {
-            EntityList.ForEach(e => e.OnDeath());
+            EntityList.ForEach(e => e.Remove());
 
             KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount + 1, false));
 

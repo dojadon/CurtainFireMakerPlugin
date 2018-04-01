@@ -57,7 +57,7 @@ namespace CurtainFireMakerPlugin.Entities
             FrameCount++;
             if (DecideToDie(this))
             {
-                OnDeath();
+                Remove();
             }
 
             LocalMat = new Matrix4(Rot, Pos);
@@ -66,10 +66,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void __call__()
         {
-            OnSpawn();
+            Spawn();
         }
 
-        public virtual void OnSpawn()
+        public virtual void Spawn()
         {
             LocalMat = new Matrix4(Rot, Pos);
             WorldMat = ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
@@ -78,7 +78,7 @@ namespace CurtainFireMakerPlugin.Entities
             IsSpawned = true;
         }
 
-        public virtual void OnDeath()
+        public virtual void Remove()
         {
             DeathFrameNo = World.RemoveEntity(this);
             IsDeath = true;

@@ -76,9 +76,9 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override bool ShouldRecord() => World.FrameCount == 0 || base.ShouldRecord();
 
-        public override void OnSpawn()
+        public override void Spawn()
         {
-            base.OnSpawn();
+            base.Spawn();
 
             if (World.FrameCount > 0)
             {
@@ -88,9 +88,9 @@ namespace CurtainFireMakerPlugin.Entities
             AddRootBoneKeyFrame();
         }
 
-        public override void OnDeath()
+        public override void Remove()
         {
-            base.OnDeath();
+            base.Remove();
 
             AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
@@ -144,7 +144,7 @@ namespace CurtainFireMakerPlugin.Entities
         public Action<EntityShot, Triangle, float> OnCollide { get; private set; }
 
         public static readonly Colliding None = new Colliding() { OnCollide = (e, tri, time) => { } };
-        public static readonly Colliding Vanish = new Colliding() { OnCollide = (e, tri, time) => e.OnDeath() };
+        public static readonly Colliding Vanish = new Colliding() { OnCollide = (e, tri, time) => e.Remove() };
         public static readonly Colliding Stick = new Colliding()
         {
             OnCollide = (e, tri, time) =>
