@@ -28,7 +28,7 @@ namespace CurtainFireMakerPlugin
         public static string SettingPythonFilePath => PluginRootPath + "config.py";
         public static string CommonScriptPath => PluginRootPath + "common.py";
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
-        public static string ProjectsDirPath => PluginRootPath + "Project\\";
+        public static string PresetsDirPath => PluginRootPath + "Preset\\";
         public static string LogPath => PluginRootPath + "lastest.log";
         public static string ErrorLogPath => PluginRootPath + "error.log";
 

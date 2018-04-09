@@ -12,9 +12,9 @@ namespace CurtainFireMakerPlugin.Forms
 {
     public partial class PreScriptEditorControl : UserControl
     {
-        public ProjectEditorControl ProjectEditor { get; set; }
+        public PresetEditorControl PresetEditor { get; set; }
 
-        public List<ScriptFile> PreScripts => ProjectEditor.PreScripts;
+        public List<ScriptFile> PreScripts => PresetEditor.PreScripts;
 
         public int SelectedScriptIndex => ComboBoxScript.SelectedIndex;
         public bool IsScriptSelected => 0 <= ComboBoxScript.SelectedIndex && ComboBoxScript.SelectedIndex < PreScripts.Count;
@@ -69,7 +69,7 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 return PreScripts.FirstOrDefault(s => s.Path == path).PreScript;
             }
-            return Project.DefaultPreScript;
+            return Preset.DefaultPreScript;
         }
 
         private void SelectedScriptIndexChanged(object sender, EventArgs e)
@@ -109,7 +109,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickGenerate(object sender, EventArgs e)
         {
-            ProjectEditor.GenerateCurtainFire();
+            PresetEditor.GenerateCurtainFire();
         }
     }
 }

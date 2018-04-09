@@ -7,14 +7,14 @@ using System.Xml;
 
 namespace CurtainFireMakerPlugin
 {
-    public class Project
+    public class Preset
     {
-        public const string TemplateProjectName = "Template";
+        public const string TemplatePresetName = "Template";
 
         public const string DefaultConfig =
         "﻿<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
         "<Configuration>\n" +
-        "  <Name>Project</Name>\n" +
+        "  <Name>Preset</Name>\n" +
         "  <Export>\n" +
         "    <Pmx>Export</Pmx>\n" +
         "    <Vmd>Export</Vmd>\n" +
@@ -31,13 +31,13 @@ namespace CurtainFireMakerPlugin
 
         private Guid Guid { get; }
 
-        private XmlNode ProjectNameNode => XmlDoc.SelectSingleNode("//Configuration/Name");
-        public string ProjectName { get => ProjectNameNode.InnerText; set => ProjectNameNode.InnerText = value; }
+        private XmlNode PresetNameNode => XmlDoc.SelectSingleNode("//Configuration/Name");
+        public string PresetName { get => PresetNameNode.InnerText; set => PresetNameNode.InnerText = value; }
 
-        public string ProjectDirPath => Configuration.ProjectsDirPath + Guid + "\\";
-        public string PreScriptDirPath => ProjectDirPath + "PreScript\\";
-        public string ConfigFilePath => ProjectDirPath + ConfigFileName;
-        public string RootScriptFilePath => ProjectDirPath + "common.py";
+        public string PresetDirPath => Configuration.PresetsDirPath + Guid + "\\";
+        public string PreScriptDirPath => PresetDirPath + "PreScript\\";
+        public string ConfigFilePath => PresetDirPath + ConfigFileName;
+        public string RootScriptFilePath => PresetDirPath + "common.py";
 
         private XmlNode ExportDirPmxNode => XmlDoc.SelectSingleNode("//Configuration/Export/Pmx");
         public string ExportDirPmx
@@ -59,7 +59,7 @@ namespace CurtainFireMakerPlugin
 
         private XmlDocument XmlDoc { get; } = new XmlDocument();
 
-        public Project(Guid guid)
+        public Preset(Guid guid)
         {
             Guid = guid;
 
@@ -89,9 +89,9 @@ namespace CurtainFireMakerPlugin
 
         private void CreateRequiredFiles()
         {
-            if (!Directory.Exists(ProjectDirPath))
+            if (!Directory.Exists(PresetDirPath))
             {
-                Directory.CreateDirectory(ProjectDirPath);
+                Directory.CreateDirectory(PresetDirPath);
             }
 
             if (!File.Exists(ConfigFilePath))

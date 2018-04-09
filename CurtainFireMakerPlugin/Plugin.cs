@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin
 
         public dynamic Script { get; private set; }
 
-        private ProjectEditorControl ProjectEditorControl { get; }
+        private PresetEditorControl PresetEditorControl { get; }
 
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
 
@@ -39,7 +39,7 @@ namespace CurtainFireMakerPlugin
                         PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
                         Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
 
-                        ProjectEditorControl = new ProjectEditorControl(this);
+                        PresetEditorControl = new PresetEditorControl(this);
 
                         ShotTypeProvider.RegisterShotType(Script.init_shottype());
                     }
@@ -68,17 +68,17 @@ namespace CurtainFireMakerPlugin
         public void Dispose()
         {
             Config?.Save();
-            ProjectEditorControl.Save();
+            PresetEditorControl.Save();
         }
 
         public UserControl CreateControl()
         {
-            return ProjectEditorControl;
+            return PresetEditorControl;
         }
 
         public Stream OnSaveProject()
         {
-            ProjectEditorControl.Save();
+            PresetEditorControl.Save();
             return new MemoryStream();
         }
 
@@ -89,7 +89,7 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm(Config, ProjectEditorControl);
+            var form = new ExportSettingForm(Config, PresetEditorControl);
             form.ShowDialog(ApplicationForm);
 
             if (form.DialogResult != DialogResult.OK) return;
@@ -128,15 +128,15 @@ namespace CurtainFireMakerPlugin
             PythonExecutor.SetGlobalVariable(("SCENE", Scene));
             PythonExecutor.SetGlobalVariable(("WORLD", world));
 
-            if (ProjectEditorControl.IsProjectSelected)
+            if (PresetEditorControl.IsPresetSelected)
             {
-                PythonExecutor.ExecuteOnRootScope(ProjectEditorControl.RootScript);
+                PythonExecutor.ExecuteOnRootScope(PresetEditorControl.RootScript);
             }
             else
             {
                 PythonExecutor.ExecuteOnRootScope(File.ReadAllText(Configuration.CommonScriptPath));
             }
-            PythonExecutor.ExecuteOnRootScope(ProjectEditorControl.GetPreScript(Config.ScriptPath));
+            PythonExecutor.ExecuteOnRootScope(PresetEditorControl.GetPreScript(Config.ScriptPath));
 
             world.Init();
 

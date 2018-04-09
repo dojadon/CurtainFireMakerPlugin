@@ -45,7 +45,7 @@
             this.TextBoxVmdExportPath = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.FolderBrowserDialogVmd = new System.Windows.Forms.FolderBrowserDialog();
-            this.TextBoxProjectScript = new System.Windows.Forms.TextBox();
+            this.TextBoxPresetScript = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -190,16 +190,16 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.Click_VmdExportDir);
             // 
-            // TextBoxProjectScript
+            // TextBoxPresetScript
             // 
-            this.TextBoxProjectScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.TextBoxProjectScript.Location = new System.Drawing.Point(14, 233);
-            this.TextBoxProjectScript.Multiline = true;
-            this.TextBoxProjectScript.Name = "TextBoxProjectScript";
-            this.TextBoxProjectScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TextBoxProjectScript.Size = new System.Drawing.Size(538, 176);
-            this.TextBoxProjectScript.TabIndex = 29;
-            this.TextBoxProjectScript.WordWrap = false;
+            this.TextBoxPresetScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.TextBoxPresetScript.Location = new System.Drawing.Point(14, 233);
+            this.TextBoxPresetScript.Multiline = true;
+            this.TextBoxPresetScript.Name = "TextBoxPresetScript";
+            this.TextBoxPresetScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TextBoxPresetScript.Size = new System.Drawing.Size(538, 176);
+            this.TextBoxPresetScript.TabIndex = 29;
+            this.TextBoxPresetScript.WordWrap = false;
             // 
             // label3
             // 
@@ -216,7 +216,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(564, 450);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.TextBoxProjectScript);
+            this.Controls.Add(this.TextBoxPresetScript);
             this.Controls.Add(this.CheckBoxDropPmxFile);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button4);
@@ -259,7 +259,7 @@
         private System.Windows.Forms.TextBox TextBoxVmdExportPath;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialogVmd;
-        private System.Windows.Forms.TextBox TextBoxProjectScript;
+        private System.Windows.Forms.TextBox TextBoxPresetScript;
         private System.Windows.Forms.Label label3;
     }
 }

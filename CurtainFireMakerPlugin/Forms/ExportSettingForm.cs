@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin.Forms
                 TextBoxScriptPath.Text = value;
                 OpenFileDialogScript.FileName = value;
                 OpenFileDialogScript.InitialDirectory = Path.GetDirectoryName(value);
-                TextBoxProjectScript.Text = ProjectScriptControl.GetPreScript(TextBoxScriptPath.Text);
+                TextBoxPresetScript.Text = PresetScriptControl.GetPreScript(TextBoxScriptPath.Text);
             }
         }
 
@@ -48,18 +48,18 @@ namespace CurtainFireMakerPlugin.Forms
 
         private Configuration Config { get; }
 
-        private ProjectEditorControl ProjectScriptControl { get; }
+        private PresetEditorControl PresetScriptControl { get; }
 
-        public ExportSettingForm(Configuration config, ProjectEditorControl projectScriptControl)
+        public ExportSettingForm(Configuration config, PresetEditorControl presetScriptControl)
         {
             Config = config;
-            ProjectScriptControl = projectScriptControl;
+            PresetScriptControl = presetScriptControl;
 
             InitializeComponent();
 
             ScriptPath = Config.ScriptPath;
-            PmxExportDirPath = ProjectScriptControl.IsProjectSelected ? ProjectScriptControl.SelectedProject.ExportDirPmx : Config.PmxExportDirPath;
-            VmdExportDirPath = ProjectScriptControl.IsProjectSelected ? ProjectScriptControl.SelectedProject.ExportDirVmd : Config.VmdExportDirPath;
+            PmxExportDirPath = PresetScriptControl.IsPresetSelected ? PresetScriptControl.SelectedPreset.ExportDirPmx : Config.PmxExportDirPath;
+            VmdExportDirPath = PresetScriptControl.IsPresetSelected ? PresetScriptControl.SelectedPreset.ExportDirVmd : Config.VmdExportDirPath;
             DropPmxFile = Config.ShouldDropPmxFile;
             DropVmdFile = Config.ShouldDropVmdFile;
         }
@@ -72,7 +72,7 @@ namespace CurtainFireMakerPlugin.Forms
             Config.ShouldDropPmxFile = DropPmxFile;
             Config.ShouldDropVmdFile = DropVmdFile;
 
-            if (!ProjectScriptControl.IsProjectSelected)
+            if (!PresetScriptControl.IsPresetSelected)
             {
                 Config.PmxExportDirPath = PmxExportDirPath;
                 Config.VmdExportDirPath = VmdExportDirPath;
@@ -83,7 +83,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             Close();
             DialogResult = DialogResult.OK;
-            ProjectScriptControl.UpdatePreScript(TextBoxScriptPath.Text, TextBoxProjectScript.Text);
+            PresetScriptControl.UpdatePreScript(TextBoxScriptPath.Text, TextBoxPresetScript.Text);
         }
 
         private void Click_Cancel(object sender, EventArgs e)

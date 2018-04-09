@@ -19,7 +19,7 @@ namespace CurtainFireMakerPlugin.Entities
         {
             GroupList.RemoveWhere(g =>
             {
-                if (g.CurrentEntity.IsDeath)
+                if (g.CurrentEntity.IsRemoved)
                 {
                     int hash = GetPropertyHashCode(g.Data.Property, g.ParentEntity);
 
@@ -29,7 +29,7 @@ namespace CurtainFireMakerPlugin.Entities
                     }
                     ReusableGroupDict[hash].Add(g);
                 }
-                return g.CurrentEntity.IsDeath;
+                return g.CurrentEntity.IsRemoved;
             });
         }
 

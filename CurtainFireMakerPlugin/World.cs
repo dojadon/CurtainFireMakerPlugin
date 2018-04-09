@@ -50,8 +50,6 @@ namespace CurtainFireMakerPlugin
         public string ModelName { get; set; }
         public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";
 
-        private static ParallelOptions ParallelOptions { get; } = new ParallelOptions() { MaxDegreeOfParallelism = 4 };
-
         public World(ShotTypeProvider typeProvider, PythonExecutor executor, Configuration config, IntPtr handle, string fileName)
         {
             ShotTypeProvider = typeProvider;
