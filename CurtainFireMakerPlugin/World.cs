@@ -48,7 +48,7 @@ namespace CurtainFireMakerPlugin
         public string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
 
         public string ModelName { get; set; }
-        public string ModelDescription { get; set; } = "This model is created by Curtain Fire Maker Plugin";
+        public string ModelDescription { get; set; } = "by CurtainFireMaker Plugin";
 
         public World(ShotTypeProvider typeProvider, PythonExecutor executor, Configuration config, IntPtr handle, string fileName)
         {
@@ -77,11 +77,18 @@ namespace CurtainFireMakerPlugin
             {
                 PmxModel.InitShotModelData(data);
             }
+
             return data;
         }
 
         internal int AddEntity(Entity entity)
         {
+            if (FrameCount > 0 && EntityList.Count == 0 && AddEntityList.Count == 0)
+            {
+                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
+                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
+            }
+
             AddEntityList.Add(entity);
 
             return FrameCount;
@@ -92,23 +99,6 @@ namespace CurtainFireMakerPlugin
             RemoveEntityList.Add(entity);
 
             return FrameCount;
-        }
-
-        internal void InitPre()
-        {
-            foreach (var type in ShotTypeProvider.ShotTypeDict.Values)
-            {
-                type.InitWorld(this);
-            }
-        }
-
-        internal void InitPost()
-        {
-            if (FrameCount > 0)
-            {
-                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
-                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
-            }
         }
 
         private System.Diagnostics.Stopwatch Stopwatch { get; } = new System.Diagnostics.Stopwatch();
@@ -142,16 +132,18 @@ namespace CurtainFireMakerPlugin
 
         public void Init()
         {
-            InitPre();
+            foreach (var type in ShotTypeProvider.ShotTypeDict.Values)
+            {
+                type.InitWorld(this);
+            }
             Executor.ExecuteFileOnNewScope(Config.ScriptPath);
-            InitPost();
         }
 
-        public void GenerateCurainFire(Action<int> onFrame, Func<bool> isEnd)
+        public void GenerateCurainFire(Func<int, bool> onFrame)
         {
             long time = Environment.TickCount;
 
-            if (RunWorld(onFrame, isEnd))
+            if (RunWorld(onFrame))
             {
                 Console.WriteLine((Environment.TickCount - time) + "ms");
                 Console.Out.Flush();
@@ -160,14 +152,13 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public bool RunWorld(Action<int> onFrame, Func<bool> isEnd)
+        public bool RunWorld(Func<int, bool> onFrame)
         {
             for (int i = 0; i < MaxFrame; i++)
             {
                 Frame();
-                onFrame(i);
 
-                if (isEnd()) { return false; }
+                if (onFrame(i)) { return false; }
             }
             Export();
             return true;

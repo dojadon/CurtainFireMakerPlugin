@@ -53,9 +53,9 @@ namespace CurtainFireMakerPlugin
 
         public void SetGlobalVariable(params (string name, object value)[] variables)
         {
-            foreach (var variable in variables)
+            foreach (var (name, value) in variables)
             {
-                RootScope.SetVariable(variable.name, variable.value);
+                RootScope.SetVariable(name, value);
             }
         }
 

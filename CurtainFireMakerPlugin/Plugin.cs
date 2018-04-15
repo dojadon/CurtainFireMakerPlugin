@@ -125,8 +125,7 @@ namespace CurtainFireMakerPlugin
                 Script = Script
             };
 
-            PythonExecutor.SetGlobalVariable(("SCENE", Scene));
-            PythonExecutor.SetGlobalVariable(("WORLD", world));
+            PythonExecutor.SetGlobalVariable(("SCENE", Scene), ("WORLD", world), ("PRESET_DIR", PresetEditorControl.SelectedPreset.PresetDirPath));
 
             if (PresetEditorControl.IsPresetSelected)
             {
@@ -146,7 +145,9 @@ namespace CurtainFireMakerPlugin
             {
                 bar.Value = i;
                 Console.Out.Flush();
-            }, isEnd);
+
+                return isEnd();
+            });
         }
     }
 }
