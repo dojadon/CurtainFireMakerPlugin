@@ -41,6 +41,7 @@
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Entities\CubicBezierCurve.cs" />
     <Compile Include="Entities\EntityBone.cs" />
+    <Compile Include="Entities\EntityShotBase.cs" />
     <Compile Include="Entities\StaticRigidObject.cs" />
     <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />

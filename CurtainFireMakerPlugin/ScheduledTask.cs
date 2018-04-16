@@ -59,6 +59,8 @@ namespace CurtainFireMakerPlugin
         private List<ScheduledTask> TaskList { get; } = new List<ScheduledTask>();
         private List<ScheduledTask> AddTaskList { get; } = new List<ScheduledTask>();
 
+        public bool IsEmpty => TaskList.Count == 0;
+
         public void AddTask(ScheduledTask task)
         {
             AddTaskList.Add(task);

@@ -69,6 +69,8 @@ namespace CurtainFireMakerPlugin
             RigidObjectList.Add(rigid);
         }
 
+        private bool IsContainsShot { get; set; } = false;
+
         internal ShotModelData AddShot(EntityShot entity)
         {
             ShotModelProvider.AddEntity(entity, out ShotModelData data);
@@ -78,17 +80,17 @@ namespace CurtainFireMakerPlugin
                 PmxModel.InitShotModelData(data);
             }
 
-            return data;
-        }
-
-        internal int AddEntity(Entity entity)
-        {
-            if (FrameCount > 0 && EntityList.Count == 0 && AddEntityList.Count == 0)
+            if(!IsContainsShot)
             {
                 KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
                 KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
             }
 
+            return data;
+        }
+
+        internal int AddEntity(Entity entity)
+        {
             AddEntityList.Add(entity);
 
             return FrameCount;
@@ -114,7 +116,7 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            EntityList.OrderBy(e => e.FramePriority).ForEach(e => e.Frame());
+            EntityList.ForEach(e =>  e.Frame());
 
             FrameCount++;
         }

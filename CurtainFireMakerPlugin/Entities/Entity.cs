@@ -26,7 +26,9 @@ namespace CurtainFireMakerPlugin.Entities
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }
 
-        public virtual Func<Entity, bool> DecideToDie { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
+        public virtual Func<Entity, bool> ShouldRemove { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
+
+        public event EventHandler DeathEvent;
 
         public bool IsRemoved { get; private set; }
 
@@ -54,7 +56,7 @@ namespace CurtainFireMakerPlugin.Entities
             TaskScheduler.Frame();
 
             FrameCount++;
-            if (DecideToDie(this))
+            if (ShouldRemove(this))
             {
                 Remove();
             }
@@ -80,6 +82,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
             DeathFrameNo = World.RemoveEntity(this);
             IsRemoved = true;
+
+            DeathEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private void AddTask(ScheduledTask task)

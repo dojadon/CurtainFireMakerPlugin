@@ -34,6 +34,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override bool IsCollisionable { get => Colliding != Colliding.None; set => Colliding = value ? Colliding : Colliding.None; }
 
+        public bool IsStraight { get; set; } = false;
+
+        public bool IsReusable => IsRemoved || ShouldRemove(this);
+
         public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
         : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
 
@@ -78,6 +82,25 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override void Spawn()
         {
+            if (IsStraight)
+            {
+                if (World.FrameCount > 0)
+                {
+                    AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
+                }
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
+                AddRootBoneKeyFrame();
+
+                Pos += Velocity * LivingLimit;
+                AddRootBoneKeyFrame(frameOffset: LivingLimit, priority: 0);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LivingLimit + 1, -1);
+
+                int currentFrame = World.FrameCount;
+                ShouldRemove = e => World.FrameCount > currentFrame + LivingLimit;
+
+                return;
+            }
+
             base.Spawn();
 
             if (World.FrameCount > 0)
