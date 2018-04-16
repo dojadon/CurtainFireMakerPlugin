@@ -19,6 +19,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         public Matrix3 LocalCoordinate { get; private set; }
 
+        public override Matrix4 WorldMat => CurrentWorldMat;
+
+        private Matrix4 CurrentWorldMat { get; set; }
+
         public EntityBone(World world, PmxBone bone, Bone mmmBone) : base(world)
         {
             PmxBone = bone;
@@ -71,7 +75,7 @@ namespace CurtainFireMakerPlugin.Entities
             PmxBone.UpdateWorldMatrix();
 
             LocalMat = PmxBone.LocalMat;
-            WorldMat = new Matrix4(LocalCoordinate * PmxBone.WorldMat.Rotation, PmxBone.WorldMat.Translation);
+            CurrentWorldMat = new Matrix4(LocalCoordinate * PmxBone.WorldMat.Rotation, PmxBone.WorldMat.Translation);
         }
 
         public void SetExtraParent(EntityBone bone)

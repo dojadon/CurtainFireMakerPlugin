@@ -6,7 +6,7 @@ using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public abstract class EntityShootable : Entity
+    public abstract class EntityShootable : EntityShotBase
     {
         public virtual Vector3 Velocity { get; set; }
 
@@ -18,7 +18,22 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected MotionInterpolation MotionInterpolation { get; set; }
 
-        public EntityShootable(World world, Entity parentEntity = null) : base(world, parentEntity) { }
+        public EntityShootable(World world, string typeName, int color, EntityShot parentEntity = null)
+        : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
+
+        public EntityShootable(World world, string typeName, int color, float scale, EntityShot parentEntity = null)
+        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+
+        public EntityShootable(World world, string typeName, int color, Vector3 scale, EntityShot parentEntity = null)
+        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+
+        public EntityShootable(World world, string typeName, int color, Matrix3 scale, EntityShot parentEntity = null)
+        : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
+
+        public EntityShootable(World world, string typeName, int color, Matrix4 scale, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
+
+        public EntityShootable(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, property, parentEntity) { }
 
         public override void Frame()
         {

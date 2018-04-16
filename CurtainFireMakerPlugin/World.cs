@@ -42,8 +42,6 @@ namespace CurtainFireMakerPlugin
 
         public event EventHandler ExportEvent;
 
-        private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
-
         public string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
         public string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
 
@@ -71,7 +69,7 @@ namespace CurtainFireMakerPlugin
 
         private bool IsContainsShot { get; set; } = false;
 
-        internal ShotModelData AddShot(EntityShot entity)
+        internal ShotModelData AddShot(EntityShotBase entity)
         {
             ShotModelProvider.AddEntity(entity, out ShotModelData data);
 
@@ -80,10 +78,11 @@ namespace CurtainFireMakerPlugin
                 PmxModel.InitShotModelData(data);
             }
 
-            if(!IsContainsShot)
+            if (!IsContainsShot)
             {
                 KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
                 KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
+                IsContainsShot = true;
             }
 
             return data;
@@ -91,7 +90,10 @@ namespace CurtainFireMakerPlugin
 
         internal int AddEntity(Entity entity)
         {
-            AddEntityList.Add(entity);
+            if (entity.IsNeededUpdate)
+            {
+                AddEntityList.Add(entity);
+            }
 
             return FrameCount;
         }
@@ -116,7 +118,7 @@ namespace CurtainFireMakerPlugin
             AddEntityList.Clear();
             RemoveEntityList.Clear();
 
-            EntityList.ForEach(e =>  e.Frame());
+            EntityList.ForEach(e => e.Frame());
 
             FrameCount++;
         }

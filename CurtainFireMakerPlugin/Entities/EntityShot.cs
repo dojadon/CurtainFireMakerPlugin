@@ -4,16 +4,13 @@ using System.Linq;
 using MMDataIO.Pmx;
 using MMDataIO.Vmd;
 using VecMath;
+using IronPython.Runtime;
+using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityShot : EntityCollisonable
     {
-        public ShotProperty Property { get; }
-
-        public ShotModelData ModelData { get; }
-        public PmxBoneData RootBone => ModelData.Bones[0];
-
         public Vector3 Upward { get; set; } = Vector3.UnitY;
         public Vector3 LookAtVec { get; set; }
 
@@ -26,17 +23,14 @@ namespace CurtainFireMakerPlugin.Entities
                 if (value != Vector3.Zero) LookAtVec = +value;
             }
         }
-
-        public Colliding Colliding { get; set; } = Colliding.None;
-
         public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
         public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.LookAtVec, e.Upward);
 
+        public Colliding Colliding { get; set; } = Colliding.None;
+
         protected override bool IsCollisionable { get => Colliding != Colliding.None; set => Colliding = value ? Colliding : Colliding.None; }
 
-        public bool IsStraight { get; set; } = false;
-
-        public bool IsReusable => IsRemoved || ShouldRemove(this);
+        private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
 
         public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
         : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
@@ -53,23 +47,8 @@ namespace CurtainFireMakerPlugin.Entities
         public EntityShot(World world, string typeName, int color, Matrix4 scale, EntityShot parentEntity = null)
         : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
 
-        public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
+        public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, property, parentEntity)
         {
-            try
-            {
-                Property = property;
-
-                ModelData = World.AddShot(this);
-
-                RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
-
-                Property.Type.InitEntity(this);
-            }
-            catch (Exception e)
-            {
-                try { Console.WriteLine(World.Executor.FormatException(e)); } catch { }
-                Console.WriteLine(e);
-            }
         }
 
         protected override void Record()
@@ -82,25 +61,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override void Spawn()
         {
-            if (IsStraight)
-            {
-                if (World.FrameCount > 0)
-                {
-                    AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
-                }
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
-                AddRootBoneKeyFrame();
-
-                Pos += Velocity * LivingLimit;
-                AddRootBoneKeyFrame(frameOffset: LivingLimit, priority: 0);
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LivingLimit + 1, -1);
-
-                int currentFrame = World.FrameCount;
-                ShouldRemove = e => World.FrameCount > currentFrame + LivingLimit;
-
-                return;
-            }
-
             base.Spawn();
 
             if (World.FrameCount > 0)
@@ -117,6 +77,12 @@ namespace CurtainFireMakerPlugin.Entities
 
             AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
+        }
+
+        public override void Frame()
+        {
+            TaskScheduler.Frame();
+            base.Frame();
         }
 
         public override void OnCollided(Triangle tri, float time)
@@ -142,23 +108,31 @@ namespace CurtainFireMakerPlugin.Entities
             AddBoneKeyFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), curve, frameOffset, priority);
         }
 
-        public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve curve, int frameOffset = 0, int priority = 0)
+        private void AddTask(ScheduledTask task)
         {
-            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot);
-            frame.InterpolationPointX1 = frame.InterpolationPointY1 = frame.InterpolationPointZ1 = curve.P1;
-            frame.InterpolationPointX2 = frame.InterpolationPointY2 = frame.InterpolationPointZ2 = curve.P2;
-            World.KeyFrames.AddBoneKeyFrame(frame, priority);
+            TaskScheduler.AddTask(task);
         }
 
-        public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, int priority = 0)
+        private void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
         {
-            var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + frameOffset, weight);
-            World.KeyFrames.AddMorphKeyFrame(frame, priority);
+            if (withArg)
+            {
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task, t), interval, executeTimes, waitTime));
+            }
+            else
+            {
+                AddTask(new ScheduledTask(t => PythonCalls.Call(task), interval, executeTimes, waitTime));
+            }
         }
 
-        public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
+        public void AddTask(PythonFunction task, PythonFunction interval, int executeTimes, int waitTime, bool withArg = false)
         {
-            return ModelData.CreateVertexMorph("V" + EntityId, func);
+            AddTask(task, i => (int)PythonCalls.Call(interval, i), executeTimes, waitTime, withArg);
+        }
+
+        public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)
+        {
+            AddTask(task, i => interval, executeTimes, waitTime, withArg);
         }
     }
 

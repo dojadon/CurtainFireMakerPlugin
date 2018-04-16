@@ -32,7 +32,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual bool HasMesh { get; } = false;
 
-        public virtual void InitEntity(EntityShot entity) { }
+        public virtual void InitEntity(EntityShotBase entity) { }
 
         public virtual void InitModelData(ShotProperty prop, PmxMaterialData[] materials)
         {

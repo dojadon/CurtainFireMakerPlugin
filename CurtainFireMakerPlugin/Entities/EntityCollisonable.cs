@@ -16,7 +16,22 @@ namespace CurtainFireMakerPlugin.Entities
 
         private bool ShouldUpdateTimeToCollide { get; set; } = true;
 
-        public EntityCollisonable(World world, Entity parentEntity = null) : base(world, parentEntity)
+        public EntityCollisonable(World world, string typeName, int color, EntityShot parentEntity = null)
+        : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
+
+        public EntityCollisonable(World world, string typeName, int color, float scale, EntityShot parentEntity = null)
+        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+
+        public EntityCollisonable(World world, string typeName, int color, Vector3 scale, EntityShot parentEntity = null)
+        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+
+        public EntityCollisonable(World world, string typeName, int color, Matrix3 scale, EntityShot parentEntity = null)
+        : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
+
+        public EntityCollisonable(World world, string typeName, int color, Matrix4 scale, EntityShot parentEntity = null)
+        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
+
+        public EntityCollisonable(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, property, parentEntity)
         {
             TimeToCollide = world.MaxFrame;
         }

@@ -11,17 +11,26 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity : DynamicObject
     {
-        public virtual Matrix4 WorldMat { get; protected set; }
+        public virtual Matrix4 WorldMat => ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
         public Vector3 WorldPos => WorldMat.Translation;
         public Matrix3 WorldRot => WorldMat;
 
-        public virtual Matrix4 LocalMat { get; protected set; }
+        public virtual Matrix4 LocalMat
+        {
+            get => new Matrix4(Rot, Pos);
+            protected set
+            {
+                Rot = value.Rotation;
+                Pos = value.Translation;
+            }
+        }
+
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
         public virtual Entity ParentEntity { get; protected set; }
 
-        public int FrameCount { get; protected set; }
+        public int FrameCount => World.FrameCount - SpawnFrameNo;
         public int LivingLimit { get; set; }
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }
@@ -32,9 +41,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public bool IsRemoved { get; private set; }
 
-        public int FramePriority => ParentEntity != null ? ParentEntity.FramePriority + 1 : 0;
-
-        private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
+        public virtual bool IsNeededUpdate => true;
 
         private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
 
@@ -53,16 +60,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void Frame()
         {
-            TaskScheduler.Frame();
-
-            FrameCount++;
             if (ShouldRemove(this))
             {
                 Remove();
             }
-
-            LocalMat = new Matrix4(Rot, Pos);
-            WorldMat = ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
         }
 
         public void __call__()
@@ -72,9 +73,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual void Spawn()
         {
-            LocalMat = new Matrix4(Rot, Pos);
-            WorldMat = ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
-
             SpawnFrameNo = World.AddEntity(this);
         }
 
@@ -84,33 +82,6 @@ namespace CurtainFireMakerPlugin.Entities
             IsRemoved = true;
 
             DeathEvent?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void AddTask(ScheduledTask task)
-        {
-            TaskScheduler.AddTask(task);
-        }
-
-        private void AddTask(PythonFunction task, Func<int, int> interval, int executeTimes, int waitTime, bool withArg = false)
-        {
-            if (withArg)
-            {
-                AddTask(new ScheduledTask(t => PythonCalls.Call(task, t), interval, executeTimes, waitTime));
-            }
-            else
-            {
-                AddTask(new ScheduledTask(t => PythonCalls.Call(task), interval, executeTimes, waitTime));
-            }
-        }
-
-        public void AddTask(PythonFunction task, PythonFunction interval, int executeTimes, int waitTime, bool withArg = false)
-        {
-            AddTask(task, i => (int)PythonCalls.Call(interval, i), executeTimes, waitTime, withArg);
-        }
-
-        public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)
-        {
-            AddTask(task, i => interval, executeTimes, waitTime, withArg);
         }
 
         public override bool Equals(object obj) => obj is Entity e && EntityId == e.EntityId;

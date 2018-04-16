@@ -38,7 +38,7 @@ namespace CurtainFireMakerPlugin.Entities
             return prop.GetHashCode() * 23 + (entity != null ? entity.EntityId : -1);
         }
 
-        public void AddEntity(EntityShot entity, out ShotModelData data)
+        public void AddEntity(EntityShotBase entity, out ShotModelData data)
         {
             int hash = GetPropertyHashCode(entity.Property, entity.ParentEntity);
 
@@ -69,17 +69,17 @@ namespace CurtainFireMakerPlugin.Entities
 
     internal class ShotGroup
     {
-        public EntityShot CurrentEntity { get; set; }
+        public EntityShotBase CurrentEntity { get; set; }
         public ShotModelData Data { get; }
         public Entity ParentEntity { get; }
 
-        public ShotGroup(EntityShot entity)
+        public ShotGroup(EntityShotBase entity)
         {
             Data = new ShotModelData(entity.World, entity.Property);
             ParentEntity = entity.ParentEntity;
         }
 
-        public void SetEntity(EntityShot entity)
+        public void SetEntity(EntityShotBase entity)
         {
             CurrentEntity = entity;
         }
