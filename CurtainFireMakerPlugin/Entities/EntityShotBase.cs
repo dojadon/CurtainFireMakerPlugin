@@ -9,7 +9,7 @@ using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class EntityShotBase : Entity
+    public abstract class EntityShotBase : Entity
     {
         public ShotProperty Property { get; }
 
