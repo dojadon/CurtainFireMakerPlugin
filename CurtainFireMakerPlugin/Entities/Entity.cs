@@ -9,7 +9,7 @@ using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class Entity : DynamicObject
+    public class Entity
     {
         public virtual Matrix4 WorldMat => ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
         public Vector3 WorldPos => WorldMat.Translation;
@@ -37,13 +37,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual Func<Entity, bool> ShouldRemove { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
 
-        public event EventHandler DeathEvent;
+        public delegate void RemoveEventHandler(object sender, RemoveEventArgs args);
+        public event RemoveEventHandler RemoveEvent;
 
         public bool IsRemoved { get; private set; }
 
         public virtual bool IsNeededUpdate => true;
-
-        private Dictionary<string, object> AttributeDict { get; } = new Dictionary<string, object>();
 
         public World World { get; }
 
@@ -76,32 +75,26 @@ namespace CurtainFireMakerPlugin.Entities
             SpawnFrameNo = World.AddEntity(this);
         }
 
-        public virtual void Remove()
+        public virtual void Remove(bool isFinalize = false)
         {
             DeathFrameNo = World.RemoveEntity(this);
             IsRemoved = true;
 
-            DeathEvent?.Invoke(this, EventArgs.Empty);
+            RemoveEvent?.Invoke(this, new RemoveEventArgs(isFinalize));
         }
 
         public override bool Equals(object obj) => obj is Entity e && EntityId == e.EntityId;
 
         public override int GetHashCode() => EntityId;
+    }
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-            if (!AttributeDict.ContainsKey(binder.Name))
-            {
-                throw new KeyNotFoundException("Not found key : " + binder.Name);
-            }
-            result = AttributeDict[binder.Name];
-            return true;
-        }
+    public class RemoveEventArgs : EventArgs
+    {
+        public bool IsFinalize { get; set; }
 
-        public override bool TrySetMember(SetMemberBinder binder, object value)
+        public RemoveEventArgs(bool isFinalize)
         {
-            AttributeDict[binder.Name] = value;
-            return true;
+            IsFinalize = isFinalize;
         }
     }
 }

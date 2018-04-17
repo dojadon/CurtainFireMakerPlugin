@@ -127,6 +127,8 @@ namespace CurtainFireMakerPlugin
 
             PythonExecutor.SetGlobalVariable(("SCENE", Scene), ("WORLD", world), ("PRESET_DIR", PresetEditorControl.SelectedPreset.PresetDirPath));
 
+            world.Init();
+
             if (PresetEditorControl.IsPresetSelected)
             {
                 PythonExecutor.ExecuteOnRootScope(PresetEditorControl.RootScript);
@@ -136,8 +138,7 @@ namespace CurtainFireMakerPlugin
                 PythonExecutor.ExecuteOnRootScope(File.ReadAllText(Configuration.CommonScriptPath));
             }
             PythonExecutor.ExecuteOnRootScope(PresetEditorControl.GetPreScript(Config.ScriptPath));
-
-            world.Init();
+            PythonExecutor.ExecuteFileOnNewScope(Config.ScriptPath);
 
             bar.Maximum = world.MaxFrame;
 

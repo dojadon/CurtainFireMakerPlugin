@@ -140,7 +140,6 @@ namespace CurtainFireMakerPlugin
             {
                 type.InitWorld(this);
             }
-            Executor.ExecuteFileOnNewScope(Config.ScriptPath);
         }
 
         public void GenerateCurainFire(Func<int, bool> onFrame)
@@ -170,7 +169,7 @@ namespace CurtainFireMakerPlugin
 
         internal void Export()
         {
-            EntityList.ForEach(e => e.Remove());
+            EntityList.ForEach(e => e.Remove(true));
 
             KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount + 1, false));
 

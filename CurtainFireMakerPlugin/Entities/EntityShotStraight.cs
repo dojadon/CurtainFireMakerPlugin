@@ -9,7 +9,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityShotStraight : EntityShotBase
     {
-        public override bool IsReusable => World.FrameCount > SpawnFrameNo + LivingLimit;
+        public override bool IsReusable => LivingLimit != 0 && World.FrameCount > SpawnFrameNo + LivingLimit;
 
         public override bool IsNeededUpdate => true;
 

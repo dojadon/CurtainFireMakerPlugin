@@ -71,9 +71,9 @@ namespace CurtainFireMakerPlugin.Entities
             AddRootBoneKeyFrame();
         }
 
-        public override void Remove()
+        public override void Remove(bool isFinalize = false)
         {
-            base.Remove();
+            base.Remove(isFinalize);
 
             AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
