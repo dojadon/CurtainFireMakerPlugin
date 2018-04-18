@@ -23,7 +23,7 @@ namespace CurtainFireMakerPlugin
 
         public dynamic Script { get; set; }
 
-        public List<StaticRigidObject> RigidObjectList { get; } = new List<StaticRigidObject>();
+        public List<RigidObject> RigidObjectList { get; } = new List<RigidObject>();
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
@@ -62,7 +62,7 @@ namespace CurtainFireMakerPlugin
             KeyFrames = new CurtainFireMotion(this);
         }
 
-        public void AddRigidObject(StaticRigidObject rigid)
+        public void AddRigidObject(RigidObject rigid)
         {
             RigidObjectList.Add(rigid);
         }

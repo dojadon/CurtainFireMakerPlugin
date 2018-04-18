@@ -85,9 +85,9 @@ namespace CurtainFireMakerPlugin.Entities
             base.Frame();
         }
 
-        public override void OnCollided(Triangle tri, float time)
+        public override void OnCollided(Vector3 normal, float time)
         {
-            Colliding.OnCollide(this, tri, time);
+            Colliding.OnCollide(this, normal, time);
         }
 
         public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
@@ -138,7 +138,7 @@ namespace CurtainFireMakerPlugin.Entities
 
     public class Colliding
     {
-        public Action<EntityShot, Triangle, float> OnCollide { get; private set; }
+        public Action<EntityShot, Vector3, float> OnCollide { get; private set; }
 
         public static readonly Colliding None = new Colliding() { OnCollide = (e, tri, time) => { } };
         public static readonly Colliding Vanish = new Colliding() { OnCollide = (e, tri, time) => e.Remove() };
@@ -152,10 +152,10 @@ namespace CurtainFireMakerPlugin.Entities
         };
         public static readonly Colliding Reflect = new Colliding()
         {
-            OnCollide = (e, tri, time) =>
+            OnCollide = (e, normal, time) =>
             {
-                e.Pos += e.Velocity * time + tri.Normal * 2.0F;
-                e.Velocity = tri.Normal * (e.Velocity * tri.Normal * -2) + e.Velocity;
+                e.Pos += e.Velocity * time + normal * 2.0F;
+                e.Velocity = normal * (e.Velocity * normal * -2) + e.Velocity;
             }
         };
     }
