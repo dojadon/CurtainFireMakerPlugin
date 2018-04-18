@@ -66,11 +66,6 @@ namespace CurtainFireMakerPlugin.Entities
             {
                 data.BoneIndexOffset = Bones.BoneList.Count;
                 ModelDataEachPropertyDict[data.Property].Add(data);
-
-                bool PropertyEquals(ShotProperty prop)
-                {
-                    return prop.Type == data.Property.Type && prop.Color == data.Property.Color;
-                }
             }
             Bones.SetupBone(data.Bones);
 
