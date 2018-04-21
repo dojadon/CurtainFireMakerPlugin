@@ -67,12 +67,12 @@ namespace CurtainFireMakerPlugin
                 PmxModel.InitShotModelData(data);
             }
 
-            if (!IsContainsShot)
+            if (!IsContainsShot && 0 < FrameCount)
             {
                 KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
                 KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
-                IsContainsShot = true;
             }
+            IsContainsShot = true;
 
             return data;
         }
