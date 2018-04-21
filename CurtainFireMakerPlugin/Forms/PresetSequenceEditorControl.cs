@@ -33,7 +33,15 @@ namespace CurtainFireMakerPlugin.Forms
         private ScriptFile SelectedSequenceScript => ScriptSequence[SequenceSelectedIndex];
 
         public string SelectedScriptPath => IsSequenceScriptSelected ? SelectedSequenceScript.Path : "";
-        public string RecentSelectedScriptPath { get => openFileDialogScript.FileName; set => openFileDialogScript.FileName = value; }
+        public string RecentSelectedScriptPath
+        {
+            get => openFileDialogScript.FileName;
+            set
+            {
+                openFileDialogScript.FileName = value;
+                openFileDialogScript.InitialDirectory = Path.GetDirectoryName(value);
+            }
+        }
 
         private string SelectedScript
         {
