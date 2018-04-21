@@ -49,8 +49,6 @@ namespace CurtainFireMakerPlugin.Entities
             Header = new PmxHeaderData
             {
                 Version = 2.0F,
-                ModelName = World.ModelName,
-                Description = World.ModelDescription,
                 VertexIndexSize = 4,
                 TextureIndexSize = 1,
                 MaterialIndexSize = 1,
@@ -126,13 +124,21 @@ namespace CurtainFireMakerPlugin.Entities
             };
         }
 
-        public void Export()
+        public void Export(string path, string name, string description)
         {
-            using (var stream = new FileStream(World.PmxExportPath, FileMode.Create, FileAccess.Write))
+            Header.ModelName = name;
+            Header.Description = description;
+
+            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 ModelData.Write(new BinaryWriter(stream));
                 World.Script.output_pmx_log(ModelData);
             }
+        }
+
+        public bool ShouldDrop()
+        {
+            return World.Script.should_drop_pmxfile(ModelData);
         }
     }
 }

@@ -15,41 +15,15 @@ namespace CurtainFireMakerPlugin
         public ScriptEngine Engine { get; }
         public ScriptScope RootScope { get; }
 
-        public PythonExecutor(IEnumerable<string> modullesDirPaths)
+        public PythonExecutor()
         {
             Engine = Python.CreateEngine();
             RootScope = Engine.CreateScope();
 
-            Engine.SetSearchPaths(Engine.GetSearchPaths().Concat(modullesDirPaths).ToList());
-
-            Engine.Execute(
-            "# -*- coding: utf-8 -*-\n" +
-            "import sys\n" +
-            $"sys.path.append(r\"{Application.StartupPath}\\Plugins\")\n" +
-            $"sys.path.append(r\"{Application.StartupPath}\\System\\x64\")\n", RootScope);
+            RootScope.SetVariable("STARTUP_PATH", Application.StartupPath);
         }
 
-        public dynamic ExecuteOnRootScope(string script)
-        {
-            return Engine.Execute(script, RootScope);
-        }
-
-        public dynamic ExecuteOnNewScope(string script)
-        {
-            var scope = Engine.CreateScope(RootScope);
-            return Engine.Execute(script, scope);
-        }
-
-        public dynamic ExecuteFileOnRootScope(string path)
-        {
-            return Engine.ExecuteFile(path, RootScope);
-        }
-
-        public dynamic ExecuteFileOnNewScope(string path)
-        {
-            var scope = Engine.CreateScope(RootScope);
-            return Engine.ExecuteFile(path, scope);
-        }
+        public ScriptScope CreateScope() => Engine.CreateScope(RootScope);
 
         public void SetGlobalVariable(params (string name, object value)[] variables)
         {

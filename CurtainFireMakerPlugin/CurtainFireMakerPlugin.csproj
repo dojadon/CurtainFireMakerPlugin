@@ -46,7 +46,6 @@
     <Compile Include="Entities\RigidObject.cs" />
     <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />
-    <Compile Include="Configuration.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
     <Compile Include="Entities\CurtainFireMotion.cs" />
     <Compile Include="Entities\ModelBoneCollection.cs" />
@@ -55,23 +54,24 @@
     <Compile Include="Entities\ModelVertexCollection.cs" />
     <Compile Include="Entities\ShotModelDataProvider.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
-    <Compile Include="Forms\ExportSettingForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ExportSettingForm.Designer.cs">
-      <DependentUpon>ExportSettingForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PreScriptEditorControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\PreScriptEditorControl.Designer.cs">
-      <DependentUpon>PreScriptEditorControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Forms\ControlConfig.cs" />
     <Compile Include="Forms\PresetEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\PresetEditorControl.Designer.cs">
       <DependentUpon>PresetEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PresetSequenceEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\PresetSequenceEditorControl.Designer.cs">
+      <DependentUpon>PresetSequenceEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PresetSettingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\PresetSettingControl.Designer.cs">
+      <DependentUpon>PresetSettingControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProgressForm.cs">
       <SubType>Form</SubType>
@@ -83,23 +83,24 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />
     <Compile Include="Entities\ShotProperty.cs" />
-    <Compile Include="Preset.cs" />
+    <Compile Include="Forms\Preset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PythonExecutor.cs" />
     <Compile Include="Entities\ShotType.cs" />
     <Compile Include="Entities\ShotTypePmx.cs" />
     <Compile Include="ScheduledTask.cs" />
     <Compile Include="World.cs" />
+    <Compile Include="XmlConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\ExportSettingForm.resx">
-      <DependentUpon>ExportSettingForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PreScriptEditorControl.resx">
-      <DependentUpon>PreScriptEditorControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PresetEditorControl.resx">
       <DependentUpon>PresetEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PresetSequenceEditorControl.resx">
+      <DependentUpon>PresetSequenceEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PresetSettingControl.resx">
+      <DependentUpon>PresetSettingControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>

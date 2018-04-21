@@ -62,26 +62,33 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        private VmdMotionData CreateVmdMotionData()
+        private VmdMotionData CreateVmdMotionData(string name)
         {
             return new VmdMotionData
             {
-                Header = new VmdHeaderData { ModelName = World.ModelName },
+                Header = new VmdHeaderData { ModelName = name },
                 MotionFrameArray = BoneFrameDict.Values.Select(t => t.frame).ToArray(),
                 MorphFrameArray = MorphFrameDict.Values.Select(t => t.frame).ToArray(),
                 PropertyFrameArray = PropertyFrames.ToArray(),
             };
         }
 
-        public void Export()
-        {
-            using (var stream = new FileStream(World.VmdExportPath, FileMode.Create, FileAccess.Write))
-            {
-                var data = CreateVmdMotionData();
-                data.Write(new BinaryWriter(stream));
+        private VmdMotionData MotionData{ get; set; }
 
-                World.Script.output_vmd_log(data);
+        public void Export(string path, string name)
+        {
+            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                MotionData = CreateVmdMotionData(name);
+                MotionData.Write(new BinaryWriter(stream));
+
+                World.Script.output_vmd_log(MotionData);
             }
+        }
+
+        public bool ShouldDrop()
+        {
+            return World.Script.should_drop_vmdfile(MotionData);
         }
     }
 }

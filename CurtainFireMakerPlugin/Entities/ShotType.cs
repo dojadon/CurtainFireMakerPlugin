@@ -16,7 +16,14 @@ namespace CurtainFireMakerPlugin.Entities
             types.ForEach(t => ShotTypeDict.Add(t.Name, t));
         }
 
-        public ShotType GetShotType(string name) => ShotTypeDict[name];
+        public ShotType GetShotType(string name)
+        {
+            if (!ShotTypeDict.ContainsKey(name))
+            {
+                throw new ArgumentException($"Not found key : {name}");
+            }
+            return ShotTypeDict[name];
+        }
     }
 
     public abstract class ShotType

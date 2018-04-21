@@ -17,7 +17,6 @@ namespace CurtainFireMakerPlugin
     {
         public int MaxFrame { get; set; } = 1000;
 
-        public Configuration Config { get; }
         internal PythonExecutor Executor { get; }
         internal IntPtr HandleToDrop { get; }
 
@@ -38,24 +37,14 @@ namespace CurtainFireMakerPlugin
 
         private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
 
-        internal string ExportFileName { get; set; }
+        public delegate void ExportEventHandler(object sender, ExportEventArgs args);
+        public event ExportEventHandler ExportEvent;
 
-        public event EventHandler ExportEvent;
-
-        public string PmxExportPath => Config.PmxExportDirPath + "\\" + ExportFileName + ".pmx";
-        public string VmdExportPath => Config.VmdExportDirPath + "\\" + ExportFileName + ".vmd";
-
-        public string ModelName { get; set; }
-        public string ModelDescription { get; set; } = "by CurtainFireMaker Plugin";
-
-        public World(ShotTypeProvider typeProvider, PythonExecutor executor, Configuration config, IntPtr handle, string fileName)
+        public World(ShotTypeProvider typeProvider, PythonExecutor executor, IntPtr handle)
         {
             ShotTypeProvider = typeProvider;
             Executor = executor;
-            Config = config;
             HandleToDrop = handle;
-
-            ExportFileName = ModelName = fileName;
 
             ShotModelProvider = new ShotModelDataProvider();
             PmxModel = new CurtainFireModel(this);
@@ -142,20 +131,20 @@ namespace CurtainFireMakerPlugin
             }
         }
 
-        public void GenerateCurainFire(Func<int, bool> onFrame)
+        public void GenerateCurainFire(Func<int, bool> onFrame, string pmxExportPath, string vmdExportPath)
         {
             long time = Environment.TickCount;
 
-            if (RunWorld(onFrame))
+            if (RunWorld(onFrame, pmxExportPath, vmdExportPath))
             {
                 Console.WriteLine((Environment.TickCount - time) + "ms");
                 Console.Out.Flush();
 
-                try { DropFileToHandle(); } catch { }
+                try { DropFileToHandle(pmxExportPath, vmdExportPath); } catch { }
             }
         }
 
-        public bool RunWorld(Func<int, bool> onFrame)
+        public bool RunWorld(Func<int, bool> onFrame, string pmxExportPath, string vmdExportPath)
         {
             for (int i = 0; i < MaxFrame; i++)
             {
@@ -163,11 +152,11 @@ namespace CurtainFireMakerPlugin
 
                 if (onFrame(i)) { return false; }
             }
-            Export();
+            Export(pmxExportPath, vmdExportPath);
             return true;
         }
 
-        internal void Export()
+        internal void Export(string pmxPath, string vmdPath)
         {
             EntityList.ForEach(e => e.Remove(true));
 
@@ -176,22 +165,22 @@ namespace CurtainFireMakerPlugin
             PmxModel.FinalizeModel(KeyFrames.MorphFrameDict.Values.Select(t => t.frame));
             KeyFrames.FinalizeKeyFrame(PmxModel.Morphs.MorphList);
 
-            PmxModel.Export();
-            KeyFrames.Export();
+            PmxModel.Export(pmxPath, Path.GetFileNameWithoutExtension(pmxPath), "by CurtainFireMakerPlugin");
+            KeyFrames.Export(vmdPath, Path.GetFileNameWithoutExtension(vmdPath));
 
-            ExportEvent?.Invoke(this, EventArgs.Empty);
+            ExportEvent?.Invoke(this, new ExportEventArgs(pmxPath, vmdPath));
         }
 
-        internal void DropFileToHandle()
+        internal void DropFileToHandle(string pmxPath, string vmdPath)
         {
-            if (Config.ShouldDropPmxFile)
+            if (PmxModel.ShouldDrop())
             {
-                Drop(HandleToDrop, new StringCollection() { PmxExportPath });
-            }
+                Drop(HandleToDrop, new StringCollection() { pmxPath });
 
-            if (Config.ShouldDropVmdFile && Config.ShouldDropPmxFile)
-            {
-                Drop(HandleToDrop, new StringCollection() { VmdExportPath });
+                if (KeyFrames.ShouldDrop())
+                {
+                    Drop(HandleToDrop, new StringCollection() { vmdPath });
+                }
             }
 
             void Drop(IntPtr hWnd, StringCollection filePaths)
@@ -234,6 +223,18 @@ namespace CurtainFireMakerPlugin
         public void AddTask(PythonFunction task, int interval, int executeTimes, int waitTime, bool withArg = false)
         {
             AddTask(task, i => interval, executeTimes, waitTime, withArg);
+        }
+    }
+
+    public class ExportEventArgs : EventArgs
+    {
+        public string PmxExportPath { get; }
+        public string VmdExportPath { get; }
+
+        public ExportEventArgs(string pmx, string vmd)
+        {
+            PmxExportPath = pmx;
+            VmdExportPath = vmd;
         }
     }
 }

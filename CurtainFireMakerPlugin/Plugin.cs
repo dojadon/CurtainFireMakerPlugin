@@ -11,41 +11,45 @@ using CurtainFireMakerPlugin.Entities;
 
 namespace CurtainFireMakerPlugin
 {
-    public class Plugin : ICommandPlugin, IHaveUserControl, ICanSavePlugin
+    public class Plugin : ICanSavePlugin, ICommandPlugin, IHaveUserControl
     {
-        internal Configuration Config { get; }
-        internal PythonExecutor PythonExecutor { get; }
+        public static string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker\\";
 
-        public dynamic Script { get; private set; }
+        public static string SettingPythonFilePath => PluginRootPath + "config.py";
+        public static string CommonScriptPath => PluginRootPath + "common.py";
+        public static string ResourceDirPath => PluginRootPath + "Resource\\";
+        public static string LogPath => PluginRootPath + "lastest.log";
+        public static string ErrorLogPath => PluginRootPath + "error.log";
 
-        private PresetEditorControl PresetEditorControl { get; }
+        internal PythonExecutor Executor { get; }
+
+        public dynamic ScriptDynamic { get; private set; }
+
+        private PresetEditorControl PresetEditorControl { get; set; }
 
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
 
         public Plugin()
         {
-            using (var writer = new StreamWriter(Configuration.LogPath, false, Encoding.UTF8))
+            using (var writer = new StreamWriter(LogPath, false, Encoding.UTF8))
             {
-                using (var error_writer = new StreamWriter(Configuration.ErrorLogPath, false, Encoding.UTF8))
+                using (var error_writer = new StreamWriter(ErrorLogPath, false, Encoding.UTF8))
                 {
                     Console.SetOut(writer);
                     Console.SetError(error_writer);
 
                     try
                     {
-                        Config = new Configuration(Configuration.SettingXmlFilePath);
-                        Config.Load();
+                        Executor = new PythonExecutor();
+                        ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
 
-                        PythonExecutor = new PythonExecutor(Config.ModullesDirPaths);
-                        Script = PythonExecutor.ExecuteFileOnRootScope(Configuration.SettingPythonFilePath);
+                        PresetEditorControl = new PresetEditorControl();
 
-                        PresetEditorControl = new PresetEditorControl(this);
-
-                        ShotTypeProvider.RegisterShotType(Script.init_shottype());
+                        ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
                     }
                     catch (Exception e)
                     {
-                        try { error_writer.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                        try { error_writer.WriteLine(Executor.FormatException(e)); } catch { }
                         error_writer.WriteLine(e);
                     }
 
@@ -58,22 +62,16 @@ namespace CurtainFireMakerPlugin
         public IWin32Window ApplicationForm { get; set; }
         public Scene Scene { get; set; }
 
-        public string Description => "Curtain Fire Maker Plugin by zyando";
+        public string Description => "CurtainFireMaker Plugin by zyando";
         public string Text => "弾幕生成";
-        public string EnglishText => "Generate Curtain Fire";
+        public string EnglishText => "Generate Danmaku";
 
         public Image Image { get; set; }
         public Image SmallImage => Image;
 
         public void Dispose()
         {
-            Config?.Save();
             PresetEditorControl.Save();
-        }
-
-        public UserControl CreateControl()
-        {
-            return PresetEditorControl;
         }
 
         public Stream OnSaveProject()
@@ -89,17 +87,12 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var form = new ExportSettingForm(Config, PresetEditorControl);
-            form.ShowDialog(ApplicationForm);
-
-            if (form.DialogResult != DialogResult.OK) return;
-
             var progressForm = new ProgressForm();
 
             using (var writer = progressForm.CreateLogWriter())
             {
                 Console.SetOut(writer);
-                PythonExecutor.SetOut(writer);
+                Executor.SetOut(writer);
 
                 try
                 {
@@ -108,37 +101,30 @@ namespace CurtainFireMakerPlugin
                 }
                 catch (Exception e)
                 {
-                    try { Console.WriteLine(PythonExecutor.FormatException(e)); } catch { }
+                    try { Console.WriteLine(Executor.FormatException(e)); } catch { }
                     Console.WriteLine(e);
                 }
                 Console.Out.Flush();
                 Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
-                PythonExecutor.SetOut(Console.OpenStandardOutput());
+                Executor.SetOut(Console.OpenStandardOutput());
             }
-            File.WriteAllText(Configuration.LogPath, progressForm.LogText);
+            File.WriteAllText(LogPath, progressForm.LogText);
         }
 
         private void RunWorld(ProgressBar bar, Func<bool> isEnd)
         {
-            var world = new World(ShotTypeProvider, PythonExecutor, Config, ApplicationForm.Handle, Path.GetFileNameWithoutExtension(Config.ScriptPath))
+            var world = new World(ShotTypeProvider, Executor, ApplicationForm.Handle)
             {
-                Script = Script
+                Script = ScriptDynamic,
+                FrameCount = PresetEditorControl.StartFrame,
+                MaxFrame = PresetEditorControl.EndFrame - PresetEditorControl.StartFrame,
             };
 
-            PythonExecutor.SetGlobalVariable(("SCENE", Scene), ("WORLD", world), ("PRESET_DIR", PresetEditorControl.SelectedPreset.PresetDirPath));
+            Executor.SetGlobalVariable(("SCENE", Scene), ("WORLD", world));
 
             world.Init();
 
-            if (PresetEditorControl.IsPresetSelected)
-            {
-                PythonExecutor.ExecuteOnRootScope(PresetEditorControl.RootScript);
-            }
-            else
-            {
-                PythonExecutor.ExecuteOnRootScope(File.ReadAllText(Configuration.CommonScriptPath));
-            }
-            PythonExecutor.ExecuteOnRootScope(PresetEditorControl.GetPreScript(Config.ScriptPath));
-            PythonExecutor.ExecuteFileOnNewScope(Config.ScriptPath);
+            PresetEditorControl.RunScript(Executor.Engine, Executor.CreateScope());
 
             bar.Maximum = world.MaxFrame;
 
@@ -148,7 +134,12 @@ namespace CurtainFireMakerPlugin
                 Console.Out.Flush();
 
                 return isEnd();
-            });
+            }, PresetEditorControl.PmxExportDirectory, PresetEditorControl.VmdExportDirectory);
+        }
+
+        public UserControl CreateControl()
+        {
+            return PresetEditorControl;
         }
     }
 }

@@ -28,262 +28,195 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.ファイルToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.新規作成ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.開くToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.上書き保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.名前を付けて保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.エクスポートToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialogNewPreset = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialogPreset = new System.Windows.Forms.OpenFileDialog();
+            this.labelPath = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.TextBoxPresetName = new System.Windows.Forms.TextBox();
-            this.ButtonReferenceVmd = new System.Windows.Forms.Button();
-            this.ButtonReferencePmx = new System.Windows.Forms.Button();
-            this.TextBoxExportDirPmx = new System.Windows.Forms.TextBox();
-            this.TextBoxExportDirVmd = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.TextBoxRootScript = new System.Windows.Forms.TextBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.ComboBoxPresets = new System.Windows.Forms.ComboBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.FolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.label4 = new System.Windows.Forms.Label();
-            this.PreScriptEditor = new CurtainFireMakerPlugin.Forms.PreScriptEditorControl();
+            this.PresetSequenceEditorControl = new CurtainFireMakerPlugin.Forms.PresetSequenceEditorControl();
+            this.PresetSettingControl = new CurtainFireMakerPlugin.Forms.PresetSettingControl();
+            this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ファイルToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(772, 24);
+            this.menuStrip1.TabIndex = 10;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // ファイルToolStripMenuItem
+            // 
+            this.ファイルToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.新規作成ToolStripMenuItem,
+            this.開くToolStripMenuItem,
+            this.上書き保存ToolStripMenuItem,
+            this.名前を付けて保存ToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.エクスポートToolStripMenuItem});
+            this.ファイルToolStripMenuItem.Name = "ファイルToolStripMenuItem";
+            this.ファイルToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.ファイルToolStripMenuItem.Text = "ファイル";
+            // 
+            // 新規作成ToolStripMenuItem
+            // 
+            this.新規作成ToolStripMenuItem.Name = "新規作成ToolStripMenuItem";
+            this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.新規作成ToolStripMenuItem.Text = "新規作成";
+            this.新規作成ToolStripMenuItem.Click += new System.EventHandler(this.ClickNewFile);
+            // 
+            // 開くToolStripMenuItem
+            // 
+            this.開くToolStripMenuItem.Name = "開くToolStripMenuItem";
+            this.開くToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.開くToolStripMenuItem.Text = "開く";
+            this.開くToolStripMenuItem.Click += new System.EventHandler(this.ClickOpen);
+            // 
+            // 上書き保存ToolStripMenuItem
+            // 
+            this.上書き保存ToolStripMenuItem.Name = "上書き保存ToolStripMenuItem";
+            this.上書き保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.上書き保存ToolStripMenuItem.Text = "上書き保存";
+            this.上書き保存ToolStripMenuItem.Click += new System.EventHandler(this.ClickSave);
+            // 
+            // 名前を付けて保存ToolStripMenuItem
+            // 
+            this.名前を付けて保存ToolStripMenuItem.Name = "名前を付けて保存ToolStripMenuItem";
+            this.名前を付けて保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.名前を付けて保存ToolStripMenuItem.Text = "名前を付けて保存";
+            this.名前を付けて保存ToolStripMenuItem.Click += new System.EventHandler(this.ClickSaveAs);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(158, 6);
+            // 
+            // エクスポートToolStripMenuItem
+            // 
+            this.エクスポートToolStripMenuItem.Name = "エクスポートToolStripMenuItem";
+            this.エクスポートToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.エクスポートToolStripMenuItem.Text = "エクスポート";
+            // 
+            // saveFileDialogNewPreset
+            // 
+            this.saveFileDialogNewPreset.DefaultExt = "xml";
+            this.saveFileDialogNewPreset.Filter = "Xml File|*.xml";
+            // 
+            // openFileDialogPreset
+            // 
+            this.openFileDialogPreset.DefaultExt = "xml";
+            this.openFileDialogPreset.FileName = "openFileDialog1";
+            this.openFileDialogPreset.Filter = "Xml File|*.xml";
+            // 
+            // labelPath
+            // 
+            this.labelPath.AutoSize = true;
+            this.labelPath.Location = new System.Drawing.Point(16, 33);
+            this.labelPath.Name = "labelPath";
+            this.labelPath.Size = new System.Drawing.Size(28, 12);
+            this.labelPath.TabIndex = 11;
+            this.labelPath.Text = "Path";
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(8, 65);
+            this.tabControl1.Location = new System.Drawing.Point(3, 57);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(722, 430);
-            this.tabControl1.TabIndex = 4;
+            this.tabControl1.Size = new System.Drawing.Size(650, 380);
+            this.tabControl1.TabIndex = 14;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.TextBoxPresetName);
-            this.tabPage1.Controls.Add(this.ButtonReferenceVmd);
-            this.tabPage1.Controls.Add(this.ButtonReferencePmx);
-            this.tabPage1.Controls.Add(this.TextBoxExportDirPmx);
-            this.tabPage1.Controls.Add(this.TextBoxExportDirVmd);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.PresetSequenceEditorControl);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(714, 404);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "プリセット";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(642, 354);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "スクリプトシーケンス";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label1.Location = new System.Drawing.Point(6, 11);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 12);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "プリセット名";
-            // 
-            // TextBoxPresetName
-            // 
-            this.TextBoxPresetName.BackColor = System.Drawing.SystemColors.Window;
-            this.TextBoxPresetName.Location = new System.Drawing.Point(6, 26);
-            this.TextBoxPresetName.Name = "TextBoxPresetName";
-            this.TextBoxPresetName.Size = new System.Drawing.Size(218, 19);
-            this.TextBoxPresetName.TabIndex = 17;
-            this.TextBoxPresetName.TextChanged += new System.EventHandler(this.TextChangedPresetName);
-            this.TextBoxPresetName.Leave += new System.EventHandler(this.LeaveTextBoxPresetName);
-            // 
-            // ButtonReferenceVmd
-            // 
-            this.ButtonReferenceVmd.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.ButtonReferenceVmd.Location = new System.Drawing.Point(474, 123);
-            this.ButtonReferenceVmd.Name = "ButtonReferenceVmd";
-            this.ButtonReferenceVmd.Size = new System.Drawing.Size(48, 21);
-            this.ButtonReferenceVmd.TabIndex = 26;
-            this.ButtonReferenceVmd.Text = "参照";
-            this.ButtonReferenceVmd.UseVisualStyleBackColor = true;
-            this.ButtonReferenceVmd.Click += new System.EventHandler(this.ReferenceExportDirVmd);
-            // 
-            // ButtonReferencePmx
-            // 
-            this.ButtonReferencePmx.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.ButtonReferencePmx.Location = new System.Drawing.Point(474, 76);
-            this.ButtonReferencePmx.Name = "ButtonReferencePmx";
-            this.ButtonReferencePmx.Size = new System.Drawing.Size(48, 21);
-            this.ButtonReferencePmx.TabIndex = 23;
-            this.ButtonReferencePmx.Text = "参照";
-            this.ButtonReferencePmx.UseVisualStyleBackColor = true;
-            this.ButtonReferencePmx.Click += new System.EventHandler(this.ReferenceExportDirPmx);
-            // 
-            // TextBoxExportDirPmx
-            // 
-            this.TextBoxExportDirPmx.Location = new System.Drawing.Point(6, 77);
-            this.TextBoxExportDirPmx.Name = "TextBoxExportDirPmx";
-            this.TextBoxExportDirPmx.Size = new System.Drawing.Size(462, 19);
-            this.TextBoxExportDirPmx.TabIndex = 21;
-            this.TextBoxExportDirPmx.TextChanged += new System.EventHandler(this.TextChangedExportDirPmx);
-            // 
-            // TextBoxExportDirVmd
-            // 
-            this.TextBoxExportDirVmd.Location = new System.Drawing.Point(6, 124);
-            this.TextBoxExportDirVmd.Name = "TextBoxExportDirVmd";
-            this.TextBoxExportDirVmd.Size = new System.Drawing.Size(462, 19);
-            this.TextBoxExportDirVmd.TabIndex = 24;
-            this.TextBoxExportDirVmd.TextChanged += new System.EventHandler(this.TextChangedExportDirVmd);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label3.Location = new System.Drawing.Point(4, 109);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 12);
-            this.label3.TabIndex = 25;
-            this.label3.Text = "Vmd出力フォルダ";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label2.Location = new System.Drawing.Point(4, 62);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(86, 12);
-            this.label2.TabIndex = 22;
-            this.label2.Text = "Pmx出力フォルダ";
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.TextBoxRootScript);
+            this.tabPage2.Controls.Add(this.PresetSettingControl);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(714, 404);
-            this.tabPage2.TabIndex = 0;
-            this.tabPage2.Text = "共通スクリプト";
+            this.tabPage2.Size = new System.Drawing.Size(642, 354);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "出力設定";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // TextBoxRootScript
+            // PresetSequenceEditorControl
             // 
-            this.TextBoxRootScript.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.TextBoxRootScript.Location = new System.Drawing.Point(8, 8);
-            this.TextBoxRootScript.Margin = new System.Windows.Forms.Padding(5, 5, 5, 8);
-            this.TextBoxRootScript.Multiline = true;
-            this.TextBoxRootScript.Name = "TextBoxRootScript";
-            this.TextBoxRootScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TextBoxRootScript.Size = new System.Drawing.Size(698, 425);
-            this.TextBoxRootScript.TabIndex = 0;
-            this.TextBoxRootScript.WordWrap = false;
-            this.TextBoxRootScript.TextChanged += new System.EventHandler(this.TextChangedRootScript);
+            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
+            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
+            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
+            this.PresetSequenceEditorControl.RecentSelectedScriptPath = "openFileDialog1";
+            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
+            this.PresetSequenceEditorControl.TabIndex = 0;
             // 
-            // tabPage3
+            // PresetSettingControl
             // 
-            this.tabPage3.Controls.Add(this.PreScriptEditor);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(714, 404);
-            this.tabPage3.TabIndex = 1;
-            this.tabPage3.Text = "プレスクリプト";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // ComboBoxPresets
-            // 
-            this.ComboBoxPresets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBoxPresets.FormattingEnabled = true;
-            this.ComboBoxPresets.Location = new System.Drawing.Point(8, 25);
-            this.ComboBoxPresets.Margin = new System.Windows.Forms.Padding(8, 3, 8, 8);
-            this.ComboBoxPresets.Name = "ComboBoxPresets";
-            this.ComboBoxPresets.Size = new System.Drawing.Size(218, 20);
-            this.ComboBoxPresets.TabIndex = 27;
-            this.ComboBoxPresets.SelectedIndexChanged += new System.EventHandler(this.SelectedPresetIndexChanged);
-            // 
-            // button3
-            // 
-            this.button3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button3.Location = new System.Drawing.Point(317, 24);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 21);
-            this.button3.TabIndex = 19;
-            this.button3.Text = "削除";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button2.Location = new System.Drawing.Point(232, 24);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 21);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "新規作成";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.AddPreset);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 10);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(46, 12);
-            this.label4.TabIndex = 28;
-            this.label4.Text = "プリセット";
-            // 
-            // PreScriptEditor
-            // 
-            this.PreScriptEditor.Location = new System.Drawing.Point(0, 0);
-            this.PreScriptEditor.Name = "PreScriptEditor";
-            this.PreScriptEditor.PresetEditor = null;
-            this.PreScriptEditor.Size = new System.Drawing.Size(714, 444);
-            this.PreScriptEditor.TabIndex = 0;
+            this.PresetSettingControl.EndFrame = 0;
+            this.PresetSettingControl.Location = new System.Drawing.Point(8, 6);
+            this.PresetSettingControl.Name = "PresetSettingControl";
+            this.PresetSettingControl.Size = new System.Drawing.Size(642, 354);
+            this.PresetSettingControl.StartFrame = 0;
+            this.PresetSettingControl.TabIndex = 13;
             // 
             // PresetEditorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.ComboBoxPresets);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.labelPath);
+            this.Controls.Add(this.menuStrip1);
             this.Name = "PresetEditorControl";
-            this.Size = new System.Drawing.Size(864, 566);
+            this.Size = new System.Drawing.Size(772, 514);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
+        private PresetSequenceEditorControl PresetSequenceEditorControl;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem ファイルToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 新規作成ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 開くToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 上書き保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 名前を付けて保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem エクスポートToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogNewPreset;
+        private System.Windows.Forms.OpenFileDialog openFileDialogPreset;
+        private System.Windows.Forms.Label labelPath;
+        private PresetSettingControl PresetSettingControl;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TextBox TextBoxRootScript;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button ButtonReferenceVmd;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox TextBoxExportDirVmd;
-        private System.Windows.Forms.Button ButtonReferencePmx;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox TextBoxExportDirPmx;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox TextBoxPresetName;
-        private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialog;
-        private System.Windows.Forms.ComboBox ComboBoxPresets;
-        private PreScriptEditorControl PreScriptEditor;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
