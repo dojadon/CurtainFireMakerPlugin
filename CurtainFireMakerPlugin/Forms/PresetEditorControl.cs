@@ -125,7 +125,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (!Path.IsPathRooted(PresetPath))
             {
-                saveFileDialogNewPreset.FileName = saveFileDialogNewPreset.InitialDirectory + "\\" + Path.GetFileNameWithoutExtension(PresetSequenceEditorControl.SelectedScriptPath) + ".xml";
+                saveFileDialogNewPreset.FileName = saveFileDialogNewPreset.InitialDirectory + "\\" + Path.GetFileNameWithoutExtension(PresetSequenceEditorControl.SelectedFilePath) + ".xml";
             }
 
             if (saveFileDialogNewPreset.ShowDialog() == DialogResult.OK)

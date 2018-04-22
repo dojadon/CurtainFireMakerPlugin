@@ -13,26 +13,14 @@ namespace CurtainFireMakerPlugin.Forms
 {
     public partial class PresetSequenceEditorControl : UserControl
     {
-        private struct ScriptFile
-        {
-            public string Name { get; set; }
-            public string Path { get; set; }
-            public string Script { get; set; }
+        private Dictionary<string, FileSystemWatcher> FileWatcherDict { get; } = new Dictionary<string, FileSystemWatcher>();
 
-            public ScriptFile(string name, string path, string script)
-            {
-                Name = name;
-                Path = path;
-                Script = script;
-            }
-        }
+        private List<string> Sequence { get; set; } = new List<string>();
+        private int SelectedIndex { get => listBoxSequence.SelectedIndex; set => listBoxSequence.SelectedIndex = value; }
+        private bool IsSelected => 0 <= SelectedIndex && SelectedIndex < Sequence.Count;
 
-        private List<ScriptFile> ScriptSequence { get; set; } = new List<ScriptFile>();
-        private int SequenceSelectedIndex { get => listBoxSequence.SelectedIndex; set => listBoxSequence.SelectedIndex = value; }
-        private bool IsSequenceScriptSelected => 0 <= SequenceSelectedIndex && SequenceSelectedIndex < ScriptSequence.Count;
-        private ScriptFile SelectedSequenceScript => ScriptSequence[SequenceSelectedIndex];
+        public string SelectedFilePath => IsSelected ? Sequence[SelectedIndex] : "";
 
-        public string SelectedScriptPath => IsSequenceScriptSelected ? SelectedSequenceScript.Path : "";
         public string RecentSelectedScriptPath
         {
             get => openFileDialogScript.FileName;
@@ -41,12 +29,6 @@ namespace CurtainFireMakerPlugin.Forms
                 openFileDialogScript.FileName = value;
                 openFileDialogScript.InitialDirectory = Path.GetDirectoryName(value);
             }
-        }
-
-        private string SelectedScript
-        {
-            get => textBoxSelectedScript.Text;
-            set => textBoxSelectedScript.Text = value.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
         }
 
         public PresetSequenceEditorControl()
@@ -63,46 +45,117 @@ namespace CurtainFireMakerPlugin.Forms
         public void LoadPreset(Preset preset)
         {
             List<string> sequence = preset.SequenceScripts.ToList();
-            ScriptSequence = sequence.Select(s => CreateScript(s)).ToList();
+            Sequence = sequence.ToList();
 
             UpdateSequenceDataSource();
 
-            SequenceSelectedIndex = ScriptSequence.Count == 0 ? -1 : 0;
+            SelectedIndex = Sequence.Count == 0 ? -1 : 0;
         }
 
         public void SavePreset(Preset preset)
         {
-            preset.SequenceScripts = ScriptSequence.Select(s => s.Path).ToArray();
+            preset.SequenceScripts = Sequence.ToArray();
         }
 
-        public void UpdateSequenceDataSource()
+        private void UpdateSequenceDataSource()
         {
             listBoxSequence.DataSource = null;
-            listBoxSequence.DataSource = ScriptSequence;
-            listBoxSequence.DisplayMember = "Name";
-            listBoxSequence.ValueMember = "Script";
+            listBoxSequence.DataSource = Sequence.Select(Path.GetFileNameWithoutExtension).ToList();
+
+            List<string> directories = Sequence.Select(Path.GetDirectoryName).Select(Path.GetFullPath).ToList();
+
+            foreach (string dir in directories.Where(d => !FileWatcherDict.ContainsKey(d)))
+            {
+                FileWatcherDict[dir] = CreateFileSystemWatcher(dir);
+            }
+
+            foreach (var pair in FileWatcherDict.Where(p => !directories.Any(d => d == p.Value.Path)))
+            {
+                pair.Value.EnableRaisingEvents = false;
+                pair.Value.Dispose();
+                FileWatcherDict.Remove(pair.Key);
+            }
         }
 
-        private ScriptFile CreateScript(string path)
+        private FileSystemWatcher CreateFileSystemWatcher(string path)
         {
-            return new ScriptFile(Path.GetFileName(path), path, File.ReadAllText(path));
+            var watcher = new FileSystemWatcher()
+            {
+                Path = path,
+                Filter = "*.py",
+                SynchronizingObject = this,
+                EnableRaisingEvents = true,
+                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite,
+            };
+            watcher.Deleted += FileDeleted;
+            watcher.Renamed += FileRenamed;
+            watcher.Changed += FileChanged;
+
+            return watcher;
+        }
+
+        private void FileDeleted(object sender, FileSystemEventArgs e)
+        {
+            int idx = Sequence.IndexOf(e.FullPath);
+            int newIdx = SelectedIndex < idx ? SelectedIndex : Math.Max(-1, SelectedIndex - 1);
+
+            if (idx >= 0)
+            {
+                Sequence.RemoveAt(idx);
+
+                UpdateSequenceDataSource();
+
+                SelectedIndex = newIdx;
+            }
+        }
+
+        private void FileRenamed(object sender, RenamedEventArgs e)
+        {
+            int idx = Sequence.IndexOf(e.OldFullPath);
+
+            if (idx >= 0)
+            {
+                int newIdx = SelectedIndex;
+
+                Sequence[idx] = e.FullPath;
+                UpdateSequenceDataSource();
+
+                SelectedIndex = newIdx;
+            }
+        }
+
+        private void FileChanged(object sender, FileSystemEventArgs e)
+        {
+            if (SelectedFilePath == e.FullPath)
+            {
+                textBoxSelectedScript.Text = ConvertToCRLF(File.ReadAllText(SelectedFilePath));
+            }
+            string ConvertToCRLF(string s)
+            {
+                return s.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
+            }
         }
 
         public void RunScript(ScriptEngine engine, ScriptScope scope)
         {
-            ScriptSequence.ForEach(s => engine.ExecuteFile(s.Path, scope));
+            Sequence.ForEach(s => engine.ExecuteFile(s, scope));
         }
 
         private void SelectedIndexChangedSequence(object sender, EventArgs e)
         {
-            if (IsSequenceScriptSelected)
+            if (IsSelected)
             {
-                SelectedScript = SelectedSequenceScript.Script;
-                labelPath.Text = SelectedSequenceScript.Path;
+                textBoxSelectedScript.Text = ConvertToCRLF(File.ReadAllText(SelectedFilePath));
+                labelPath.Text = SelectedFilePath;
             }
             else
             {
-                SelectedScript = labelPath.Text = "";
+                textBoxSelectedScript.Text = labelPath.Text = "";
+            }
+
+            string ConvertToCRLF(string s)
+            {
+                return s.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
             }
         }
 
@@ -110,9 +163,9 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (openFileDialogScript.ShowDialog() == DialogResult.OK)
             {
-                ScriptSequence.Add(CreateScript(openFileDialogScript.FileName));
+                Sequence.Add(openFileDialogScript.FileName);
                 UpdateSequenceDataSource();
-                SequenceSelectedIndex = ScriptSequence.Count - 1;
+                SelectedIndex = Sequence.Count - 1;
 
                 openFileDialogScript.InitialDirectory = Path.GetDirectoryName(openFileDialogScript.FileName);
             }
@@ -120,57 +173,57 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickRemove(object sender, EventArgs e)
         {
-            if (!IsSequenceScriptSelected) return;
+            if (!IsSelected) return;
 
-            int index = SequenceSelectedIndex;
-            ScriptSequence.RemoveAt(SequenceSelectedIndex);
+            int index = SelectedIndex;
+            Sequence.RemoveAt(SelectedIndex);
             UpdateSequenceDataSource();
-            SequenceSelectedIndex = index - 1;
+            SelectedIndex = index - 1;
 
-            if (index == 0 && ScriptSequence.Count > 0)
+            if (index == 0 && Sequence.Count > 0)
             {
-                SequenceSelectedIndex = 0;
+                SelectedIndex = 0;
             }
         }
 
         private void ClickUp(object sender, EventArgs e)
         {
-            if (!IsSequenceScriptSelected || SequenceSelectedIndex == 0 || ScriptSequence.Count < 2) return;
+            if (!IsSelected || SelectedIndex == 0 || Sequence.Count < 2) return;
 
-            var script = SelectedSequenceScript;
-            int index = SequenceSelectedIndex;
+            var script = SelectedFilePath;
+            int index = SelectedIndex;
 
-            ScriptSequence[index] = ScriptSequence[index - 1];
-            ScriptSequence[index - 1] = script;
+            Sequence[index] = Sequence[index - 1];
+            Sequence[index - 1] = script;
 
             UpdateSequenceDataSource();
 
-            SequenceSelectedIndex = index - 1;
+            SelectedIndex = index - 1;
         }
 
         private void ClickDown(object sender, EventArgs e)
         {
-            if (!IsSequenceScriptSelected || SequenceSelectedIndex == ScriptSequence.Count - 1 || ScriptSequence.Count < 2) return;
+            if (!IsSelected || SelectedIndex == Sequence.Count - 1 || Sequence.Count < 2) return;
 
-            var script = SelectedSequenceScript;
-            int index = SequenceSelectedIndex;
+            var script = SelectedFilePath;
+            int index = SelectedIndex;
 
-            ScriptSequence[index] = ScriptSequence[index + 1];
-            ScriptSequence[index + 1] = script;
+            Sequence[index] = Sequence[index + 1];
+            Sequence[index + 1] = script;
 
             UpdateSequenceDataSource();
 
-            SequenceSelectedIndex = index + 1;
+            SelectedIndex = index + 1;
         }
 
         private void DragDropSequence(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            ScriptSequence.AddRange(files.Select(CreateScript));
+            Sequence.AddRange(files);
 
             UpdateSequenceDataSource();
-            SequenceSelectedIndex = ScriptSequence.Count - 1;
+            SelectedIndex = Sequence.Count - 1;
         }
 
         private void DragEnterSequence(object sender, DragEventArgs e)
