@@ -97,7 +97,7 @@ namespace CurtainFireMakerPlugin
                 try
                 {
                     System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
-                    RunWorld(progressForm.ProgressBar, () => progressForm.DialogResult == DialogResult.Cancel);
+                    RunWorld(progressForm);
                 }
                 catch (Exception e)
                 {
@@ -111,7 +111,7 @@ namespace CurtainFireMakerPlugin
             File.WriteAllText(LogPath, progressForm.LogText);
         }
 
-        private void RunWorld(ProgressBar bar, Func<bool> isEnd)
+        private void RunWorld(ProgressForm progress)
         {
             var world = new World(ShotTypeProvider, Executor, ApplicationForm.Handle)
             {
@@ -126,14 +126,14 @@ namespace CurtainFireMakerPlugin
 
             PresetEditorControl.RunScript(Executor.Engine, Executor.CreateScope());
 
-            bar.Maximum = world.MaxFrame;
+            progress.Maximum = world.MaxFrame;
 
             world.GenerateCurainFire(i =>
             {
-                bar.Value = i;
+                progress.Value = i;
                 Console.Out.Flush();
 
-                return isEnd();
+                return progress.IsCanceled;
             }, PresetEditorControl.PmxExportDirectory, PresetEditorControl.VmdExportDirectory);
         }
 

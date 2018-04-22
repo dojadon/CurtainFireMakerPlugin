@@ -21,7 +21,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public string SelectedFilePath => IsSelected ? Sequence[SelectedIndex] : "";
 
-        private string SectedScriptText{ set => textBoxSelectedScript.Text = value; }
+        private string SectedScriptText { set => textBoxSelectedScript.Text = value; }
 
         public string RecentSelectedScriptPath
         {
@@ -235,6 +235,43 @@ namespace CurtainFireMakerPlugin.Forms
         private void TextChangedScript(object sender, EventArgs e)
         {
             textBoxSelectedScript.Text = textBoxSelectedScript.Text.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
+        }
+
+        private void ListBoxMouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = listBoxSequence.IndexFromPoint(e.Location);
+
+                if (index >= 0)
+                {
+                    listBoxSequence.ClearSelected();
+                    listBoxSequence.SelectedIndex = index;
+                }
+            }
+        }
+
+        private void OpenWithExplorer(object sender, EventArgs e)
+        {
+            if (!IsSelected) return;
+
+            System.Diagnostics.Process.Start(Path.GetDirectoryName(SelectedFilePath));
+        }
+
+        private void OpenWithAtom(object sender, EventArgs e)
+        {
+            if (!IsSelected) return;
+
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            process.StartInfo.FileName = "atom";
+            process.StartInfo.Arguments = $"\"{SelectedFilePath}\"";
+            process.Start();
+        }
+
+        private void OpeningContextMenu(object sender, CancelEventArgs e)
+        {
+            ToolStripMenuItemRemove.Enabled = ToolStripMenuItemOpen.Enabled = IsSelected;
         }
     }
 }

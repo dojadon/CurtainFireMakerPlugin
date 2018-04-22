@@ -143,6 +143,7 @@
     <Reference Include="Microsoft.Scripting.Metadata">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\IronPython 2.7\Microsoft.Scripting.Metadata.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MikuMikuPlugin">
       <HintPath>..\packages\MikuMikuPlugin.dll</HintPath>
     </Reference>

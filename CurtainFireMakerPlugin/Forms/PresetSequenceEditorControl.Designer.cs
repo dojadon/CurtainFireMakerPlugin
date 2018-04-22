@@ -28,7 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.listBoxSequence = new System.Windows.Forms.ListBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.追加ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemRemove = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripMenuItemOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.エクスプローラーToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.atomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -36,11 +44,13 @@
             this.textBoxSelectedScript = new System.Windows.Forms.TextBox();
             this.openFileDialogScript = new System.Windows.Forms.OpenFileDialog();
             this.labelPath = new System.Windows.Forms.Label();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listBoxSequence
             // 
             this.listBoxSequence.AllowDrop = true;
+            this.listBoxSequence.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxSequence.FormattingEnabled = true;
             this.listBoxSequence.ItemHeight = 12;
             this.listBoxSequence.Location = new System.Drawing.Point(6, 8);
@@ -50,6 +60,60 @@
             this.listBoxSequence.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChangedSequence);
             this.listBoxSequence.DragDrop += new System.Windows.Forms.DragEventHandler(this.DragDropSequence);
             this.listBoxSequence.DragEnter += new System.Windows.Forms.DragEventHandler(this.DragEnterSequence);
+            this.listBoxSequence.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ListBoxMouseUp);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.追加ToolStripMenuItem,
+            this.ToolStripMenuItemRemove,
+            this.toolStripMenuItem1,
+            this.ToolStripMenuItemOpen});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 98);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.OpeningContextMenu);
+            // 
+            // 追加ToolStripMenuItem
+            // 
+            this.追加ToolStripMenuItem.Name = "追加ToolStripMenuItem";
+            this.追加ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.追加ToolStripMenuItem.Text = "追加";
+            this.追加ToolStripMenuItem.Click += new System.EventHandler(this.ClickAdd);
+            // 
+            // ToolStripMenuItemRemove
+            // 
+            this.ToolStripMenuItemRemove.Name = "ToolStripMenuItemRemove";
+            this.ToolStripMenuItemRemove.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemRemove.Text = "削除";
+            this.ToolStripMenuItemRemove.Click += new System.EventHandler(this.ClickRemove);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // ToolStripMenuItemOpen
+            // 
+            this.ToolStripMenuItemOpen.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.エクスプローラーToolStripMenuItem,
+            this.atomToolStripMenuItem});
+            this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemOpen.Text = "開く";
+            // 
+            // エクスプローラーToolStripMenuItem
+            // 
+            this.エクスプローラーToolStripMenuItem.Name = "エクスプローラーToolStripMenuItem";
+            this.エクスプローラーToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.エクスプローラーToolStripMenuItem.Text = "エクスプローラー";
+            this.エクスプローラーToolStripMenuItem.Click += new System.EventHandler(this.OpenWithExplorer);
+            // 
+            // atomToolStripMenuItem
+            // 
+            this.atomToolStripMenuItem.Name = "atomToolStripMenuItem";
+            this.atomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.atomToolStripMenuItem.Text = "Atom";
+            this.atomToolStripMenuItem.Click += new System.EventHandler(this.OpenWithAtom);
             // 
             // button6
             // 
@@ -137,6 +201,7 @@
             this.Controls.Add(this.textBoxSelectedScript);
             this.Name = "PresetSequenceEditorControl";
             this.Size = new System.Drawing.Size(642, 354);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -151,5 +216,12 @@
         private System.Windows.Forms.TextBox textBoxSelectedScript;
         private System.Windows.Forms.OpenFileDialog openFileDialogScript;
         private System.Windows.Forms.Label labelPath;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemOpen;
+        private System.Windows.Forms.ToolStripMenuItem エクスプローラーToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem atomToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 追加ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemRemove;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
     }
 }

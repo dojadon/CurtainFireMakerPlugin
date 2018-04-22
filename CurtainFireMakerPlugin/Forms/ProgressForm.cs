@@ -10,7 +10,10 @@ namespace CurtainFireMakerPlugin.Forms
 {
     public partial class ProgressForm : Form
     {
-        public ProgressBar ProgressBar => progressBar;
+        public int Maximum { get => progressBar.Maximum; set => progressBar.Maximum = value; }
+        public int Value { get => progressBar.Value; set => progressBar.Value = value; }
+
+        public bool IsCanceled => DialogResult == DialogResult.Cancel;
 
         public string LogText => richTextBoxLog.Text;
 
