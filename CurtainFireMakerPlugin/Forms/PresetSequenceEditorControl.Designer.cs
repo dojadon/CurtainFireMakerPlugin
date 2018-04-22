@@ -107,6 +107,7 @@
             this.textBoxSelectedScript.Size = new System.Drawing.Size(473, 328);
             this.textBoxSelectedScript.TabIndex = 12;
             this.textBoxSelectedScript.WordWrap = false;
+            this.textBoxSelectedScript.TextChanged += new System.EventHandler(this.TextChangedScript);
             // 
             // openFileDialogScript
             // 

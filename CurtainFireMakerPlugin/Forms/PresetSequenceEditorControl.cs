@@ -21,6 +21,8 @@ namespace CurtainFireMakerPlugin.Forms
 
         public string SelectedFilePath => IsSelected ? Sequence[SelectedIndex] : "";
 
+        private string SectedScriptText{ set => textBoxSelectedScript.Text = value; }
+
         public string RecentSelectedScriptPath
         {
             get => openFileDialogScript.FileName;
@@ -128,11 +130,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (SelectedFilePath == e.FullPath)
             {
-                textBoxSelectedScript.Text = ConvertToCRLF(File.ReadAllText(SelectedFilePath));
-            }
-            string ConvertToCRLF(string s)
-            {
-                return s.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
+                SectedScriptText = File.ReadAllText(SelectedFilePath);
             }
         }
 
@@ -145,17 +143,12 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (IsSelected)
             {
-                textBoxSelectedScript.Text = ConvertToCRLF(File.ReadAllText(SelectedFilePath));
+                SectedScriptText = File.ReadAllText(SelectedFilePath);
                 labelPath.Text = SelectedFilePath;
             }
             else
             {
-                textBoxSelectedScript.Text = labelPath.Text = "";
-            }
-
-            string ConvertToCRLF(string s)
-            {
-                return s.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
+                SectedScriptText = labelPath.Text = "";
             }
         }
 
@@ -237,6 +230,11 @@ namespace CurtainFireMakerPlugin.Forms
                     e.Effect = DragDropEffects.Copy;
                 }
             }
+        }
+
+        private void TextChangedScript(object sender, EventArgs e)
+        {
+            textBoxSelectedScript.Text = textBoxSelectedScript.Text.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
         }
     }
 }
