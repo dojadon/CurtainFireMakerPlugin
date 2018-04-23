@@ -71,7 +71,7 @@ namespace CurtainFireMakerPlugin.Forms
                 FileWatcherDict[dir] = CreateFileSystemWatcher(dir);
             }
 
-            foreach (var pair in FileWatcherDict.Where(p => !directories.Any(d => d == p.Value.Path)))
+            foreach (var pair in FileWatcherDict.Where(p => !directories.Any(d => d == p.Value.Path)).ToList())
             {
                 pair.Value.EnableRaisingEvents = false;
                 pair.Value.Dispose();
