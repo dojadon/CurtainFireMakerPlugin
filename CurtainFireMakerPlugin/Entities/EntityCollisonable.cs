@@ -33,7 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public EntityCollisonable(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, property, parentEntity)
         {
-            TimeToCollide = world.MaxFrame;
+            TimeToCollide = 1E+5F;
         }
 
         public override void Frame()

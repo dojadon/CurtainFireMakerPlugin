@@ -15,12 +15,7 @@ namespace CurtainFireMakerPlugin
 {
     public class World
     {
-        public int MaxFrame { get; set; } = 1000;
-
         internal PythonExecutor Executor { get; }
-        internal IntPtr HandleToDrop { get; }
-
-        public dynamic Script { get; set; }
 
         public List<RigidObject> RigidObjectList { get; } = new List<RigidObject>();
 
@@ -40,15 +35,27 @@ namespace CurtainFireMakerPlugin
         public delegate void ExportEventHandler(object sender, ExportEventArgs args);
         public event ExportEventHandler ExportEvent;
 
-        public World(ShotTypeProvider typeProvider, PythonExecutor executor, IntPtr handle)
+        public string ExportedFileName { get; set; }
+
+        public World(ShotTypeProvider typeProvider, PythonExecutor executor)
         {
             ShotTypeProvider = typeProvider;
             Executor = executor;
-            HandleToDrop = handle;
 
             ShotModelProvider = new ShotModelDataProvider();
             PmxModel = new CurtainFireModel(this);
             KeyFrames = new CurtainFireMotion(this);
+
+            foreach (var type in ShotTypeProvider.ShotTypeDict.Values)
+            {
+                type.InitWorld(this);
+            }
+
+            ExportEvent += (sender, e) =>
+            {
+                PmxModel.Export(e.Script, e.PmxExportPath, ExportedFileName, "by CurtainFireMakerPlugin");
+                KeyFrames.Export(e.Script, e.PmxExportPath, ExportedFileName);
+            };
         }
 
         public void AddRigidObject(RigidObject rigid)
@@ -96,6 +103,17 @@ namespace CurtainFireMakerPlugin
 
         private System.Diagnostics.Stopwatch Stopwatch { get; } = new System.Diagnostics.Stopwatch();
 
+        public void Run(Action action, string msg)
+        {
+            Stopwatch.Reset();
+            Stopwatch.Start();
+
+            action();
+
+            Stopwatch.Stop();
+            Console.WriteLine(msg + " : {0:#,0}ns", Stopwatch.ElapsedTicks / (double)System.Diagnostics.Stopwatch.Frequency * 1E+06);
+        }
+
         internal void Frame()
         {
             ShotModelProvider.Frame();
@@ -112,74 +130,29 @@ namespace CurtainFireMakerPlugin
             FrameCount++;
         }
 
-        public void Run(Action action, string msg)
-        {
-            Stopwatch.Reset();
-            Stopwatch.Start();
-
-            action();
-
-            Stopwatch.Stop();
-            Console.WriteLine(msg + " : {0:#,0}ns", Stopwatch.ElapsedTicks / (double)System.Diagnostics.Stopwatch.Frequency * 1E+06);
-        }
-
-        public void Init()
-        {
-            foreach (var type in ShotTypeProvider.ShotTypeDict.Values)
-            {
-                type.InitWorld(this);
-            }
-        }
-
-        public void GenerateCurainFire(Func<int, bool> onFrame, string pmxExportPath, string vmdExportPath)
-        {
-            long time = Environment.TickCount;
-
-            if (RunWorld(onFrame, pmxExportPath, vmdExportPath))
-            {
-                Console.WriteLine((Environment.TickCount - time) + "ms");
-                Console.Out.Flush();
-
-                try { DropFileToHandle(pmxExportPath, vmdExportPath); } catch { }
-            }
-        }
-
-        public bool RunWorld(Func<int, bool> onFrame, string pmxExportPath, string vmdExportPath)
-        {
-            for (int i = 0; i < MaxFrame; i++)
-            {
-                Frame();
-
-                if (onFrame(i)) { return false; }
-            }
-            Export(pmxExportPath, vmdExportPath);
-            return true;
-        }
-
-        internal void Export(string pmxPath, string vmdPath)
+        public void FinalizeWorld()
         {
             EntityList.ForEach(e => e.Remove(true));
-
             KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount + 1, false));
+        }
 
+        internal void Export(dynamic script, string directory)
+        {
             PmxModel.FinalizeModel(KeyFrames.MorphFrameDict.Values.Select(t => t.frame));
             KeyFrames.FinalizeKeyFrame(PmxModel.Morphs.MorphList);
 
-            PmxModel.Export(pmxPath, Path.GetFileNameWithoutExtension(pmxPath), "by CurtainFireMakerPlugin");
-            KeyFrames.Export(vmdPath, Path.GetFileNameWithoutExtension(vmdPath));
-
-            ExportEvent?.Invoke(this, new ExportEventArgs(pmxPath, vmdPath));
+            ExportEvent?.Invoke(this, new ExportEventArgs(Path.Combine(directory, ExportedFileName + ".pmx"), Path.Combine(directory, ExportedFileName + ".vmd")) { Script = script });
         }
 
-        internal void DropFileToHandle(string pmxPath, string vmdPath)
+        internal void DropFileToHandle(IntPtr handle, dynamic script, string directory)
         {
-            if (PmxModel.ShouldDrop())
+            if (PmxModel.ShouldDrop(script))
             {
-                Drop(HandleToDrop, new StringCollection() { pmxPath });
+                Drop(handle, new StringCollection() { Path.Combine(directory, ExportedFileName + ".pmx") });
 
-                if (KeyFrames.ShouldDrop())
+                if (KeyFrames.ShouldDrop(script))
                 {
-                    Drop(HandleToDrop, new StringCollection() { vmdPath });
+                    Drop(handle, new StringCollection() { Path.Combine(directory, ExportedFileName + ".vmd") });
                 }
             }
 
@@ -228,6 +201,7 @@ namespace CurtainFireMakerPlugin
 
     public class ExportEventArgs : EventArgs
     {
+        public dynamic Script { get; set; }
         public string PmxExportPath { get; }
         public string VmdExportPath { get; }
 

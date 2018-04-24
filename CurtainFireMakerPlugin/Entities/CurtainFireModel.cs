@@ -124,7 +124,7 @@ namespace CurtainFireMakerPlugin.Entities
             };
         }
 
-        public void Export(string path, string name, string description)
+        public void Export(dynamic script, string path, string name, string description)
         {
             Header.ModelName = name;
             Header.Description = description;
@@ -132,13 +132,13 @@ namespace CurtainFireMakerPlugin.Entities
             using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 ModelData.Write(new BinaryWriter(stream));
-                World.Script.output_pmx_log(ModelData);
+                script.output_pmx_log(ModelData);
             }
         }
 
-        public bool ShouldDrop()
+        public bool ShouldDrop(dynamic script)
         {
-            return World.Script.should_drop_pmxfile(ModelData);
+            return script.should_drop_pmxfile(ModelData);
         }
     }
 }

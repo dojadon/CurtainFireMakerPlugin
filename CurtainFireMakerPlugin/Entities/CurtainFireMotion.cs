@@ -73,22 +73,22 @@ namespace CurtainFireMakerPlugin.Entities
             };
         }
 
-        private VmdMotionData MotionData{ get; set; }
+        private VmdMotionData MotionData { get; set; }
 
-        public void Export(string path, string name)
+        public void Export(dynamic script, string path, string name)
         {
             using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 MotionData = CreateVmdMotionData(name);
                 MotionData.Write(new BinaryWriter(stream));
 
-                World.Script.output_vmd_log(MotionData);
+                script.output_vmd_log(MotionData);
             }
         }
 
-        public bool ShouldDrop()
+        public bool ShouldDrop(dynamic script)
         {
-            return World.Script.should_drop_vmdfile(MotionData);
+            return script.should_drop_vmdfile(MotionData);
         }
     }
 }

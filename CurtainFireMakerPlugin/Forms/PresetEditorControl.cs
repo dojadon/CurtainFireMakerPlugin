@@ -35,8 +35,8 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        public string PmxExportDirectory => PresetPath.Substring(0, PresetPath.Length - 3) + "pmx";
-        public string VmdExportDirectory => PresetPath.Substring(0, PresetPath.Length - 3) + "vmd";
+        public string ExportDirectory => Path.GetDirectoryName(PresetPath);
+        public string FileName => Path.GetFileNameWithoutExtension(PresetPath);
 
         public int StartFrame => PresetSettingControl.StartFrame;
         public int EndFrame => PresetSettingControl.EndFrame;

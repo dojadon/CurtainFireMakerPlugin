@@ -113,28 +113,45 @@ namespace CurtainFireMakerPlugin
 
         private void RunWorld(ProgressForm progress)
         {
-            var world = new World(ShotTypeProvider, Executor, ApplicationForm.Handle)
+            var worlds = new List<World>();
+
+            Func<string, World> CreateWorld = (string name) =>
             {
-                Script = ScriptDynamic,
-                FrameCount = PresetEditorControl.StartFrame,
-                MaxFrame = PresetEditorControl.EndFrame - PresetEditorControl.StartFrame,
+                var world = new World(ShotTypeProvider, Executor)
+                {
+                    FrameCount = PresetEditorControl.StartFrame,
+                    ExportedFileName = name,
+                };
+                worlds.Add(world);
+
+                return world;
             };
 
-            Executor.SetGlobalVariable(("SCENE", Scene), ("WORLD", world));
-
-            world.Init();
-
+            Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PresetEditorControl.FileName));
             PresetEditorControl.RunScript(Executor.Engine, Executor.CreateScope());
 
-            progress.Maximum = world.MaxFrame;
+            progress.Maximum = PresetEditorControl.EndFrame - PresetEditorControl.StartFrame;
+            long time = Environment.TickCount;
 
-            world.GenerateCurainFire(i =>
+            for (int i = 0; i < progress.Maximum; i++)
             {
+                worlds.ForEach(w => w.Frame());
                 progress.Value = i;
+
                 Console.Out.Flush();
 
-                return progress.IsCanceled;
-            }, PresetEditorControl.PmxExportDirectory, PresetEditorControl.VmdExportDirectory);
+                if (progress.IsCanceled) return;
+            }
+            worlds.ForEach(w => w.FinalizeWorld());
+            worlds.ForEach(w => w.Export(ScriptDynamic, PresetEditorControl.ExportDirectory));
+
+            Console.WriteLine((Environment.TickCount - time) + "ms");
+            Console.Out.Flush();
+
+            foreach (var world in worlds)
+            {
+                try { world.DropFileToHandle(ApplicationForm.Handle, ScriptDynamic, PresetEditorControl.ExportDirectory); } catch { }
+            }
         }
 
         public UserControl CreateControl()
