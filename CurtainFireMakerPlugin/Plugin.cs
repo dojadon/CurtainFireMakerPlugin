@@ -142,6 +142,8 @@ namespace CurtainFireMakerPlugin
 
                 if (progress.IsCanceled) return;
             }
+            progress.Text = "出力完了";
+
             worlds.ForEach(w => w.FinalizeWorld());
             worlds.ForEach(w => w.Export(ScriptDynamic, PresetEditorControl.ExportDirectory));
 
