@@ -54,7 +54,7 @@ namespace CurtainFireMakerPlugin
             ExportEvent += (sender, e) =>
             {
                 PmxModel.Export(e.Script, e.PmxExportPath, ExportedFileName, "by CurtainFireMakerPlugin");
-                KeyFrames.Export(e.Script, e.PmxExportPath, ExportedFileName);
+                KeyFrames.Export(e.Script, e.VmdExportPath, ExportedFileName);
             };
         }
 
