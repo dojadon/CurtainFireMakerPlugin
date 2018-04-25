@@ -4,7 +4,9 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
 using CurtainFireMakerPlugin.Entities;
@@ -149,6 +151,8 @@ namespace CurtainFireMakerPlugin
 
             Console.WriteLine((Environment.TickCount - time) + "ms");
             Console.Out.Flush();
+
+            var control = Control.FromHandle(ApplicationForm.Handle);
 
             foreach (var world in worlds)
             {

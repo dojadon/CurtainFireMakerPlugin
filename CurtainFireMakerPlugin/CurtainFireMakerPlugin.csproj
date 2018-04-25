@@ -37,6 +37,9 @@
     <RegisterForComInterop>false</RegisterForComInterop>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Entities\CubicBezierCurve.cs" />
@@ -113,6 +116,7 @@
     <ProjectReference Include="..\..\MMDataIO\MMDataIO\MMDataIO.csproj">
       <Project>{1aef787f-b0ed-44b4-b091-6570888a91f7}</Project>
       <Name>MMDataIO</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\MMTransform\MMTransform\MMTransform.csproj">
       <Project>{aaace1cb-2ee7-4f6a-ba5c-68eb86b8d517}</Project>
@@ -126,6 +130,7 @@
   <ItemGroup>
     <Reference Include="DxMath">
       <HintPath>..\packages\DxMath.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="IronPython">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\IronPython 2.7\IronPython.dll</HintPath>
@@ -146,6 +151,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MikuMikuPlugin">
       <HintPath>..\packages\MikuMikuPlugin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -155,6 +161,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
@@ -167,10 +174,11 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetName).* C:\Tool\CG\MikuMikuMoving64_v1282\Plugins
-copy $(TargetFileName) C:\Tool\CG\MikuMikuMoving64_v1282\CurtainFireMaker\Plugins
-copy "C:\Tool\CG\MikuMikuMoving64_v1282\CurtainFireMaker\Plugins\*.dll" "$(TargetDir)CurtainFireMaker\Plugins"
-copy "C:\Tool\CG\MikuMikuMoving64_v1282\CurtainFireMaker\System\x64\*.dll" "$(TargetDir)CurtainFireMaker\System\x64"
+    <PostBuildEvent>set out_path="C:\Tool\CG\MikuMikuMoving64_v1282\Plugins\$(TargetFileName)"
+
+"C:\Program Files (x86)\Microsoft\ILMerge\ILMerge.exe" /out:%25out_path%25 /targetplatform:v4 /wildcards $(TargetFileName) MM*.dll VecMath.dll
+
+copy %25out_path%25 C:\Tool\CG\MikuMikuMoving64_v1282\CurtainFireMaker\Plugins
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
