@@ -10,6 +10,7 @@ using CurtainFireMakerPlugin.Entities;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using MMDataIO.Vmd;
+using VecMath.Geometry;
 
 namespace CurtainFireMakerPlugin
 {
@@ -17,7 +18,7 @@ namespace CurtainFireMakerPlugin
     {
         internal PythonExecutor Executor { get; }
 
-        public List<RigidObject> RigidObjectList { get; } = new List<RigidObject>();
+        public RigidNode RootRigid { get; } = new RigidNode(new Triangle[0], AABoundingBox.Root);
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
@@ -58,9 +59,9 @@ namespace CurtainFireMakerPlugin
             };
         }
 
-        public void AddRigidObject(RigidObject rigid)
+        public void AddRigidNode(RigidNode rigid)
         {
-            RigidObjectList.Add(rigid);
+            RootRigid.ChildList.Add(rigid);
         }
 
         private bool IsContainsShot { get; set; } = false;
@@ -96,7 +97,10 @@ namespace CurtainFireMakerPlugin
 
         internal int RemoveEntity(Entity entity)
         {
-            RemoveEntityList.Add(entity);
+            if (entity.IsNeededUpdate)
+            {
+                RemoveEntityList.Add(entity);
+            }
 
             return FrameCount;
         }

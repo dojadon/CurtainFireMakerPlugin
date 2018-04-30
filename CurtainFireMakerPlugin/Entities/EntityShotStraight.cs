@@ -11,7 +11,7 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public override bool IsReusable => LivingLimit != 0 && World.FrameCount > SpawnFrameNo + LivingLimit;
 
-        public override bool IsNeededUpdate => true;
+        public override bool IsNeededUpdate => false;
 
         public Vector3 Velocity { get; set; }
         public Vector3 Upward { get; set; } = Vector3.UnitY;

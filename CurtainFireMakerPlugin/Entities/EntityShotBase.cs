@@ -18,22 +18,22 @@ namespace CurtainFireMakerPlugin.Entities
 
         public virtual bool IsReusable => IsRemoved;
 
-        public EntityShotBase(World world, string typeName, int color, EntityShot parentEntity = null)
+        public EntityShotBase(World world, string typeName, int color, EntityShotBase parentEntity = null)
             : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
 
-        public EntityShotBase(World world, string typeName, int color, float scale, EntityShot parentEntity = null)
+        public EntityShotBase(World world, string typeName, int color, float scale, EntityShotBase parentEntity = null)
         : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
 
-        public EntityShotBase(World world, string typeName, int color, Vector3 scale, EntityShot parentEntity = null)
+        public EntityShotBase(World world, string typeName, int color, Vector3 scale, EntityShotBase parentEntity = null)
         : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
 
-        public EntityShotBase(World world, string typeName, int color, Matrix3 scale, EntityShot parentEntity = null)
+        public EntityShotBase(World world, string typeName, int color, Matrix3 scale, EntityShotBase parentEntity = null)
         : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
 
-        public EntityShotBase(World world, string typeName, int color, Matrix4 scale, EntityShot parentEntity = null)
+        public EntityShotBase(World world, string typeName, int color, Matrix4 scale, EntityShotBase parentEntity = null)
         : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
 
-        public EntityShotBase(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, parentEntity)
+        public EntityShotBase(World world, ShotProperty property, EntityShotBase parentEntity = null) : base(world, parentEntity)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace CurtainFireMakerPlugin.Entities
 
                 ModelData = World.AddShot(this);
 
-                RootBone.ParentId = ParentEntity is EntityShot entity ? entity.RootBone.BoneId : RootBone.ParentId;
+                RootBone.ParentId = ParentEntity is EntityShotBase entity ? entity.RootBone.BoneId : RootBone.ParentId;
 
                 Property.Type.InitEntity(this);
             }

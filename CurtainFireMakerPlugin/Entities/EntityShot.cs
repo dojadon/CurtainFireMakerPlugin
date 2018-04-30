@@ -32,22 +32,22 @@ namespace CurtainFireMakerPlugin.Entities
 
         private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
 
-        public EntityShot(World world, string typeName, int color, EntityShot parentEntity = null)
+        public EntityShot(World world, string typeName, int color, EntityShotBase parentEntity = null)
         : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
 
-        public EntityShot(World world, string typeName, int color, float scale, EntityShot parentEntity = null)
+        public EntityShot(World world, string typeName, int color, float scale, EntityShotBase parentEntity = null)
         : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
 
-        public EntityShot(World world, string typeName, int color, Vector3 scale, EntityShot parentEntity = null)
+        public EntityShot(World world, string typeName, int color, Vector3 scale, EntityShotBase parentEntity = null)
         : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
 
-        public EntityShot(World world, string typeName, int color, Matrix3 scale, EntityShot parentEntity = null)
+        public EntityShot(World world, string typeName, int color, Matrix3 scale, EntityShotBase parentEntity = null)
         : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
 
-        public EntityShot(World world, string typeName, int color, Matrix4 scale, EntityShot parentEntity = null)
+        public EntityShot(World world, string typeName, int color, Matrix4 scale, EntityShotBase parentEntity = null)
         : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
 
-        public EntityShot(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, property, parentEntity)
+        public EntityShot(World world, ShotProperty property, EntityShotBase parentEntity = null) : base(world, property, parentEntity)
         {
         }
 
@@ -90,10 +90,10 @@ namespace CurtainFireMakerPlugin.Entities
             Colliding.OnCollide(this, normal, time);
         }
 
-        public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isSyncingVelocity = true)
+        public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isKeepTerminalSlope = true)
         {
             AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
-            base.SetMotionInterpolationCurve(pos1, pos2, length, isSyncingVelocity);
+            base.SetMotionInterpolationCurve(pos1, pos2, length, isKeepTerminalSlope);
         }
 
         public override void RemoveMotionInterpolationCurve()

@@ -26,6 +26,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -46,7 +47,7 @@
     <Compile Include="Entities\EntityBone.cs" />
     <Compile Include="Entities\EntityShotBase.cs" />
     <Compile Include="Entities\EntityShotStraight.cs" />
-    <Compile Include="Entities\RigidObject.cs" />
+    <Compile Include="Entities\RigidNode.cs" />
     <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />

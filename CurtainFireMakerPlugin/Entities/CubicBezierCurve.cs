@@ -35,6 +35,27 @@ namespace CurtainFireMakerPlugin.Entities
             return (from d in solution where (0 - eps <= d && d <= 1 + eps) select (float)d).Distinct().ToArray();
         }
 
+        public float SolveYFromX(float x)
+        {
+            float[] t = SolveTimeFromX(x);
+
+            if (t.Length == 0)
+            {
+                throw new ArithmeticException($"ベジエ曲線の解が見つかりません : x[ {x} ]");
+            }
+
+            float time = t[0];
+
+            if (t.Length > 1)
+            {
+                for (int i = 1; i < t.Length; i++)
+                {
+                    if (Math.Abs(x - time) > Math.Abs(x - t[i])) time = t[i];
+                }
+            }
+            return Y(time);
+        }
+
         public float X(float t) => GetPosition(t, P0.x, P1.x, P2.x, P3.x);
 
         public float Y(float t) => GetPosition(t, P0.y, P1.y, P2.y, P3.y);
