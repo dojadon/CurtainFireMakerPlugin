@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.listBoxSequence = new System.Windows.Forms.ListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
             this.追加ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -44,6 +45,7 @@
             this.textBoxSelectedScript = new System.Windows.Forms.TextBox();
             this.openFileDialogScript = new System.Windows.Forms.OpenFileDialog();
             this.labelPath = new System.Windows.Forms.Label();
+            this.saveFileDialogScript = new System.Windows.Forms.SaveFileDialog();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,32 +67,40 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItemNew,
             this.追加ToolStripMenuItem,
             this.ToolStripMenuItemRemove,
             this.toolStripMenuItem1,
             this.ToolStripMenuItemOpen});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 98);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.OpeningContextMenu);
+            // 
+            // ToolStripMenuItemNew
+            // 
+            this.ToolStripMenuItemNew.Name = "ToolStripMenuItemNew";
+            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(98, 22);
+            this.ToolStripMenuItemNew.Text = "新規";
+            this.ToolStripMenuItemNew.Click += new System.EventHandler(this.CreateNewFile);
             // 
             // 追加ToolStripMenuItem
             // 
             this.追加ToolStripMenuItem.Name = "追加ToolStripMenuItem";
-            this.追加ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.追加ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.追加ToolStripMenuItem.Text = "追加";
             this.追加ToolStripMenuItem.Click += new System.EventHandler(this.ClickAdd);
             // 
             // ToolStripMenuItemRemove
             // 
             this.ToolStripMenuItemRemove.Name = "ToolStripMenuItemRemove";
-            this.ToolStripMenuItemRemove.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemRemove.Size = new System.Drawing.Size(98, 22);
             this.ToolStripMenuItemRemove.Text = "削除";
             this.ToolStripMenuItemRemove.Click += new System.EventHandler(this.ClickRemove);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(95, 6);
             // 
             // ToolStripMenuItemOpen
             // 
@@ -98,20 +108,20 @@
             this.エクスプローラーToolStripMenuItem,
             this.atomToolStripMenuItem});
             this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
-            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(98, 22);
             this.ToolStripMenuItemOpen.Text = "開く";
             // 
             // エクスプローラーToolStripMenuItem
             // 
             this.エクスプローラーToolStripMenuItem.Name = "エクスプローラーToolStripMenuItem";
-            this.エクスプローラーToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.エクスプローラーToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.エクスプローラーToolStripMenuItem.Text = "エクスプローラー";
             this.エクスプローラーToolStripMenuItem.Click += new System.EventHandler(this.OpenWithExplorer);
             // 
             // atomToolStripMenuItem
             // 
             this.atomToolStripMenuItem.Name = "atomToolStripMenuItem";
-            this.atomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.atomToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.atomToolStripMenuItem.Text = "Atom";
             this.atomToolStripMenuItem.Click += new System.EventHandler(this.OpenWithAtom);
             // 
@@ -188,6 +198,10 @@
             this.labelPath.TabIndex = 18;
             this.labelPath.Text = "Path";
             // 
+            // saveFileDialogScript
+            // 
+            this.saveFileDialogScript.Filter = "Python Script|*.py";
+            // 
             // PresetSequenceEditorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -223,5 +237,7 @@
         private System.Windows.Forms.ToolStripMenuItem 追加ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemRemove;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemNew;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogScript;
     }
 }

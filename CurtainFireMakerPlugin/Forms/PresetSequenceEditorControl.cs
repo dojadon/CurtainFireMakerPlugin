@@ -59,6 +59,30 @@ namespace CurtainFireMakerPlugin.Forms
             preset.SequenceScripts = Sequence.ToArray();
         }
 
+        private void AddScript(string path)
+        {
+            Sequence.Add(path);
+            UpdateSequenceDataSource();
+            SelectedIndex = Sequence.Count - 1;
+
+            openFileDialogScript.InitialDirectory = saveFileDialogScript.InitialDirectory = Path.GetDirectoryName(path);
+        }
+
+        private void MoveScript(int count)
+        {
+            if (!IsSelected || SelectedIndex + count >= Sequence.Count || 0 > SelectedIndex + count || Sequence.Count < 2) return;
+
+            var script = SelectedFilePath;
+            int index = SelectedIndex;
+
+            Sequence[index] = Sequence[index + count];
+            Sequence[index + count] = script;
+
+            UpdateSequenceDataSource();
+
+            SelectedIndex = index + count;
+        }
+
         private void UpdateSequenceDataSource()
         {
             listBoxSequence.DataSource = null;
@@ -156,11 +180,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (openFileDialogScript.ShowDialog() == DialogResult.OK)
             {
-                Sequence.Add(openFileDialogScript.FileName);
-                UpdateSequenceDataSource();
-                SelectedIndex = Sequence.Count - 1;
-
-                openFileDialogScript.InitialDirectory = Path.GetDirectoryName(openFileDialogScript.FileName);
+                AddScript(openFileDialogScript.FileName);
             }
         }
 
@@ -179,34 +199,34 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        private void ClickUp(object sender, EventArgs e)
+        private void ClickUp(object sender, EventArgs e) => MoveScript(-1);
+        private void ClickDown(object sender, EventArgs e) => MoveScript(1);
+
+        private void CreateNewFile(object sender, EventArgs e)
         {
-            if (!IsSelected || SelectedIndex == 0 || Sequence.Count < 2) return;
-
-            var script = SelectedFilePath;
-            int index = SelectedIndex;
-
-            Sequence[index] = Sequence[index - 1];
-            Sequence[index - 1] = script;
-
-            UpdateSequenceDataSource();
-
-            SelectedIndex = index - 1;
+            if (saveFileDialogScript.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialogScript.FileName, "# -*- coding: utf-8 -*-", System.Text.Encoding.UTF8);
+                AddScript(saveFileDialogScript.FileName);
+            }
         }
 
-        private void ClickDown(object sender, EventArgs e)
+        private void OpenWithExplorer(object sender, EventArgs e)
         {
-            if (!IsSelected || SelectedIndex == Sequence.Count - 1 || Sequence.Count < 2) return;
+            if (!IsSelected) return;
 
-            var script = SelectedFilePath;
-            int index = SelectedIndex;
+            System.Diagnostics.Process.Start(Path.GetDirectoryName(SelectedFilePath));
+        }
 
-            Sequence[index] = Sequence[index + 1];
-            Sequence[index + 1] = script;
+        private void OpenWithAtom(object sender, EventArgs e)
+        {
+            if (!IsSelected) return;
 
-            UpdateSequenceDataSource();
-
-            SelectedIndex = index + 1;
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            process.StartInfo.FileName = "atom";
+            process.StartInfo.Arguments = $"\"{SelectedFilePath}\"";
+            process.Start();
         }
 
         private void DragDropSequence(object sender, DragEventArgs e)
@@ -232,11 +252,6 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        private void TextChangedScript(object sender, EventArgs e)
-        {
-            textBoxSelectedScript.Text = textBoxSelectedScript.Text.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
-        }
-
         private void ListBoxMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -251,27 +266,14 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        private void OpenWithExplorer(object sender, EventArgs e)
-        {
-            if (!IsSelected) return;
-
-            System.Diagnostics.Process.Start(Path.GetDirectoryName(SelectedFilePath));
-        }
-
-        private void OpenWithAtom(object sender, EventArgs e)
-        {
-            if (!IsSelected) return;
-
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            process.StartInfo.FileName = "atom";
-            process.StartInfo.Arguments = $"\"{SelectedFilePath}\"";
-            process.Start();
-        }
-
         private void OpeningContextMenu(object sender, CancelEventArgs e)
         {
             ToolStripMenuItemRemove.Enabled = ToolStripMenuItemOpen.Enabled = IsSelected;
+        }
+
+        private void TextChangedScript(object sender, EventArgs e)
+        {
+            textBoxSelectedScript.Text = textBoxSelectedScript.Text.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
         }
     }
 }
