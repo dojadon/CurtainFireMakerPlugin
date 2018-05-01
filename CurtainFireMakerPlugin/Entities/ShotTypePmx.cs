@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private float VertexScale { get; }
 
-        public ShotTypePmx(string name, string path, float scale) : base(name)
+        public ShotTypePmx(string name, string path, float scale, string materialName = "") : base(name, materialName)
         {
             PmxFilePath = Plugin.ResourceDirPath + path;
             VertexScale = scale;

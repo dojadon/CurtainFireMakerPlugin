@@ -29,13 +29,17 @@ namespace CurtainFireMakerPlugin.Entities
     public abstract class ShotType
     {
         public string Name { get; }
+        public string MaterialName { get; }
 
         public abstract PmxModelData OriginalData { get; }
 
-        public ShotType(string name)
+        public ShotType(string name, string materialName = "")
         {
             Name = name;
+            MaterialName = materialName;
         }
+
+        public string GetMaterialName() => MaterialName + (MaterialName.Length > 0 ? "_" : "") + Name;
 
         public virtual bool HasMesh { get; } = false;
 
