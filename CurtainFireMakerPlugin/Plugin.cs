@@ -89,7 +89,10 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            var progressForm = new ProgressForm();
+            var progressForm = new ProgressForm()
+            {
+                Maximum = PresetEditorControl.EndFrame - PresetEditorControl.StartFrame
+            };
 
             using (var writer = progressForm.CreateLogWriter())
             {
@@ -129,25 +132,27 @@ namespace CurtainFireMakerPlugin
                 return world;
             };
 
+            long time = Environment.TickCount;
+
             Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PresetEditorControl.FileName));
             PresetEditorControl.RunScript(Executor.Engine, Executor.CreateScope());
 
-            progress.Maximum = PresetEditorControl.EndFrame - PresetEditorControl.StartFrame;
-            long time = Environment.TickCount;
-
-            for (int i = 0; i < progress.Maximum; i++)
+            if(worlds.Count > 0)
             {
-                worlds.ForEach(w => w.Frame());
-                progress.Value = i;
+                for (int i = 0; i < progress.Maximum; i++)
+                {
+                    worlds.ForEach(w => w.Frame());
+                    progress.Value = i;
 
-                Console.Out.Flush();
+                    Console.Out.Flush();
 
-                if (progress.IsCanceled) return;
+                    if (progress.IsCanceled) return;
+                }
+                progress.Text = "出力完了";
+
+                worlds.ForEach(w => w.FinalizeWorld());
+                worlds.ForEach(w => w.Export(ScriptDynamic, PresetEditorControl.ExportDirectory));
             }
-            progress.Text = "出力完了";
-
-            worlds.ForEach(w => w.FinalizeWorld());
-            worlds.ForEach(w => w.Export(ScriptDynamic, PresetEditorControl.ExportDirectory));
 
             Console.WriteLine((Environment.TickCount - time) + "ms");
             Console.Out.Flush();
