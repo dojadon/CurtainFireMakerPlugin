@@ -79,7 +79,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (var prop in ModelDataEachPropertyDict.Keys)
             {
-                Vertices.CreateVertices(prop.Type, ModelDataEachPropertyDict[prop], vertices.Count, out var propVertices, out var propVertexIndeices);
+                Vertices.CreateVertices(prop.Type, ModelDataEachPropertyDict[prop], vertices.Count,out var propVertices, out var propVertexIndeices);
                 Materials.CreateMaterials(prop, textures, ModelDataEachPropertyDict[prop].Count, out var propMaterials);
 
                 vertices.AddRange(propVertices);
@@ -114,12 +114,12 @@ namespace CurtainFireMakerPlugin.Entities
                     Indices =Enumerable.Range(0, Morphs.MorphList.Count).ToArray(),
                     NormalSlot = false,
                 },
-                new PmxSlotData
-                {
-                    SlotName = "弾ボーン",
-                    Type = SlotType.BONE,
-                    Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
-                }
+                //new PmxSlotData
+                //{
+                //    SlotName = "弾ボーン",
+                //    Type = SlotType.BONE,
+                //    Indices = Enumerable.Range(1, Bones.BoneList.Count - 1).ToArray()
+                //}
                 },
             };
         }

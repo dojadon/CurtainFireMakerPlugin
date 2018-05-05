@@ -25,6 +25,9 @@ namespace CurtainFireMakerPlugin
         public HashSet<Entity> EntityList { get; } = new HashSet<Entity>();
         public int FrameCount { get; set; }
 
+        public int StartFrame { get; }
+        public int EndFrame { get; }
+
         public ShotTypeProvider ShotTypeProvider { get; }
 
         internal ShotModelDataProvider ShotModelProvider { get; }
@@ -38,10 +41,12 @@ namespace CurtainFireMakerPlugin
 
         public string ExportedFileName { get; set; }
 
-        public World(ShotTypeProvider typeProvider, PythonExecutor executor)
+        public World(ShotTypeProvider typeProvider, PythonExecutor executor, int startframe, int endframe)
         {
             ShotTypeProvider = typeProvider;
             Executor = executor;
+            StartFrame = startframe;
+            EndFrame = endframe;
 
             ShotModelProvider = new ShotModelDataProvider();
             PmxModel = new CurtainFireModel(this);

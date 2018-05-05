@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MMDataIO.Pmx;
+using VecMath;
 
 namespace CurtainFireMakerPlugin.Entities
 {
