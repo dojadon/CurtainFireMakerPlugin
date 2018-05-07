@@ -58,6 +58,12 @@ namespace CurtainFireMakerPlugin.Forms
                 openFileDialogPreset.FileName = saveFileDialogNewPreset.FileName = Config.RecentSelectedPresetPath;
                 openFileDialogPreset.InitialDirectory = saveFileDialogNewPreset.InitialDirectory = Path.GetDirectoryName(Config.RecentSelectedPresetPath);
             }
+
+            if (File.Exists(PresetPath))
+            {
+                Preset.Load(PresetPath);
+                LoadPreset();
+            }
         }
 
         public void Save()

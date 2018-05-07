@@ -59,24 +59,31 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override bool ShouldRecord() => World.FrameCount == 0 || base.ShouldRecord();
 
-        public override void Spawn()
+        public override bool Spawn()
         {
-            base.Spawn();
-
-            if (World.FrameCount > 0)
+            if (base.Spawn())
             {
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
+                if (World.FrameCount > 0)
+                {
+                    AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
+                }
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
+                AddRootBoneKeyFrame();
+
+                return true;
             }
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
-            AddRootBoneKeyFrame();
+            return false;
         }
 
-        public override void Remove(bool isFinalize = false)
+        public override bool Remove(bool isFinalize = false)
         {
-            base.Remove(isFinalize);
-
-            AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
+            if (base.Remove(isFinalize))
+            {
+                AddRootBoneKeyFrame(frameOffset: 0, priority: 0);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, 1, -1);
+                return true;
+            }
+            return false;
         }
 
         public override void Frame()

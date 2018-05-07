@@ -67,12 +67,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         private void UpdateMinTimeToCollide(RigidNode rigidObject)
         {
-            if (!rigidObject.BoundingVolume.IsIntersect(Pos, Velocity)) return;
+            if (!rigidObject.BoundingVolume.IsIntersectWithRay(Pos, Velocity)) return;
 
             foreach (var tri in rigidObject.Mesh)
             {
-                float time = tri.CalculateTimeToIntersect(Pos, Velocity);
-                if (0 <= time && time + FrameCount < TimeToCollide && tri.IsIntersect(Pos, Velocity))
+                float time = tri.CalculateTimeToIntersectWithRay(Pos, Velocity);
+                if (0 <= time && time + FrameCount < TimeToCollide && tri.IsIntersectWithRay(Pos, Velocity))
                 {
                     TimeToCollide = time + FrameCount;
                     TriagnleToCollide = tri;

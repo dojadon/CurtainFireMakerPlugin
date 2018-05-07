@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Dynamic;
 using VecMath;
-using IronPython.Runtime;
-using IronPython.Runtime.Operations;
+using VecMath.Geometry;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -35,11 +34,15 @@ namespace CurtainFireMakerPlugin.Entities
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }
 
+        public float Range { get; set; } = 0;
+        public Sphere Sphere => new Sphere(Pos, Range);
+
         public virtual Func<Entity, bool> ShouldRemove { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
 
         public delegate void RemoveEventHandler(object sender, RemoveEventArgs args);
         public event RemoveEventHandler RemoveEvent;
 
+        public bool IsSpawned { get; private set; }
         public bool IsRemoved { get; private set; }
 
         public virtual bool IsNeededUpdate => true;
@@ -70,17 +73,26 @@ namespace CurtainFireMakerPlugin.Entities
             Spawn();
         }
 
-        public virtual void Spawn()
+        public virtual bool Spawn()
         {
-            SpawnFrameNo = World.AddEntity(this);
+            if (!IsSpawned)
+            {
+                SpawnFrameNo = World.AddEntity(this);
+                return IsSpawned = true;
+            }
+            return false;
         }
 
-        public virtual void Remove(bool isFinalize = false)
+        public virtual bool Remove(bool isFinalize = false)
         {
-            DeathFrameNo = World.RemoveEntity(this);
-            IsRemoved = true;
+            if (!IsRemoved)
+            {
+                DeathFrameNo = World.RemoveEntity(this);
+                RemoveEvent?.Invoke(this, new RemoveEventArgs(isFinalize));
 
-            RemoveEvent?.Invoke(this, new RemoveEventArgs(isFinalize));
+                return IsRemoved = true;
+            }
+            return false;
         }
 
         public override bool Equals(object obj) => obj is Entity e && EntityId == e.EntityId;
