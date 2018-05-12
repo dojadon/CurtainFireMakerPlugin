@@ -29,11 +29,10 @@ namespace CurtainFireMakerPlugin.Entities
             MMMBone = mmmBone;
         }
 
-        public override void Spawn()
+        public override bool Spawn()
         {
-            base.Spawn();
-
             Frame();
+            return base.Spawn();
         }
 
         public void Init(List<EntityBone> bones)

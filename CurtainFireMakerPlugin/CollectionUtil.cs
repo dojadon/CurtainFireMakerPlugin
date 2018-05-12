@@ -11,6 +11,18 @@ namespace CurtainFireMakerPlugin
         {
             foreach (var t in collection) action(t);
         }
+
+        public static T FirstOrDefault<T>(this IEnumerable<T> collection, Func<T, bool> pred, T def)
+        {
+            try
+            {
+                return collection.First(pred);
+            }
+            catch (InvalidOperationException)
+            {
+                return def;
+            }
+        }
     }
 
     public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>

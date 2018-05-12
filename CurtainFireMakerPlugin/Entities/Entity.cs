@@ -36,6 +36,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public float Range { get; set; } = 0;
         public Sphere Sphere => new Sphere(Pos, Range);
+        public Sphere GetExpandSphere(float r) => new Sphere(Pos, Range + r);
 
         public virtual Func<Entity, bool> ShouldRemove { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
 

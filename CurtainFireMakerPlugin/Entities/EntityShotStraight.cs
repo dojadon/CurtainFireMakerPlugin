@@ -35,10 +35,8 @@ namespace CurtainFireMakerPlugin.Entities
         {
         }
 
-        public override void Spawn()
+        public override bool Spawn()
         {
-            base.Spawn();
-
             Rot = Matrix3.LookAt(Velocity, Upward);
 
             if (World.FrameCount > 0)
@@ -50,6 +48,8 @@ namespace CurtainFireMakerPlugin.Entities
 
             AddBoneKeyFrame(RootBone, Pos + Velocity * LivingLimit, Rot, CubicBezierCurve.Line, LivingLimit, 0);
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LivingLimit + 1, -1);
+
+            return base.Spawn();
         }
     }
 }
