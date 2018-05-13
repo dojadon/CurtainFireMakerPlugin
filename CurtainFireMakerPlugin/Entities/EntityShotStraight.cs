@@ -16,6 +16,8 @@ namespace CurtainFireMakerPlugin.Entities
         public Vector3 Velocity { get; set; }
         public Vector3 Upward { get; set; } = Vector3.UnitY;
 
+        public Func<EntityShotStraight, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.Velocity, e.Upward);
+
         public EntityShotStraight(World world, string typeName, int color, EntityShot parentEntity = null)
            : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
 
@@ -37,7 +39,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override bool Spawn()
         {
-            Rot = Matrix3.LookAt(Velocity, Upward);
+            Rot = GetRecordedRot(this);
 
             if (World.FrameCount > 0)
             {
