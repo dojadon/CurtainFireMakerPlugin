@@ -4,11 +4,10 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
+using CurtainFireMakerPlugin.Forms.WinAPI;
 using CurtainFireMakerPlugin.Entities;
 
 namespace CurtainFireMakerPlugin
@@ -23,43 +22,6 @@ namespace CurtainFireMakerPlugin
         public static string LogPath => PluginRootPath + "lastest.log";
         public static string ErrorLogPath => PluginRootPath + "error.log";
 
-        internal PythonExecutor Executor { get; }
-
-        public dynamic ScriptDynamic { get; private set; }
-
-        private PresetEditorControl PresetEditorControl { get; set; }
-
-        private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
-
-        public Plugin()
-        {
-            using (var writer = new StreamWriter(LogPath, false, Encoding.UTF8))
-            {
-                using (var error_writer = new StreamWriter(ErrorLogPath, false, Encoding.UTF8))
-                {
-                    Console.SetOut(writer);
-                    Console.SetError(error_writer);
-
-                    try
-                    {
-                        Executor = new PythonExecutor();
-                        ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
-
-                        PresetEditorControl = new PresetEditorControl();
-
-                        ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
-                    }
-                    catch (Exception e)
-                    {
-                        try { error_writer.WriteLine(Executor.FormatException(e)); } catch { }
-                        error_writer.WriteLine(e);
-                    }
-
-                    Image = Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico"));
-                }
-            }
-        }
-
         public Guid GUID => new Guid();
         public IWin32Window ApplicationForm { get; set; }
         public Scene Scene { get; set; }
@@ -68,8 +30,52 @@ namespace CurtainFireMakerPlugin
         public string Text => "弾幕生成";
         public string EnglishText => "Generate Danmaku";
 
-        public Image Image { get; set; }
+        public Image Image { get; set; } = Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico"));
         public Image SmallImage => Image;
+
+        internal PythonExecutor Executor { get; } 
+        public dynamic ScriptDynamic { get; private set; }
+        private PresetEditorControl PresetEditorControl { get; set; }
+        private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
+        private HookNativeWindow HookNativeWindow { get; }
+
+        public Plugin()
+        {
+            Executor = new PythonExecutor();
+            HookNativeWindow = new HookNativeWindow(this);
+        }
+
+        public UserControl CreateControl()
+        {
+            Init();
+            return PresetEditorControl;
+        }
+
+        private void Init()
+        {
+            using (var writer = new StreamWriter(LogPath, false, Encoding.UTF8))
+            {
+                Console.SetOut(writer);
+                try
+                {
+                    ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
+
+                    PresetEditorControl = new PresetEditorControl();
+
+                    ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
+                    HookNativeWindow.RegisterHotKeys(ScriptDynamic.init_hotkeys());
+                    HookNativeWindow.StartHook(Control.FromHandle(ApplicationForm.Handle));
+                }
+                catch (Exception e)
+                {
+                    using (var error_writer = new StreamWriter(ErrorLogPath, false, Encoding.UTF8))
+                    {
+                        try { error_writer.WriteLine(Executor.FormatException(e)); } catch { }
+                        error_writer.WriteLine(e);
+                    }
+                }
+            }
+        }
 
         public void Dispose()
         {
@@ -137,7 +143,7 @@ namespace CurtainFireMakerPlugin
             Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PresetEditorControl.FileName));
             PresetEditorControl.RunScript(Executor.Engine, Executor.CreateScope());
 
-            if(worlds.Count > 0)
+            if (worlds.Count > 0)
             {
                 for (int i = 0; i < progress.Maximum; i++)
                 {
@@ -163,11 +169,6 @@ namespace CurtainFireMakerPlugin
             {
                 try { world.DropFileToHandle(ApplicationForm.Handle, ScriptDynamic, PresetEditorControl.ExportDirectory); } catch { }
             }
-        }
-
-        public UserControl CreateControl()
-        {
-            return PresetEditorControl;
         }
     }
 }
