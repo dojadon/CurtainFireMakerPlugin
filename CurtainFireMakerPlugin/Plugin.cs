@@ -7,7 +7,6 @@ using System.IO;
 using System.Reflection;
 using MikuMikuPlugin;
 using CurtainFireMakerPlugin.Forms;
-using CurtainFireMakerPlugin.Forms.WinAPI;
 using CurtainFireMakerPlugin.Entities;
 
 namespace CurtainFireMakerPlugin
@@ -37,12 +36,10 @@ namespace CurtainFireMakerPlugin
         public dynamic ScriptDynamic { get; private set; }
         private PresetEditorControl PresetEditorControl { get; set; }
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
-        private HookNativeWindow HookNativeWindow { get; }
 
         public Plugin()
         {
             Executor = new PythonExecutor();
-            HookNativeWindow = new HookNativeWindow(this);
         }
 
         public UserControl CreateControl()
@@ -59,12 +56,9 @@ namespace CurtainFireMakerPlugin
                 try
                 {
                     ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
-
                     PresetEditorControl = new PresetEditorControl();
 
                     ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
-                    HookNativeWindow.RegisterHotKeys(ScriptDynamic.init_hotkeys());
-                    HookNativeWindow.StartHook(Control.FromHandle(ApplicationForm.Handle));
                 }
                 catch (Exception e)
                 {

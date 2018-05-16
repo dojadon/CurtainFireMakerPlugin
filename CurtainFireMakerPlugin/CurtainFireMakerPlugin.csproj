@@ -84,7 +84,6 @@
     <Compile Include="Forms\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\WinAPI\HookNativeWindow.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityShot.cs" />
@@ -95,7 +94,6 @@
     <Compile Include="Entities\ShotType.cs" />
     <Compile Include="Entities\ShotTypePmx.cs" />
     <Compile Include="ScheduledTask.cs" />
-    <Compile Include="Forms\WinAPI\HotKey.cs" />
     <Compile Include="World.cs" />
     <Compile Include="XmlConfig.cs" />
   </ItemGroup>
