@@ -9,7 +9,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class ShotModelData
     {
-        public PmxMorphData VertexMorph { get; set; }
+        public Dictionary<int, PmxMorphData> Morphs { get; } = new Dictionary<int, PmxMorphData>();
 
         public PmxBoneData[] Bones { get; }
 
@@ -28,13 +28,13 @@ namespace CurtainFireMakerPlugin.Entities
             Bones = Property.Type.CreateBones(world, property);
         }
 
-        public PmxMorphData CreateVertexMorph(string morphName, Func<Vector3, Vector3> func)
+        public PmxMorphData CreateVertexMorph(string name, int id, Func<Vector3, Vector3> func)
         {
-            if (VertexMorph == null)
+            if (!Morphs.ContainsKey(id))
             {
-                VertexMorph = new PmxMorphData()
+                Morphs[id] = new PmxMorphData()
                 {
-                    MorphName = morphName,
+                    MorphName = name,
                     SlotType = MorphSlotType.RIP,
                     MorphType = MorphType.VERTEX,
 
@@ -42,9 +42,9 @@ namespace CurtainFireMakerPlugin.Entities
                     Enumerable.Range(0, Property.Type.OriginalData.VertexArray.Length)
                     .Select(i => (IPmxMorphTypeData)new PmxMorphVertexData() { Index = i, Position = func((Vector4)Property.Type.OriginalData.VertexArray[i].Pos * Property.Scale) }).ToArray()
                 };
-                World.PmxModel.Morphs.MorphList.Add(VertexMorph);
+                World.PmxModel.Morphs.MorphList.Add(Morphs[id]);
             }
-            return VertexMorph;
+            return Morphs[id];
         }
     }
 }

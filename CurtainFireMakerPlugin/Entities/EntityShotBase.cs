@@ -66,9 +66,9 @@ namespace CurtainFireMakerPlugin.Entities
             World.KeyFrames.AddMorphKeyFrame(frame, priority);
         }
 
-        public PmxMorphData CreateVertexMorph(Func<Vector3, Vector3> func)
+        public PmxMorphData CreateVertexMorph(int id, Func<Vector3, Vector3> func)
         {
-            return ModelData.CreateVertexMorph("V" + EntityId, func);
+            return ModelData.CreateVertexMorph("V"+ id + "_" + EntityId, id, func);
         }
     }
 }

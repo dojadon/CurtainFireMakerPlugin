@@ -32,7 +32,7 @@ namespace CurtainFireMakerPlugin
         public Image Image { get; set; } = Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico"));
         public Image SmallImage => Image;
 
-        internal PythonExecutor Executor { get; } 
+        internal PythonExecutor Executor { get; }
         public dynamic ScriptDynamic { get; private set; }
         private PresetEditorControl PresetEditorControl { get; set; }
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();

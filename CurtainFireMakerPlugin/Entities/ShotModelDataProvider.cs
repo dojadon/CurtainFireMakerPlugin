@@ -11,11 +11,18 @@ namespace CurtainFireMakerPlugin.Entities
 
         private Dictionary<int, List<ShotGroup>> ReusableGroupDict { get; set; } = new Dictionary<int, List<ShotGroup>>();
 
+        private bool IsUpdated { get; set; }
+
         public ShotModelDataProvider()
         {
         }
 
         public void Frame()
+        {
+            IsUpdated = false;
+        }
+
+        public void Update()
         {
             GroupList.RemoveWhere(g =>
             {
@@ -31,6 +38,7 @@ namespace CurtainFireMakerPlugin.Entities
                 }
                 return g.IsReusable;
             });
+            IsUpdated = true;
         }
 
         private int GetPropertyHashCode(ShotProperty prop, Entity entity)
@@ -40,6 +48,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddEntity(EntityShotBase entity, out ShotModelData data)
         {
+            if (!IsUpdated)
+            {
+                Update();
+            }
+
             int hash = GetPropertyHashCode(entity.Property, entity.ParentEntity);
 
             ShotGroup group = null;
