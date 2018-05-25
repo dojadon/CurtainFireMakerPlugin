@@ -13,6 +13,10 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override bool IsNeededUpdate => false;
 
+        public Vector3 InitialPos { get; private set; }
+
+        public override Vector3 Pos { get => InitialPos + Velocity * (World.FrameCount - SpawnFrameNo); set => throw new NotSupportedException(); }
+
         public Vector3 Velocity { get; set; }
         public Vector3 Upward { get; set; } = Vector3.UnitY;
 
@@ -39,6 +43,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override bool Spawn()
         {
+            InitialPos = Pos;
             Rot = GetRecordedRot(this);
 
             if (World.FrameCount > 0)
@@ -46,9 +51,9 @@ namespace CurtainFireMakerPlugin.Entities
                 AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
             }
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
-            AddBoneKeyFrame(RootBone, Pos, Rot, CubicBezierCurve.Line, 0, 0);
+            AddBoneKeyFrame(RootBone, InitialPos, Rot, CubicBezierCurve.Line, 0, 0);
 
-            AddBoneKeyFrame(RootBone, Pos + Velocity * LivingLimit, Rot, CubicBezierCurve.Line, LivingLimit, 0);
+            AddBoneKeyFrame(RootBone, InitialPos + Velocity * LivingLimit, Rot, CubicBezierCurve.Line, LivingLimit, 0);
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LivingLimit + 1, -1);
 
             return base.Spawn();
