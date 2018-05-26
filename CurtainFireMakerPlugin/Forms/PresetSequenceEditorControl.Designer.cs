@@ -43,7 +43,6 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.textBoxSelectedScript = new System.Windows.Forms.TextBox();
-            this.openFileDialogScript = new System.Windows.Forms.OpenFileDialog();
             this.labelPath = new System.Windows.Forms.Label();
             this.saveFileDialogScript = new System.Windows.Forms.SaveFileDialog();
             this.contextMenuStrip1.SuspendLayout();
@@ -183,11 +182,6 @@
             this.textBoxSelectedScript.WordWrap = false;
             this.textBoxSelectedScript.TextChanged += new System.EventHandler(this.TextChangedScript);
             // 
-            // openFileDialogScript
-            // 
-            this.openFileDialogScript.FileName = "openFileDialog1";
-            this.openFileDialogScript.Filter = "Python Script|*.py";
-            // 
             // labelPath
             // 
             this.labelPath.AutoSize = true;
@@ -228,7 +222,6 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBoxSelectedScript;
-        private System.Windows.Forms.OpenFileDialog openFileDialogScript;
         private System.Windows.Forms.Label labelPath;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemOpen;

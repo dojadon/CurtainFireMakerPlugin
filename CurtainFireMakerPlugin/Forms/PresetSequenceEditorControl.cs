@@ -23,15 +23,8 @@ namespace CurtainFireMakerPlugin.Forms
 
         private string SectedScriptText { set => textBoxSelectedScript.Text = value; }
 
-        public string RecentSelectedScriptPath
-        {
-            get => openFileDialogScript.FileName;
-            set
-            {
-                openFileDialogScript.FileName = value;
-                openFileDialogScript.InitialDirectory = Path.GetDirectoryName(value);
-            }
-        }
+        public string RecentSelectedScriptPath { get; set; }
+        public List<string> RecentDirectories { get; set; }
 
         public PresetSequenceEditorControl()
         {
@@ -64,8 +57,6 @@ namespace CurtainFireMakerPlugin.Forms
             Sequence.Add(path);
             UpdateSequenceDataSource();
             SelectedIndex = Sequence.Count - 1;
-
-            openFileDialogScript.InitialDirectory = saveFileDialogScript.InitialDirectory = Path.GetDirectoryName(path);
         }
 
         private void MoveScript(int count)
@@ -178,9 +169,9 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickAdd(object sender, EventArgs e)
         {
-            if (openFileDialogScript.ShowDialog() == DialogResult.OK)
+            if (ShowOpenFileDialog(out string path))
             {
-                AddScript(openFileDialogScript.FileName);
+                AddScript(path);
             }
         }
 
@@ -274,6 +265,30 @@ namespace CurtainFireMakerPlugin.Forms
         private void TextChangedScript(object sender, EventArgs e)
         {
             textBoxSelectedScript.Text = textBoxSelectedScript.Text.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
+        }
+
+        private bool ShowOpenFileDialog(out string path)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "Python Script|*.py",
+                DefaultExt = ".py",
+                CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
+                FileName = RecentSelectedScriptPath,
+            };
+
+            if (dialog.ShowDialog() ?? false)
+            {
+                path = dialog.FileName;
+                RecentDirectories.Add(Path.GetDirectoryName(path));
+                RecentSelectedScriptPath = path;
+                return true;
+            }
+            else
+            {
+                path = "";
+                return false;
+            }
         }
     }
 }

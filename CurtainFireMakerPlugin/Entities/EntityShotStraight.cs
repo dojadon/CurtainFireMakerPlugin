@@ -15,7 +15,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public Vector3 InitialPos { get; private set; }
 
-        public override Vector3 Pos { get => InitialPos + Velocity * (World.FrameCount - SpawnFrameNo); set => throw new NotSupportedException(); }
+        public override Vector3 Pos { get => IsSpawned ? InitialPos + Velocity * (World.FrameCount - SpawnFrameNo) : base.Pos; set => base.Pos = value; }
 
         public Vector3 Velocity { get; set; }
         public Vector3 Upward { get; set; } = Vector3.UnitY;
