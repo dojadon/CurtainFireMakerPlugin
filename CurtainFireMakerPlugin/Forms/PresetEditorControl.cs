@@ -54,10 +54,7 @@ namespace CurtainFireMakerPlugin.Forms
             if (File.Exists(ConfigPath))
             {
                 Config.Load(ConfigPath);
-                PresetSequenceEditorControl.RecentSelectedScriptPath = Config.RecentSelectedScriptPath;
-                PresetSequenceEditorControl.RecentDirectories = Config.RecentScriptDirectories.ToList();
-                openFileDialogPreset.FileName = saveFileDialogNewPreset.FileName = Config.RecentSelectedPresetPath;
-                openFileDialogPreset.InitialDirectory = saveFileDialogNewPreset.InitialDirectory = Path.GetDirectoryName(Config.RecentSelectedPresetPath);
+                LoadConfig();
             }
 
             if (File.Exists(PresetPath))
@@ -69,9 +66,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public void Save()
         {
-            Config.RecentSelectedPresetPath = PresetPath;
-            Config.RecentSelectedScriptPath = PresetSequenceEditorControl.RecentSelectedScriptPath;
-            Config.RecentScriptDirectories = PresetSequenceEditorControl.RecentDirectories.ToArray();
+            SaveConfig();
             Config.Save(ConfigPath);
 
             if (Path.IsPathRooted(PresetPath))
@@ -79,6 +74,19 @@ namespace CurtainFireMakerPlugin.Forms
                 SavePreset();
                 Preset.Save(PresetPath);
             }
+        }
+
+        private void LoadConfig()
+        {
+            PresetSequenceEditorControl.LoadConfig(Config);
+            openFileDialogPreset.FileName = saveFileDialogNewPreset.FileName = Config.RecentSelectedPresetPath;
+            openFileDialogPreset.InitialDirectory = saveFileDialogNewPreset.InitialDirectory = Path.GetDirectoryName(Config.RecentSelectedPresetPath);
+        }
+
+        private void SaveConfig()
+        {
+            PresetSequenceEditorControl.SaveConfig(Config);
+            Config.RecentSelectedPresetPath = PresetPath;
         }
 
         private void LoadPreset()

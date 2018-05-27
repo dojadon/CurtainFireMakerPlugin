@@ -30,12 +30,20 @@ namespace CurtainFireMakerPlugin.Forms
         {
             InitializeComponent();
 
-            SetTabLength(textBoxSelectedScript.Handle, 16);
+            WinAPIWrapper.SetTabLength(textBoxSelectedScript.Handle, 16);
         }
 
-        [System.Runtime.InteropServices.DllImport("User32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int[] lParam);
-        private static void SetTabLength(IntPtr handle, int length) => SendMessage(handle, 0x00CB, 1, new int[] { length });
+        public void LoadConfig(ControlConfig config)
+        {
+            RecentSelectedScriptPath = config.RecentSelectedScriptPath;
+            RecentDirectories = config.RecentScriptDirectories.ToList();
+        }
+
+        public void SaveConfig(ControlConfig config)
+        {
+            config.RecentSelectedScriptPath = RecentSelectedScriptPath;
+            config.RecentScriptDirectories = RecentDirectories.ToArray();
+        }
 
         public void LoadPreset(Preset preset)
         {
