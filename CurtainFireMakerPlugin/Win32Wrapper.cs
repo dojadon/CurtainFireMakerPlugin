@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace CurtainFireMakerPlugin
 {
-    public static class WinAPIWrapper
+    public static class Win32Wrapper
     {
         [DllImport("User32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int[] lParam);

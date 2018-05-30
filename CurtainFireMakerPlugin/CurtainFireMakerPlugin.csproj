@@ -94,7 +94,7 @@
     <Compile Include="Entities\ShotType.cs" />
     <Compile Include="Entities\ShotTypePmx.cs" />
     <Compile Include="ScheduledTask.cs" />
-    <Compile Include="WinAPIWrapper.cs" />
+    <Compile Include="Win32Wrapper.cs" />
     <Compile Include="World.cs" />
     <Compile Include="XmlConfig.cs" />
   </ItemGroup>

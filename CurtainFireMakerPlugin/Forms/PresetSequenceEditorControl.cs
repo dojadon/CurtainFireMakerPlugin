@@ -30,7 +30,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             InitializeComponent();
 
-            WinAPIWrapper.SetTabLength(textBoxSelectedScript.Handle, 16);
+            Win32Wrapper.SetTabLength(textBoxSelectedScript.Handle, 16);
         }
 
         public void LoadConfig(ControlConfig config)
