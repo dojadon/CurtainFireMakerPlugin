@@ -59,7 +59,7 @@
     <Compile Include="Entities\ModelVertexCollection.cs" />
     <Compile Include="Entities\ShotModelDataProvider.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
-    <Compile Include="Forms\ControlConfig.cs" />
+    <Compile Include="PluginConfig.cs" />
     <Compile Include="Forms\PresetEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

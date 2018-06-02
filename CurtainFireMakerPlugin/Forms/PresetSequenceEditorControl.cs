@@ -23,7 +23,6 @@ namespace CurtainFireMakerPlugin.Forms
 
         private string SectedScriptText { set => textBoxSelectedScript.Text = value; }
 
-        public string RecentSelectedScriptPath { get; set; }
         public List<string> RecentDirectories { get; set; }
 
         public PresetSequenceEditorControl()
@@ -33,15 +32,13 @@ namespace CurtainFireMakerPlugin.Forms
             Win32Wrapper.SetTabLength(textBoxSelectedScript.Handle, 16);
         }
 
-        public void LoadConfig(ControlConfig config)
+        public void LoadConfig(PluginConfig config)
         {
-            RecentSelectedScriptPath = config.RecentSelectedScriptPath;
             RecentDirectories = config.RecentScriptDirectories.ToList();
         }
 
-        public void SaveConfig(ControlConfig config)
+        public void SaveConfig(PluginConfig config)
         {
-            config.RecentSelectedScriptPath = RecentSelectedScriptPath;
             config.RecentScriptDirectories = RecentDirectories.ToArray();
         }
 
@@ -286,14 +283,12 @@ namespace CurtainFireMakerPlugin.Forms
                 Filter = "Python Script|*.py",
                 DefaultExt = ".py",
                 CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
-                FileName = RecentSelectedScriptPath,
             };
 
             if (dialog.ShowDialog() ?? false)
             {
                 path = dialog.FileName;
                 RecentDirectories.Add(Path.GetDirectoryName(path));
-                RecentSelectedScriptPath = path;
                 return true;
             }
             else

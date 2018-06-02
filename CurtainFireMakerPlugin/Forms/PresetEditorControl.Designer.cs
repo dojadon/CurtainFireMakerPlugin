@@ -41,8 +41,8 @@
             this.labelPath = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.PresetSequenceEditorControl = new CurtainFireMakerPlugin.Forms.PresetSequenceEditorControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.PresetSettingControl = new CurtainFireMakerPlugin.Forms.PresetSettingControl();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -120,7 +120,6 @@
             // openFileDialogPreset
             // 
             this.openFileDialogPreset.DefaultExt = "xml";
-            this.openFileDialogPreset.FileName = "openFileDialog1";
             this.openFileDialogPreset.Filter = "Xml File|*.xml";
             // 
             // labelPath
@@ -156,6 +155,15 @@
             this.tabPage1.Text = "スクリプトシーケンス";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // PresetSequenceEditorControl
+            // 
+            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
+            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
+            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
+            this.PresetSequenceEditorControl.RecentDirectories = null;
+            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
+            this.PresetSequenceEditorControl.TabIndex = 0;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.PresetSettingControl);
@@ -166,16 +174,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "出力設定";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // PresetSequenceEditorControl
-            // 
-            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
-            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
-            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
-            this.PresetSequenceEditorControl.RecentDirectories = null;
-            this.PresetSequenceEditorControl.RecentSelectedScriptPath = "openFileDialog1";
-            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
-            this.PresetSequenceEditorControl.TabIndex = 0;
             // 
             // PresetSettingControl
             // 

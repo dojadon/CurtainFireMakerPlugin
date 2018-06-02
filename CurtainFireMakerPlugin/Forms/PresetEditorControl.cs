@@ -15,7 +15,7 @@ namespace CurtainFireMakerPlugin.Forms
     {
         private static string ConfigPath => Plugin.PluginRootPath + "config.xml";
 
-        private ControlConfig Config { get; } = new ControlConfig();
+        private PluginConfig Config { get; }
         private Preset Preset { get; } = new Preset();
 
         private string presetPath;
@@ -41,24 +41,16 @@ namespace CurtainFireMakerPlugin.Forms
         public int StartFrame => PresetSettingControl.StartFrame;
         public int EndFrame => PresetSettingControl.EndFrame;
 
-        public PresetEditorControl()
+        public PresetEditorControl(PluginConfig config)
         {
+            Config = config;
             Preset.Init();
 
             InitializeComponent();
 
             PresetPath = "新規";
 
-            Config.Init();
-            if (File.Exists(ConfigPath))
-            {
-                Config.Load(ConfigPath);
-                LoadConfig();
-            }
-            else
-            {
-                Config.Save(ConfigPath);
-            }
+            LoadConfig();
 
             if (File.Exists(Config.RecentSelectedPresetPath))
             {
@@ -83,7 +75,6 @@ namespace CurtainFireMakerPlugin.Forms
         private void LoadConfig()
         {
             PresetSequenceEditorControl.LoadConfig(Config);
-            openFileDialogPreset.FileName = saveFileDialogNewPreset.FileName = Config.RecentSelectedPresetPath;
             openFileDialogPreset.InitialDirectory = saveFileDialogNewPreset.InitialDirectory = Path.GetDirectoryName(Config.RecentSelectedPresetPath);
         }
 

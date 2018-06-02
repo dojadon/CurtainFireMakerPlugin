@@ -20,6 +20,7 @@ namespace CurtainFireMakerPlugin
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
         public static string LogPath => PluginRootPath + "lastest.log";
         public static string ErrorLogPath => PluginRootPath + "error.log";
+        public static string ConfigPath => Plugin.PluginRootPath + "config.xml";
 
         public Guid GUID => new Guid();
         public IWin32Window ApplicationForm { get; set; }
@@ -32,6 +33,7 @@ namespace CurtainFireMakerPlugin
         public Image Image { get; set; } = Image.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("CurtainFireMakerPlugin.icon.ico"));
         public Image SmallImage => Image;
 
+        private PluginConfig Config { get; } = new PluginConfig();
         internal PythonExecutor Executor { get; }
         public dynamic ScriptDynamic { get; private set; }
         private PresetEditorControl PresetEditorControl { get; set; }
@@ -55,8 +57,18 @@ namespace CurtainFireMakerPlugin
                 Console.SetOut(writer);
                 try
                 {
+                    Config.Init();
+                    if (File.Exists(ConfigPath))
+                    {
+                        Config.Load(ConfigPath);
+                    }
+                    else
+                    {
+                        Config.Save(ConfigPath);
+                    }
+
                     ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
-                    PresetEditorControl = new PresetEditorControl();
+                    PresetEditorControl = new PresetEditorControl(Config);
 
                     ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
                 }
@@ -156,8 +168,6 @@ namespace CurtainFireMakerPlugin
 
             Console.WriteLine((Environment.TickCount - time) + "ms");
             Console.Out.Flush();
-
-            var control = Control.FromHandle(ApplicationForm.Handle);
 
             foreach (var world in worlds)
             {
