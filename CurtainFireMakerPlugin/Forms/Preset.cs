@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin.Forms
         "  <Sequence></Sequence>\n" +
         "</Configuration>\n";
 
-        public override XmlNode RootNode => Document.SelectSingleNode(@"//Configuration");
+        public override XmlNode RootNode => Document.SelectSingleNode("//Configuration");
 
         public int StartFrame { get => GetInt("StartFrame"); set => SetValue("StartFrame", value); }
         public int EndFrame { get => GetInt("EndFrame"); set => SetValue("EndFrame", value); }
@@ -31,6 +31,11 @@ namespace CurtainFireMakerPlugin.Forms
         {
             base.Init();
             Document.LoadXml(DefaultXml);
+        }
+
+        public static bool IsFormated(string path)
+        {
+            return IsFormated(path, "//Configuration", "//Configuration/StartFrame", "//Configuration/EndFrame", "//Configuration/Sequence");
         }
     }
 }

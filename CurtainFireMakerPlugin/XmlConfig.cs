@@ -75,6 +75,14 @@ namespace CurtainFireMakerPlugin
             }
         }
 
+        public static bool IsFormated(string path, params string[] xpaths)
+        {
+            var doc = new XmlDocument();
+            doc.Load(path);
+
+            return xpaths.All(p => doc.SelectNodes(p).Count > 0);
+        }
+
         public static string GetAbsolutePath(string path)
         {
             if (Path.IsPathRooted(path))

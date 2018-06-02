@@ -153,7 +153,11 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (SelectedFilePath == e.FullPath)
             {
-                SectedScriptText = File.ReadAllText(SelectedFilePath);
+                try
+                {
+                    SectedScriptText = File.ReadAllText(SelectedFilePath);
+                }
+                catch { }
             }
         }
 

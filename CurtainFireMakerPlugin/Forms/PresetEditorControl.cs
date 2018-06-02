@@ -47,7 +47,6 @@ namespace CurtainFireMakerPlugin.Forms
 
             InitializeComponent();
 
-            LoadPreset();
             PresetPath = "新規";
 
             Config.Init();
@@ -56,12 +55,17 @@ namespace CurtainFireMakerPlugin.Forms
                 Config.Load(ConfigPath);
                 LoadConfig();
             }
-
-            if (File.Exists(PresetPath))
+            else
             {
-                Preset.Load(PresetPath);
-                LoadPreset();
+                Config.Save(ConfigPath);
             }
+
+            if (File.Exists(Config.RecentSelectedPresetPath))
+            {
+                PresetPath = Config.RecentSelectedPresetPath;
+                Preset.Load(PresetPath);
+            }
+            LoadPreset();
         }
 
         public void Save()
@@ -117,10 +121,16 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (openFileDialogPreset.ShowDialog() == DialogResult.OK)
             {
-                PresetPath = openFileDialogPreset.FileName;
-
-                Preset.Load(PresetPath);
-                LoadPreset();
+                if (Preset.IsFormated(openFileDialogPreset.FileName))
+                {
+                    PresetPath = openFileDialogPreset.FileName;
+                    Preset.Load(PresetPath);
+                    LoadPreset();
+                }
+                else
+                {
+                    MessageBox.Show($"Format Error：{openFileDialogPreset.FileName}");
+                }
             }
         }
 
