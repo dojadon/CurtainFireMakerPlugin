@@ -42,6 +42,8 @@ namespace CurtainFireMakerPlugin.Forms
         public int StartFrame => PresetSettingControl.StartFrame;
         public int EndFrame => PresetSettingControl.EndFrame;
 
+        private long LastTime { get; set; } = Environment.TickCount;
+
         public PresetEditorControl(PluginConfig config)
         {
             Config = config;
@@ -85,6 +87,8 @@ namespace CurtainFireMakerPlugin.Forms
             PresetSequenceEditorControl.SaveConfig(Config);
             Config.RecentPresetDirectories = RecentDirectories.Distinct().ToArray();
             Config.RecentSelectedPresetPath = PresetPath;
+            Config.TotalTime += (int)(Environment.TickCount - LastTime) / 1000;
+            LastTime = Environment.TickCount;
         }
 
         private void LoadPreset()
@@ -206,6 +210,28 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 path = "";
                 return false;
+            }
+        }
+
+        private void ClickRecordedTime(object sender, EventArgs e)
+        {
+            SaveConfig();
+
+            MessageBox.Show(Convert(Config.TotalTime));
+
+            string Convert(int i)
+            {
+                int h, m, s;
+
+                h = i / 3600;
+                i %= 3600;
+
+                m = i / 60;
+                i %= 60;
+
+                s = i;
+
+                return $"{h}時間 {m}分 {s}秒";
             }
         }
     }

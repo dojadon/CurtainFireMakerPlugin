@@ -39,9 +39,11 @@
             this.labelPath = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.PresetSequenceEditorControl = new CurtainFireMakerPlugin.Forms.PresetSequenceEditorControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.PresetSettingControl = new CurtainFireMakerPlugin.Forms.PresetSettingControl();
+            this.その他ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.起動時間ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -51,7 +53,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ファイルToolStripMenuItem});
+            this.ファイルToolStripMenuItem,
+            this.その他ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(772, 24);
@@ -143,6 +146,15 @@
             this.tabPage1.Text = "スクリプトシーケンス";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // PresetSequenceEditorControl
+            // 
+            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
+            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
+            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
+            this.PresetSequenceEditorControl.RecentDirectories = null;
+            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
+            this.PresetSequenceEditorControl.TabIndex = 0;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.PresetSettingControl);
@@ -154,15 +166,6 @@
             this.tabPage2.Text = "出力設定";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // PresetSequenceEditorControl
-            // 
-            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
-            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
-            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
-            this.PresetSequenceEditorControl.RecentDirectories = null;
-            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
-            this.PresetSequenceEditorControl.TabIndex = 0;
-            // 
             // PresetSettingControl
             // 
             this.PresetSettingControl.EndFrame = 0;
@@ -171,6 +174,21 @@
             this.PresetSettingControl.Size = new System.Drawing.Size(642, 354);
             this.PresetSettingControl.StartFrame = 0;
             this.PresetSettingControl.TabIndex = 13;
+            // 
+            // その他ToolStripMenuItem
+            // 
+            this.その他ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.起動時間ToolStripMenuItem});
+            this.その他ToolStripMenuItem.Name = "その他ToolStripMenuItem";
+            this.その他ToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.その他ToolStripMenuItem.Text = "その他";
+            // 
+            // 起動時間ToolStripMenuItem
+            // 
+            this.起動時間ToolStripMenuItem.Name = "起動時間ToolStripMenuItem";
+            this.起動時間ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.起動時間ToolStripMenuItem.Text = "記録時間";
+            this.起動時間ToolStripMenuItem.Click += new System.EventHandler(this.ClickRecordedTime);
             // 
             // PresetEditorControl
             // 
@@ -206,5 +224,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ToolStripMenuItem その他ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 起動時間ToolStripMenuItem;
     }
 }

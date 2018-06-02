@@ -11,6 +11,7 @@ namespace CurtainFireMakerPlugin
         public const string DefaultXml =
         "<?xml version = \"1.0\" encoding = \"UTF-8\"?>\n" +
         "<Configuration>\n" +
+        "  <TotalTime>0</TotalTime>" +
         "  <RecentSelectedPresetPath>新規</RecentSelectedPresetPath>\n" +
         "  <RecentPresetDirectories>\n" +
         "  </RecentPresetDirectories>\n" +
@@ -25,6 +26,8 @@ namespace CurtainFireMakerPlugin
         public string[] RecentPresetDirectories { get => GetPaths("RecentPresetDirectories/Path"); set => SetPaths("RecentPresetDirectories/Path", value); }
 
         public string[] RecentScriptDirectories { get => GetPaths("RecentScriptDirectories/Path"); set => SetPaths("RecentScriptDirectories/Path", value); }
+
+        public int TotalTime { get => GetInt("TotalTime"); set => SetValue("TotalTime", value); }
 
         public override void Init()
         {
