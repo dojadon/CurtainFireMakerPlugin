@@ -12,6 +12,8 @@ namespace CurtainFireMakerPlugin
         "<?xml version = \"1.0\" encoding = \"UTF-8\"?>\n" +
         "<Configuration>\n" +
         "  <RecentSelectedPresetPath>新規</RecentSelectedPresetPath>\n" +
+        "  <RecentPresetDirectories>\n" +
+        "  </RecentPresetDirectories>\n" +
         "  <RecentScriptDirectories>\n" +
         "  </RecentScriptDirectories>\n" +
         "</Configuration>\n";
@@ -19,6 +21,8 @@ namespace CurtainFireMakerPlugin
         public override XmlNode RootNode => Document.SelectSingleNode(@"//Configuration");
 
         public string RecentSelectedPresetPath { get => GetPath("RecentSelectedPresetPath"); set => SetPath("RecentSelectedPresetPath", value); }
+
+        public string[] RecentPresetDirectories { get => GetPaths("RecentPresetDirectories/Path"); set => SetPaths("RecentPresetDirectories/Path", value); }
 
         public string[] RecentScriptDirectories { get => GetPaths("RecentScriptDirectories/Path"); set => SetPaths("RecentScriptDirectories/Path", value); }
 

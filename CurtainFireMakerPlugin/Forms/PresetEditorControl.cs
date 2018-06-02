@@ -18,6 +18,9 @@ namespace CurtainFireMakerPlugin.Forms
         private PluginConfig Config { get; }
         private Preset Preset { get; } = new Preset();
 
+        private List<string> RecentDirectories { get; set; } = new List<string>();
+        private string InitialDirectory { get; set; }
+
         private string presetPath;
         public string PresetPath
         {
@@ -26,11 +29,9 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 presetPath = value;
                 labelPath.Text = "Path : " + value;
-
                 if (Path.IsPathRooted(PresetPath))
                 {
-                    openFileDialogPreset.InitialDirectory = Path.GetDirectoryName(PresetPath);
-                    saveFileDialogNewPreset.InitialDirectory = Path.GetDirectoryName(PresetPath);
+                    InitialDirectory = Path.GetDirectoryName(PresetPath);
                 }
             }
         }
@@ -75,12 +76,14 @@ namespace CurtainFireMakerPlugin.Forms
         private void LoadConfig()
         {
             PresetSequenceEditorControl.LoadConfig(Config);
-            openFileDialogPreset.InitialDirectory = saveFileDialogNewPreset.InitialDirectory = Path.GetDirectoryName(Config.RecentSelectedPresetPath);
+            RecentDirectories = Config.RecentPresetDirectories.ToList();
+            InitialDirectory = Path.GetDirectoryName(Config.RecentSelectedPresetPath);
         }
 
         private void SaveConfig()
         {
             PresetSequenceEditorControl.SaveConfig(Config);
+            Config.RecentPresetDirectories = RecentDirectories.ToArray();
             Config.RecentSelectedPresetPath = PresetPath;
         }
 
@@ -110,17 +113,17 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickOpen(object sender, EventArgs e)
         {
-            if (openFileDialogPreset.ShowDialog() == DialogResult.OK)
+            if (ShowOpenFileDialog(out string path))
             {
-                if (Preset.IsFormated(openFileDialogPreset.FileName))
+                if (Preset.IsFormated(path))
                 {
-                    PresetPath = openFileDialogPreset.FileName;
+                    PresetPath = path;
                     Preset.Load(PresetPath);
                     LoadPreset();
                 }
                 else
                 {
-                    MessageBox.Show($"Format Error：{openFileDialogPreset.FileName}");
+                    MessageBox.Show($"Format Error：{path}");
                 }
             }
         }
@@ -172,6 +175,28 @@ namespace CurtainFireMakerPlugin.Forms
                 {
                     e.Effect = DragDropEffects.Copy;
                 }
+            }
+        }
+
+        private bool ShowOpenFileDialog(out string path)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "Xml File|*.xml",
+                DefaultExt = ".xml",
+                CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
+            };
+
+            if (dialog.ShowDialog() ?? false)
+            {
+                path = dialog.FileName;
+                RecentDirectories.Add(Path.GetDirectoryName(path));
+                return true;
+            }
+            else
+            {
+                path = "";
+                return false;
             }
         }
     }

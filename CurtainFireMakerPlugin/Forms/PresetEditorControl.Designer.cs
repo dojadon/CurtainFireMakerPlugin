@@ -37,7 +37,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.エクスポートToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialogNewPreset = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialogPreset = new System.Windows.Forms.OpenFileDialog();
             this.labelPath = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -116,11 +115,6 @@
             // 
             this.saveFileDialogNewPreset.DefaultExt = "xml";
             this.saveFileDialogNewPreset.Filter = "Xml File|*.xml";
-            // 
-            // openFileDialogPreset
-            // 
-            this.openFileDialogPreset.DefaultExt = "xml";
-            this.openFileDialogPreset.Filter = "Xml File|*.xml";
             // 
             // labelPath
             // 
@@ -214,7 +208,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem エクスポートToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialogNewPreset;
-        private System.Windows.Forms.OpenFileDialog openFileDialogPreset;
         private System.Windows.Forms.Label labelPath;
         private PresetSettingControl PresetSettingControl;
         private System.Windows.Forms.TabControl tabControl1;
