@@ -42,7 +42,6 @@ namespace CurtainFireMakerPlugin.Entities
                     Enumerable.Range(0, Property.Type.OriginalData.VertexArray.Length)
                     .Select(i => (IPmxMorphTypeData)new PmxMorphVertexData() { Index = i, Position = func((Vector4)Property.Type.OriginalData.VertexArray[i].Pos * Property.Scale) }).ToArray()
                 };
-                World.PmxModel.Morphs.MorphList.Add(Morphs[id]);
             }
             return Morphs[id];
         }

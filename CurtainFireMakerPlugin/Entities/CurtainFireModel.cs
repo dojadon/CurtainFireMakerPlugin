@@ -31,7 +31,7 @@ namespace CurtainFireMakerPlugin.Entities
         public ModelMorphCollection Morphs { get; }
         public ModelBoneCollection Bones { get; }
 
-        private PmxModelData ModelData { get; set; }
+        public PmxModelData ModelData { get; private set; }
 
         public MultiDictionary<ShotProperty, ShotModelData> ModelDataEachPropertyDict { get; } = new MultiDictionary<ShotProperty, ShotModelData>(new ShotPropertyComparer());
 
@@ -76,28 +76,29 @@ namespace CurtainFireMakerPlugin.Entities
             var vertexIndices = new List<int>();
             var materials = new List<PmxMaterialData>();
             var textures = ModelDataEachPropertyDict.Keys.SelectMany(p => p.Type.CreateTextures(World, p)).Distinct().ToArray();
+            var morphs = new List<PmxMorphData>();
 
             foreach (var prop in ModelDataEachPropertyDict.Keys)
             {
-                Vertices.CreateVertices(prop.Type, ModelDataEachPropertyDict[prop], vertices.Count,out var propVertices, out var propVertexIndeices);
+                Vertices.CreateVertices(prop.Type, ModelDataEachPropertyDict[prop], vertices.Count, out var propVertices, out var propVertexIndeices);
                 Materials.CreateMaterials(prop, textures, ModelDataEachPropertyDict[prop].Count, out var propMaterials);
+                Morphs.CompressMorph(ModelDataEachPropertyDict[prop], morphFrames, out var propMorphs);
 
                 vertices.AddRange(propVertices);
                 vertexIndices.AddRange(propVertexIndeices);
                 materials.AddRange(propMaterials);
+                morphs.AddRange(propMorphs);
             }
-
-            Morphs.CompressMorph(morphFrames);
 
             ModelData = new PmxModelData
             {
                 Header = Header,
                 VertexIndices = vertexIndices.ToArray(),
+                BoneArray = Bones.BoneArray,
                 TextureFiles = textures.ToArray(),
                 VertexArray = vertices.ToArray(),
                 MaterialArray = materials.ToArray(),
-                BoneArray = Bones.BoneArray,
-                MorphArray = Morphs.MorphArray,
+                MorphArray = morphs.ToArray(),
                 SlotArray = new[]
                 {
                 new PmxSlotData
@@ -111,7 +112,7 @@ namespace CurtainFireMakerPlugin.Entities
                 {
                     SlotName = "表情",
                     Type = SlotType.MORPH,
-                    Indices =Enumerable.Range(0, Morphs.MorphList.Count).ToArray(),
+                    Indices =Enumerable.Range(0, morphs.Count).ToArray(),
                     NormalSlot = false,
                 },
                 //new PmxSlotData

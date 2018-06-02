@@ -52,7 +52,7 @@
     <Compile Include="Entities\EntityCollisonable.cs" />
     <Compile Include="Entities\EntityShootable.cs" />
     <Compile Include="Entities\CurtainFireModel.cs" />
-    <Compile Include="Entities\CurtainFireMotion.cs" />
+    <Compile Include="Entities\CurtainFireSequence.cs" />
     <Compile Include="Entities\ModelBoneCollection.cs" />
     <Compile Include="Entities\ModelMaterialCollection.cs" />
     <Compile Include="Entities\ModelMorphCollection.cs" />

@@ -32,7 +32,7 @@ namespace CurtainFireMakerPlugin
 
         internal ShotModelDataProvider ShotModelProvider { get; }
         internal CurtainFireModel PmxModel { get; }
-        internal CurtainFireMotion KeyFrames { get; }
+        internal CurtainFireSequence VmdSequence { get; }
 
         private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
 
@@ -50,7 +50,7 @@ namespace CurtainFireMakerPlugin
 
             ShotModelProvider = new ShotModelDataProvider();
             PmxModel = new CurtainFireModel(this);
-            KeyFrames = new CurtainFireMotion(this);
+            VmdSequence = new CurtainFireSequence(this);
 
             foreach (var type in ShotTypeProvider.ShotTypeDict.Values)
             {
@@ -60,7 +60,7 @@ namespace CurtainFireMakerPlugin
             ExportEvent += (sender, e) =>
             {
                 PmxModel.Export(e.Script, e.PmxExportPath, ExportedFileName, "by CurtainFireMakerPlugin");
-                KeyFrames.Export(e.Script, e.VmdExportPath, ExportedFileName);
+                VmdSequence.Export(e.Script, e.VmdExportPath, ExportedFileName);
             };
         }
 
@@ -82,8 +82,8 @@ namespace CurtainFireMakerPlugin
 
             if (!IsContainsShot && 0 < FrameCount)
             {
-                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
-                KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
+                VmdSequence.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
+                VmdSequence.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
             }
             IsContainsShot = true;
 
@@ -142,13 +142,13 @@ namespace CurtainFireMakerPlugin
         public void FinalizeWorld()
         {
             EntityList.ForEach(e => e.Remove(true));
-            KeyFrames.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount + 1, false));
+            VmdSequence.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount + 1, false));
         }
 
         internal void Export(dynamic script, string directory)
         {
-            PmxModel.FinalizeModel(KeyFrames.MorphFrameDict.Values.Select(t => t.frame));
-            KeyFrames.FinalizeKeyFrame(PmxModel.Morphs.MorphList);
+            PmxModel.FinalizeModel(VmdSequence.MorphFrameDict.Values.Select(t => t.frame));
+            VmdSequence.FinalizeKeyFrame(PmxModel.ModelData.MorphArray);
 
             ExportEvent?.Invoke(this, new ExportEventArgs(Path.Combine(directory, ExportedFileName + ".pmx"), Path.Combine(directory, ExportedFileName + ".vmd")) { Script = script });
         }
@@ -159,7 +159,7 @@ namespace CurtainFireMakerPlugin
             {
                 Drop(handle, new StringCollection() { Path.Combine(directory, ExportedFileName + ".pmx") });
 
-                if (KeyFrames.ShouldDrop(script))
+                if (VmdSequence.ShouldDrop(script))
                 {
                     Drop(handle, new StringCollection() { Path.Combine(directory, ExportedFileName + ".vmd") });
                 }

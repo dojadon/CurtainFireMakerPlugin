@@ -8,7 +8,7 @@ using MMDataIO.Vmd;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    internal class CurtainFireMotion
+    internal class CurtainFireSequence
     {
         public Dictionary<(string name, int time), (VmdMotionFrameData frame, int priority)> BoneFrameDict { get; }
         public Dictionary<(string name, int time), (VmdMorphFrameData frame, int priority)> MorphFrameDict { get; }
@@ -16,7 +16,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         private World World { get; }
 
-        public CurtainFireMotion(World world)
+        public CurtainFireSequence(World world)
         {
             World = world;
 

@@ -17,7 +17,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override Vector3 Pos { get => IsSpawned ? InitialPos + Velocity * (World.FrameCount - SpawnFrameNo) : base.Pos; set => base.Pos = value; }
 
-        public Vector3 Velocity { get; set; }
+        public  Vector3 Velocity { get; set; }
         public Vector3 Upward { get; set; } = Vector3.UnitY;
 
         public Func<EntityShotStraight, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.Velocity, e.Upward);

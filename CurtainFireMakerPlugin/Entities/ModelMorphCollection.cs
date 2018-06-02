@@ -9,25 +9,19 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class ModelMorphCollection
     {
-        public List<PmxMorphData> MorphList { get; } = new List<PmxMorphData>();
         public World World { get; }
-
-        public PmxMorphData[] MorphArray => MorphList.ToArray();
 
         public ModelMorphCollection(World world)
         {
             World = world;
         }
 
-        public void CompressMorph(IEnumerable<VmdMorphFrameData> morphFrameList)
+        public void CompressMorph(IEnumerable<ShotModelData> dataList, IEnumerable<VmdMorphFrameData> morphFrameList, out PmxMorphData[] morphs)
         {
+            var morphList = dataList.SelectMany(d => d.Morphs.Values).ToList();
             var framesEachMorph = morphFrameList.ToLookup(f => f.Name, f => f.FrameTime).ToDictionary(g => g.Key, g => g.ToArray());
-            var morphsEachType = MorphList.ToLookup(m => m.MorphType);
 
-            foreach (var removedMorph in morphsEachType.SelectMany(g => Grouping(g, framesEachMorph)))
-            {
-                MorphList.Remove(removedMorph);
-            }
+            morphs = morphList.Except(morphList.ToLookup(m => m.MorphType).SelectMany(g => Grouping(g, framesEachMorph))).ToArray();
         }
 
         private IEnumerable<PmxMorphData> Grouping(IEnumerable<PmxMorphData> morphList, Dictionary<string, int[]> framesEachMorph)

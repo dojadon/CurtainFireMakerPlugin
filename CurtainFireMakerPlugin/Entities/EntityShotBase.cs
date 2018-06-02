@@ -57,13 +57,13 @@ namespace CurtainFireMakerPlugin.Entities
             var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot);
             frame.InterpolationPointX1 = frame.InterpolationPointY1 = frame.InterpolationPointZ1 = curve.P1;
             frame.InterpolationPointX2 = frame.InterpolationPointY2 = frame.InterpolationPointZ2 = curve.P2;
-            World.KeyFrames.AddBoneKeyFrame(frame, priority);
+            World.VmdSequence.AddBoneKeyFrame(frame, priority);
         }
 
         public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, int priority = 0)
         {
             var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + frameOffset, weight);
-            World.KeyFrames.AddMorphKeyFrame(frame, priority);
+            World.VmdSequence.AddMorphKeyFrame(frame, priority);
         }
 
         public PmxMorphData CreateVertexMorph(int id, Func<Vector3, Vector3> func)
