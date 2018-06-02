@@ -36,12 +36,11 @@
             this.名前を付けて保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.エクスポートToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFileDialogNewPreset = new System.Windows.Forms.SaveFileDialog();
             this.labelPath = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.PresetSequenceEditorControl = new CurtainFireMakerPlugin.Forms.PresetSequenceEditorControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.PresetSequenceEditorControl = new CurtainFireMakerPlugin.Forms.PresetSequenceEditorControl();
             this.PresetSettingControl = new CurtainFireMakerPlugin.Forms.PresetSettingControl();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -111,11 +110,6 @@
             this.エクスポートToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.エクスポートToolStripMenuItem.Text = "エクスポート";
             // 
-            // saveFileDialogNewPreset
-            // 
-            this.saveFileDialogNewPreset.DefaultExt = "xml";
-            this.saveFileDialogNewPreset.Filter = "Xml File|*.xml";
-            // 
             // labelPath
             // 
             this.labelPath.AutoSize = true;
@@ -149,15 +143,6 @@
             this.tabPage1.Text = "スクリプトシーケンス";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // PresetSequenceEditorControl
-            // 
-            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
-            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
-            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
-            this.PresetSequenceEditorControl.RecentDirectories = null;
-            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
-            this.PresetSequenceEditorControl.TabIndex = 0;
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.PresetSettingControl);
@@ -168,6 +153,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "出力設定";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // PresetSequenceEditorControl
+            // 
+            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
+            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
+            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
+            this.PresetSequenceEditorControl.RecentDirectories = null;
+            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
+            this.PresetSequenceEditorControl.TabIndex = 0;
             // 
             // PresetSettingControl
             // 
@@ -207,7 +201,6 @@
         private System.Windows.Forms.ToolStripMenuItem 名前を付けて保存ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem エクスポートToolStripMenuItem;
-        private System.Windows.Forms.SaveFileDialog saveFileDialogNewPreset;
         private System.Windows.Forms.Label labelPath;
         private PresetSettingControl PresetSettingControl;
         private System.Windows.Forms.TabControl tabControl1;

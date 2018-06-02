@@ -83,7 +83,7 @@ namespace CurtainFireMakerPlugin.Forms
         private void SaveConfig()
         {
             PresetSequenceEditorControl.SaveConfig(Config);
-            Config.RecentPresetDirectories = RecentDirectories.ToArray();
+            Config.RecentPresetDirectories = RecentDirectories.Distinct().ToArray();
             Config.RecentSelectedPresetPath = PresetPath;
         }
 
@@ -91,6 +91,11 @@ namespace CurtainFireMakerPlugin.Forms
         {
             PresetSettingControl.LoadPreset(Preset);
             PresetSequenceEditorControl.LoadPreset(Preset);
+
+            if (File.Exists(PresetPath))
+            {
+                RecentDirectories.Add(Path.GetDirectoryName(PresetPath));
+            }
         }
 
         private void SavePreset()
@@ -113,10 +118,11 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickOpen(object sender, EventArgs e)
         {
-            if (ShowOpenFileDialog(out string path))
+            if (ShowFileDialog(CreateOpenFileDialog(), out string path))
             {
                 if (Preset.IsFormated(path))
                 {
+                    RecentDirectories.Add(path);
                     PresetPath = path;
                     Preset.Load(PresetPath);
                     LoadPreset();
@@ -143,15 +149,9 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickSaveAs(object sender, EventArgs e)
         {
-            if (!Path.IsPathRooted(PresetPath))
+            if (ShowFileDialog(CreateSaveFileDialog(), out string path))
             {
-                saveFileDialogNewPreset.FileName = saveFileDialogNewPreset.InitialDirectory + "\\" + Path.GetFileNameWithoutExtension(PresetSequenceEditorControl.SelectedFilePath) + ".xml";
-            }
-
-            if (saveFileDialogNewPreset.ShowDialog() == DialogResult.OK)
-            {
-                PresetPath = saveFileDialogNewPreset.FileName;
-
+                PresetPath = path;
                 ClickSave(sender, e);
             }
         }
@@ -178,19 +178,28 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        private bool ShowOpenFileDialog(out string path)
+        private Microsoft.Win32.OpenFileDialog CreateOpenFileDialog() => new Microsoft.Win32.OpenFileDialog()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog()
-            {
-                Filter = "Xml File|*.xml",
-                DefaultExt = ".xml",
-                CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
-            };
+            Filter = "Xml File|*.xml",
+            DefaultExt = ".xml",
+            InitialDirectory = InitialDirectory,
+            CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
+        };
 
+        private Microsoft.Win32.SaveFileDialog CreateSaveFileDialog() => new Microsoft.Win32.SaveFileDialog()
+        {
+            Filter = "Xml File|*.xml",
+            DefaultExt = ".xml",
+            InitialDirectory = InitialDirectory,
+            FileName = Path.IsPathRooted(PresetPath) ? PresetPath : $"{InitialDirectory}\\{Path.GetFileNameWithoutExtension(PresetSequenceEditorControl.SelectedFilePath)}.xml",
+            CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
+        };
+
+        public static bool ShowFileDialog(Microsoft.Win32.FileDialog dialog, out string path)
+        {
             if (dialog.ShowDialog() ?? false)
             {
                 path = dialog.FileName;
-                RecentDirectories.Add(Path.GetDirectoryName(path));
                 return true;
             }
             else

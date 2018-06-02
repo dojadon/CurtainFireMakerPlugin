@@ -39,7 +39,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public void SaveConfig(PluginConfig config)
         {
-            config.RecentScriptDirectories = RecentDirectories.ToArray();
+            config.RecentScriptDirectories = RecentDirectories.Distinct().ToArray();
         }
 
         public void LoadPreset(Preset preset)
@@ -178,8 +178,9 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickAdd(object sender, EventArgs e)
         {
-            if (ShowOpenFileDialog(out string path))
+            if (PresetEditorControl.ShowFileDialog(CreateOpenFileDialog(), out string path))
             {
+                RecentDirectories.Add(path);
                 AddScript(path);
             }
         }
@@ -204,10 +205,10 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void CreateNewFile(object sender, EventArgs e)
         {
-            if (saveFileDialogScript.ShowDialog() == DialogResult.OK)
+            if (PresetEditorControl.ShowFileDialog(CreateSaveFileDialog(), out string path))
             {
-                File.WriteAllText(saveFileDialogScript.FileName, "# -*- coding: utf-8 -*-", System.Text.Encoding.UTF8);
-                AddScript(saveFileDialogScript.FileName);
+                File.WriteAllText(path, "# -*- coding: utf-8 -*-", System.Text.Encoding.UTF8);
+                AddScript(path);
             }
         }
 
@@ -276,26 +277,18 @@ namespace CurtainFireMakerPlugin.Forms
             textBoxSelectedScript.Text = textBoxSelectedScript.Text.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
         }
 
-        private bool ShowOpenFileDialog(out string path)
+        private Microsoft.Win32.OpenFileDialog CreateOpenFileDialog() => new Microsoft.Win32.OpenFileDialog()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog()
-            {
-                Filter = "Python Script|*.py",
-                DefaultExt = ".py",
-                CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
-            };
+            Filter = "Python Script|*.py",
+            DefaultExt = ".py",
+            CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
+        };
 
-            if (dialog.ShowDialog() ?? false)
-            {
-                path = dialog.FileName;
-                RecentDirectories.Add(Path.GetDirectoryName(path));
-                return true;
-            }
-            else
-            {
-                path = "";
-                return false;
-            }
-        }
+        private Microsoft.Win32.SaveFileDialog CreateSaveFileDialog() => new Microsoft.Win32.SaveFileDialog()
+        {
+            Filter = "Python Script|*.py",
+            DefaultExt = ".py",
+            CustomPlaces = RecentDirectories.Select(s => new Microsoft.Win32.FileDialogCustomPlace(s)).ToList(),
+        };
     }
 }
