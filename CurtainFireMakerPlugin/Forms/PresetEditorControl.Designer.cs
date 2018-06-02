@@ -134,6 +134,7 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.AllowDrop = true;
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(3, 57);
@@ -141,6 +142,8 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(650, 380);
             this.tabControl1.TabIndex = 14;
+            this.tabControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.DragDropPreset);
+            this.tabControl1.DragEnter += new System.Windows.Forms.DragEventHandler(this.DragEnterPreset);
             // 
             // tabPage1
             // 
@@ -169,6 +172,7 @@
             this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
             this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
             this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
+            this.PresetSequenceEditorControl.RecentDirectories = null;
             this.PresetSequenceEditorControl.RecentSelectedScriptPath = "openFileDialog1";
             this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 354);
             this.PresetSequenceEditorControl.TabIndex = 0;

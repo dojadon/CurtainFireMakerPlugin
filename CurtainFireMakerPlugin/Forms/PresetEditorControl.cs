@@ -161,5 +161,27 @@ namespace CurtainFireMakerPlugin.Forms
                 ClickSave(sender, e);
             }
         }
+
+        private void DragDropPreset(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            PresetPath = files[0];
+            Preset.Load(PresetPath);
+            LoadPreset();
+        }
+
+        private void DragEnterPreset(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] drags = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (drags.All(f => File.Exists(f) && f.EndsWith("xml")))
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            }
+        }
     }
 }
