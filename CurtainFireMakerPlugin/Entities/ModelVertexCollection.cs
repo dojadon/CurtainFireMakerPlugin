@@ -32,7 +32,7 @@ namespace CurtainFireMakerPlugin.Entities
                     totalFaceCount += faceCount;
                 }
 
-                foreach (var morph in data.Morphs.Values/*.Where(m => m.MorphType == MorphType.VERTEX)*/)
+                foreach (var morph in data.Morphs.Values.Where(m => m.MorphType == MorphType.VERTEX))
                 {
                     Enumerable.Range(0, morph.MorphArray.Length).ForEach(i => morph.MorphArray[i].Index += vertexOffset + vertexList.Count);
                 }
@@ -46,6 +46,7 @@ namespace CurtainFireMakerPlugin.Entities
             PmxVertexData SetupVertex(PmxVertexData vertex, int boneOffset)
             {
                 vertex.BoneId = vertex.BoneId.Select(i => i + boneOffset).ToArray();
+                vertex.ExtraUv = new[] { type.Key };
                 return vertex;
             }
         }

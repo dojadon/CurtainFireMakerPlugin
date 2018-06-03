@@ -39,7 +39,7 @@ namespace CurtainFireMakerPlugin
         public delegate void ExportEventHandler(object sender, ExportEventArgs args);
         public event ExportEventHandler ExportEvent;
 
-        public string ExportedFileName { get; set; }
+        public string ExportFileName { get; set; }
 
         public World(ShotTypeProvider typeProvider, PythonExecutor executor, int startframe, int endframe)
         {
@@ -59,8 +59,8 @@ namespace CurtainFireMakerPlugin
 
             ExportEvent += (sender, e) =>
             {
-                PmxModel.Export(e.Script, e.PmxExportPath, ExportedFileName, "by CurtainFireMakerPlugin");
-                VmdSequence.Export(e.Script, e.VmdExportPath, ExportedFileName);
+                PmxModel.Export(e.Script, e.PmxExportPath, ExportFileName, "by CurtainFireMakerPlugin");
+                VmdSequence.Export(e.Script, e.VmdExportPath, ExportFileName);
             };
         }
 
@@ -150,18 +150,18 @@ namespace CurtainFireMakerPlugin
             PmxModel.FinalizeModel(VmdSequence.MorphFrameDict.Values.Select(t => t.frame));
             VmdSequence.FinalizeKeyFrame(PmxModel.ModelData.MorphArray);
 
-            ExportEvent?.Invoke(this, new ExportEventArgs(Path.Combine(directory, ExportedFileName + ".pmx"), Path.Combine(directory, ExportedFileName + ".vmd")) { Script = script });
+            ExportEvent?.Invoke(this, new ExportEventArgs(Path.Combine(directory, ExportFileName + ".pmx"), Path.Combine(directory, ExportFileName + ".vmd")) { Script = script });
         }
 
         internal void DropFileToHandle(IntPtr handle, dynamic script, string directory)
         {
             if (PmxModel.ShouldDrop(script))
             {
-                Drop(handle, new StringCollection() { Path.Combine(directory, ExportedFileName + ".pmx") });
+                Drop(handle, new StringCollection() { Path.Combine(directory, ExportFileName + ".pmx") });
 
                 if (VmdSequence.ShouldDrop(script))
                 {
-                    Drop(handle, new StringCollection() { Path.Combine(directory, ExportedFileName + ".vmd") });
+                    Drop(handle, new StringCollection() { Path.Combine(directory, ExportFileName + ".vmd") });
                 }
             }
 

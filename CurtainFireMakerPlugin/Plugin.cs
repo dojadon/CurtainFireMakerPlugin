@@ -137,7 +137,7 @@ namespace CurtainFireMakerPlugin
                 var world = new World(ShotTypeProvider, Executor, PresetEditorControl.StartFrame, PresetEditorControl.EndFrame)
                 {
                     FrameCount = PresetEditorControl.StartFrame,
-                    ExportedFileName = name,
+                    ExportFileName = name,
                 };
                 worlds.Add(world);
 

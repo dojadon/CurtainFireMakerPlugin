@@ -49,6 +49,7 @@ namespace CurtainFireMakerPlugin.Entities
             Header = new PmxHeaderData
             {
                 Version = 2.0F,
+                NumberOfExtraUv = 1,
                 VertexIndexSize = 4,
                 TextureIndexSize = 1,
                 MaterialIndexSize = 1,

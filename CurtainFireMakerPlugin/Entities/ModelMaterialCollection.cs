@@ -26,7 +26,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (var (material, i) in materials.Select((item, idx) => (item, idx)))
             {
-                material.MaterialName = prop.Type.GetMaterialName() + "_" + GetHexColorCode(prop.Color) + (materials.Length != 0 ? "_" + i : "");
+                material.MaterialName = prop.Type.Name + "_" + GetHexColorCode(prop.Color) + (materials.Length != 0 ? "_" + i : "");
 
                 material.TextureId = GetTextureId(material.TextureId);
                 material.SphereId = GetTextureId(material.SphereId);

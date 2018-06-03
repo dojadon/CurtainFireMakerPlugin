@@ -28,18 +28,24 @@ namespace CurtainFireMakerPlugin.Entities
 
     public abstract class ShotType
     {
+        public static Vector4 KeyNormal { get; } = new Vector4(0.3F, 0.7F, 0.0F, 0.0F);
+        public static Vector4 KeyAlpha { get; } = new Vector4(0.3F, 0.7F, 0.0F, 0.1F);
+        public static Vector4 KeyMask { get; } = new Vector4(0.3F, 0.7F, 0.1F, 0.0F);
+        public static Vector4 KeyBillboard { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.0F);
+        public static Vector4 KeyBillboardAlpha { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.1F);
+
         public string Name { get; }
-        public string MaterialName { get; }
+        public Vector4 Key { get; }
 
         public abstract PmxModelData OriginalData { get; }
 
-        public ShotType(string name, string materialName = "")
+        public ShotType(string name, Vector4 key)
         {
             Name = name;
-            MaterialName = materialName;
+            Key = key;
         }
 
-        public string GetMaterialName() => MaterialName + (MaterialName.Length > 0 ? "_" : "") + Name;
+        public ShotType(string name) : this(name, KeyNormal) { }
 
         public virtual bool HasMesh { get; } = false;
 
