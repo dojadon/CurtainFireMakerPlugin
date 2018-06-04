@@ -45,5 +45,23 @@ namespace CurtainFireMakerPlugin.Entities
             }
             return Morphs[id];
         }
+
+        public PmxMorphData CreateUVMorph(string name, int id, MorphType type, Func<Vector3, Vector4> func)
+        {
+            if (!Morphs.ContainsKey(id))
+            {
+                Morphs[id] = new PmxMorphData()
+                {
+                    MorphName = name,
+                    SlotType = MorphSlotType.RIP,
+                    MorphType = type,
+
+                    MorphArray =
+                    Enumerable.Range(0, Property.Type.OriginalData.VertexArray.Length)
+                    .Select(i => (IPmxMorphTypeData)new PmxMorphUVData() { Index = i, Uv = func((Vector4)Property.Type.OriginalData.VertexArray[i].Pos * Property.Scale) }).ToArray()
+                };
+            }
+            return Morphs[id];
+        }
     }
 }

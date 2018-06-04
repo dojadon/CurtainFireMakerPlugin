@@ -68,7 +68,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         public PmxMorphData CreateVertexMorph(int id, Func<Vector3, Vector3> func)
         {
-            return ModelData.CreateVertexMorph("V"+ id + "_" + EntityId, id, func);
+            return ModelData.CreateVertexMorph(EntityId + "_" + id, id, func);
+        }
+
+        public PmxMorphData CreateUvMorph(int id, MorphType type, Func<Vector3, Vector4> func)
+        {
+            return ModelData.CreateUVMorph(EntityId + "_" + id, id, type, func);
         }
     }
 }

@@ -32,9 +32,14 @@ namespace CurtainFireMakerPlugin.Entities
                     totalFaceCount += faceCount;
                 }
 
-                foreach (var morph in data.Morphs.Values.Where(m => m.MorphType == MorphType.VERTEX))
+                foreach (var morph in data.Morphs.Values.Where(ShouldAddIndex))
                 {
                     Enumerable.Range(0, morph.MorphArray.Length).ForEach(i => morph.MorphArray[i].Index += vertexOffset + vertexList.Count);
+                }
+
+                bool ShouldAddIndex(PmxMorphData m)
+                {
+                    return (m.MorphType & (MorphType.VERTEX | MorphType.UV | MorphType.EXUV1 | MorphType.EXUV2 | MorphType.EXUV3 | MorphType.EXUV4)) > 0;
                 }
 
                 vertexList.AddRange(data.Property.Type.CreateVertices(World, data.Property).Select(v => SetupVertex(v, data.BoneIndexOffset)));
