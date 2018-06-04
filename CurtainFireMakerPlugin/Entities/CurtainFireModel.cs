@@ -23,7 +23,7 @@ namespace CurtainFireMakerPlugin.Entities
         }
     }
 
-    internal class CurtainFireModel
+    public class CurtainFireModel
     {
         private PmxHeaderData Header { get; }
         public ModelVertexCollection Vertices { get; }
@@ -69,6 +69,11 @@ namespace CurtainFireMakerPlugin.Entities
             Bones.SetupBone(data.Bones);
 
             data.IsInitialized = true;
+        }
+
+        public void AddMorph(PmxMorphData morph)
+        {
+            Morphs.MorphList.Add(morph);
         }
 
         public void FinalizeModel(IEnumerable<VmdMorphFrameData> morphFrames)

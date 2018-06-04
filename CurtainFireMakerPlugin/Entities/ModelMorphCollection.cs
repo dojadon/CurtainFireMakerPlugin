@@ -11,6 +11,8 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public World World { get; }
 
+        public List<PmxMorphData> MorphList { get; } = new List<PmxMorphData>();
+
         public ModelMorphCollection(World world)
         {
             World = world;
@@ -18,7 +20,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void CompressMorph(IEnumerable<ShotModelData> dataList, IEnumerable<VmdMorphFrameData> morphFrameList, out PmxMorphData[] morphs)
         {
-            var morphList = dataList.SelectMany(d => d.Morphs.Values).ToList();
+            var morphList = dataList.SelectMany(d => d.Morphs.Values).Union(MorphList).ToList();
             var framesEachMorph = morphFrameList.ToLookup(f => f.Name, f => f.FrameTime).ToDictionary(g => g.Key, g => g.ToArray());
 
             morphs = morphList.Except(morphList.ToLookup(m => m.MorphType).SelectMany(g => Grouping(g, framesEachMorph))).ToArray();
