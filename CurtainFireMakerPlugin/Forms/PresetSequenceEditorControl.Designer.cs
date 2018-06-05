@@ -31,21 +31,22 @@
             this.components = new System.ComponentModel.Container();
             this.listBoxSequence = new System.Windows.Forms.ListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ToolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
             this.追加ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolStripMenuItemOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.エクスプローラーToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.atomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.textBoxSelectedScript = new System.Windows.Forms.TextBox();
             this.labelPath = new System.Windows.Forms.Label();
             this.saveFileDialogScript = new System.Windows.Forms.SaveFileDialog();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listBoxSequence
@@ -54,9 +55,9 @@
             this.listBoxSequence.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxSequence.FormattingEnabled = true;
             this.listBoxSequence.ItemHeight = 12;
-            this.listBoxSequence.Location = new System.Drawing.Point(6, 8);
+            this.listBoxSequence.Location = new System.Drawing.Point(6, 32);
             this.listBoxSequence.Name = "listBoxSequence";
-            this.listBoxSequence.Size = new System.Drawing.Size(154, 316);
+            this.listBoxSequence.Size = new System.Drawing.Size(142, 316);
             this.listBoxSequence.TabIndex = 17;
             this.listBoxSequence.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChangedSequence);
             this.listBoxSequence.DragDrop += new System.Windows.Forms.DragEventHandler(this.DragDropSequence);
@@ -66,21 +67,13 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemNew,
             this.追加ToolStripMenuItem,
             this.ToolStripMenuItemRemove,
             this.toolStripMenuItem1,
             this.ToolStripMenuItemOpen});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 76);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.OpeningContextMenu);
-            // 
-            // ToolStripMenuItemNew
-            // 
-            this.ToolStripMenuItemNew.Name = "ToolStripMenuItemNew";
-            this.ToolStripMenuItemNew.Size = new System.Drawing.Size(98, 22);
-            this.ToolStripMenuItemNew.Text = "新規";
-            this.ToolStripMenuItemNew.Click += new System.EventHandler(this.CreateNewFile);
             // 
             // 追加ToolStripMenuItem
             // 
@@ -107,8 +100,8 @@
             this.エクスプローラーToolStripMenuItem,
             this.atomToolStripMenuItem});
             this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
-            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(98, 22);
-            this.ToolStripMenuItemOpen.Text = "開く";
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(156, 22);
+            this.ToolStripMenuItemOpen.Text = "プログラムから開く";
             // 
             // エクスプローラーToolStripMenuItem
             // 
@@ -124,60 +117,14 @@
             this.atomToolStripMenuItem.Text = "Atom";
             this.atomToolStripMenuItem.Click += new System.EventHandler(this.OpenWithAtom);
             // 
-            // button6
-            // 
-            this.button6.Font = new System.Drawing.Font("MS UI Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button6.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button6.Location = new System.Drawing.Point(137, 330);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(23, 23);
-            this.button6.TabIndex = 16;
-            this.button6.Text = "↓";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.ClickDown);
-            // 
-            // button5
-            // 
-            this.button5.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button5.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button5.Location = new System.Drawing.Point(108, 330);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(23, 23);
-            this.button5.TabIndex = 15;
-            this.button5.Text = "↑";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.ClickUp);
-            // 
-            // button4
-            // 
-            this.button4.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button4.Location = new System.Drawing.Point(57, 330);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(45, 23);
-            this.button4.TabIndex = 14;
-            this.button4.Text = "削除";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.ClickRemove);
-            // 
-            // button3
-            // 
-            this.button3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button3.Location = new System.Drawing.Point(6, 330);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(45, 23);
-            this.button3.TabIndex = 13;
-            this.button3.Text = "追加";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.ClickAdd);
-            // 
             // textBoxSelectedScript
             // 
-            this.textBoxSelectedScript.Location = new System.Drawing.Point(166, 23);
+            this.textBoxSelectedScript.Location = new System.Drawing.Point(154, 47);
             this.textBoxSelectedScript.Multiline = true;
             this.textBoxSelectedScript.Name = "textBoxSelectedScript";
             this.textBoxSelectedScript.ReadOnly = true;
             this.textBoxSelectedScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxSelectedScript.Size = new System.Drawing.Size(473, 328);
+            this.textBoxSelectedScript.Size = new System.Drawing.Size(485, 304);
             this.textBoxSelectedScript.TabIndex = 12;
             this.textBoxSelectedScript.WordWrap = false;
             this.textBoxSelectedScript.TextChanged += new System.EventHandler(this.TextChangedScript);
@@ -186,7 +133,7 @@
             // 
             this.labelPath.AutoSize = true;
             this.labelPath.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.labelPath.Location = new System.Drawing.Point(166, 8);
+            this.labelPath.Location = new System.Drawing.Point(154, 32);
             this.labelPath.Name = "labelPath";
             this.labelPath.Size = new System.Drawing.Size(28, 12);
             this.labelPath.TabIndex = 18;
@@ -196,20 +143,76 @@
             // 
             this.saveFileDialogScript.Filter = "Python Script|*.py";
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripButton3,
+            this.toolStripButton4});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(642, 25);
+            this.toolStrip1.TabIndex = 19;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::CurtainFireMakerPlugin.Properties.Resources.folder;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.ToolTipText = "ファイルを開く";
+            this.toolStripButton1.Click += new System.EventHandler(this.ClickAdd);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::CurtainFireMakerPlugin.Properties.Resources.minus;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton2.ToolTipText = "削除";
+            this.toolStripButton2.Click += new System.EventHandler(this.ClickRemove);
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = global::CurtainFireMakerPlugin.Properties.Resources.up;
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Text = "toolStripButton3";
+            this.toolStripButton3.ToolTipText = "上へ移動";
+            this.toolStripButton3.Click += new System.EventHandler(this.ClickUp);
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = global::CurtainFireMakerPlugin.Properties.Resources.down;
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton4.Text = "toolStripButton4";
+            this.toolStripButton4.ToolTipText = "下へ移動";
+            this.toolStripButton4.Click += new System.EventHandler(this.ClickDown);
+            // 
             // PresetSequenceEditorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.labelPath);
             this.Controls.Add(this.listBoxSequence);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.textBoxSelectedScript);
             this.Name = "PresetSequenceEditorControl";
-            this.Size = new System.Drawing.Size(642, 354);
+            this.Size = new System.Drawing.Size(642, 358);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,10 +220,6 @@
 
         #endregion
         private System.Windows.Forms.ListBox listBoxSequence;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBoxSelectedScript;
         private System.Windows.Forms.Label labelPath;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -230,7 +229,11 @@
         private System.Windows.Forms.ToolStripMenuItem 追加ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemRemove;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemNew;
         private System.Windows.Forms.SaveFileDialog saveFileDialogScript;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton toolStripButton4;
     }
 }

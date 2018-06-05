@@ -202,15 +202,6 @@ namespace CurtainFireMakerPlugin.Forms
         private void ClickUp(object sender, EventArgs e) => MoveScript(-1);
         private void ClickDown(object sender, EventArgs e) => MoveScript(1);
 
-        private void CreateNewFile(object sender, EventArgs e)
-        {
-            if (PresetEditorControl.ShowFileDialog(CreateSaveFileDialog(), out string path))
-            {
-                File.WriteAllText(path, "# -*- coding: utf-8 -*-", System.Text.Encoding.UTF8);
-                AddScript(path);
-            }
-        }
-
         private void OpenWithExplorer(object sender, EventArgs e)
         {
             if (!IsSelected) return;
