@@ -44,8 +44,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public void LoadPreset(Preset preset)
         {
-            List<string> sequence = preset.SequenceScripts.ToList();
-            Sequence = sequence.ToList();
+            Sequence = preset.SequenceScripts.Where(File.Exists).ToList();
 
             UpdateSequenceDataSource();
 
