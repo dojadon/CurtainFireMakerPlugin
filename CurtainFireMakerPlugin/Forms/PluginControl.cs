@@ -126,11 +126,30 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        private void ClickClose(object sender, TabControlCancelEventArgs e)
+        private bool Close(PresetEditorControl editor)
         {
-            var editor = (PresetEditorControl)e.TabPage.Controls[0];
+            return editor.CheckSave(CreateSaveFileDialog());
+        }
 
-            if (editor.CheckSave(CreateSaveFileDialog()))
+        private void ClickClose(object sender, EventArgs e)
+        {
+            if (CurrentPresetEditor != null && !Close(CurrentPresetEditor))
+            {
+                TabControl.TabPages.Remove(TabControl.SelectedTab);
+            }
+        }
+
+        private void ClickCloseAll(object sender, EventArgs e)
+        {
+            foreach (TabPage page in TabControl.TabPages)
+            {
+                if (!Close((PresetEditorControl)page.Controls[0])) TabControl.TabPages.Remove(page);
+            }
+        }
+
+        private void OnTabClosing(object sender, TabControlCancelEventArgs e)
+        {
+            if (Close((PresetEditorControl)e.TabPage.Controls[0]))
             {
                 e.Cancel = true;
             }
