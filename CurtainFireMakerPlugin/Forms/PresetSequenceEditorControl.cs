@@ -39,7 +39,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public void SaveConfig(PluginConfig config)
         {
-            config.RecentScriptDirectories = RecentDirectories.Distinct().Where(Directory.Exists).ToArray();
+            config.RecentScriptDirectories = config.RecentScriptDirectories.Concat(RecentDirectories).Distinct().Where(Directory.Exists).ToArray();
         }
 
         public void LoadPreset(Preset preset)
@@ -56,10 +56,10 @@ namespace CurtainFireMakerPlugin.Forms
             preset.SequenceScripts = Sequence.ToArray();
         }
 
-       public bool IsUpdated(Preset preset)
-       {
-            return preset.SequenceScripts.Intersect(Sequence).Count() == Sequence.Count;
-       }
+        public bool IsUpdated(Preset preset)
+        {
+            return preset.SequenceScripts.Length != Sequence.Count || Enumerable.Zip(preset.SequenceScripts, Sequence, (s1, s2) => s1 != s2).Any(b => b);
+        }
 
         private void AddScript(string path)
         {
@@ -182,7 +182,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickAdd(object sender, EventArgs e)
         {
-            if (PresetEditorControl.ShowFileDialog(CreateOpenFileDialog(), out string path))
+            if (PluginControl.ShowFileDialog(CreateOpenFileDialog(), out string path))
             {
                 RecentDirectories.Add(path);
                 AddScript(path);

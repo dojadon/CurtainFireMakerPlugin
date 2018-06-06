@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27428.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurtainFireMakerPlugin", "CurtainFireMakerPlugin\CurtainFireMakerPlugin.csproj", "{CC28360B-AB53-4D9F-BED6-74E652C9CED0}"
 EndProject
@@ -92,6 +92,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5068180E-3D96-480B-ABE2-C9E0F7906902}
+		SolutionGuid = {E88CCB84-E5A6-4221-A916-7E1C583B5125}
 	EndGlobalSection
 EndGlobal

@@ -60,6 +60,12 @@
     <Compile Include="Entities\ShotModelDataProvider.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
     <Compile Include="Forms\IPresetEditor.cs" />
+    <Compile Include="Forms\PluginControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\PluginControl.Designer.cs">
+      <DependentUpon>PluginControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="PluginConfig.cs" />
     <Compile Include="Forms\PresetEditorControl.cs">
       <SubType>UserControl</SubType>
@@ -105,6 +111,9 @@
     <Compile Include="XmlConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PluginControl.resx">
+      <DependentUpon>PluginControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PresetEditorControl.resx">
       <DependentUpon>PresetEditorControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -151,6 +160,10 @@
     <Reference Include="IronPython.Modules">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\IronPython 2.7\IronPython.Modules.dll</HintPath>
     </Reference>
+    <Reference Include="JacksonSoft.CustomTabControl, Version=1.0.1.7, Culture=neutral, PublicKeyToken=53c237210c7e462d, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\JacksonSoft.CustomTabControl.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Dynamic">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\IronPython 2.7\Microsoft.Dynamic.dll</HintPath>
@@ -181,8 +194,6 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationClient" />
-    <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -225,6 +236,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Time_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SaveAll_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

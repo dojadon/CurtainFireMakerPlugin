@@ -10,6 +10,8 @@ namespace CurtainFireMakerPlugin.Forms
     {
         void LoadPreset(Preset preset);
         void SavePreset(Preset preset);
+        void LoadConfig(PluginConfig config);
+        void SaveConfig(PluginConfig config);
         bool IsUpdated(Preset preset);
     }
 }

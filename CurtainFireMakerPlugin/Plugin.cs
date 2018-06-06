@@ -36,7 +36,7 @@ namespace CurtainFireMakerPlugin
         private PluginConfig Config { get; } = new PluginConfig();
         internal PythonExecutor Executor { get; }
         public dynamic ScriptDynamic { get; private set; }
-        private PresetEditorControl PresetEditorControl { get; set; }
+        private PluginControl PluginControl { get; set; }
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
 
         public Plugin()
@@ -47,7 +47,7 @@ namespace CurtainFireMakerPlugin
         public UserControl CreateControl()
         {
             Init();
-            return PresetEditorControl;
+            return PluginControl;
         }
 
         private void Init()
@@ -68,7 +68,7 @@ namespace CurtainFireMakerPlugin
                     }
 
                     ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
-                    PresetEditorControl = new PresetEditorControl(Config);
+                    PluginControl = new PluginControl(Config);
 
                     ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
                 }
@@ -85,13 +85,20 @@ namespace CurtainFireMakerPlugin
 
         public void Dispose()
         {
+            PluginControl.Save();
         }
 
         public void Run(CommandArgs args)
         {
+            if (!PluginControl.IsSelectPreset)
+            {
+                MessageBox.Show("プリセットが選択されていません", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var progressForm = new ProgressForm()
             {
-                Maximum = PresetEditorControl.EndFrame - PresetEditorControl.StartFrame
+                Maximum = PluginControl.EndFrame - PluginControl.StartFrame
             };
 
             using (var writer = progressForm.CreateLogWriter())
@@ -122,9 +129,9 @@ namespace CurtainFireMakerPlugin
 
             Func<string, World> CreateWorld = (string name) =>
             {
-                var world = new World(ShotTypeProvider, Executor, PresetEditorControl.StartFrame, PresetEditorControl.EndFrame)
+                var world = new World(ShotTypeProvider, Executor, PluginControl.StartFrame, PluginControl.EndFrame)
                 {
-                    FrameCount = PresetEditorControl.StartFrame,
+                    FrameCount = PluginControl.StartFrame,
                     ExportFileName = name,
                 };
                 worlds.Add(world);
@@ -134,8 +141,8 @@ namespace CurtainFireMakerPlugin
 
             long time = Environment.TickCount;
 
-            Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PresetEditorControl.FileName));
-            PresetEditorControl.RunScript(Executor.Engine, Executor.CreateScope());
+            Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PluginControl.FileName));
+            PluginControl.RunScript(Executor.Engine, Executor.CreateScope());
 
             if (worlds.Count > 0)
             {
@@ -151,7 +158,7 @@ namespace CurtainFireMakerPlugin
                 progress.Text = "出力完了";
 
                 worlds.ForEach(w => w.FinalizeWorld());
-                worlds.ForEach(w => w.Export(ScriptDynamic, PresetEditorControl.ExportDirectory));
+                worlds.ForEach(w => w.Export(ScriptDynamic, PluginControl.ExportDirectory));
             }
 
             Console.WriteLine((Environment.TickCount - time) + "ms");
@@ -159,7 +166,7 @@ namespace CurtainFireMakerPlugin
 
             foreach (var world in worlds)
             {
-                try { world.DropFileToHandle(ApplicationForm.Handle, ScriptDynamic, PresetEditorControl.ExportDirectory); } catch { }
+                try { world.DropFileToHandle(ApplicationForm.Handle, ScriptDynamic, PluginControl.ExportDirectory); } catch { }
             }
         }
     }

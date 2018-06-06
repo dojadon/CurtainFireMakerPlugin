@@ -61,7 +61,7 @@
             this.listBoxSequence.ItemHeight = 12;
             this.listBoxSequence.Location = new System.Drawing.Point(6, 32);
             this.listBoxSequence.Name = "listBoxSequence";
-            this.listBoxSequence.Size = new System.Drawing.Size(142, 328);
+            this.listBoxSequence.Size = new System.Drawing.Size(142, 292);
             this.listBoxSequence.TabIndex = 17;
             this.listBoxSequence.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChangedSequence);
             this.listBoxSequence.DragDrop += new System.Windows.Forms.DragEventHandler(this.DragDropSequence);
@@ -128,8 +128,8 @@
             this.textBoxSelectedScript.Name = "textBoxSelectedScript";
             this.textBoxSelectedScript.ReadOnly = true;
             this.textBoxSelectedScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxSelectedScript.Size = new System.Drawing.Size(485, 313);
-            this.textBoxSelectedScript.TabIndex = 12;
+            this.textBoxSelectedScript.Size = new System.Drawing.Size(485, 277);
+            this.textBoxSelectedScript.TabIndex = 19;
             this.textBoxSelectedScript.WordWrap = false;
             this.textBoxSelectedScript.TextChanged += new System.EventHandler(this.TextChangedScript);
             // 
@@ -228,14 +228,14 @@
             // エクスプローラーToolStripMenuItem1
             // 
             this.エクスプローラーToolStripMenuItem1.Name = "エクスプローラーToolStripMenuItem1";
-            this.エクスプローラーToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.エクスプローラーToolStripMenuItem1.Size = new System.Drawing.Size(143, 22);
             this.エクスプローラーToolStripMenuItem1.Text = "エクスプローラー";
             this.エクスプローラーToolStripMenuItem1.Click += new System.EventHandler(this.OpenWithExplorer);
             // 
             // atomToolStripMenuItem1
             // 
             this.atomToolStripMenuItem1.Name = "atomToolStripMenuItem1";
-            this.atomToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.atomToolStripMenuItem1.Size = new System.Drawing.Size(143, 22);
             this.atomToolStripMenuItem1.Text = "Atom";
             this.atomToolStripMenuItem1.Click += new System.EventHandler(this.OpenWithAtom);
             // 
@@ -248,7 +248,7 @@
             this.Controls.Add(this.listBoxSequence);
             this.Controls.Add(this.textBoxSelectedScript);
             this.Name = "PresetSequenceEditorControl";
-            this.Size = new System.Drawing.Size(642, 370);
+            this.Size = new System.Drawing.Size(642, 328);
             this.contextMenuStrip1.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

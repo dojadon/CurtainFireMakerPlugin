@@ -34,7 +34,15 @@ namespace CurtainFireMakerPlugin.Forms
 
         public bool IsUpdated(Preset preset)
         {
-            return preset.StartFrame == StartFrame && preset.EndFrame == EndFrame;
+            return preset.StartFrame != StartFrame || preset.EndFrame != EndFrame;
+        }
+
+        public void LoadConfig(PluginConfig config)
+        {
+        }
+
+        public void SaveConfig(PluginConfig config)
+        {
         }
     }
 }

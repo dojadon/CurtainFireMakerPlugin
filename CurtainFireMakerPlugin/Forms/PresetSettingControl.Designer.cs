@@ -99,7 +99,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDownStartFrame);
             this.Name = "PresetSettingControl";
-            this.Size = new System.Drawing.Size(642, 354);
+            this.Size = new System.Drawing.Size(160, 62);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStartFrame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEndFrame)).EndInit();
             this.ResumeLayout(false);
