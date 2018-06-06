@@ -11,7 +11,7 @@ using CurtainFireMakerPlugin.Entities;
 
 namespace CurtainFireMakerPlugin
 {
-    public class Plugin : ICanSavePlugin, ICommandPlugin, IHaveUserControl
+    public class Plugin : ICommandPlugin, IHaveUserControl
     {
         public static string PluginRootPath => Application.StartupPath + "\\CurtainFireMaker\\";
 
@@ -85,18 +85,6 @@ namespace CurtainFireMakerPlugin
 
         public void Dispose()
         {
-            PresetEditorControl.Save();
-        }
-
-        public Stream OnSaveProject()
-        {
-            PresetEditorControl.Save();
-            return new MemoryStream();
-        }
-
-        public void OnLoadProject(Stream stream)
-        {
-
         }
 
         public void Run(CommandArgs args)

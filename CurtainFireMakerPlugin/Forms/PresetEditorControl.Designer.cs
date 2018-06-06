@@ -39,14 +39,16 @@
             this.labelPath = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.PresetSequenceEditorControl = new CurtainFireMakerPlugin.Forms.PresetSequenceEditorControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.PresetSettingControl = new CurtainFireMakerPlugin.Forms.PresetSettingControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.PresetSequenceEditorControl = new CurtainFireMakerPlugin.Forms.PresetSequenceEditorControl();
+            this.PresetSettingControl = new CurtainFireMakerPlugin.Forms.PresetSettingControl();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -152,15 +154,6 @@
             this.tabPage1.Text = "スクリプトシーケンス";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // PresetSequenceEditorControl
-            // 
-            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
-            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
-            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
-            this.PresetSequenceEditorControl.RecentDirectories = null;
-            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 370);
-            this.PresetSequenceEditorControl.TabIndex = 0;
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.PresetSettingControl);
@@ -172,6 +165,30 @@
             this.tabPage2.Text = "出力設定";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton4,
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripButton3,
+            this.toolStripSeparator1,
+            this.toolStripButton5});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(768, 25);
+            this.toolStrip1.TabIndex = 15;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // PresetSequenceEditorControl
+            // 
+            this.PresetSequenceEditorControl.Location = new System.Drawing.Point(0, 0);
+            this.PresetSequenceEditorControl.Margin = new System.Windows.Forms.Padding(0);
+            this.PresetSequenceEditorControl.Name = "PresetSequenceEditorControl";
+            this.PresetSequenceEditorControl.RecentDirectories = null;
+            this.PresetSequenceEditorControl.Size = new System.Drawing.Size(642, 370);
+            this.PresetSequenceEditorControl.TabIndex = 0;
+            // 
             // PresetSettingControl
             // 
             this.PresetSettingControl.EndFrame = 0;
@@ -181,18 +198,16 @@
             this.PresetSettingControl.StartFrame = 0;
             this.PresetSettingControl.TabIndex = 13;
             // 
-            // toolStrip1
+            // toolStripButton4
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton4,
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(768, 25);
-            this.toolStrip1.TabIndex = 15;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = global::CurtainFireMakerPlugin.Properties.Resources.NewFile_16x;
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton4.Text = "toolStripButton4";
+            this.toolStripButton4.ToolTipText = "新しいプリセット";
+            this.toolStripButton4.Click += new System.EventHandler(this.ClickNewFile);
             // 
             // toolStripButton1
             // 
@@ -227,16 +242,20 @@
             this.toolStripButton3.ToolTipText = "名前を付けて保存";
             this.toolStripButton3.Click += new System.EventHandler(this.ClickSaveAs);
             // 
-            // toolStripButton4
+            // toolStripSeparator1
             // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = global::CurtainFireMakerPlugin.Properties.Resources.NewFile_16x;
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton4.Text = "toolStripButton4";
-            this.toolStripButton4.ToolTipText = "新しいプリセット";
-            this.toolStripButton4.Click += new System.EventHandler(this.ClickNewFile);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = global::CurtainFireMakerPlugin.Properties.Resources.Time_16x;
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.ToolTipText = "記録時間";
             // 
             // PresetEditorControl
             // 
@@ -280,5 +299,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButton5;
     }
 }

@@ -21,6 +21,9 @@ namespace CurtainFireMakerPlugin.Forms
         private List<string> RecentDirectories { get; set; } = new List<string>();
         private string InitialDirectory { get; set; }
 
+        private IPresetEditor[] PresetEditors { get; }
+        private bool IsUpdated => PresetEditors.Any(c => c.IsUpdated(Preset));
+
         private string presetPath;
         public string PresetPath
         {
@@ -51,8 +54,9 @@ namespace CurtainFireMakerPlugin.Forms
 
             InitializeComponent();
 
-            PresetPath = "新規";
+            PresetEditors = new IPresetEditor[] { PresetSequenceEditorControl, PresetSettingControl };
 
+            PresetPath = "新規";
             LoadConfig();
 
             if (File.Exists(Config.RecentSelectedPresetPath))
@@ -93,8 +97,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void LoadPreset()
         {
-            PresetSettingControl.LoadPreset(Preset);
-            PresetSequenceEditorControl.LoadPreset(Preset);
+            PresetEditors.ForEach(c => c.LoadPreset(Preset));
 
             if (File.Exists(PresetPath))
             {
@@ -104,8 +107,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void SavePreset()
         {
-            PresetSettingControl.SavePreset(Preset);
-            PresetSequenceEditorControl.SavePreset(Preset);
+            PresetEditors.ForEach(c => c.SavePreset(Preset));
         }
 
         public void RunScript(ScriptEngine engine, ScriptScope scope)
@@ -113,8 +115,35 @@ namespace CurtainFireMakerPlugin.Forms
             PresetSequenceEditorControl.RunScript(engine, scope);
         }
 
+        private bool CheckSave()
+        {
+            if (IsUpdated)
+            {
+                var result = MessageBox.Show("保存されてない変更があります。\r\n変更を保存しますか？", "閉じる", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        ClickSave(this, EventArgs.Empty);
+                        break;
+
+                    case DialogResult.No:
+                        break;
+
+                    case DialogResult.Cancel:
+                        return true;
+                }
+            }
+            return false;
+        }
+
         private void ClickNewFile(object sender, EventArgs e)
         {
+            if (CheckSave())
+            {
+                return;
+            }
+
             Preset.Init();
             LoadPreset();
             PresetPath = "新規";
@@ -122,7 +151,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void ClickOpen(object sender, EventArgs e)
         {
-            if (ShowFileDialog(CreateOpenFileDialog(), out string path))
+            if (!CheckSave() && ShowFileDialog(CreateOpenFileDialog(), out string path))
             {
                 if (Preset.IsFormated(path))
                 {
@@ -217,7 +246,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             SaveConfig();
 
-            MessageBox.Show(Convert(Config.TotalTime));
+            MessageBox.Show(Convert(Config.TotalTime), "記録時間");
 
             string Convert(int i)
             {

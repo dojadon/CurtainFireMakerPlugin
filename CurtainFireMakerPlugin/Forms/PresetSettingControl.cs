@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin.Forms
 {
-    public partial class PresetSettingControl : UserControl
+    public partial class PresetSettingControl : UserControl, IPresetEditor
     {
         public int StartFrame { get => (int)numericUpDownStartFrame.Value; set => numericUpDownStartFrame.Value = value; }
         public int EndFrame { get => (int)numericUpDownEndFrame.Value; set => numericUpDownEndFrame.Value = value; }
@@ -30,6 +30,11 @@ namespace CurtainFireMakerPlugin.Forms
         {
             preset.StartFrame = StartFrame;
             preset.EndFrame = EndFrame;
+        }
+
+        public bool IsUpdated(Preset preset)
+        {
+            return preset.StartFrame == StartFrame && preset.EndFrame == EndFrame;
         }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.Scripting.Hosting;
 
 namespace CurtainFireMakerPlugin.Forms
 {
-    public partial class PresetSequenceEditorControl : UserControl
+    public partial class PresetSequenceEditorControl : UserControl, IPresetEditor
     {
         private Dictionary<string, FileSystemWatcher> FileWatcherDict { get; } = new Dictionary<string, FileSystemWatcher>();
 
@@ -39,7 +39,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public void SaveConfig(PluginConfig config)
         {
-            config.RecentScriptDirectories = RecentDirectories.Distinct().ToArray();
+            config.RecentScriptDirectories = RecentDirectories.Distinct().Where(Directory.Exists).ToArray();
         }
 
         public void LoadPreset(Preset preset)
@@ -55,6 +55,11 @@ namespace CurtainFireMakerPlugin.Forms
         {
             preset.SequenceScripts = Sequence.ToArray();
         }
+
+       public bool IsUpdated(Preset preset)
+       {
+            return preset.SequenceScripts.Intersect(Sequence).Count() == Sequence.Count;
+       }
 
         private void AddScript(string path)
         {

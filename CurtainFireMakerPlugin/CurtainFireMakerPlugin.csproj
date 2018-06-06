@@ -59,6 +59,7 @@
     <Compile Include="Entities\ModelVertexCollection.cs" />
     <Compile Include="Entities\ShotModelDataProvider.cs" />
     <Compile Include="Entities\ShotModelData.cs" />
+    <Compile Include="Forms\IPresetEditor.cs" />
     <Compile Include="PluginConfig.cs" />
     <Compile Include="Forms\PresetEditorControl.cs">
       <SubType>UserControl</SubType>
@@ -221,6 +222,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\NewFile_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Time_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
