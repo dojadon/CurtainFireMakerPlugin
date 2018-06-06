@@ -45,6 +45,10 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.エクスプローラーToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.atomToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -57,7 +61,7 @@
             this.listBoxSequence.ItemHeight = 12;
             this.listBoxSequence.Location = new System.Drawing.Point(6, 32);
             this.listBoxSequence.Name = "listBoxSequence";
-            this.listBoxSequence.Size = new System.Drawing.Size(142, 316);
+            this.listBoxSequence.Size = new System.Drawing.Size(142, 328);
             this.listBoxSequence.TabIndex = 17;
             this.listBoxSequence.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChangedSequence);
             this.listBoxSequence.DragDrop += new System.Windows.Forms.DragEventHandler(this.DragDropSequence);
@@ -78,21 +82,21 @@
             // 追加ToolStripMenuItem
             // 
             this.追加ToolStripMenuItem.Name = "追加ToolStripMenuItem";
-            this.追加ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.追加ToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.追加ToolStripMenuItem.Text = "追加";
             this.追加ToolStripMenuItem.Click += new System.EventHandler(this.ClickAdd);
             // 
             // ToolStripMenuItemRemove
             // 
             this.ToolStripMenuItemRemove.Name = "ToolStripMenuItemRemove";
-            this.ToolStripMenuItemRemove.Size = new System.Drawing.Size(98, 22);
+            this.ToolStripMenuItemRemove.Size = new System.Drawing.Size(156, 22);
             this.ToolStripMenuItemRemove.Text = "削除";
             this.ToolStripMenuItemRemove.Click += new System.EventHandler(this.ClickRemove);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(95, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(153, 6);
             // 
             // ToolStripMenuItemOpen
             // 
@@ -124,7 +128,7 @@
             this.textBoxSelectedScript.Name = "textBoxSelectedScript";
             this.textBoxSelectedScript.ReadOnly = true;
             this.textBoxSelectedScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxSelectedScript.Size = new System.Drawing.Size(485, 304);
+            this.textBoxSelectedScript.Size = new System.Drawing.Size(485, 313);
             this.textBoxSelectedScript.TabIndex = 12;
             this.textBoxSelectedScript.WordWrap = false;
             this.textBoxSelectedScript.TextChanged += new System.EventHandler(this.TextChangedScript);
@@ -132,6 +136,7 @@
             // labelPath
             // 
             this.labelPath.AutoSize = true;
+            this.labelPath.BackColor = System.Drawing.SystemColors.Control;
             this.labelPath.ForeColor = System.Drawing.SystemColors.WindowText;
             this.labelPath.Location = new System.Drawing.Point(154, 32);
             this.labelPath.Name = "labelPath";
@@ -149,7 +154,9 @@
             this.toolStripButton1,
             this.toolStripButton2,
             this.toolStripButton3,
-            this.toolStripButton4});
+            this.toolStripButton4,
+            this.toolStripSeparator1,
+            this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(642, 25);
@@ -159,7 +166,7 @@
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::CurtainFireMakerPlugin.Properties.Resources.folder;
+            this.toolStripButton1.Image = global::CurtainFireMakerPlugin.Properties.Resources.plus;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
@@ -200,6 +207,38 @@
             this.toolStripButton4.ToolTipText = "下へ移動";
             this.toolStripButton4.Click += new System.EventHandler(this.ClickDown);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.エクスプローラーToolStripMenuItem1,
+            this.atomToolStripMenuItem1});
+            this.toolStripDropDownButton1.Image = global::CurtainFireMakerPlugin.Properties.Resources.OpenFile_16x;
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
+            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.ToolTipText = "プログラムからファイルを開く";
+            // 
+            // エクスプローラーToolStripMenuItem1
+            // 
+            this.エクスプローラーToolStripMenuItem1.Name = "エクスプローラーToolStripMenuItem1";
+            this.エクスプローラーToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.エクスプローラーToolStripMenuItem1.Text = "エクスプローラー";
+            this.エクスプローラーToolStripMenuItem1.Click += new System.EventHandler(this.OpenWithExplorer);
+            // 
+            // atomToolStripMenuItem1
+            // 
+            this.atomToolStripMenuItem1.Name = "atomToolStripMenuItem1";
+            this.atomToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.atomToolStripMenuItem1.Text = "Atom";
+            this.atomToolStripMenuItem1.Click += new System.EventHandler(this.OpenWithAtom);
+            // 
             // PresetSequenceEditorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -209,7 +248,7 @@
             this.Controls.Add(this.listBoxSequence);
             this.Controls.Add(this.textBoxSelectedScript);
             this.Name = "PresetSequenceEditorControl";
-            this.Size = new System.Drawing.Size(642, 358);
+            this.Size = new System.Drawing.Size(642, 370);
             this.contextMenuStrip1.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -230,10 +269,14 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemRemove;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.SaveFileDialog saveFileDialogScript;
-        private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem エクスプローラーToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem atomToolStripMenuItem1;
     }
 }

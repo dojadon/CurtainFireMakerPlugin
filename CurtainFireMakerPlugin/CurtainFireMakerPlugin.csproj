@@ -201,6 +201,27 @@
   <ItemGroup>
     <None Include="Resources\folder.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SaveAs_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenFolder_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remove_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenFile_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewFile_16x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set out_path="C:\Tool\CG\MikuMikuMoving64_v1282\Plugins\$(TargetFileName)"

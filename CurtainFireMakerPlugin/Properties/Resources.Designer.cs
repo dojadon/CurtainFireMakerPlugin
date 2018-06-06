@@ -73,16 +73,6 @@ namespace CurtainFireMakerPlugin.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap folder {
-            get {
-                object obj = ResourceManager.GetObject("folder", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
-        /// </summary>
         internal static System.Drawing.Bitmap minus {
             get {
                 object obj = ResourceManager.GetObject("minus", resourceCulture);
@@ -93,9 +83,59 @@ namespace CurtainFireMakerPlugin.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap NewFile_16x {
+            get {
+                object obj = ResourceManager.GetObject("NewFile_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap OpenFile_16x {
+            get {
+                object obj = ResourceManager.GetObject("OpenFile_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap OpenFolder_16x {
+            get {
+                object obj = ResourceManager.GetObject("OpenFolder_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap plus {
             get {
                 object obj = ResourceManager.GetObject("plus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Save_16x {
+            get {
+                object obj = ResourceManager.GetObject("Save_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap SaveAs_16x {
+            get {
+                object obj = ResourceManager.GetObject("SaveAs_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
