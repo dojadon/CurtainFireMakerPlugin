@@ -74,7 +74,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (IsUpdated(Preset))
             {
-                var result = MessageBox.Show("保存されてない変更があります。\r\n変更を保存しますか？", "閉じる", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                var result = MessageBox.Show("保存されてない変更があります。\r\n変更を保存しますか？", Path.GetFileNameWithoutExtension(PresetPath), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                 switch (result)
                 {
