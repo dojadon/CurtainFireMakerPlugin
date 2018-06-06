@@ -166,5 +166,25 @@ namespace CurtainFireMakerPlugin.Forms
                 return false;
             }
         }
+
+        private void ClickRecordedTime(object sender, EventArgs e)
+        {
+            SaveConfig();
+
+            MessageBox.Show(Convert(Config.TotalTime));
+
+            string Convert(int i)
+            {
+                int h = i / 3600;
+                i %= 3600;
+
+                int m = i / 60;
+                i %= 60;
+
+                int s = i;
+
+                return $"{h}時間 {m}分 {s}秒";
+            }
+        }
     }
 }

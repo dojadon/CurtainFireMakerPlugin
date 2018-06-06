@@ -195,6 +195,7 @@
             this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton5.Text = "toolStripButton5";
             this.toolStripButton5.ToolTipText = "記録時間";
+            this.toolStripButton5.Click += new System.EventHandler(this.ClickRecordedTime);
             // 
             // TabControl
             // 
