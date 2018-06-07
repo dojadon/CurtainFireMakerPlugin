@@ -13,5 +13,7 @@ namespace CurtainFireMakerPlugin.Forms
         void LoadConfig(PluginConfig config);
         void SaveConfig(PluginConfig config);
         bool IsUpdated(Preset preset);
+
+        event EventHandler ValueChangedEvent;
     }
 }

@@ -15,6 +15,8 @@ namespace CurtainFireMakerPlugin.Forms
         public int StartFrame { get => (int)numericUpDownStartFrame.Value; set => numericUpDownStartFrame.Value = value; }
         public int EndFrame { get => (int)numericUpDownEndFrame.Value; set => numericUpDownEndFrame.Value = value; }
 
+        public event EventHandler ValueChangedEvent;
+
         public PresetSettingControl()
         {
             InitializeComponent();
@@ -43,6 +45,11 @@ namespace CurtainFireMakerPlugin.Forms
 
         public void SaveConfig(PluginConfig config)
         {
+        }
+
+        private void ValueChanged(object sender, EventArgs e)
+        {
+            ValueChangedEvent(this, EventArgs.Empty);
         }
     }
 }

@@ -57,6 +57,7 @@
             this.numericUpDownStartFrame.Name = "numericUpDownStartFrame";
             this.numericUpDownStartFrame.Size = new System.Drawing.Size(80, 19);
             this.numericUpDownStartFrame.TabIndex = 9;
+            this.numericUpDownStartFrame.ValueChanged += new System.EventHandler(this.ValueChanged);
             // 
             // label1
             // 
@@ -79,6 +80,7 @@
             this.numericUpDownEndFrame.Name = "numericUpDownEndFrame";
             this.numericUpDownEndFrame.Size = new System.Drawing.Size(80, 19);
             this.numericUpDownEndFrame.TabIndex = 11;
+            this.numericUpDownEndFrame.ValueChanged += new System.EventHandler(this.ValueChanged);
             // 
             // label3
             // 

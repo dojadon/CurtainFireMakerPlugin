@@ -11,12 +11,11 @@ using Microsoft.Scripting.Hosting;
 
 namespace CurtainFireMakerPlugin.Forms
 {
-    public partial class PresetEditorControl : UserControl, IPresetEditor
+    public partial class PresetEditorControl : UserControl
     {
         private Preset Preset { get; } = new Preset();
 
         private IPresetEditor[] PresetEditors { get; }
-        public bool IsUpdated(Preset preset) => PresetEditors.Any(c => c.IsUpdated(Preset));
 
         public string PresetPath { get; private set; }
 
@@ -40,39 +39,45 @@ namespace CurtainFireMakerPlugin.Forms
             InitializeComponent();
 
             PresetEditors = new IPresetEditor[] { PresetSequenceEditorControl, PresetSettingControl };
+            foreach (var editor in PresetEditors)
+            {
+                editor.ValueChangedEvent += new EventHandler(Changed);
+
+                void Changed(Object o, EventArgs e)
+                {
+                    if (o is IPresetEditor sender)
+                    {
+                        if (IsUpdated())
+                        {
+                            if (!Parent.Text.EndsWith("*")) Parent.Text += "*";
+                        }
+                        else
+                        {
+                            if (Parent.Text.EndsWith("*")) Parent.Text = Parent.Text.Trim('*');
+                        }
+                    }
+                }
+            }
 
             LoadConfig(config);
             LoadPreset(Preset);
         }
 
-        public void LoadConfig(PluginConfig config)
-        {
-            PresetEditors.ForEach(p => p.LoadConfig(config));
-        }
+        public void LoadConfig(PluginConfig config) => PresetEditors.ForEach(p => p.LoadConfig(config));
 
-        public void SaveConfig(PluginConfig config)
-        {
-            PresetEditors.ForEach(p => p.SaveConfig(config));
-        }
+        public void SaveConfig(PluginConfig config) => PresetEditors.ForEach(p => p.SaveConfig(config));
 
-        public void LoadPreset(Preset preset)
-        {
-            PresetEditors.ForEach(c => c.LoadPreset(Preset));
-        }
+        public bool IsUpdated() => PresetEditors.Any(c => c.IsUpdated(Preset));
 
-        public void SavePreset(Preset preset)
-        {
-            PresetEditors.ForEach(c => c.SavePreset(Preset));
-        }
+        public void LoadPreset(Preset preset) => PresetEditors.ForEach(c => c.LoadPreset(Preset));
 
-        public void RunScript(ScriptEngine engine, ScriptScope scope)
-        {
-            PresetSequenceEditorControl.RunScript(engine, scope);
-        }
+        public void SavePreset(Preset preset) => PresetEditors.ForEach(c => c.SavePreset(Preset));
+
+        public void RunScript(ScriptEngine engine, ScriptScope scope) => PresetSequenceEditorControl.RunScript(engine, scope);
 
         public bool CheckSave(Microsoft.Win32.SaveFileDialog dialog)
         {
-            if (IsUpdated(Preset))
+            if (IsUpdated())
             {
                 var result = MessageBox.Show("保存されてない変更があります。\r\n変更を保存しますか？", Path.GetFileNameWithoutExtension(PresetPath), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 

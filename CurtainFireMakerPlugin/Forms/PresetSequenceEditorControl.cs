@@ -25,6 +25,8 @@ namespace CurtainFireMakerPlugin.Forms
 
         public List<string> RecentDirectories { get; set; }
 
+        public event EventHandler ValueChangedEvent;
+
         public PresetSequenceEditorControl()
         {
             InitializeComponent();
@@ -101,6 +103,8 @@ namespace CurtainFireMakerPlugin.Forms
                 pair.Value.Dispose();
                 FileWatcherDict.Remove(pair.Key);
             }
+
+            ValueChangedEvent(this, EventArgs.Empty);
         }
 
         private FileSystemWatcher CreateFileSystemWatcher(string path)
