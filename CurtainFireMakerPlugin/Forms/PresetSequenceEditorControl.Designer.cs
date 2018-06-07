@@ -41,14 +41,20 @@
             this.labelPath = new System.Windows.Forms.Label();
             this.saveFileDialogScript = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.エクスプローラーToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.atomToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ペーストToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -73,30 +79,33 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.追加ToolStripMenuItem,
             this.ToolStripMenuItemRemove,
+            this.toolStripSeparator2,
+            this.ToolStripMenuItemCopy,
+            this.ペーストToolStripMenuItem,
             this.toolStripMenuItem1,
             this.ToolStripMenuItemOpen});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 126);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.OpeningContextMenu);
             // 
             // 追加ToolStripMenuItem
             // 
             this.追加ToolStripMenuItem.Name = "追加ToolStripMenuItem";
-            this.追加ToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.追加ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.追加ToolStripMenuItem.Text = "追加";
             this.追加ToolStripMenuItem.Click += new System.EventHandler(this.ClickAdd);
             // 
             // ToolStripMenuItemRemove
             // 
             this.ToolStripMenuItemRemove.Name = "ToolStripMenuItemRemove";
-            this.ToolStripMenuItemRemove.Size = new System.Drawing.Size(156, 22);
+            this.ToolStripMenuItemRemove.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemRemove.Text = "削除";
             this.ToolStripMenuItemRemove.Click += new System.EventHandler(this.ClickRemove);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(153, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
             // ToolStripMenuItemOpen
             // 
@@ -104,7 +113,7 @@
             this.エクスプローラーToolStripMenuItem,
             this.atomToolStripMenuItem});
             this.ToolStripMenuItemOpen.Name = "ToolStripMenuItemOpen";
-            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(156, 22);
+            this.ToolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemOpen.Text = "プログラムから開く";
             // 
             // エクスプローラーToolStripMenuItem
@@ -131,7 +140,6 @@
             this.textBoxSelectedScript.Size = new System.Drawing.Size(485, 277);
             this.textBoxSelectedScript.TabIndex = 19;
             this.textBoxSelectedScript.WordWrap = false;
-            this.textBoxSelectedScript.TextChanged += new System.EventHandler(this.TextChangedScript);
             // 
             // labelPath
             // 
@@ -156,12 +164,37 @@
             this.toolStripButton3,
             this.toolStripButton4,
             this.toolStripSeparator1,
+            this.toolStripButton5,
+            this.toolStripButton6,
+            this.toolStripSeparator3,
             this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(642, 25);
             this.toolStrip1.TabIndex = 19;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ToolStripMenuItemCopy
+            // 
+            this.ToolStripMenuItemCopy.Name = "ToolStripMenuItemCopy";
+            this.ToolStripMenuItemCopy.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemCopy.Text = "コピー";
+            this.ToolStripMenuItemCopy.Click += new System.EventHandler(this.ClickCopy);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripButton1
             // 
@@ -207,10 +240,27 @@
             this.toolStripButton4.ToolTipText = "下へ移動";
             this.toolStripButton4.Click += new System.EventHandler(this.ClickDown);
             // 
-            // toolStripSeparator1
+            // toolStripButton5
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = global::CurtainFireMakerPlugin.Properties.Resources.Copy_16x;
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.ToolTipText = "コピー";
+            this.toolStripButton5.Click += new System.EventHandler(this.ClickCopy);
+            // 
+            // toolStripButton6
+            // 
+            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton6.Image = global::CurtainFireMakerPlugin.Properties.Resources.Paste_16x;
+            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton6.Name = "toolStripButton6";
+            this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton6.Text = "toolStripButton6";
+            this.toolStripButton6.ToolTipText = "ペースト";
+            this.toolStripButton6.Click += new System.EventHandler(this.ClickPaste);
             // 
             // toolStripDropDownButton1
             // 
@@ -238,6 +288,13 @@
             this.atomToolStripMenuItem1.Size = new System.Drawing.Size(143, 22);
             this.atomToolStripMenuItem1.Text = "Atom";
             this.atomToolStripMenuItem1.Click += new System.EventHandler(this.OpenWithAtom);
+            // 
+            // ペーストToolStripMenuItem
+            // 
+            this.ペーストToolStripMenuItem.Name = "ペーストToolStripMenuItem";
+            this.ペーストToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ペーストToolStripMenuItem.Text = "ペースト";
+            this.ペーストToolStripMenuItem.Click += new System.EventHandler(this.ClickPaste);
             // 
             // PresetSequenceEditorControl
             // 
@@ -278,5 +335,11 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem エクスプローラーToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem atomToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCopy;
+        private System.Windows.Forms.ToolStripButton toolStripButton5;
+        private System.Windows.Forms.ToolStripButton toolStripButton6;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem ペーストToolStripMenuItem;
     }
 }

@@ -21,7 +21,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public string SelectedFilePath => IsSelected ? Sequence[SelectedIndex] : "";
 
-        private string SectedScriptText { set => textBoxSelectedScript.Text = value; }
+        private string SectedScriptText { set => textBoxSelectedScript.Text = value.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n"); }
 
         public List<string> RecentDirectories { get; set; }
 
@@ -268,13 +268,31 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void OpeningContextMenu(object sender, CancelEventArgs e)
         {
-            ToolStripMenuItemRemove.Enabled = ToolStripMenuItemOpen.Enabled = IsSelected;
+            ToolStripMenuItemCopy.Enabled = ToolStripMenuItemRemove.Enabled = ToolStripMenuItemOpen.Enabled = IsSelected;
         }
 
-        private void TextChangedScript(object sender, EventArgs e)
+        private void Copy()
         {
-            textBoxSelectedScript.Text = textBoxSelectedScript.Text.Replace("\r\n", "\r").Replace("\r", "\n").Replace("\n", "\r\n");
+            if (IsSelected)
+            {
+                Clipboard.SetFileDropList(new System.Collections.Specialized.StringCollection() { SelectedFilePath });
+            }
         }
+
+        private void Paste()
+        {
+            if (Clipboard.ContainsFileDropList())
+            {
+                foreach (string path in Clipboard.GetFileDropList())
+                {
+                    AddScript(path);
+                }
+            }
+        }
+
+        private void ClickCopy(object sender, EventArgs e) => Copy();
+
+        private void ClickPaste(object sender, EventArgs e) => Paste();
 
         private Microsoft.Win32.OpenFileDialog CreateOpenFileDialog() => new Microsoft.Win32.OpenFileDialog()
         {

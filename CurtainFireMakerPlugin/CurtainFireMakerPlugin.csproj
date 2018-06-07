@@ -239,6 +239,12 @@
   <ItemGroup>
     <None Include="Resources\SaveAll_16x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Paste_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Copy_16x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set out_path="C:\Tool\CG\MikuMikuMoving64_v1282\Plugins\$(TargetFileName)"
