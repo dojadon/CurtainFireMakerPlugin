@@ -67,11 +67,7 @@ namespace CurtainFireMakerPlugin.Forms
                 if (((PresetEditorControl)p.Controls[0]).PresetPath == path) return;
             }
 
-            var editor = new PresetEditorControl(path, Config)
-            {
-                Location = new Point(0, 0),
-                Size = new Size(1000, 1000),
-            };
+            var editor = new PresetEditorControl(path, Config) { Location = new Point(0, 0), Size = new Size(1000, 1000) };
 
             var page = new TabPage
             {
@@ -117,10 +113,7 @@ namespace CurtainFireMakerPlugin.Forms
         }
         private void ClickSaveAll(object sender, EventArgs e) => SaveAll();
 
-        private bool Close(PresetEditorControl editor)
-        {
-            return editor.CheckSave(CreateSaveFileDialog());
-        }
+        private bool Close(PresetEditorControl editor) => editor.CheckSave(CreateSaveFileDialog());
 
         private void Close()
         {
@@ -142,10 +135,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void OnTabClosing(object sender, TabControlCancelEventArgs e)
         {
-            if (Close((PresetEditorControl)e.TabPage.Controls[0]))
-            {
-                e.Cancel = true;
-            }
+            e.Cancel = Close((PresetEditorControl)e.TabPage.Controls[0]);
         }
 
         private Microsoft.Win32.OpenFileDialog CreateOpenFileDialog() => new Microsoft.Win32.OpenFileDialog()
@@ -189,13 +179,7 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 int h = i / 3600;
                 i %= 3600;
-
-                int m = i / 60;
-                i %= 60;
-
-                int s = i;
-
-                return $"{h}時間 {m}分 {s}秒";
+                return $"{h}時間 { i / 60}分 { i %= 60}秒";
             }
         }
     }
