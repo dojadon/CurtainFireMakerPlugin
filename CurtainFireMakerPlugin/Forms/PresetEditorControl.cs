@@ -39,28 +39,27 @@ namespace CurtainFireMakerPlugin.Forms
             InitializeComponent();
 
             PresetEditors = new IPresetEditor[] { PresetSequenceEditorControl, PresetSettingControl };
-            foreach (var editor in PresetEditors)
-            {
-                editor.ValueChangedEvent += new EventHandler(Changed);
-
-                void Changed(Object o, EventArgs e)
-                {
-                    if (o is IPresetEditor sender)
-                    {
-                        if (IsUpdated())
-                        {
-                            if (!Parent.Text.EndsWith("*")) Parent.Text += "*";
-                        }
-                        else
-                        {
-                            if (Parent.Text.EndsWith("*")) Parent.Text = Parent.Text.Trim('*');
-                        }
-                    }
-                }
-            }
+            PresetEditors.ForEach(e => e.ValueChangedEvent += new EventHandler(PresetChanged));
 
             LoadConfig(config);
             LoadPreset(Preset);
+        }
+
+        private void PresetChanged(Object o, EventArgs e)
+        {
+            const string UpdatedChar = "*";
+
+            if (o is IPresetEditor sender && Parent != null)
+            {
+                if (IsUpdated())
+                {
+                    if (!Parent.Text.EndsWith(UpdatedChar)) Parent.Text += UpdatedChar;
+                }
+                else
+                {
+                    if (Parent.Text.EndsWith(UpdatedChar)) Parent.Text = Parent.Text.TrimEnd(char.Parse(UpdatedChar));
+                }
+            }
         }
 
         public void LoadConfig(PluginConfig config) => PresetEditors.ForEach(p => p.LoadConfig(config));
