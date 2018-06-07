@@ -11,6 +11,17 @@ using Microsoft.Scripting.Hosting;
 
 namespace CurtainFireMakerPlugin.Forms
 {
+    interface IPresetEditor
+    {
+        void LoadPreset(Preset preset);
+        void SavePreset(Preset preset);
+        void LoadConfig(PluginConfig config);
+        void SaveConfig(PluginConfig config);
+        bool IsUpdated(Preset preset);
+
+        event EventHandler ValueChangedEvent;
+    }
+
     public partial class PresetEditorControl : UserControl
     {
         private Preset Preset { get; } = new Preset();
