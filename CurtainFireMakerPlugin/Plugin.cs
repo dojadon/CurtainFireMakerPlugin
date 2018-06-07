@@ -85,7 +85,6 @@ namespace CurtainFireMakerPlugin
 
         public void Dispose()
         {
-            PluginControl.Save();
         }
 
         public void Run(CommandArgs args)

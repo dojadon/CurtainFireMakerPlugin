@@ -39,6 +39,8 @@ namespace CurtainFireMakerPlugin.Forms
             InitializeComponent();
 
             TabControl.DisplayStyleProvider.ShowTabCloser = true;
+
+            HandleDestroyed += (sender, e) => CloseAll();
         }
 
         private void LoadConfig()
@@ -51,11 +53,6 @@ namespace CurtainFireMakerPlugin.Forms
             Config.RecentPresetDirectories = RecentDirectories.Distinct().Where(Directory.Exists).ToArray();
             Config.TotalTime += (int)(Environment.TickCount - LastTime) / 1000;
             LastTime = Environment.TickCount;
-        }
-
-        public void Save()
-        {
-            SaveConfig();
         }
 
         public void RunScript(ScriptEngine engine, ScriptScope scope)
@@ -87,10 +84,7 @@ namespace CurtainFireMakerPlugin.Forms
             TabControl.TabPages.Add(page);
         }
 
-        private void ClickNewFile(object sender, EventArgs e)
-        {
-            AddPage("新規");
-        }
+        private void ClickNewFile(object sender, EventArgs e) => AddPage("新規");
 
         private void ClickOpen(object sender, EventArgs e)
         {
@@ -108,44 +102,43 @@ namespace CurtainFireMakerPlugin.Forms
             }
         }
 
-        private void ClickSave(object sender, EventArgs e)
-        {
-            CurrentPresetEditor?.Save(CreateSaveFileDialog());
-        }
+        private void Save() => CurrentPresetEditor?.SaveAs(CreateSaveFileDialog());
+        private void ClickSave(object sender, EventArgs e) => SaveAs();
 
-        private void ClickSaveAs(object sender, EventArgs e)
-        {
-            CurrentPresetEditor?.SaveAs(CreateSaveFileDialog());
-        }
+        private void SaveAs() => CurrentPresetEditor?.SaveAs(CreateSaveFileDialog());
+        private void ClickSaveAs(object sender, EventArgs e) => SaveAs();
 
-        private void ClickSaveAll(object sender, EventArgs e)
+        private void SaveAll()
         {
             foreach (TabPage p in TabControl.TabPages)
             {
                 ((PresetEditorControl)p.Controls[0]).Save(CreateSaveFileDialog());
             }
         }
+        private void ClickSaveAll(object sender, EventArgs e) => SaveAll();
 
         private bool Close(PresetEditorControl editor)
         {
             return editor.CheckSave(CreateSaveFileDialog());
         }
 
-        private void ClickClose(object sender, EventArgs e)
+        private void Close()
         {
             if (CurrentPresetEditor != null && !Close(CurrentPresetEditor))
             {
                 TabControl.TabPages.Remove(TabControl.SelectedTab);
             }
         }
+        private void ClickClose(object sender, EventArgs e) => Close();
 
-        private void ClickCloseAll(object sender, EventArgs e)
+        private void CloseAll()
         {
             foreach (TabPage page in TabControl.TabPages)
             {
                 if (!Close((PresetEditorControl)page.Controls[0])) TabControl.TabPages.Remove(page);
             }
         }
+        private void ClickCloseAll(object sender, EventArgs e) => CloseAll();
 
         private void OnTabClosing(object sender, TabControlCancelEventArgs e)
         {
