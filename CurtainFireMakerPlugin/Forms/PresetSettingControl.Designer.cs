@@ -96,6 +96,7 @@
             // checkBoxBackGround
             // 
             this.checkBoxBackGround.AutoSize = true;
+            this.checkBoxBackGround.ForeColor = System.Drawing.SystemColors.WindowText;
             this.checkBoxBackGround.Location = new System.Drawing.Point(195, 10);
             this.checkBoxBackGround.Name = "checkBoxBackGround";
             this.checkBoxBackGround.Size = new System.Drawing.Size(146, 16);
