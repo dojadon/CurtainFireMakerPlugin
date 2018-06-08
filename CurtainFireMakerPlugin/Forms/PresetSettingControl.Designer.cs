@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownEndFrame = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
+            this.checkBoxBackGround = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStartFrame)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEndFrame)).BeginInit();
             this.SuspendLayout();
@@ -92,16 +93,28 @@
             this.label3.TabIndex = 12;
             this.label3.Text = "終了フレーム";
             // 
+            // checkBoxBackGround
+            // 
+            this.checkBoxBackGround.AutoSize = true;
+            this.checkBoxBackGround.Location = new System.Drawing.Point(195, 10);
+            this.checkBoxBackGround.Name = "checkBoxBackGround";
+            this.checkBoxBackGround.Size = new System.Drawing.Size(146, 16);
+            this.checkBoxBackGround.TabIndex = 13;
+            this.checkBoxBackGround.Text = "バックグラウンドで実行する";
+            this.checkBoxBackGround.UseVisualStyleBackColor = true;
+            this.checkBoxBackGround.CheckedChanged += new System.EventHandler(this.ValueChanged);
+            // 
             // PresetSettingControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxBackGround);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.numericUpDownEndFrame);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDownStartFrame);
             this.Name = "PresetSettingControl";
-            this.Size = new System.Drawing.Size(160, 62);
+            this.Size = new System.Drawing.Size(500, 62);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStartFrame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEndFrame)).EndInit();
             this.ResumeLayout(false);
@@ -115,5 +128,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDownEndFrame;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox checkBoxBackGround;
     }
 }

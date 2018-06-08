@@ -11,15 +11,19 @@ namespace CurtainFireMakerPlugin.Forms
         private const string DefaultXml =
         "<?xml version = \"1.0\" encoding = \"UTF-8\"?>\n" +
         "<Configuration>\n" +
+        "  <CFMPluginVersion>1.0</CFMPluginVersion>\n" +
         "  <StartFrame>0</StartFrame>\n" +
         "  <EndFrame>1200</EndFrame>\n" +
+        "  <BackGround>False</BackGround>\n" +
         "  <Sequence></Sequence>\n" +
         "</Configuration>\n";
 
         public override XmlNode RootNode => Document.SelectSingleNode("//Configuration");
 
-        public int StartFrame { get => GetInt("StartFrame"); set => SetValue("StartFrame", value); }
-        public int EndFrame { get => GetInt("EndFrame"); set => SetValue("EndFrame", value); }
+        public int StartFrame { get => GetInt("StartFrame", 0); set => SetValue("StartFrame", 0, value); }
+        public int EndFrame { get => GetInt("EndFrame", 1200); set => SetValue("EndFrame", 1200, value); }
+
+        public bool BackGround { get => GetBool("BackGround", false); set => SetValue("BackGround", false, value); }
 
         public string[] SequenceScripts { get => GetPaths("Sequence/Path"); set => SetPaths("Sequence/Path", value); }
 
@@ -35,7 +39,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public static bool IsFormated(string path)
         {
-            return IsFormated(path, "//Configuration", "//Configuration/StartFrame", "//Configuration/EndFrame", "//Configuration/Sequence");
+            return IsFormated(path, "//Configuration/CFMPluginVersion");
         }
     }
 }

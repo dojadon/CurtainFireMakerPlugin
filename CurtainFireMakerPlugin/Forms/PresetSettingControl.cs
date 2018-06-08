@@ -15,6 +15,8 @@ namespace CurtainFireMakerPlugin.Forms
         public int StartFrame { get => (int)numericUpDownStartFrame.Value; set => numericUpDownStartFrame.Value = value; }
         public int EndFrame { get => (int)numericUpDownEndFrame.Value; set => numericUpDownEndFrame.Value = value; }
 
+        public bool BackGround { get => checkBoxBackGround.Checked; set => checkBoxBackGround.Checked = value; }
+
         public event EventHandler ValueChangedEvent;
 
         public PresetSettingControl()
@@ -26,17 +28,19 @@ namespace CurtainFireMakerPlugin.Forms
         {
             StartFrame = preset.StartFrame;
             EndFrame = preset.EndFrame;
+            BackGround = preset.BackGround;
         }
 
         public void SavePreset(Preset preset)
         {
             preset.StartFrame = StartFrame;
             preset.EndFrame = EndFrame;
+            preset.BackGround =BackGround;
         }
 
         public bool IsUpdated(Preset preset)
         {
-            return preset.StartFrame != StartFrame || preset.EndFrame != EndFrame;
+            return preset.StartFrame != StartFrame || preset.EndFrame != EndFrame || preset.BackGround != BackGround;
         }
 
         public void LoadConfig(PluginConfig config)

@@ -49,7 +49,7 @@
             this.PresetSettingControl.EndFrame = 0;
             this.PresetSettingControl.Location = new System.Drawing.Point(6, 18);
             this.PresetSettingControl.Name = "PresetSettingControl";
-            this.PresetSettingControl.Size = new System.Drawing.Size(160, 62);
+            this.PresetSettingControl.Size = new System.Drawing.Size(624, 62);
             this.PresetSettingControl.StartFrame = 0;
             this.PresetSettingControl.TabIndex = 13;
             // 

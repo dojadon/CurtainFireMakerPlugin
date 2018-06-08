@@ -22,37 +22,41 @@ namespace CurtainFireMakerPlugin
 
         public void Save(string path) => Document.Save(path);
 
-        protected string GetPath(string xpath) => GetAbsolutePath(GetString(xpath));
-
-        protected void SetPath(string xpath, string value) => RootNode.SelectSingleNode(xpath).InnerText = GetAbsolutePath(value);
-
-        protected string GetString(string xpath) => RootNode.SelectSingleNode(xpath).InnerText;
-
-        protected void SetString(string xpath, string value) => RootNode.SelectSingleNode(xpath).InnerText = value;
-
-        protected bool GetBool(string xpath) => bool.Parse(RootNode.SelectSingleNode(xpath).InnerText);
-
-        protected int GetInt(string xpath) => int.Parse(RootNode.SelectSingleNode(xpath).InnerText);
-
-        protected void SetValue(string xpath, object value) => RootNode.SelectSingleNode(xpath).InnerText = value.ToString();
-
-        protected string[] GetStrings(string xpath)
+        protected XmlNode GetNode(string xpath, object defaultVal)
         {
-            return (from XmlNode node in RootNode.SelectNodes(xpath) select node.InnerText).ToArray();
-        }
+            var node = RootNode.SelectSingleNode(xpath);
 
-        protected void SetStrings(string xpath, string[] values)
-        {
-            var nodes = RootNode.SelectNodes(xpath);
-            for (int i = 0; i < nodes.Count; i++)
+            if (node == null)
             {
-                nodes.Item(i).InnerText = values[i];
+                node = Document.CreateElement(xpath);
+                node.AppendChild(Document.CreateTextNode(defaultVal.ToString()));
+                RootNode.AppendChild(node);
             }
+            return node;
         }
+
+        protected XmlNodeList GetNodes(string xpath)
+        {
+            return RootNode.SelectNodes(xpath);
+        }
+
+        protected string GetPath(string xpath, object defaultVal) => GetAbsolutePath(GetString(xpath, defaultVal));
+
+        protected void SetPath(string xpath, object defaultVal, string value) => GetNode(xpath, defaultVal).InnerText = GetAbsolutePath(value);
+
+        protected string GetString(string xpath, object defaultVal) => GetNode(xpath, defaultVal).InnerText;
+
+        protected void SetString(string xpath, object defaultVal, string value) => GetNode(xpath, defaultVal).InnerText = value;
+
+        protected bool GetBool(string xpath, object defaultVal) => bool.Parse(GetNode(xpath, defaultVal).InnerText);
+
+        protected int GetInt(string xpath, object defaultVal) => int.Parse(GetNode(xpath, defaultVal).InnerText);
+
+        protected void SetValue(string xpath, object defaultVal, object value) => GetNode(xpath, defaultVal).InnerText = value.ToString();
 
         protected string[] GetPaths(string xpath)
         {
-            return (from XmlNode node in RootNode.SelectNodes(xpath) select GetAbsolutePath(node.InnerText)).ToArray();
+            return (from XmlNode node in GetNodes(xpath) select GetAbsolutePath(node.InnerText)).ToArray();
         }
 
         protected void SetPaths(string xpath, string[] values)
@@ -60,7 +64,7 @@ namespace CurtainFireMakerPlugin
             var parentNode = RootNode.SelectSingleNode(xpath.Substring(0, xpath.LastIndexOf('/')));
             var childPath = xpath.Substring(xpath.LastIndexOf('/') + 1);
 
-            var nodes = RootNode.SelectNodes(xpath);
+            var nodes = GetNodes(xpath);
 
             foreach (var node in nodes)
             {

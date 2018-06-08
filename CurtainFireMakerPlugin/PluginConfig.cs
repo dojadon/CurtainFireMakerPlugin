@@ -24,7 +24,7 @@ namespace CurtainFireMakerPlugin
 
         public string[] RecentScriptDirectories { get => GetPaths("RecentScriptDirectories/Path"); set => SetPaths("RecentScriptDirectories/Path", value); }
 
-        public int TotalTime { get => GetInt("TotalTime"); set => SetValue("TotalTime", value); }
+        public int TotalTime { get => GetInt("TotalTime", 0); set => SetValue("TotalTime", 0, value); }
 
         public override void Init()
         {
