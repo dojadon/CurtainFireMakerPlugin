@@ -20,8 +20,8 @@ namespace CurtainFireMakerPlugin.Forms
 
         private long LastTime { get; set; } = Environment.TickCount;
 
-        private PresetEditorControl CurrentPresetEditor => (PresetEditorControl)TabControl.SelectedTab?.Controls[0];
-        private PresetEditorControl GetPresetEditor(int idx) => (PresetEditorControl)TabControl.TabPages[idx].Controls[0];
+        private PresetEditorControl CurrentPresetEditor => TabControl.SelectedTab.Controls[0] is PresetEditorControl e ? e : null;
+        private PresetEditorControl GetPresetEditor(int idx) => TabControl.TabPages[idx].Controls[0] is PresetEditorControl e ? e : null;
 
         public bool IsSelectPreset => TabControl.SelectedTab != null;
 
@@ -62,7 +62,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             foreach (TabPage p in TabControl.TabPages)
             {
-                if (((PresetEditorControl)p.Controls[0]).PresetPath == path) return;
+                if (p.Controls[0] is PresetEditorControl e && e.PresetPath == path) return;
             }
 
             var editor = new PresetEditorControl(path, Config) { Location = new Point(0, 0), Size = new Size(1000, 1000) };
@@ -104,9 +104,9 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void SaveAll()
         {
-            foreach (TabPage p in TabControl.TabPages)
+            foreach (TabPage page in TabControl.TabPages)
             {
-                ((PresetEditorControl)p.Controls[0]).Save(CreateSaveFileDialog());
+                if (page.Controls[0] is PresetEditorControl editor) editor.Save(CreateSaveFileDialog());
             }
         }
         private void ClickSaveAll(object sender, EventArgs e) => SaveAll();
@@ -115,7 +115,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void Close()
         {
-            if (CurrentPresetEditor != null && !Close(CurrentPresetEditor))
+            if (TabControl.SelectedIndex != 0 && CurrentPresetEditor != null && !Close(CurrentPresetEditor))
             {
                 TabControl.TabPages.Remove(TabControl.SelectedTab);
             }
@@ -126,14 +126,14 @@ namespace CurtainFireMakerPlugin.Forms
         {
             foreach (TabPage page in TabControl.TabPages)
             {
-                if (!Close((PresetEditorControl)page.Controls[0])) TabControl.TabPages.Remove(page);
+                if (page.Controls[0] is PresetEditorControl editor && !Close(editor)) TabControl.TabPages.Remove(page);
             }
         }
         private void ClickCloseAll(object sender, EventArgs e) => CloseAll();
 
         private void OnTabClosing(object sender, TabControlCancelEventArgs e)
         {
-            e.Cancel = Close((PresetEditorControl)e.TabPage.Controls[0]);
+            e.Cancel = e.TabPage.Controls[0] is PresetEditorControl editor && Close(editor);
         }
 
         private Microsoft.Win32.OpenFileDialog CreateOpenFileDialog() => new Microsoft.Win32.OpenFileDialog()

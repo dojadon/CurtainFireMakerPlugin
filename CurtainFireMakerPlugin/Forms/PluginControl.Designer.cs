@@ -47,6 +47,7 @@
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.TabControl = new System.Windows.Forms.CustomTabControl();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -143,7 +144,8 @@
             this.toolStripButton3,
             this.toolStripButton6,
             this.toolStripSeparator1,
-            this.toolStripButton5});
+            this.toolStripButton5,
+            this.toolStripSeparator3});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1280, 25);
@@ -222,6 +224,11 @@
             this.toolStripButton5.ToolTipText = "記録時間";
             this.toolStripButton5.Click += new System.EventHandler(this.ClickRecordedTime);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // TabControl
             // 
             this.TabControl.DisplayStyle = System.Windows.Forms.TabStyle.Chrome;
@@ -295,5 +302,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem 閉じるToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem すべて閉じるToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }

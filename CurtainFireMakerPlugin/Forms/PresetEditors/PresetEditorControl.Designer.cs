@@ -46,6 +46,7 @@
             // 
             // PresetSettingControl
             // 
+            this.PresetSettingControl.BackGround = false;
             this.PresetSettingControl.EndFrame = 0;
             this.PresetSettingControl.Location = new System.Drawing.Point(6, 18);
             this.PresetSettingControl.Name = "PresetSettingControl";
