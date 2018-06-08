@@ -38,8 +38,6 @@ namespace CurtainFireMakerPlugin.Forms
 
             InitializeComponent();
 
-            TabControl.DisplayStyleProvider.ShowTabCloser = true;
-
             HandleDestroyed += (sender, e) => CloseAll();
         }
 

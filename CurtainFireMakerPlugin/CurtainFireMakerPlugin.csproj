@@ -66,22 +66,22 @@
       <DependentUpon>PluginControl.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginConfig.cs" />
-    <Compile Include="Forms\PresetEditorControl.cs">
+    <Compile Include="Forms\PresetEditors\PresetEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\PresetEditorControl.Designer.cs">
+    <Compile Include="Forms\PresetEditors\PresetEditorControl.Designer.cs">
       <DependentUpon>PresetEditorControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PresetSequenceEditorControl.cs">
+    <Compile Include="Forms\PresetEditors\PresetSequenceEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\PresetSequenceEditorControl.Designer.cs">
+    <Compile Include="Forms\PresetEditors\PresetSequenceEditorControl.Designer.cs">
       <DependentUpon>PresetSequenceEditorControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PresetSettingControl.cs">
+    <Compile Include="Forms\PresetEditors\PresetSettingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\PresetSettingControl.Designer.cs">
+    <Compile Include="Forms\PresetEditors\PresetSettingControl.Designer.cs">
       <DependentUpon>PresetSettingControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProgressForm.cs">
@@ -113,13 +113,13 @@
     <EmbeddedResource Include="Forms\PluginControl.resx">
       <DependentUpon>PluginControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PresetEditorControl.resx">
+    <EmbeddedResource Include="Forms\PresetEditors\PresetEditorControl.resx">
       <DependentUpon>PresetEditorControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PresetSequenceEditorControl.resx">
+    <EmbeddedResource Include="Forms\PresetEditors\PresetSequenceEditorControl.resx">
       <DependentUpon>PresetSequenceEditorControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PresetSettingControl.resx">
+    <EmbeddedResource Include="Forms\PresetEditors\PresetSettingControl.resx">
       <DependentUpon>PresetSettingControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProgressForm.resx">
@@ -245,6 +245,7 @@
   <ItemGroup>
     <None Include="Resources\Copy_16x.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set out_path="C:\Tool\CG\MikuMikuMoving64_v1282\Plugins\$(TargetFileName)"
