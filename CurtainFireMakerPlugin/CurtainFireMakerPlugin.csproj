@@ -65,9 +65,6 @@
     <Compile Include="Forms\PluginControl.Designer.cs">
       <DependentUpon>PluginControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PresetEditors\ResizableCustomTabControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="PluginConfig.cs" />
     <Compile Include="Forms\PresetEditors\PresetEditorControl.cs">
       <SubType>UserControl</SubType>
