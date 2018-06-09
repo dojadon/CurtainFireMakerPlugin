@@ -97,7 +97,7 @@ namespace CurtainFireMakerPlugin.Forms
         }
 
         private void Save() => CurrentPresetEditor?.Save(CreateSaveFileDialog());
-        private void ClickSave(object sender, EventArgs e) => SaveAs();
+        private void ClickSave(object sender, EventArgs e) => Save();
 
         private void SaveAs() => CurrentPresetEditor?.SaveAs(CreateSaveFileDialog());
         private void ClickSaveAs(object sender, EventArgs e) => SaveAs();
