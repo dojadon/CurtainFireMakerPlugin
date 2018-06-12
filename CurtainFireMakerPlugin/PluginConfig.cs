@@ -20,9 +20,9 @@ namespace CurtainFireMakerPlugin
 
         public override XmlNode RootNode => Document.SelectSingleNode(@"//Configuration");
 
-        public string[] RecentPresetDirectories { get => GetPaths("RecentPresetDirectories/Path"); set => SetPaths("RecentPresetDirectories/Path", value); }
+        public string[] RecentPresetDirectories { get => GetStrings("RecentPresetDirectories/Path"); set => SetStrings("RecentPresetDirectories/Path", value); }
 
-        public string[] RecentScriptDirectories { get => GetPaths("RecentScriptDirectories/Path"); set => SetPaths("RecentScriptDirectories/Path", value); }
+        public string[] RecentScriptDirectories { get => GetStrings("RecentScriptDirectories/Path"); set => SetStrings("RecentScriptDirectories/Path", value); }
 
         public int TotalTime { get => GetInt("TotalTime", 0); set => SetValue("TotalTime", 0, value); }
 

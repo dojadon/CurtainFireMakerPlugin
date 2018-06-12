@@ -44,23 +44,31 @@ namespace CurtainFireMakerPlugin.Forms
             config.RecentScriptDirectories = config.RecentScriptDirectories.Concat(RecentDirectories).Distinct().Where(Directory.Exists).ToArray();
         }
 
-        public void LoadPreset(Preset preset)
+        public void LoadPreset(Preset preset, string path)
         {
-            Sequence = preset.SequenceScripts.Where(File.Exists).ToList();
+            var directory = Path.IsPathRooted(path) ? Path.GetDirectoryName(path) : Plugin.PluginRootPath;
+
+            Sequence = preset.SequenceScripts.Select(p => Path.IsPathRooted(p) ? p : Path.Combine(directory, p)).Where(File.Exists).ToList();
 
             UpdateSequenceDataSource();
 
             SelectedIndex = Sequence.Count == 0 ? -1 : 0;
         }
 
-        public void SavePreset(Preset preset)
+        public void SavePreset(Preset preset, string path)
         {
-            preset.SequenceScripts = Sequence.ToArray();
+            preset.SequenceScripts = GetRelativeSequence(path).ToArray();
         }
 
-        public bool IsUpdated(Preset preset)
+        public bool IsUpdated(Preset preset, string path)
         {
-            return preset.SequenceScripts.Length != Sequence.Count || Enumerable.Zip(preset.SequenceScripts, Sequence, (s1, s2) => s1 != s2).Any(b => b);
+            return preset.SequenceScripts.Length != Sequence.Count || Enumerable.Zip(preset.SequenceScripts, GetRelativeSequence(path), (s1, s2) => s1 != s2).Any(b => b);
+        }
+
+        private IEnumerable<string> GetRelativeSequence(string path)
+        {
+            var directory = Path.IsPathRooted(path) ? Path.GetDirectoryName(path) + "\\" : Plugin.PluginRootPath;
+            return Sequence.Select(p => p.Replace(directory, ""));
         }
 
         private void AddScript(string path)

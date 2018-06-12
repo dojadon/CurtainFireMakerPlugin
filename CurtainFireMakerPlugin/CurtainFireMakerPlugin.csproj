@@ -250,7 +250,7 @@
   <PropertyGroup>
     <PostBuildEvent>set out_path="C:\Tool\CG\MikuMikuMoving64_v1282\Plugins\$(TargetFileName)"
 
-"C:\Program Files (x86)\Microsoft\ILMerge\ILMerge.exe" /out:%25out_path%25 /targetplatform:v4 /wildcards $(TargetFileName) MM*.dll VecMath.dll
+"C:\Program Files (x86)\Microsoft\ILMerge\ILMerge.exe" /out:%25out_path%25 /targetplatform:v4 /wildcards $(TargetFileName) MM*.dll VecMath.dll JacksonSoft.CustomTabControl.dll
 
 copy %25out_path%25 C:\Tool\CG\MikuMikuMoving64_v1282\CurtainFireMaker\Plugins
 </PostBuildEvent>

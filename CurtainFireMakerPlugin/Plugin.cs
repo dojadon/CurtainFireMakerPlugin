@@ -79,6 +79,7 @@ namespace CurtainFireMakerPlugin
                         try { error_writer.WriteLine(Executor.FormatException(e)); } catch { }
                         error_writer.WriteLine(e);
                     }
+                    MessageBox.Show(File.ReadAllText(ErrorLogPath), "CurtainFireMakerPlugin", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -124,7 +125,7 @@ namespace CurtainFireMakerPlugin
 
         private void RunWorld(ProgressForm progress)
         {
-            var worlds = new List<World>();
+            var addWorlds = new List<World>();
 
             Func<string, World> CreateWorld = (string name) =>
             {
@@ -133,7 +134,7 @@ namespace CurtainFireMakerPlugin
                     FrameCount = PluginControl.StartFrame,
                     ExportFileName = name,
                 };
-                worlds.Add(world);
+                addWorlds.Add(world);
 
                 return world;
             };
@@ -143,11 +144,18 @@ namespace CurtainFireMakerPlugin
             Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PluginControl.FileName));
             PluginControl.RunScript(Executor.Engine, Executor.CreateScope());
 
+            var worlds = new List<World>(addWorlds);
+            addWorlds.Clear();
+
             if (worlds.Count > 0)
             {
                 for (int i = 0; i < progress.Maximum; i++)
                 {
                     worlds.ForEach(w => w.Frame());
+
+                    worlds.AddRange(addWorlds);
+                    addWorlds.Clear();
+
                     progress.Value = i;
 
                     Console.Out.Flush();

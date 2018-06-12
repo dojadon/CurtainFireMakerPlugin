@@ -25,7 +25,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         public bool BackGround { get => GetBool("BackGround", false); set => SetValue("BackGround", false, value); }
 
-        public string[] SequenceScripts { get => GetPaths("Sequence/Path"); set => SetPaths("Sequence/Path", value); }
+        public string[] SequenceScripts { get => GetStrings("Sequence/Path"); set => SetStrings("Sequence/Path", value); }
 
         public Preset()
         {

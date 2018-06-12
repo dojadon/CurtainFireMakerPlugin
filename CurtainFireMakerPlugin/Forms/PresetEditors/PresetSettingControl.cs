@@ -24,21 +24,21 @@ namespace CurtainFireMakerPlugin.Forms
             InitializeComponent();
         }
 
-        public void LoadPreset(Preset preset)
+        public void LoadPreset(Preset preset, string path)
         {
             StartFrame = preset.StartFrame;
             EndFrame = preset.EndFrame;
             BackGround = preset.BackGround;
         }
 
-        public void SavePreset(Preset preset)
+        public void SavePreset(Preset preset, string path)
         {
             preset.StartFrame = StartFrame;
             preset.EndFrame = EndFrame;
             preset.BackGround =BackGround;
         }
 
-        public bool IsUpdated(Preset preset)
+        public bool IsUpdated(Preset preset, string path)
         {
             return preset.StartFrame != StartFrame || preset.EndFrame != EndFrame || preset.BackGround != BackGround;
         }

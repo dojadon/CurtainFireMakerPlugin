@@ -13,11 +13,11 @@ namespace CurtainFireMakerPlugin.Forms
 {
     interface IPresetEditor
     {
-        void LoadPreset(Preset preset);
-        void SavePreset(Preset preset);
+        void LoadPreset(Preset preset, string path);
+        void SavePreset(Preset preset, string path);
         void LoadConfig(PluginConfig config);
         void SaveConfig(PluginConfig config);
-        bool IsUpdated(Preset preset);
+        bool IsUpdated(Preset preset, string path);
 
         event EventHandler ValueChangedEvent;
     }
@@ -53,7 +53,7 @@ namespace CurtainFireMakerPlugin.Forms
             PresetEditors.ForEach(e => e.ValueChangedEvent += new EventHandler((o, a) => UpdateWeatherChanged()));
 
             LoadConfig(config);
-            LoadPreset(Preset);
+            LoadPreset(Preset, PresetPath);
         }
 
         private void UpdateWeatherChanged()
@@ -62,7 +62,7 @@ namespace CurtainFireMakerPlugin.Forms
 
             if (Parent != null)
             {
-                if (IsUpdated())
+                if (IsUpdated(PresetPath))
                 {
                     if (!Parent.Text.EndsWith(UpdatedChar)) Parent.Text += UpdatedChar;
                 }
@@ -77,17 +77,17 @@ namespace CurtainFireMakerPlugin.Forms
 
         public void SaveConfig(PluginConfig config) => PresetEditors.ForEach(p => p.SaveConfig(config));
 
-        public bool IsUpdated() => PresetEditors.Any(c => c.IsUpdated(Preset));
+        public bool IsUpdated(string path) => PresetEditors.Any(c => c.IsUpdated(Preset, path));
 
-        public void LoadPreset(Preset preset) => PresetEditors.ForEach(c => c.LoadPreset(Preset));
+        public void LoadPreset(Preset preset, string path) => PresetEditors.ForEach(c => c.LoadPreset(preset, path));
 
-        public void SavePreset(Preset preset) => PresetEditors.ForEach(c => c.SavePreset(Preset));
+        public void SavePreset(Preset preset, string path) => PresetEditors.ForEach(c => c.SavePreset(preset, path));
 
         public void RunScript(ScriptEngine engine, ScriptScope scope) => PresetSequenceEditorControl.RunScript(engine, scope);
 
         public bool CheckSave(Microsoft.Win32.SaveFileDialog dialog)
         {
-            if (IsUpdated())
+            if (IsUpdated(PresetPath))
             {
                 var result = MessageBox.Show("保存されてない変更があります。\r\n変更を保存しますか？", Path.GetFileNameWithoutExtension(PresetPath), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
@@ -111,7 +111,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (Path.IsPathRooted(PresetPath))
             {
-                SavePreset(Preset);
+                SavePreset(Preset, PresetPath);
                 Preset.Save(PresetPath);
                 UpdateWeatherChanged();
             }
