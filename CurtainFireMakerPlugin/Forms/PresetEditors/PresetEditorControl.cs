@@ -50,7 +50,7 @@ namespace CurtainFireMakerPlugin.Forms
             InitializeComponent();
 
             PresetEditors = new IPresetEditor[] { PresetSequenceEditorControl, PresetSettingControl };
-            PresetEditors.ForEach(e => e.ValueChangedEvent += new EventHandler((o, a) => UpdateWeatherChanged()));
+            PresetEditors.ForEach(e => e.ValueChangedEvent += (o, a) => UpdateWeatherChanged());
 
             LoadConfig(config);
             LoadPreset(Preset, PresetPath);
@@ -71,6 +71,8 @@ namespace CurtainFireMakerPlugin.Forms
                     if (Parent.Text.EndsWith(UpdatedChar)) Parent.Text = Parent.Text.TrimEnd(char.Parse(UpdatedChar));
                 }
             }
+
+            Invalidate();
         }
 
         public void LoadConfig(PluginConfig config) => PresetEditors.ForEach(p => p.LoadConfig(config));

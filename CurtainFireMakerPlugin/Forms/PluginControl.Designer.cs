@@ -81,43 +81,47 @@
             // 新規作成ToolStripMenuItem
             // 
             this.新規作成ToolStripMenuItem.Name = "新規作成ToolStripMenuItem";
-            this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.新規作成ToolStripMenuItem.Text = "新規作成";
+            this.新規作成ToolStripMenuItem.Click += new System.EventHandler(this.ClickNewFile);
             // 
             // 開くToolStripMenuItem
             // 
             this.開くToolStripMenuItem.Name = "開くToolStripMenuItem";
-            this.開くToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.開くToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.開くToolStripMenuItem.Text = "開く";
+            this.開くToolStripMenuItem.Click += new System.EventHandler(this.ClickOpen);
             // 
             // 上書き保存ToolStripMenuItem
             // 
             this.上書き保存ToolStripMenuItem.Name = "上書き保存ToolStripMenuItem";
-            this.上書き保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.上書き保存ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.上書き保存ToolStripMenuItem.Text = "上書き保存";
+            this.上書き保存ToolStripMenuItem.Click += new System.EventHandler(this.ClickSave);
             // 
             // 名前を付けて保存ToolStripMenuItem
             // 
             this.名前を付けて保存ToolStripMenuItem.Name = "名前を付けて保存ToolStripMenuItem";
-            this.名前を付けて保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.名前を付けて保存ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.名前を付けて保存ToolStripMenuItem.Text = "名前を付けて保存";
+            this.名前を付けて保存ToolStripMenuItem.Click += new System.EventHandler(this.ClickSaveAs);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(158, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // 閉じるToolStripMenuItem
             // 
             this.閉じるToolStripMenuItem.Name = "閉じるToolStripMenuItem";
-            this.閉じるToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.閉じるToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.閉じるToolStripMenuItem.Text = "閉じる";
             this.閉じるToolStripMenuItem.Click += new System.EventHandler(this.ClickClose);
             // 
             // すべて閉じるToolStripMenuItem
             // 
             this.すべて閉じるToolStripMenuItem.Name = "すべて閉じるToolStripMenuItem";
-            this.すべて閉じるToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.すべて閉じるToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.すべて閉じるToolStripMenuItem.Text = "すべて閉じる";
             this.すべて閉じるToolStripMenuItem.Click += new System.EventHandler(this.ClickCloseAll);
             // 
@@ -132,8 +136,9 @@
             // 起動時間ToolStripMenuItem
             // 
             this.起動時間ToolStripMenuItem.Name = "起動時間ToolStripMenuItem";
-            this.起動時間ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.起動時間ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.起動時間ToolStripMenuItem.Text = "記録時間";
+            this.起動時間ToolStripMenuItem.Click += new System.EventHandler(this.ClickRecordedTime);
             // 
             // toolStrip1
             // 
