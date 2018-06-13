@@ -76,6 +76,8 @@ namespace CurtainFireMakerPlugin.Forms
             page.Controls.Add(editor);
 
             TabControl.TabPages.Add(page);
+
+            Refresh();
         }
 
         private void ClickNewFile(object sender, EventArgs e) => AddPage("新規");
@@ -119,6 +121,7 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 TabControl.TabPages.Remove(TabControl.SelectedTab);
             }
+            Refresh();
         }
         private void ClickClose(object sender, EventArgs e) => Close();
 

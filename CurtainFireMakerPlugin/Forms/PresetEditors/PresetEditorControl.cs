@@ -71,8 +71,7 @@ namespace CurtainFireMakerPlugin.Forms
                     if (Parent.Text.EndsWith(UpdatedChar)) Parent.Text = Parent.Text.TrimEnd(char.Parse(UpdatedChar));
                 }
             }
-
-            Invalidate();
+            Refresh();
         }
 
         public void LoadConfig(PluginConfig config) => PresetEditors.ForEach(p => p.LoadConfig(config));
