@@ -11,7 +11,7 @@ namespace CurtainFireMakerPlugin
         public const string DefaultXml =
         "<?xml version = \"1.0\" encoding = \"UTF-8\"?>\n" +
         "<Configuration>\n" +
-        "  <PythonLibDirectory></PythonLibDirectory>" +
+        "  <PythonExeFilePath></PythonExeFilePath>" +
         "  <TotalTime>0</TotalTime>" +
         "  <RecentPresetDirectories>\n" +
         "  </RecentPresetDirectories>\n" +
@@ -21,7 +21,7 @@ namespace CurtainFireMakerPlugin
 
         public override XmlNode RootNode => Document.SelectSingleNode(@"//Configuration");
 
-        public string PythonLibDirectory { get => GetString("PythonLibDirectory", ""); set => SetString("PythonLibDirectory", "", value); }
+        public string PythonExeFilePath { get => GetString("PythonExeFilePath", ""); set => SetString("PythonExeFilePath", "", value); }
 
         public string[] RecentPresetDirectories { get => GetStrings("RecentPresetDirectories/Path"); set => SetStrings("RecentPresetDirectories/Path", value); }
 
