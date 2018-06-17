@@ -62,7 +62,7 @@
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
             this.richTextBoxLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.richTextBoxLog.Size = new System.Drawing.Size(500, 228);
+            this.richTextBoxLog.Size = new System.Drawing.Size(500, 256);
             this.richTextBoxLog.TabIndex = 3;
             this.richTextBoxLog.Text = "";
             // 
@@ -70,7 +70,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 281);
+            this.ClientSize = new System.Drawing.Size(524, 309);
             this.Controls.Add(this.richTextBoxLog);
             this.Controls.Add(this.label);
             this.Controls.Add(this.progressBar);

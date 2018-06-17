@@ -33,6 +33,7 @@ namespace CurtainFireMakerPlugin.Entities
         public static Vector4 KeyMask { get; } = new Vector4(0.3F, 0.7F, 0.1F, 0.0F);
         public static Vector4 KeyBillboard { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.0F);
         public static Vector4 KeyBillboardAlpha { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.1F);
+        public static Vector4 KeyBillboardShotL { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.2F);
 
         public string Name { get; }
         public Vector4 Key { get; }
