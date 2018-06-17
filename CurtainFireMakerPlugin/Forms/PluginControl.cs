@@ -38,7 +38,12 @@ namespace CurtainFireMakerPlugin.Forms
 
             InitializeComponent();
 
-            HandleDestroyed += (sender, e) => CloseAll();
+            HandleDestroyed += (sender, e) =>
+            {
+                CloseAll();
+                SaveConfig();
+                Config.Save(Plugin.ConfigPath);
+            };
         }
 
         private void LoadConfig()
@@ -48,7 +53,7 @@ namespace CurtainFireMakerPlugin.Forms
 
         private void SaveConfig()
         {
-            Config.RecentPresetDirectories = RecentDirectories.Distinct().Where(Directory.Exists).ToArray();
+            Config.RecentPresetDirectories = RecentDirectories.Distinct().Where(Directory.Exists).OrderBy(s => s).ToArray();
             Config.TotalTime += (int)(Environment.TickCount - LastTime) / 1000;
             LastTime = Environment.TickCount;
         }
