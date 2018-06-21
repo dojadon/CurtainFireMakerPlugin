@@ -67,18 +67,6 @@ namespace CurtainFireMakerPlugin
                         Config.Save(ConfigPath);
                     }
 
-                    if (!File.Exists(Config.PythonExeFilePath))
-                    {
-                        var dialog = new PythonLibSelectForm();
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                        {
-                            Config.PythonExeFilePath = dialog.Path;
-                        }
-                    }
-                    Executor.RootScope.SetVariable("STARTUP_PATH", Application.StartupPath);
-                    Executor.RootScope.SetVariable("PYTHON_EXE_FILE_PATH", Config.PythonExeFilePath);
-                    Executor.RootScope.SetVariable("PYTHON_LIB_DIRECTORY", Path.GetDirectoryName(Config.PythonExeFilePath) + "\\Lib");
-
                     ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
                     PluginControl = new PluginControl(Config);
 

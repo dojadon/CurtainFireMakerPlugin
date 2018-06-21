@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace CurtainFireMakerPlugin.Forms
 {
-    public partial class PythonLibSelectForm : Form
+    public partial class SelectingPythonLibForm : Form
     {
         public string Path { get => textBoxPath.Text; set => textBoxPath.Text = value; }
 
-        public PythonLibSelectForm()
+        public SelectingPythonLibForm()
         {
             InitializeComponent();
         }
@@ -31,6 +31,16 @@ namespace CurtainFireMakerPlugin.Forms
             {
                 Path = openFileDialogPython.FileName;
             }
+        }
+
+        private void textBoxPath_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SelectingPythonLibForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

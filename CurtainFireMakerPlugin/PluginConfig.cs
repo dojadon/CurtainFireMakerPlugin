@@ -21,8 +21,6 @@ namespace CurtainFireMakerPlugin
 
         public override XmlNode RootNode => Document.SelectSingleNode(@"//Configuration");
 
-        public string PythonExeFilePath { get => GetString("PythonExeFilePath", ""); set => SetString("PythonExeFilePath", "", value); }
-
         public string[] RecentPresetDirectories { get => GetStrings("RecentPresetDirectories/Path"); set => SetStrings("RecentPresetDirectories/Path", value); }
 
         public string[] RecentScriptDirectories { get => GetStrings("RecentScriptDirectories/Path"); set => SetStrings("RecentScriptDirectories/Path", value); }
