@@ -50,15 +50,24 @@ namespace CurtainFireMakerPlugin
 
         public static string GetPython2File()
         {
+            const string TempFileName = "temp.py";
+            const string Script = 
+            "import sys\r\n" +
+            "print \";\".join(sys.path)";
+
+            File.WriteAllText(TempFileName, Script);
+
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.FileName = "py";
-            process.StartInfo.Arguments = $"-2 {Plugin.PluginRootPath + "\\print_pythonpath.py"}";
+            process.StartInfo.Arguments = $"-2 {TempFileName}";
             process.Start();
 
             string result = process.StandardOutput.ReadToEnd();
+
+            File.Delete(TempFileName);
 
             return result.Split(';').Where(Directory.Exists).SelectMany(Directory.GetFiles).First(s => s.EndsWith("python.exe"));
         }
