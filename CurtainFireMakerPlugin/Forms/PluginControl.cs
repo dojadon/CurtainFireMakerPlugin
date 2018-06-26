@@ -82,7 +82,7 @@ namespace CurtainFireMakerPlugin.Forms
 
             TabControl.TabPages.Add(page);
 
-            Refresh();
+            TabControl.SelectedIndex = TabControl.TabPages.Count - 1;
         }
 
         private void ClickNewFile(object sender, EventArgs e) => AddPage("新規");
