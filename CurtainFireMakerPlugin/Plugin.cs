@@ -142,7 +142,7 @@ namespace CurtainFireMakerPlugin
 
             long time = Environment.TickCount;
 
-            Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PluginControl.FileName));
+            Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PluginControl.FileName), ("EXPORT_DIRECTORY", PluginControl.ExportDirectory));
             PluginControl.RunScript(Executor.Engine, Executor.CreateScope());
 
             var worlds = new List<World>(addWorlds);

@@ -52,12 +52,17 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override void Frame()
         {
+            UpdateMatrix(World.FrameCount);
+        }
+
+        public void UpdateMatrix(int frame)
+        {
             var pos = DxMath.Vector3.Zero;
             var rot = DxMath.Quaternion.Identity;
 
             foreach (var layer in MMMBone.Layers)
             {
-                var data = layer.Frames.GetFrame(World.FrameCount);
+                var data = layer.Frames.GetFrame(frame);
                 pos += data.Position;
                 rot *= data.Quaternion;
             }
@@ -67,7 +72,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (var bone in ParentBones)
             {
-                bone.Frame();
+                bone.UpdateMatrix(frame);
             }
 
             PmxBone.UpdateLocalMatrix();

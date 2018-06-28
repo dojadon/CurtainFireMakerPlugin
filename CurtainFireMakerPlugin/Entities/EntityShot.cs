@@ -9,7 +9,7 @@ using IronPython.Runtime.Operations;
 
 namespace CurtainFireMakerPlugin.Entities
 {
-    public class EntityShot : EntityCollisonable
+    public class EntityShot : EntityShootable
     {
         public Vector3 Upward { get; set; } = Vector3.UnitY;
         public Vector3 LookAtVec { get; set; }
@@ -25,10 +25,6 @@ namespace CurtainFireMakerPlugin.Entities
         }
         public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
         public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.LookAtVec, e.Upward);
-
-        public Colliding Colliding { get; set; } = Colliding.None;
-
-        protected override bool IsCollisionable { get => Colliding != Colliding.None; set => Colliding = value ? Colliding : Colliding.None; }
 
         private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
 
@@ -53,7 +49,6 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected override void Record()
         {
-            base.Record();
             AddRootBoneKeyFrame();
         }
 
@@ -90,11 +85,6 @@ namespace CurtainFireMakerPlugin.Entities
         {
             TaskScheduler.Frame();
             base.Frame();
-        }
-
-        public override void OnCollided(Vector3 normal, float time)
-        {
-            Colliding.OnCollide(this, normal, time);
         }
 
         public override void SetMotionInterpolationCurve(Vector2 pos1, Vector2 pos2, int length, bool isKeepTerminalSlope = true)
@@ -141,29 +131,5 @@ namespace CurtainFireMakerPlugin.Entities
         {
             AddTask(task, i => interval, executeTimes, waitTime, withArg);
         }
-    }
-
-    public class Colliding
-    {
-        public Action<EntityShot, Vector3, float> OnCollide { get; private set; }
-
-        public static readonly Colliding None = new Colliding() { OnCollide = (e, tri, time) => { } };
-        public static readonly Colliding Vanish = new Colliding() { OnCollide = (e, tri, time) => e.Remove() };
-        public static readonly Colliding Stick = new Colliding()
-        {
-            OnCollide = (e, tri, time) =>
-            {
-                e.Pos += e.Velocity * time;
-                e.Velocity = Vector3.Zero;
-            }
-        };
-        public static readonly Colliding Reflect = new Colliding()
-        {
-            OnCollide = (e, normal, time) =>
-            {
-                e.Pos += e.Velocity * time + normal * 2.0F;
-                e.Velocity = normal * (e.Velocity * normal * -2) + e.Velocity;
-            }
-        };
     }
 }

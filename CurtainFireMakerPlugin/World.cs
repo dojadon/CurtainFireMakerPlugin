@@ -18,7 +18,7 @@ namespace CurtainFireMakerPlugin
     {
         internal PythonExecutor Executor { get; }
 
-        public RigidNode RootRigid { get; } = new RigidNode(new Triangle[0], AABoundingBox.Root);
+        public RigidNode RootRigid { get; } = new RigidNode(AABoundingBox.Root);
 
         private List<Entity> AddEntityList { get; } = new List<Entity>();
         private List<Entity> RemoveEntityList { get; } = new List<Entity>();
