@@ -17,11 +17,15 @@ namespace CurtainFireMakerPlugin
         "  </RecentPresetDirectories>\n" +
         "  <RecentScriptDirectories>\n" +
         "  </RecentScriptDirectories>\n" +
+        "  <RecentPresetPaths>\n" +
+        "  </RecentPresetPaths>\n" +
         "</Configuration>\n";
 
         public override XmlNode RootNode => Document.SelectSingleNode(@"//Configuration");
 
         public string[] RecentPresetDirectories { get => GetStrings("RecentPresetDirectories/Path"); set => SetStrings("RecentPresetDirectories/Path", value); }
+
+        public string[] RecentPresetPaths { get => GetStrings("RecentPresetPaths/Path"); set => SetStrings("RecentPresetPaths/Path", value); }
 
         public string[] RecentScriptDirectories { get => GetStrings("RecentScriptDirectories/Path"); set => SetStrings("RecentScriptDirectories/Path", value); }
 

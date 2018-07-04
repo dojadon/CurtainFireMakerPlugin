@@ -34,26 +34,29 @@ namespace CurtainFireMakerPlugin.Forms
         public PluginControl(PluginConfig config)
         {
             Config = config;
-            LoadConfig();
 
             InitializeComponent();
 
+            LoadConfig();
+
             HandleDestroyed += (sender, e) =>
             {
-                CloseAll();
                 SaveConfig();
                 Config.Save(Plugin.ConfigPath);
+                CloseAll();
             };
         }
 
         private void LoadConfig()
         {
             RecentDirectories = Config.RecentPresetDirectories.ToList();
+            Config.RecentPresetPaths.Where(File.Exists).ForEach(AddPage);
         }
 
         private void SaveConfig()
         {
             Config.RecentPresetDirectories = RecentDirectories.Distinct().Where(Directory.Exists).OrderBy(s => s).ToArray();
+            Config.RecentPresetPaths = Enumerable.Range(0, TabControl.TabPages.Count).Select(i => TabControl.TabPages[i].Controls[0] is PresetEditorControl e ? e.PresetPath : "").ToArray();
             Config.TotalTime += (int)(Environment.TickCount - LastTime) / 1000;
             LastTime = Environment.TickCount;
         }

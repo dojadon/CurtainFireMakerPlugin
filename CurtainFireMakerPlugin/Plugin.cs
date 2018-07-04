@@ -60,13 +60,16 @@ namespace CurtainFireMakerPlugin
                     Config.Init();
                     if (File.Exists(ConfigPath))
                     {
+                        Console.WriteLine("Load config.xml");
                         Config.Load(ConfigPath);
                     }
                     else
                     {
+                        Console.WriteLine("Create config.xml");
                         Config.Save(ConfigPath);
                     }
 
+                    Console.WriteLine("Execute config.py");
                     ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
                     PluginControl = new PluginControl(Config);
 
