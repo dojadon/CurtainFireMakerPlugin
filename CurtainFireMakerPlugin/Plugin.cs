@@ -42,6 +42,7 @@ namespace CurtainFireMakerPlugin
         public Plugin()
         {
             Executor = new PythonExecutor();
+            InitScriptEngine();
         }
 
         public UserControl CreateControl()
@@ -68,8 +69,6 @@ namespace CurtainFireMakerPlugin
                     }
                     PluginControl = new PluginControl(Config);
                     PluginControl.InitScriptEngineEvent += (sender, e) => InitScriptEngine();
-
-                    InitScriptEngine();
                 }
                 catch (Exception e)
                 {
@@ -80,6 +79,9 @@ namespace CurtainFireMakerPlugin
                     }
                     MessageBox.Show(File.ReadAllText(ErrorLogPath), "CurtainFireMakerPlugin", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                Console.Out.Flush();
+                Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
+                Executor.SetOut(Console.OpenStandardOutput());
             }
         }
 

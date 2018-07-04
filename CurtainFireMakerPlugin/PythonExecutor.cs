@@ -12,10 +12,13 @@ namespace CurtainFireMakerPlugin
 {
     public class PythonExecutor
     {
-        public ScriptEngine Engine { get; private set; }
+        public ScriptEngine Engine { get; private set; } = Python.CreateEngine();
         public ScriptScope RootScope { get; private set; }
 
-        public PythonExecutor() { }
+        public PythonExecutor()
+        {
+            Init();
+        }
 
         public void Init()
         {
