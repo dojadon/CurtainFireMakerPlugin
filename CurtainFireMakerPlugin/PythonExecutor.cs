@@ -12,10 +12,12 @@ namespace CurtainFireMakerPlugin
 {
     public class PythonExecutor
     {
-        public ScriptEngine Engine { get; }
-        public ScriptScope RootScope { get; }
+        public ScriptEngine Engine { get; private set; }
+        public ScriptScope RootScope { get; private set; }
 
-        public PythonExecutor()
+        public PythonExecutor() { }
+
+        public void Init()
         {
             Engine = Python.CreateEngine();
             RootScope = Engine.CreateScope();
@@ -51,7 +53,7 @@ namespace CurtainFireMakerPlugin
         public static string GetPython2File()
         {
             const string TempFileName = "temp.py";
-            const string Script = 
+            const string Script =
             "import sys\r\n" +
             "print \";\".join(sys.path)";
 

@@ -50,7 +50,7 @@ namespace CurtainFireMakerPlugin
             return PluginControl;
         }
 
-        private void Init()
+        public void Init()
         {
             using (var writer = new StreamWriter(LogPath, false, Encoding.UTF8))
             {
@@ -60,20 +60,16 @@ namespace CurtainFireMakerPlugin
                     Config.Init();
                     if (File.Exists(ConfigPath))
                     {
-                        Console.WriteLine("Load config.xml");
                         Config.Load(ConfigPath);
                     }
                     else
                     {
-                        Console.WriteLine("Create config.xml");
                         Config.Save(ConfigPath);
                     }
-
-                    Console.WriteLine("Execute config.py");
-                    ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
                     PluginControl = new PluginControl(Config);
+                    PluginControl.InitScriptEngineEvent += (sender, e) => InitScriptEngine();
 
-                    ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
+                    InitScriptEngine();
                 }
                 catch (Exception e)
                 {
@@ -85,6 +81,15 @@ namespace CurtainFireMakerPlugin
                     MessageBox.Show(File.ReadAllText(ErrorLogPath), "CurtainFireMakerPlugin", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        public void InitScriptEngine()
+        {
+            Executor.Init();
+
+            Console.WriteLine("Execute config.py");
+            ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
+            ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
         }
 
         public void Dispose()

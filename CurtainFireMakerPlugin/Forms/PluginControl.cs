@@ -31,6 +31,8 @@ namespace CurtainFireMakerPlugin.Forms
         public int StartFrame => CurrentPresetEditor.StartFrame;
         public int EndFrame => CurrentPresetEditor.EndFrame;
 
+        public event EventHandler InitScriptEngineEvent;
+
         public PluginControl(PluginConfig config)
         {
             Config = config;
@@ -191,5 +193,7 @@ namespace CurtainFireMakerPlugin.Forms
                 return $"{h}時間 { i / 60}分 { i %= 60}秒";
             }
         }
+
+        private void ClickInitScriptEngine(object sender, EventArgs e) => InitScriptEngineEvent?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -13,6 +13,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void RegisterShotType(IEnumerable<ShotType> types)
         {
+            ShotTypeDict.Clear();
             types.ForEach(t => ShotTypeDict.Add(t.Name, t));
         }
 
