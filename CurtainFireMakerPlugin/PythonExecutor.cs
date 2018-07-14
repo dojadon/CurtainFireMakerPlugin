@@ -14,11 +14,9 @@ namespace CurtainFireMakerPlugin
     {
         public ScriptEngine Engine { get; private set; } = Python.CreateEngine();
         public ScriptScope RootScope { get; private set; }
+        public dynamic ScriptDynamic { get; private set; }
 
-        public PythonExecutor()
-        {
-            Init();
-        }
+        public PythonExecutor() { }
 
         public void Init()
         {
@@ -27,6 +25,8 @@ namespace CurtainFireMakerPlugin
 
             RootScope.SetVariable("STARTUP_PATH", Application.StartupPath);
             RootScope.SetVariable("PYTHON_LIB_DIRECTORY", Path.GetDirectoryName(GetPython2File()) + "\\Lib");
+
+            ScriptDynamic = Engine.ExecuteFile(Plugin.SettingPythonFilePath, RootScope);
         }
 
         public ScriptScope CreateScope() => Engine.CreateScope(RootScope);
@@ -37,12 +37,6 @@ namespace CurtainFireMakerPlugin
             {
                 RootScope.SetVariable(name, value);
             }
-        }
-
-        public void SetOut(Stream stream)
-        {
-            Engine.Runtime.IO.OutputStream.Dispose();
-            Engine.Runtime.IO.SetOutput(stream, Encoding.UTF8);
         }
 
         public void SetOut(TextWriter writer)

@@ -20,7 +20,7 @@ namespace CurtainFireMakerPlugin
         public static string ResourceDirPath => PluginRootPath + "Resource\\";
         public static string LogPath => PluginRootPath + "lastest.log";
         public static string ErrorLogPath => PluginRootPath + "error.log";
-        public static string ConfigPath => Plugin.PluginRootPath + "config.xml";
+        public static string ConfigPath => PluginRootPath + "config.xml";
 
         public Guid GUID => new Guid();
         public IWin32Window ApplicationForm { get; set; }
@@ -34,14 +34,12 @@ namespace CurtainFireMakerPlugin
         public Image SmallImage => Image;
 
         private PluginConfig Config { get; } = new PluginConfig();
-        internal PythonExecutor Executor { get; }
-        public dynamic ScriptDynamic { get; private set; }
+        internal PythonExecutor Executor { get; } = new PythonExecutor();
         private PluginControl PluginControl { get; set; }
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
 
         public Plugin()
         {
-            Executor = new PythonExecutor();
             InitScriptEngine();
         }
 
@@ -55,18 +53,14 @@ namespace CurtainFireMakerPlugin
         {
             using (var writer = new StreamWriter(LogPath, false, Encoding.UTF8))
             {
-                Console.SetOut(writer);
+                SetOut(writer);
                 try
                 {
                     Config.Init();
-                    if (File.Exists(ConfigPath))
-                    {
-                        Config.Load(ConfigPath);
-                    }
-                    else
-                    {
-                        Config.Save(ConfigPath);
-                    }
+
+                    if (File.Exists(ConfigPath)) Config.Load(ConfigPath);
+                    else Config.Save(ConfigPath);
+
                     PluginControl = new PluginControl(Config);
                     PluginControl.InitScriptEngineEvent += (sender, e) => InitScriptEngine();
                 }
@@ -80,18 +74,20 @@ namespace CurtainFireMakerPlugin
                     MessageBox.Show(File.ReadAllText(ErrorLogPath), "CurtainFireMakerPlugin", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 Console.Out.Flush();
-                Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
-                Executor.SetOut(Console.OpenStandardOutput());
+                SetOut(new StreamWriter(Console.OpenStandardOutput()));
             }
+        }
+
+        private void SetOut(TextWriter writer)
+        {
+            Console.SetOut(writer);
+            Executor.SetOut(writer);
         }
 
         public void InitScriptEngine()
         {
             Executor.Init();
-
-            Console.WriteLine("Execute config.py");
-            ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
-            ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
+            ShotTypeProvider.RegisterShotType(Executor.ScriptDynamic.init_shottype());
         }
 
         public void Dispose()
@@ -114,8 +110,7 @@ namespace CurtainFireMakerPlugin
 
             using (var writer = progressForm.CreateLogWriter())
             {
-                Console.SetOut(writer);
-                Executor.SetOut(writer);
+                SetOut(writer);
 
                 try
                 {
@@ -128,8 +123,7 @@ namespace CurtainFireMakerPlugin
                     Console.WriteLine(e);
                 }
                 Console.Out.Flush();
-                Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
-                Executor.SetOut(Console.OpenStandardOutput());
+                SetOut(new StreamWriter(Console.OpenStandardOutput()));
             }
             File.WriteAllText(LogPath, progressForm.LogText);
         }
@@ -176,7 +170,7 @@ namespace CurtainFireMakerPlugin
                 progress.Text = "出力完了";
 
                 worlds.ForEach(w => w.FinalizeWorld());
-                worlds.ForEach(w => w.Export(ScriptDynamic, PluginControl.ExportDirectory));
+                worlds.ForEach(w => w.Export(Executor.ScriptDynamic, PluginControl.ExportDirectory));
             }
 
             Console.WriteLine((Environment.TickCount - time) + "ms");
@@ -184,7 +178,7 @@ namespace CurtainFireMakerPlugin
 
             foreach (var world in worlds)
             {
-                try { world.DropFileToHandle(ApplicationForm.Handle, ScriptDynamic, PluginControl.ExportDirectory); } catch { }
+                try { world.DropFileToHandle(ApplicationForm.Handle, Executor.ScriptDynamic, PluginControl.ExportDirectory); } catch { }
             }
         }
     }
