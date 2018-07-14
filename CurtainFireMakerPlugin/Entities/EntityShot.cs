@@ -23,7 +23,6 @@ namespace CurtainFireMakerPlugin.Entities
                 if (value != Vector3.Zero) LookAtVec = +value;
             }
         }
-        public Func<EntityShot, Vector3> GetRecordedPos { get; set; } = e => e.Pos;
         public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.LookAtVec, e.Upward);
 
         private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
@@ -102,7 +101,7 @@ namespace CurtainFireMakerPlugin.Entities
         public void AddRootBoneKeyFrame(int frameOffset = 0, int priority = 0)
         {
             var curve = MotionInterpolation?.StartFrame < World.FrameCount ? MotionInterpolation.Curve : CubicBezierCurve.Line;
-            AddBoneKeyFrame(RootBone, GetRecordedPos(this), GetRecordedRot(this), curve, frameOffset, priority);
+            AddBoneKeyFrame(RootBone, Pos, Rot = GetRecordedRot(this), curve, frameOffset, priority);
         }
 
         private void AddTask(ScheduledTask task)

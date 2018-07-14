@@ -17,7 +17,7 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual Matrix4 LocalMat
         {
             get => new Matrix4(Rot, Pos);
-            protected set
+            set
             {
                 Rot = value.Rotation;
                 Pos = value.Translation;
