@@ -196,7 +196,7 @@ namespace CurtainFireMakerPlugin.Forms
         {
             if (PluginControl.ShowFileDialog(CreateOpenFileDialog(), out string path))
             {
-                RecentDirectories.Add(path);
+                RecentDirectories.Add(Path.GetDirectoryName(path));
                 AddScript(path);
             }
         }
