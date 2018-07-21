@@ -13,6 +13,8 @@ namespace CurtainFireMakerPlugin.Entities
 
         public MultiDictionary<ShotProperty, int> BoneCountEachPropertyDict { get; } = new MultiDictionary<ShotProperty, int>();
 
+        private Random Random { get; } = new Random();
+
         public ModelVertexCollection(World world)
         {
             World = world;
@@ -42,18 +44,27 @@ namespace CurtainFireMakerPlugin.Entities
                     return (m.MorphType & (MorphType.VERTEX | MorphType.UV | MorphType.EXUV1 | MorphType.EXUV2 | MorphType.EXUV3 | MorphType.EXUV4)) > 0;
                 }
 
+                Vector4 exuv1 = data.Property.Type.GetExtraUv1();
+                Vector4 exuv2 = data.Property.Type.GetExtraUv2();
+                Vector4 exuv3 = data.Property.Type.GetExtraUv3();
+                Vector4 exuv4 = data.Property.Type.GetExtraUv4();
+
                 vertexList.AddRange(data.Property.Type.CreateVertices(World, data.Property).Select(v => SetupVertex(v, data.BoneIndexOffset)));
+
+                PmxVertexData SetupVertex(PmxVertexData vertex, int boneOffset)
+                {
+                    vertex.BoneId = vertex.BoneId.Select(i => i + boneOffset).ToArray();
+
+                    vertex.ExtraUv1 = exuv1;
+                    vertex.ExtraUv2 = exuv2;
+                    vertex.ExtraUv3 = exuv3;
+                    vertex.ExtraUv4 = exuv4;
+                    return vertex;
+                }
             }
 
             vertices = vertexList.ToArray();
             indices = indicesEachMaterial.SelectMany(list => list).ToArray();
-
-            PmxVertexData SetupVertex(PmxVertexData vertex, int boneOffset)
-            {
-                vertex.BoneId = vertex.BoneId.Select(i => i + boneOffset).ToArray();
-                vertex.ExtraUv = new[] { type.Key };
-                return vertex;
-            }
         }
     }
 }

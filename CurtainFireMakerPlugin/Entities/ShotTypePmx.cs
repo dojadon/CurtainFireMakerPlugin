@@ -16,16 +16,12 @@ namespace CurtainFireMakerPlugin.Entities
 
         private float VertexScale { get; }
 
-        public ShotTypePmx(string name, string path, float scale, Vector4 key) : base(name, key)
+        public ShotTypePmx(string name, string path, float scale) : base(name)
         {
             PmxFilePath = Plugin.ResourceDirPath + path;
             VertexScale = scale;
 
             ReadPmxData();
-        }
-
-        public ShotTypePmx(string name, string path, float scale) : this(name, path, scale, KeyNormal)
-        {
         }
 
         private void ReadPmxData()
@@ -92,6 +88,16 @@ namespace CurtainFireMakerPlugin.Entities
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = CloneUtil.Clone(OriginalData.BoneArray[i]);
+            }
+            return result;
+        }
+
+        public override PmxMorphData[] CreateMorphs(World world, ShotProperty prop)
+        {
+            PmxMorphData[] result = new PmxMorphData[OriginalData.MorphArray.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = CloneUtil.Clone(OriginalData.MorphArray[i]);
             }
             return result;
         }

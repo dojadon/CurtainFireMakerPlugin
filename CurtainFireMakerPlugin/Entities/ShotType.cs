@@ -29,25 +29,14 @@ namespace CurtainFireMakerPlugin.Entities
 
     public abstract class ShotType
     {
-        public static Vector4 KeyNormal { get; } = new Vector4(0.3F, 0.7F, 0.0F, 0.0F);
-        public static Vector4 KeyAlpha { get; } = new Vector4(0.3F, 0.7F, 0.0F, 0.1F);
-        public static Vector4 KeyMask { get; } = new Vector4(0.3F, 0.7F, 0.1F, 0.0F);
-        public static Vector4 KeyBillboard { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.0F);
-        public static Vector4 KeyBillboardAlpha { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.1F);
-        public static Vector4 KeyBillboardShotL { get; } = new Vector4(0.3F, 0.7F, 0.2F, 0.2F);
-
         public string Name { get; }
-        public Vector4 Key { get; }
 
         public abstract PmxModelData OriginalData { get; }
 
-        public ShotType(string name, Vector4 key)
+        public ShotType(string name)
         {
             Name = name;
-            Key = key;
         }
-
-        public ShotType(string name) : this(name, KeyNormal) { }
 
         public virtual bool HasMesh { get; } = false;
 
@@ -76,5 +65,26 @@ namespace CurtainFireMakerPlugin.Entities
         public abstract int[] CreateVertexIndices(World wolrd, ShotProperty prop);
 
         public abstract PmxVertexData[] CreateVertices(World wolrd, ShotProperty prop);
+
+        public abstract PmxMorphData[] CreateMorphs(World world, ShotProperty prop);
+
+        public virtual bool IsBillboard() => false;
+        public virtual bool IsMasked() => false;
+
+        public Vector4 GetExtraUv1() => new Vector4(3, 7, IsBillboard() ? 1 : 0, IsMasked() ? 1 : 0);
+
+        public virtual bool IsUseTexture() => false;
+        public virtual bool IsUseTexture_L() => false;
+
+        public virtual float GetAlphaALObject() => 1;
+        public virtual float GetAlphaALScn() => 1;
+
+        public virtual float GetRotationAngleZ() => 0;
+
+        public Vector4 GetExtraUv2() => new Vector4(IsUseTexture_L() ? 2 : (IsUseTexture() ? 1 : 0), GetAlphaALObject(), GetAlphaALScn(), GetRotationAngleZ());
+
+        public Vector4 GetExtraUv3() => new Vector4(0, 0, 0, 0);
+
+        public Vector4 GetExtraUv4() => new Vector4(0, 0, 0, 0);
     }
 }

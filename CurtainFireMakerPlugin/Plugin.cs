@@ -86,8 +86,26 @@ namespace CurtainFireMakerPlugin
 
         public void InitScriptEngine()
         {
-            Executor.Init();
-            ShotTypeProvider.RegisterShotType(Executor.ScriptDynamic.init_shottype());
+            using (var writer = new StreamWriter(LogPath, false, Encoding.UTF8))
+            {
+                SetOut(writer);
+                try
+                {
+                    Executor.Init();
+                    ShotTypeProvider.RegisterShotType(Executor.ScriptDynamic.init_shottype());
+                }
+                catch (Exception e)
+                {
+                    using (var error_writer = new StreamWriter(ErrorLogPath, false, Encoding.UTF8))
+                    {
+                        try { error_writer.WriteLine(Executor.FormatException(e)); } catch { }
+                        error_writer.WriteLine(e);
+                    }
+                    MessageBox.Show(File.ReadAllText(ErrorLogPath), "CurtainFireMakerPlugin", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                Console.Out.Flush();
+                SetOut(new StreamWriter(Console.OpenStandardOutput()));
+            }
         }
 
         public void Dispose()

@@ -49,7 +49,7 @@ namespace CurtainFireMakerPlugin.Entities
             Header = new PmxHeaderData
             {
                 Version = 2.0F,
-                NumberOfExtraUv = 1,
+                NumberOfExtraUv = 2,
                 VertexIndexSize = 4,
                 TextureIndexSize = 1,
                 MaterialIndexSize = 1,
@@ -118,7 +118,7 @@ namespace CurtainFireMakerPlugin.Entities
                 {
                     SlotName = "表情",
                     Type = SlotType.MORPH,
-                    Indices =Enumerable.Range(0, morphs.Count).ToArray(),
+                    Indices = Enumerable.Range(0,Math.Min(128,  morphs.Count)).ToArray(),
                     NormalSlot = false,
                 },
                 //new PmxSlotData
