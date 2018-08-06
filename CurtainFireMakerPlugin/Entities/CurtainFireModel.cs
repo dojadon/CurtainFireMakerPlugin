@@ -121,6 +121,12 @@ namespace CurtainFireMakerPlugin.Entities
                     Indices = Enumerable.Range(0,Math.Min(128,  morphs.Count)).ToArray(),
                     NormalSlot = false,
                 },
+                new PmxSlotData
+                {
+                    SlotName = "Time",
+                    Type = SlotType.BONE,
+                    Indices = new int[]{ 1 },
+                },
                 //new PmxSlotData
                 //{
                 //    SlotName = "弾ボーン",

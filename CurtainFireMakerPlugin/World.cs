@@ -10,6 +10,7 @@ using CurtainFireMakerPlugin.Entities;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
 using MMDataIO.Vmd;
+using VecMath;
 using VecMath.Geometry;
 
 namespace CurtainFireMakerPlugin
@@ -57,6 +58,12 @@ namespace CurtainFireMakerPlugin
                 type.InitWorld(this);
             }
 
+            if (0 < StartFrame)
+            {
+                VmdSequence.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
+                VmdSequence.AddPropertyKeyFrame(new VmdPropertyFrameData(StartFrame, true));
+            }
+
             ExportEvent += (sender, e) =>
             {
                 PmxModel.Export(e.Script, e.PmxExportPath, ExportFileName, "by CurtainFireMakerPlugin");
@@ -69,8 +76,6 @@ namespace CurtainFireMakerPlugin
             RootRigid.ChildList.Add(rigid);
         }
 
-        private bool IsContainsShot { get; set; } = false;
-
         internal ShotModelData AddShot(EntityShotBase entity)
         {
             ShotModelProvider.AddEntity(entity, out ShotModelData data);
@@ -79,13 +84,6 @@ namespace CurtainFireMakerPlugin
             {
                 PmxModel.InitShotModelData(data);
             }
-
-            if (!IsContainsShot && 0 < FrameCount)
-            {
-                VmdSequence.AddPropertyKeyFrame(new VmdPropertyFrameData(0, false));
-                VmdSequence.AddPropertyKeyFrame(new VmdPropertyFrameData(FrameCount, true));
-            }
-            IsContainsShot = true;
 
             return data;
         }

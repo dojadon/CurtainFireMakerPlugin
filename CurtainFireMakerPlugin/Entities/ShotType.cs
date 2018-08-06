@@ -68,10 +68,11 @@ namespace CurtainFireMakerPlugin.Entities
 
         public abstract PmxMorphData[] CreateMorphs(World world, ShotProperty prop);
 
+        public virtual bool IsButterfly() => false;
         public virtual bool IsBillboard() => false;
         public virtual bool IsMasked() => false;
 
-        public Vector4 GetExtraUv1() => new Vector4(3, 7, IsBillboard() ? 1 : 0, IsMasked() ? 1 : 0);
+        public Vector4 GetExtraUv1() => new Vector4(487, IsButterfly() ? 2 : (IsBillboard() ? 1 : 0), GetRotationAngle(), GetRotationSpeed());
 
         public virtual bool IsUseTexture() => false;
         public virtual bool IsUseTexture_L() => false;
@@ -79,9 +80,10 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual float GetAlphaALObject() => 1;
         public virtual float GetAlphaALScn() => 1;
 
-        public virtual float GetRotationAngleZ() => 0;
+        public virtual float GetRotationAngle() => 0;
+        public virtual float GetRotationSpeed() => 0;
 
-        public Vector4 GetExtraUv2() => new Vector4(IsUseTexture_L() ? 2 : (IsUseTexture() ? 1 : 0), GetAlphaALObject(), GetAlphaALScn(), GetRotationAngleZ());
+        public Vector4 GetExtraUv2() => new Vector4(GetAlphaALObject(), GetAlphaALScn(), IsUseTexture_L() ? 2 : (IsUseTexture() ? 1 : 0), IsMasked() ? 1 : 0);
 
         public Vector4 GetExtraUv3() => new Vector4(0, 0, 0, 0);
 
