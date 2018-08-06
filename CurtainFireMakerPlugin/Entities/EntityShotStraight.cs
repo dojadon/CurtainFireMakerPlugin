@@ -9,7 +9,7 @@ namespace CurtainFireMakerPlugin.Entities
 {
     public class EntityShotStraight : EntityShotBase
     {
-        public override bool IsReusable => LivingLimit != 0 && World.FrameCount > SpawnFrameNo + LivingLimit;
+        public override bool IsReusable => LifeSpan != 0 && World.FrameCount > SpawnFrameNo + LifeSpan;
 
         public override bool IsNeededUpdate => false;
 
@@ -53,8 +53,8 @@ namespace CurtainFireMakerPlugin.Entities
             AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
             AddBoneKeyFrame(RootBone, InitialPos, Rot, CubicBezierCurve.Line, 0, 0);
 
-            AddBoneKeyFrame(RootBone, InitialPos + Velocity * LivingLimit, Rot, CubicBezierCurve.Line, LivingLimit, 0);
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LivingLimit + 1, -1);
+            AddBoneKeyFrame(RootBone, InitialPos + Velocity * LifeSpan, Rot, CubicBezierCurve.Line, LifeSpan, 0);
+            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LifeSpan + 1, -1);
 
             return base.Spawn();
         }

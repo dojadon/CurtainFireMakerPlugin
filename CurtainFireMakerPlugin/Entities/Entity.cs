@@ -30,7 +30,7 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual Entity ParentEntity { get; protected set; }
 
         public int FrameCount => World.FrameCount - SpawnFrameNo;
-        public int LivingLimit { get; set; }
+        public int LifeSpan { get; set; }
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }
 
@@ -38,10 +38,10 @@ namespace CurtainFireMakerPlugin.Entities
         public Sphere Sphere => new Sphere(Pos, Range);
         public Sphere GetExpandSphere(float r) => new Sphere(Pos, Range + r);
 
-        public virtual Func<Entity, bool> ShouldRemove { get; set; } = e => e.LivingLimit != 0 && e.FrameCount >= e.LivingLimit;
+        public virtual Func<Entity, bool> ShouldRemove { get; set; } = e => e.LifeSpan != 0 && e.FrameCount >= e.LifeSpan;
 
-        public delegate void RemoveEventHandler(object sender, RemoveEventArgs args);
-        public event RemoveEventHandler RemoveEvent;
+        public delegate void RemovedEventHandler(object sender, RemoveEventArgs args);
+        public event RemovedEventHandler RemovedEvent;
 
         public bool IsSpawned { get; private set; }
         public bool IsRemoved { get; private set; }
@@ -89,7 +89,7 @@ namespace CurtainFireMakerPlugin.Entities
             if (!IsRemoved)
             {
                 DeathFrameNo = World.RemoveEntity(this);
-                RemoveEvent?.Invoke(this, new RemoveEventArgs(isFinalize));
+                RemovedEvent?.Invoke(this, new RemoveEventArgs(isFinalize));
 
                 return IsRemoved = true;
             }
