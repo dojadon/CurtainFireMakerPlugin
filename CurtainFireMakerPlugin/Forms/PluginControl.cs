@@ -49,6 +49,15 @@ namespace CurtainFireMakerPlugin.Forms
             };
         }
 
+        public bool GetSelectedPreset(out PresetEditorControl preset)
+        {
+            var selectingForm = new SelectPresetForm((from TabPage page in TabControl.TabPages select page).Select(p => p.Controls[0] is PresetEditorControl e ? e : null).ToList());
+
+            preset = selectingForm.ShowDialog() == DialogResult.OK ? selectingForm.CurrentPreset : null;
+
+            return preset != null;
+        }
+
         private void LoadConfig()
         {
             RecentDirectories = Config.RecentPresetDirectories.ToList();
@@ -63,9 +72,9 @@ namespace CurtainFireMakerPlugin.Forms
             LastTime = Environment.TickCount;
         }
 
-        public void RunScript(ScriptEngine engine, ScriptScope scope)
+        public void RunScript(PresetEditorControl preset, ScriptEngine engine, ScriptScope scope)
         {
-            CurrentPresetEditor.RunScript(engine, scope);
+            preset.RunScript(engine, scope);
         }
 
         private void AddPage(string path)

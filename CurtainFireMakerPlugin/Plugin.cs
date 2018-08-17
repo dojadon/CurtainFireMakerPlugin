@@ -115,11 +115,7 @@ namespace CurtainFireMakerPlugin
 
         public void Run(CommandArgs args)
         {
-            if (!PluginControl.IsSelectPreset)
-            {
-                MessageBox.Show("プリセットが選択されていません", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (!PluginControl.GetSelectedPreset(out var preset) || preset == null) return;
 
             var progressForm = new ProgressForm()
             {
@@ -133,7 +129,7 @@ namespace CurtainFireMakerPlugin
                 try
                 {
                     System.Threading.Tasks.Task.Factory.StartNew(progressForm.ShowDialog);
-                    RunWorld(progressForm);
+                    RunWorld(progressForm, preset);
                 }
                 catch (Exception e)
                 {
@@ -146,15 +142,17 @@ namespace CurtainFireMakerPlugin
             File.WriteAllText(LogPath, progressForm.LogText);
         }
 
-        private void RunWorld(ProgressForm progress)
+        private void RunWorld(ProgressForm progress, PresetEditorControl preset)
         {
             var addWorlds = new List<World>();
+            int startFrame = preset.StartFrame;
+            int endFrame = preset.EndFrame;
 
             Func<string, World> CreateWorld = (string name) =>
             {
-                var world = new World(ShotTypeProvider, Executor, PluginControl.StartFrame, PluginControl.EndFrame)
+                var world = new World(ShotTypeProvider, Executor, startFrame, endFrame)
                 {
-                    FrameCount = PluginControl.StartFrame,
+                    FrameCount = startFrame,
                     ExportFileName = name,
                 };
                 addWorlds.Add(world);
@@ -164,9 +162,9 @@ namespace CurtainFireMakerPlugin
 
             long time = Environment.TickCount;
 
-            Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", PluginControl.FileName), ("EXPORT_DIRECTORY", PluginControl.ExportDirectory),
-            ("STARTFRAME", PluginControl.StartFrame), ("ENDFRAME", PluginControl.EndFrame));
-            PluginControl.RunScript(Executor.Engine, Executor.CreateScope());
+            Executor.SetGlobalVariable(("SCENE", Scene), ("CreateWorld", CreateWorld), ("PRESET_FILENAME", preset.FileName), ("EXPORT_DIRECTORY", preset.ExportDirectory),
+            ("STARTFRAME", startFrame), ("ENDFRAME", endFrame));
+            PluginControl.RunScript(preset, Executor.Engine, Executor.CreateScope());
 
             var worlds = new List<World>(addWorlds);
             addWorlds.Clear();
@@ -189,7 +187,7 @@ namespace CurtainFireMakerPlugin
                 progress.Text = "出力完了";
 
                 worlds.ForEach(w => w.FinalizeWorld());
-                worlds.ForEach(w => w.Export(Executor.ScriptDynamic, PluginControl.ExportDirectory));
+                worlds.ForEach(w => w.Export(Executor.ScriptDynamic, preset.ExportDirectory));
             }
 
             Console.WriteLine((Environment.TickCount - time) + "ms");
@@ -197,7 +195,7 @@ namespace CurtainFireMakerPlugin
 
             foreach (var world in worlds)
             {
-                try { world.DropFileToHandle(ApplicationForm.Handle, Executor.ScriptDynamic, PluginControl.ExportDirectory); } catch { }
+                try { world.DropFileToHandle(ApplicationForm.Handle, Executor.ScriptDynamic, preset.ExportDirectory); } catch { }
             }
         }
     }
