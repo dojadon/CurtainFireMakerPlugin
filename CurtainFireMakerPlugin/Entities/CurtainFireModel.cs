@@ -30,6 +30,7 @@ namespace CurtainFireMakerPlugin.Entities
         public ModelMaterialCollection Materials { get; }
         public ModelMorphCollection Morphs { get; }
         public ModelBoneCollection Bones { get; }
+        public ModelRigidCollection Rigids { get; }
 
         public PmxModelData ModelData { get; private set; }
 
@@ -45,6 +46,7 @@ namespace CurtainFireMakerPlugin.Entities
             Materials = new ModelMaterialCollection(World);
             Morphs = new ModelMorphCollection(World);
             Bones = new ModelBoneCollection(World);
+            Rigids = new ModelRigidCollection(World);
 
             Header = new PmxHeaderData
             {
@@ -83,17 +85,20 @@ namespace CurtainFireMakerPlugin.Entities
             var materials = new List<PmxMaterialData>();
             var textures = ModelDataEachPropertyDict.Keys.SelectMany(p => p.Type.CreateTextures(World, p)).Distinct().ToArray();
             var morphs = new List<PmxMorphData>();
+            var rigids = new List<PmxRigidData>();
 
             foreach (var prop in ModelDataEachPropertyDict.Keys)
             {
                 Vertices.CreateVertices(prop.Type, ModelDataEachPropertyDict[prop], vertices.Count, out var propVertices, out var propVertexIndeices);
                 Materials.CreateMaterials(prop, textures, ModelDataEachPropertyDict[prop].Count, out var propMaterials);
                 Morphs.CompressMorph(ModelDataEachPropertyDict[prop], morphFrames, out var propMorphs);
+                Rigids.CreateRigids(ModelDataEachPropertyDict[prop], out var propRigids);
 
                 vertices.AddRange(propVertices);
                 vertexIndices.AddRange(propVertexIndeices);
                 materials.AddRange(propMaterials);
                 morphs.AddRange(propMorphs);
+                rigids.AddRange(propRigids);
             }
 
             ModelData = new PmxModelData
@@ -105,6 +110,7 @@ namespace CurtainFireMakerPlugin.Entities
                 VertexArray = vertices.ToArray(),
                 MaterialArray = materials.ToArray(),
                 MorphArray = morphs.ToArray(),
+                RigidArray = rigids.ToArray(),
                 SlotArray = new[]
                 {
                 new PmxSlotData

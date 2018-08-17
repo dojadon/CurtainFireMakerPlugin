@@ -66,6 +66,12 @@ namespace CurtainFireMakerPlugin.Entities
             World.VmdSequence.AddMorphKeyFrame(frame, priority);
         }
 
+        public void AddRigid(int id, PmxRigidData rigid)
+        {
+            rigid.RigidName = EntityId + "_" + id;
+            ModelData.AddRigid(id, rigid);
+        }
+
         public PmxMorphData CreateVertexMorph(int id, Func<Vector3, Vector3> func)
         {
             return ModelData.CreateVertexMorph(EntityId + "_" + id, id, func);

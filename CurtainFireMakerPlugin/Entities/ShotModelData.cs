@@ -10,6 +10,7 @@ namespace CurtainFireMakerPlugin.Entities
     public class ShotModelData
     {
         public Dictionary<int, PmxMorphData> Morphs { get; } = new Dictionary<int, PmxMorphData>();
+        public Dictionary<int, PmxRigidData> Rigids { get; } = new Dictionary<int, PmxRigidData>();
 
         public PmxBoneData[] Bones { get; }
 
@@ -26,6 +27,14 @@ namespace CurtainFireMakerPlugin.Entities
             World = world;
 
             Bones = Property.Type.CreateBones(world, property);
+        }
+
+        public void AddRigid(int id, PmxRigidData rigid)
+        {
+            if (!Rigids.ContainsKey(id))
+            {
+                Rigids[id] = rigid;
+            }
         }
 
         public PmxMorphData CreateVertexMorph(string name, int id, Func<Vector3, Vector3> func)
