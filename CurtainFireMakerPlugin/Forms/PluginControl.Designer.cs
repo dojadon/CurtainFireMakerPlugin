@@ -39,6 +39,7 @@
             this.すべて閉じるToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.その他ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.起動時間ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.スクリプトエンジン初期化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
@@ -49,7 +50,6 @@
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.TabControl = new System.Windows.Forms.CustomTabControl();
-            this.スクリプトエンジン初期化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -142,6 +142,13 @@
             this.起動時間ToolStripMenuItem.Text = "記録時間";
             this.起動時間ToolStripMenuItem.Click += new System.EventHandler(this.ClickRecordedTime);
             // 
+            // スクリプトエンジン初期化ToolStripMenuItem
+            // 
+            this.スクリプトエンジン初期化ToolStripMenuItem.Name = "スクリプトエンジン初期化ToolStripMenuItem";
+            this.スクリプトエンジン初期化ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.スクリプトエンジン初期化ToolStripMenuItem.Text = "スクリプトエンジン初期化";
+            this.スクリプトエンジン初期化ToolStripMenuItem.Click += new System.EventHandler(this.ClickInitScriptEngine);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -167,7 +174,7 @@
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton4.Text = "toolStripButton4";
-            this.toolStripButton4.ToolTipText = "新しいプリセット";
+            this.toolStripButton4.ToolTipText = "新規作成";
             this.toolStripButton4.Click += new System.EventHandler(this.ClickNewFile);
             // 
             // toolStripButton1
@@ -178,7 +185,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.ToolTipText = "プリセットを開く";
+            this.toolStripButton1.ToolTipText = "開く";
             this.toolStripButton1.Click += new System.EventHandler(this.ClickOpen);
             // 
             // toolStripButton2
@@ -268,13 +275,6 @@
             this.TabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.TabControl.TabIndex = 18;
             this.TabControl.TabClosing += new System.EventHandler<System.Windows.Forms.TabControlCancelEventArgs>(this.OnTabClosing);
-            // 
-            // スクリプトエンジン初期化ToolStripMenuItem
-            // 
-            this.スクリプトエンジン初期化ToolStripMenuItem.Name = "スクリプトエンジン初期化ToolStripMenuItem";
-            this.スクリプトエンジン初期化ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.スクリプトエンジン初期化ToolStripMenuItem.Text = "スクリプトエンジン初期化";
-            this.スクリプトエンジン初期化ToolStripMenuItem.Click += new System.EventHandler(this.ClickInitScriptEngine);
             // 
             // PluginControl
             // 

@@ -78,7 +78,7 @@
             this.Controls.Add(this.listBoxPresets);
             this.Name = "SelectPresetForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "プリセットを選択";
+            this.Text = "選択";
             this.ResumeLayout(false);
 
         }
