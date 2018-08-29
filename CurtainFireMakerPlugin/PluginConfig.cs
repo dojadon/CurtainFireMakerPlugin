@@ -11,12 +11,12 @@ namespace CurtainFireMakerPlugin
         public const string DefaultXml =
         "<?xml version = \"1.0\" encoding = \"UTF-8\"?>\n" +
         "<Configuration>\n" +
-        "  <PythonExeFilePath></PythonExeFilePath>" +
         "  <TotalTime>0</TotalTime>" +
         "  <RecentPresetDirectories>\n" +
         "  </RecentPresetDirectories>\n" +
         "  <RecentScriptDirectories>\n" +
         "  </RecentScriptDirectories>\n" +
+        "  <RecentPresetPath></RecentPresetPath>" +
         "  <RecentPresetPaths>\n" +
         "  </RecentPresetPaths>\n" +
         "</Configuration>\n";
@@ -26,6 +26,8 @@ namespace CurtainFireMakerPlugin
         public string[] RecentPresetDirectories { get => GetStrings("RecentPresetDirectories/Path"); set => SetStrings("RecentPresetDirectories/Path", value); }
 
         public string[] RecentPresetPaths { get => GetStrings("RecentPresetPaths/Path"); set => SetStrings("RecentPresetPaths/Path", value); }
+
+        public string RecentPresetPath { get => GetString("RecentPresetPath", ""); set => SetValue("RecentPresetPath", "", value); }
 
         public string[] RecentScriptDirectories { get => GetStrings("RecentScriptDirectories/Path"); set => SetStrings("RecentScriptDirectories/Path", value); }
 

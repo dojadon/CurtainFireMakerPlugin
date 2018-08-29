@@ -15,6 +15,7 @@ namespace CurtainFireMakerPlugin.Forms
     {
         private PluginConfig Config { get; }
 
+        private string RecentPresetPath { get; set; }
         private List<string> RecentDirectories { get; set; } = new List<string>();
         private string InitialDirectory { get; set; }
 
@@ -51,21 +52,29 @@ namespace CurtainFireMakerPlugin.Forms
 
         public bool GetSelectedPreset(out PresetEditorControl preset)
         {
-            var selectingForm = new SelectPresetForm((from TabPage page in TabControl.TabPages select page).Select(p => p.Controls[0] is PresetEditorControl e ? e : null).ToList());
+            var presets = (from TabPage page in TabControl.TabPages select page).Select(p => p.Controls[0] is PresetEditorControl e ? e : null).ToList();
+
+            int idx = Enumerable.Range(0, presets.Count).Last(i => i == 0 || presets[i].PresetPath == RecentPresetPath);
+
+            var selectingForm = new SelectPresetForm(presets, idx);
 
             preset = selectingForm.ShowDialog() == DialogResult.OK ? selectingForm.CurrentPreset : null;
+
+            RecentPresetPath = preset?.PresetPath ?? RecentPresetPath;
 
             return preset != null;
         }
 
         private void LoadConfig()
         {
+            RecentPresetPath = File.Exists(Config.RecentPresetPath) ? Config.RecentPresetPath : "";
             RecentDirectories = Config.RecentPresetDirectories.ToList();
             Config.RecentPresetPaths.Where(File.Exists).ForEach(AddPage);
         }
 
         private void SaveConfig()
         {
+            Config.RecentPresetPath = RecentPresetPath;
             Config.RecentPresetDirectories = RecentDirectories.Distinct().Where(Directory.Exists).OrderBy(s => s).ToArray();
             Config.RecentPresetPaths = Enumerable.Range(0, TabControl.TabPages.Count).Select(i => TabControl.TabPages[i].Controls[0] is PresetEditorControl e ? e.PresetPath : "").ToArray();
             Config.TotalTime += (int)(Environment.TickCount - LastTime) / 1000;

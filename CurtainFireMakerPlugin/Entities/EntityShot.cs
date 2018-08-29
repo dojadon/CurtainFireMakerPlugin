@@ -20,7 +20,7 @@ namespace CurtainFireMakerPlugin.Entities
             set
             {
                 base.Velocity = value;
-                if (value != Vector3.Zero) LookAtVec = +value;
+                if (value != Vector3.Zero) LookAtVec = MathUtil.Normalize(value);
             }
         }
         public Func<EntityShot, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.LookAtVec, e.Upward);

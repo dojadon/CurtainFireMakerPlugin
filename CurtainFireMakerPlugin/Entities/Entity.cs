@@ -69,11 +69,6 @@ namespace CurtainFireMakerPlugin.Entities
             }
         }
 
-        public void __call__()
-        {
-            Spawn();
-        }
-
         public virtual bool Spawn()
         {
             if (!IsSpawned)

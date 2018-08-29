@@ -16,13 +16,14 @@ namespace CurtainFireMakerPlugin.Forms
 
         public List<PresetEditorControl> Presets { get; }
 
-        public SelectPresetForm(IEnumerable<PresetEditorControl> controls)
+        public SelectPresetForm(IEnumerable<PresetEditorControl> controls, int idx)
         {
             InitializeComponent();
 
             Presets = controls.ToList();
             listBoxPresets.DataSource = controls;
             listBoxPresets.DisplayMember = "FileName";
+            listBoxPresets.SelectedIndex = idx;
         }
 
         private void ClickCancel(object sender, EventArgs e)

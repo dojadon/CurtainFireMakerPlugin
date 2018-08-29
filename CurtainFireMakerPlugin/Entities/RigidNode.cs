@@ -27,9 +27,18 @@ namespace CurtainFireMakerPlugin.Entities
             child.DepthLevel = DepthLevel + 1;
         }
 
+        public (float, IGeometry) CalcTimeToCollide(Vector3 pos, Vector3 velocity, float min = 1E+6F)
+        {
+            IGeometry geo = new NoneGeometry();
+
+            UpdateMinTimeToCollide(pos, velocity, ref min, ref geo);
+
+            return (min, geo);
+        }
+
         public void UpdateMinTimeToCollide(Vector3 pos, Vector3 velocity, ref float collideTime, ref IGeometry collideShape)
         {
-            if (!BoundingVolume.IsIntersectWithRay(pos, velocity)) return;
+            if (!BoundingVolume.CalculateTimeToIntersect(pos, velocity, out float min, out float max) || min > collideTime) return;
 
             foreach (var shape in GeometryShapes)
             {
@@ -43,7 +52,7 @@ namespace CurtainFireMakerPlugin.Entities
 
             foreach (var node in ChildList)
             {
-                UpdateMinTimeToCollide(pos, velocity, ref collideTime, ref collideShape);
+                node.UpdateMinTimeToCollide(pos, velocity, ref collideTime, ref collideShape);
             }
         }
     }
