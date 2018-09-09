@@ -75,10 +75,10 @@ namespace CurtainFireMakerPlugin.Entities
             return Enumerable.Range(0, 8).Select(i => new Vector3(GetEmelent(0, i & 1), GetEmelent(1, i & 2), GetEmelent(2, i & 4))).Select(v => new AABoundingBox(center, v));
         }
 
-        public IEnumerable<(Entity e, float)> TimeToCollide(Vector3 pos, Vector3 velocity, float exRange = 0)
+        public IEnumerable<(Entity e, float)> TimeToCollide(Vector3 pos, Vector3 velocity, float range = 0)
         {
-            return ChildNodes.Where(n => n.AABB.IsIntersectWithRay(pos, velocity)).SelectMany(n => n.TimeToCollide(pos, velocity, exRange))
-            .Concat(Entities.Select(e => (e, e.GetExpandSphere(exRange).CalculateTimeToIntersectWithRay(pos, velocity))));
+            return ChildNodes.Where(n => n.AABB.IsIntersectWithRay(pos, velocity)).SelectMany(n => n.TimeToCollide(pos, velocity, range))
+            .Concat(Entities.Select(e => (e, new Sphere(e.Pos, range).CalculateTimeToIntersectWithRay(pos, velocity))));
         }
 
         public (Entity, float) MinTimeToCollide(Vector3 pos, Vector3 velocity, float exRange = 0)
@@ -94,100 +94,6 @@ namespace CurtainFireMakerPlugin.Entities
         public IEnumerable<Entity> GetEntities()
         {
             return Entities.Concat(ChildNodes.SelectMany(n => n.GetEntities()));
-        }
-    }
-
-    public class KdNode
-    {
-        public KdNode Child1 { get; }
-        public KdNode Child2 { get; }
-
-        public bool IsLeafNode => Child1 == null;
-
-        public Entity Entity { get; }
-
-        public int Level { get; }
-        public int Axis => Level % 3;
-
-        public KdNode(IEnumerable<Entity> entities, int level = 0)
-        {
-            try
-            {
-                var array = entities.OrderBy(e => e.Pos[level % 3]).ToArray();
-
-                if (array.Length > 1)
-                {
-                    int mid = array.Length / 2;
-
-                    Entity = array[mid];
-                    Child1 = new KdNode(array.Take(mid), level + 1);
-
-                    if (mid + 1 < array.Length)
-                    {
-                        Child2 = new KdNode(array.Skip(mid + 1), level + 1);
-                    }
-                }
-                else
-                {
-                    Entity = array[0];
-                }
-            }
-            catch (Exception e)
-            {
-                try { Console.WriteLine(entities.First().World.Executor.FormatException(e)); } catch { }
-                Console.WriteLine(e);
-            }
-        }
-
-        public float Distance(Vector3 pos) => (Entity.Pos - pos).LengthSquare();
-
-        public float DistanceVertical(Vector3 pos) => (float)Math.Pow(Entity.Pos[Axis] - pos[Axis], 2);
-
-        public KdNode GetNode(Vector3 pos)
-        {
-            return pos[Axis] < Entity.Pos[Axis] ? Child1 : Child2;
-        }
-
-        public KdNode GetLeafNode(Vector3 pos)
-        {
-            return IsLeafNode ? this : (GetNode(pos) ?? Child1).GetLeafNode(pos);
-        }
-
-        public Entity Nearest(Vector3 pos, int maxDepth = 128)
-        {
-            var node = GetLeafNode(pos);
-            return (Nearest(pos, node.Distance(pos), 0, maxDepth) ?? node).Entity;
-        }
-
-        public KdNode Nearest(Vector3 pos, float min, int depth, int maxDepth)
-        {
-            KdNode result = null;
-
-            if (depth > maxDepth) return result;
-
-            var dis = Distance(pos);
-            if (dis < min)
-            {
-                min = dis;
-                result = this;
-            }
-
-            if (IsLeafNode) return result;
-
-            dis = DistanceVertical(pos);
-
-            if (dis < min)
-            {
-                var node1 = Child1?.Nearest(pos, min, depth + 1, maxDepth);
-                var node2 = Child2?.Nearest(pos, min, depth + 1, maxDepth);
-
-                return node1 == null && node2 == null ? result : (node1 ?? node2);
-            }
-            else
-            {
-                var node = GetNode(pos);
-                return node?.Nearest(pos, min, depth + 1, maxDepth) ?? result;
-            }
         }
     }
 }

@@ -6,6 +6,7 @@ using MMDataIO.Vmd;
 using VecMath;
 using IronPython.Runtime;
 using IronPython.Runtime.Operations;
+using CurtainFireCore;
 
 namespace CurtainFireMakerPlugin.Entities
 {
@@ -27,22 +28,22 @@ namespace CurtainFireMakerPlugin.Entities
 
         private ScheduledTaskManager TaskScheduler { get; } = new ScheduledTaskManager();
 
-        public EntityShot(World world, string typeName, int color, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
+        public EntityShot(World world, string typeName, int color)
+        : this(world, typeName, color, Matrix4.Identity) { }
 
-        public EntityShot(World world, string typeName, int color, float scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShot(World world, string typeName, int color, float scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShot(World world, string typeName, int color, Vector3 scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShot(World world, string typeName, int color, Vector3 scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShot(World world, string typeName, int color, Matrix3 scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
+        public EntityShot(World world, string typeName, int color, Matrix3 scale)
+        : this(world, typeName, color, (Matrix4)scale) { }
 
-        public EntityShot(World world, string typeName, int color, Matrix4 scale, EntityShotBase parentEntity = null)
-        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
+        public EntityShot(World world, string typeName, int color, Matrix4 scale)
+        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale)) { }
 
-        public EntityShot(World world, ShotProperty property, EntityShotBase parentEntity = null) : base(world, property, parentEntity)
+        public EntityShot(World world, ShotProperty property) : base(world, property)
         {
         }
 

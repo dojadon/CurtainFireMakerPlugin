@@ -107,13 +107,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="PythonExecutor.cs" />
     <Compile Include="Entities\ShotType.cs" />
     <Compile Include="Entities\ShotTypePmx.cs" />
-    <Compile Include="ScheduledTask.cs" />
-    <Compile Include="Win32Wrapper.cs" />
     <Compile Include="World.cs" />
-    <Compile Include="XmlConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\PluginControl.resx">
@@ -143,6 +139,10 @@
     <EmbeddedResource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\CurtainFireCore\CurtainFireCore.csproj">
+      <Project>{0d7ffafc-e32a-4738-b2a4-2c7d6ab2046e}</Project>
+      <Name>CurtainFireCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MMDataIO\MMDataIO\MMDataIO.csproj">
       <Project>{1aef787f-b0ed-44b4-b091-6570888a91f7}</Project>
       <Name>MMDataIO</Name>
@@ -194,9 +194,8 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
@@ -205,8 +204,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\plus.png" />
   </ItemGroup>
   <ItemGroup>
@@ -259,7 +256,7 @@
   <PropertyGroup>
     <PostBuildEvent>set out_path="C:\Tool\CG\MikuMikuMoving64_v1282\Plugins\$(TargetFileName)"
 
-"C:\Program Files (x86)\Microsoft\ILMerge\ILMerge.exe" /out:%25out_path%25 /targetplatform:v4 /wildcards $(TargetFileName) MM*.dll VecMath.dll JacksonSoft.CustomTabControl.dll
+"C:\Program Files (x86)\Microsoft\ILMerge\ILMerge.exe" /out:%25out_path%25 /targetplatform:v4 /wildcards $(TargetFileName) MM*.dll VecMath.dll JacksonSoft.CustomTabControl.dll CurtainFireCore.dll
 
 copy %25out_path%25 C:\Tool\CG\MikuMikuMoving64_v1282\CurtainFireMaker\Plugins
 </PostBuildEvent>

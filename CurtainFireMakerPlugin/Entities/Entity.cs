@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Dynamic;
 using VecMath;
-using VecMath.Geometry;
+using CurtainFireCore;
 
 namespace CurtainFireMakerPlugin.Entities
 {
     public class Entity
     {
-        public virtual Matrix4 WorldMat => ParentEntity != null ? LocalMat * ParentEntity.WorldMat : LocalMat;
+        public virtual Matrix4 WorldMat => Parent != null ? LocalMat * Parent.WorldMat : LocalMat;
         public Vector3 WorldPos => WorldMat.Translation;
         public Matrix3 WorldRot => WorldMat;
 
@@ -27,16 +26,12 @@ namespace CurtainFireMakerPlugin.Entities
         public virtual Vector3 Pos { get; set; }
         public virtual Quaternion Rot { get; set; } = Quaternion.Identity;
 
-        public virtual Entity ParentEntity { get; protected set; }
+        public virtual Entity Parent { get; set; }
 
         public int FrameCount => World.FrameCount - SpawnFrameNo;
         public int LifeSpan { get; set; }
         public int SpawnFrameNo { get; private set; }
         public int DeathFrameNo { get; private set; }
-
-        public float Range { get; set; } = 0;
-        public Sphere Sphere => new Sphere(Pos, Range);
-        public Sphere GetExpandSphere(float r) => new Sphere(Pos, Range + r);
 
         public virtual Func<Entity, bool> ShouldRemove { get; set; } = e => e.LifeSpan != 0 && e.FrameCount >= e.LifeSpan;
 
@@ -53,12 +48,10 @@ namespace CurtainFireMakerPlugin.Entities
         public int EntityId { get; }
         private static int nextEntityId;
 
-        public Entity(World world, Entity parentEntity = null)
+        public Entity(World world)
         {
             World = world;
             EntityId = nextEntityId++;
-
-            ParentEntity = parentEntity;
         }
 
         public virtual void Frame()

@@ -22,22 +22,22 @@ namespace CurtainFireMakerPlugin.Entities
 
         public Func<EntityShotStraight, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.Velocity, e.Upward);
 
-        public EntityShotStraight(World world, string typeName, int color, EntityShot parentEntity = null)
-           : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
+        public EntityShotStraight(World world, string typeName, int color)
+           : this(world, typeName, color, Matrix4.Identity) { }
 
-        public EntityShotStraight(World world, string typeName, int color, float scale, EntityShot parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShotStraight(World world, string typeName, int color, float scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShotStraight(World world, string typeName, int color, Vector3 scale, EntityShot parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShotStraight(World world, string typeName, int color, Vector3 scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShotStraight(World world, string typeName, int color, Matrix3 scale, EntityShot parentEntity = null)
-        : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
+        public EntityShotStraight(World world, string typeName, int color, Matrix3 scale)
+        : this(world, typeName, color, (Matrix4)scale) { }
 
-        public EntityShotStraight(World world, string typeName, int color, Matrix4 scale, EntityShot parentEntity = null)
-        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
+        public EntityShotStraight(World world, string typeName, int color, Matrix4 scale)
+        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale)) { }
 
-        public EntityShotStraight(World world, ShotProperty property, EntityShot parentEntity = null) : base(world, property, parentEntity)
+        public EntityShotStraight(World world, ShotProperty property) : base(world, property)
         {
         }
 

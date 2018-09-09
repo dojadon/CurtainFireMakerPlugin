@@ -26,7 +26,7 @@ namespace CurtainFireMakerPlugin.Entities
             return ShotTypeDict[name];
         }
     }
-
+    
     public abstract class ShotType
     {
         public string Name { get; }

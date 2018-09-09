@@ -13,36 +13,31 @@ namespace CurtainFireMakerPlugin.Entities
     {
         public ShotProperty Property { get; }
 
-        public ShotModelData ModelData { get; }
+        public ShotModelData ModelData { get; private set; }
         public PmxBoneData RootBone => ModelData.Bones[0];
 
         public virtual bool IsReusable => IsRemoved;
 
-        public EntityShotBase(World world, string typeName, int color, EntityShotBase parentEntity = null)
-            : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
+        public EntityShotBase(World world, string typeName, int color)
+            : this(world, typeName, color, Matrix4.Identity) { }
 
-        public EntityShotBase(World world, string typeName, int color, float scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShotBase(World world, string typeName, int color, float scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShotBase(World world, string typeName, int color, Vector3 scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShotBase(World world, string typeName, int color, Vector3 scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShotBase(World world, string typeName, int color, Matrix3 scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
+        public EntityShotBase(World world, string typeName, int color, Matrix3 scale)
+        : this(world, typeName, color, (Matrix4)scale) { }
 
-        public EntityShotBase(World world, string typeName, int color, Matrix4 scale, EntityShotBase parentEntity = null)
-        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
+        public EntityShotBase(World world, string typeName, int color, Matrix4 scale)
+        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale)) { }
 
-        public EntityShotBase(World world, ShotProperty property, EntityShotBase parentEntity = null) : base(world, parentEntity)
+        public EntityShotBase(World world, ShotProperty property) : base(world)
         {
             try
             {
                 Property = property;
-
-                ModelData = World.AddShot(this);
-
-                RootBone.ParentId = ParentEntity is EntityShotBase entity ? entity.RootBone.BoneId : RootBone.ParentId;
-
                 Property.Type.InitEntity(this);
             }
             catch (Exception e)
@@ -50,6 +45,17 @@ namespace CurtainFireMakerPlugin.Entities
                 try { Console.WriteLine(World.Executor.FormatException(e)); } catch { }
                 Console.WriteLine(e);
             }
+        }
+
+        public override bool Spawn()
+        {
+            if (base.Spawn())
+            {
+                ModelData = World.AddShot(this);
+                RootBone.ParentId = Parent is EntityShotBase entity ? entity.RootBone.BoneId : RootBone.ParentId;
+                return true;
+            }
+            return false;
         }
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve curve, int frameOffset = 0, int priority = 0)

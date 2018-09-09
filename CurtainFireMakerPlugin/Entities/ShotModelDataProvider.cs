@@ -53,7 +53,7 @@ namespace CurtainFireMakerPlugin.Entities
                 Update();
             }
 
-            int hash = GetPropertyHashCode(entity.Property, entity.ParentEntity);
+            int hash = GetPropertyHashCode(entity.Property, entity.Parent);
 
             ShotGroup group = null;
             if (ReusableGroupDict.ContainsKey(hash))
@@ -91,7 +91,7 @@ namespace CurtainFireMakerPlugin.Entities
         public ShotGroup(EntityShotBase entity)
         {
             Data = new ShotModelData(entity.World, entity.Property);
-            ParentEntity = entity.ParentEntity;
+            ParentEntity = entity.Parent;
         }
 
         public void SetEntity(EntityShotBase entity)

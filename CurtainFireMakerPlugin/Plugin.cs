@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 using MikuMikuPlugin;
+using CurtainFireCore;
 using CurtainFireMakerPlugin.Forms;
 using CurtainFireMakerPlugin.Entities;
 
@@ -37,6 +38,7 @@ namespace CurtainFireMakerPlugin
         internal PythonExecutor Executor { get; } = new PythonExecutor();
         private PluginControl PluginControl { get; set; }
         private ShotTypeProvider ShotTypeProvider { get; } = new ShotTypeProvider();
+        public dynamic ScriptDynamic { get; private set; }
 
         public Plugin()
         {
@@ -92,7 +94,8 @@ namespace CurtainFireMakerPlugin
                 try
                 {
                     Executor.Init();
-                    ShotTypeProvider.RegisterShotType(Executor.ScriptDynamic.init_shottype());
+                    ScriptDynamic = Executor.Engine.ExecuteFile(SettingPythonFilePath, Executor.RootScope);
+                    ShotTypeProvider.RegisterShotType(ScriptDynamic.init_shottype());
                 }
                 catch (Exception e)
                 {
@@ -187,7 +190,7 @@ namespace CurtainFireMakerPlugin
                 progress.Text = "出力完了";
 
                 worlds.ForEach(w => w.FinalizeWorld());
-                worlds.ForEach(w => w.Export(Executor.ScriptDynamic, preset.ExportDirectory));
+                worlds.ForEach(w => w.Export(ScriptDynamic, preset.ExportDirectory));
             }
 
             Console.WriteLine((Environment.TickCount - time) + "ms");
@@ -195,7 +198,7 @@ namespace CurtainFireMakerPlugin
 
             foreach (var world in worlds)
             {
-                try { world.DropFileToHandle(ApplicationForm.Handle, Executor.ScriptDynamic, preset.ExportDirectory); } catch { }
+                try { world.DropFileToHandle(ApplicationForm.Handle, ScriptDynamic, preset.ExportDirectory); } catch { }
             }
         }
     }

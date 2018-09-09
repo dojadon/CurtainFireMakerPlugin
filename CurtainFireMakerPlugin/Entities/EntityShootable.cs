@@ -18,22 +18,22 @@ namespace CurtainFireMakerPlugin.Entities
 
         protected MotionInterpolation MotionInterpolation { get; set; }
 
-        public EntityShootable(World world, string typeName, int color, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, Matrix4.Identity, parentEntity) { }
+        public EntityShootable(World world, string typeName, int color)
+        : this(world, typeName, color, Matrix4.Identity) { }
 
-        public EntityShootable(World world, string typeName, int color, float scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShootable(World world, string typeName, int color, float scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShootable(World world, string typeName, int color, Vector3 scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, new Matrix3(scale), parentEntity) { }
+        public EntityShootable(World world, string typeName, int color, Vector3 scale)
+        : this(world, typeName, color, new Matrix3(scale)) { }
 
-        public EntityShootable(World world, string typeName, int color, Matrix3 scale, EntityShotBase parentEntity = null)
-        : this(world, typeName, color, (Matrix4)scale, parentEntity) { }
+        public EntityShootable(World world, string typeName, int color, Matrix3 scale)
+        : this(world, typeName, color, (Matrix4)scale) { }
 
-        public EntityShootable(World world, string typeName, int color, Matrix4 scale, EntityShotBase parentEntity = null)
-        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale), parentEntity) { }
+        public EntityShootable(World world, string typeName, int color, Matrix4 scale)
+        : this(world, new ShotProperty(world.ShotTypeProvider.GetShotType(typeName), color, scale)) { }
 
-        public EntityShootable(World world, ShotProperty property, EntityShotBase parentEntity = null) : base(world, property, parentEntity) { }
+        public EntityShootable(World world, ShotProperty property) : base(world, property) { }
 
         public override void Frame()
         {

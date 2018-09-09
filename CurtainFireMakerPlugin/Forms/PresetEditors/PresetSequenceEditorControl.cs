@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Scripting.Hosting;
+using CurtainFireCore;
 
 namespace CurtainFireMakerPlugin.Forms
 {

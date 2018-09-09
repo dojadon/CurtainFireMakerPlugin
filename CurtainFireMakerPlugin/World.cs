@@ -12,6 +12,7 @@ using IronPython.Runtime.Operations;
 using MMDataIO.Vmd;
 using VecMath;
 using VecMath.Geometry;
+using CurtainFireCore;
 
 namespace CurtainFireMakerPlugin
 {

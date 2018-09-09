@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Xml;
+using CurtainFireCore;
 
 namespace CurtainFireMakerPlugin
 {
