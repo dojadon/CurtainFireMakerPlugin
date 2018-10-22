@@ -38,7 +38,6 @@ namespace CurtainFireMakerPlugin.Entities
             try
             {
                 Property = property;
-                Property.Type.InitEntity(this);
             }
             catch (Exception e)
             {
@@ -52,6 +51,7 @@ namespace CurtainFireMakerPlugin.Entities
             if (base.Spawn())
             {
                 ModelData = World.AddShot(this);
+                Property.Type.InitEntity(this);
                 RootBone.ParentId = Parent is EntityShotBase entity ? entity.RootBone.BoneId : RootBone.ParentId;
                 return true;
             }
@@ -60,7 +60,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddBoneKeyFrame(PmxBoneData bone, Vector3 pos, Quaternion rot, CubicBezierCurve curve, int frameOffset = 0, int priority = 0)
         {
-            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + frameOffset, pos, rot);
+            var frame = new VmdMotionFrameData(bone.BoneName, World.FrameCount + World.FrameOffset + frameOffset, pos, rot);
             frame.InterpolationPointX1 = frame.InterpolationPointY1 = frame.InterpolationPointZ1 = curve.P1;
             frame.InterpolationPointX2 = frame.InterpolationPointY2 = frame.InterpolationPointZ2 = curve.P2;
             World.VmdSequence.AddBoneKeyFrame(frame, priority);
@@ -68,7 +68,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public void AddMorphKeyFrame(PmxMorphData morph, float weight, int frameOffset = 0, int priority = 0)
         {
-            var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + frameOffset, weight);
+            var frame = new VmdMorphFrameData(morph.MorphName, World.FrameCount + World.FrameOffset + frameOffset, weight);
             World.VmdSequence.AddMorphKeyFrame(frame, priority);
         }
 

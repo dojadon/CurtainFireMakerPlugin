@@ -17,7 +17,7 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override Vector3 Pos { get => IsSpawned ? InitialPos + Velocity * (World.FrameCount - SpawnFrameNo) : base.Pos; set => base.Pos = value; }
 
-        public  Vector3 Velocity { get; set; }
+        public Vector3 Velocity { get; set; }
         public Vector3 Upward { get; set; } = Vector3.UnitY;
 
         public Func<EntityShotStraight, Quaternion> GetRecordedRot { get; set; } = e => Matrix3.LookAt(e.Velocity, e.Upward);
@@ -43,20 +43,23 @@ namespace CurtainFireMakerPlugin.Entities
 
         public override bool Spawn()
         {
-            InitialPos = Pos;
-            Rot = GetRecordedRot(this);
-
-            if (World.FrameCount > 0)
+            if (base.Spawn())
             {
-                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
+                InitialPos = Pos;
+                Rot = GetRecordedRot(this);
+
+                if (World.FrameCount > 0)
+                {
+                    AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -1, -1);
+                }
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
+                AddBoneKeyFrame(RootBone, InitialPos, Rot, CubicBezierCurve.Line, 0, 0);
+
+                AddBoneKeyFrame(RootBone, InitialPos + Velocity * LifeSpan, Rot, CubicBezierCurve.Line, LifeSpan, 0);
+                AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LifeSpan + 1, -1);
+                return true;
             }
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, -World.FrameCount, -1);
-            AddBoneKeyFrame(RootBone, InitialPos, Rot, CubicBezierCurve.Line, 0, 0);
-
-            AddBoneKeyFrame(RootBone, InitialPos + Velocity * LifeSpan, Rot, CubicBezierCurve.Line, LifeSpan, 0);
-            AddBoneKeyFrame(RootBone, new Vector3(0, -5000000, 0), Quaternion.Identity, CubicBezierCurve.Line, LifeSpan + 1, -1);
-
-            return base.Spawn();
+            return false;
         }
     }
 }

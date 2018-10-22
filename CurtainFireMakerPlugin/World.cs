@@ -30,6 +30,8 @@ namespace CurtainFireMakerPlugin
         public int StartFrame { get; }
         public int EndFrame { get; }
 
+        public int FrameOffset { get; set; } 
+
         public ShotTypeProvider ShotTypeProvider { get; }
 
         internal ShotModelDataProvider ShotModelProvider { get; }

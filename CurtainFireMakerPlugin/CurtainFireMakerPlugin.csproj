@@ -109,6 +109,7 @@
     </Compile>
     <Compile Include="Entities\ShotType.cs" />
     <Compile Include="Entities\ShotTypePmx.cs" />
+    <Compile Include="VectorExtensions.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

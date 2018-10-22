@@ -67,8 +67,8 @@ namespace CurtainFireMakerPlugin.Entities
                 rot *= data.Quaternion;
             }
 
-            PmxBone.Pos = Pos = pos;
-            PmxBone.Rot = Rot = rot;
+            PmxBone.Pos = Pos = pos.Convert();
+            PmxBone.Rot = Rot = rot.Convert();
 
             foreach (var bone in ParentBones)
             {
